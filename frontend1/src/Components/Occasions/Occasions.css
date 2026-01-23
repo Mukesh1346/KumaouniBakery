@@ -1,0 +1,62 @@
+/* Heading */
+.OccasionHeadSec {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.OccasionTitle {
+    color: #0E4D65;
+    font-weight: 600;
+}
+
+.OccasionSubtitle {
+    color: #0E4D65;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+/* Grid layout */
+.OccasionCardSec {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* Card */
+.OccasionCard {
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Image */
+.occasionalPic {
+    width: 100%;
+    border-radius: 14px;
+    transition: transform 0.4s ease;
+}
+
+/* Hover */
+.OccasionCard:hover .occasionalPic {
+    transform: scale(1.05);
+}
+
+/* Title */
+.OccasionCard h3 {
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #0E4D65;
+}
+
+/* Extra safety for very small screens */
+@media (max-width: 360px) {
+    .OccasionCard h3 {
+        font-size: 14px;
+    }
+}
+
+@media(max-width:768px){
+    .occasionalPic {
+    width: 80%;
+}
+}

@@ -1,0 +1,135 @@
+/* OVERLAY */
+.location-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* POPUP */
+.location-popup {
+  width: 520px;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  animation: popupFade 0.3s ease;
+}
+
+/* HEADER */
+.popup-header {
+  background: #e9f6ff;
+  padding: 20px;
+  position: relative;
+}
+
+.popup-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.popup-header p {
+  margin: 6px 0 0;
+  color: #0077b6;
+  font-size: 14px;
+}
+
+/* CLOSE */
+.close-btn {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* INPUT */
+.location-input {
+  display: flex;
+  border: 1px solid #ddd;
+  margin: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.country-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  border-right: 1px solid #ddd;
+}
+
+.location-input input {
+  border: none;
+  flex: 1;
+  padding: 12px;
+  outline: none;
+}
+
+/* CURRENT LOCATION */
+.current-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px 20px;
+  color: #0077b6;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* COUNTRY SELECT CONTAINER */
+.country-box {
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #ddd;
+  background: #fff;
+}
+
+/* SELECT */
+.country-select {
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  cursor: pointer;
+  appearance: none; /* remove default arrow */
+  padding: 12px;
+}
+
+/* Custom dropdown arrow */
+.country-box {
+  position: relative;
+}
+
+.country-box::after {
+  content: "▾";
+  position: absolute;
+  right: 6px;
+  font-size: 14px;
+  pointer-events: none;
+  color: #555;
+}
+
+
+/* ANIMATION */
+@keyframes popupFade {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 576px) {
+  .location-popup {
+    width: 90%;
+  }
+}
