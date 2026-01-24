@@ -21,7 +21,7 @@ const EditSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const response = await axios.get(
-          "https://api.cakecrazzy.com/api/get-main-category"
+          "http://localhost:7000/api/get-main-category"
         ); // Adjust the URL to your API endpoint
         setMainCategories(response.data.data); // Assuming the response structure
       } catch (error) {
@@ -33,7 +33,7 @@ const EditSubCategory = () => {
     const fetchSubCategory = async () => {
       try {
         const response = await axios.get(
-          `https://api.cakecrazzy.com/api/get-single-subcategory/${id}`
+          `http://localhost:7000/api/get-single-subcategory/${id}`
         );
         const { categoryName, subcategoryName, ActiveonHome, image } = response.data.data;
 
@@ -92,7 +92,7 @@ const EditSubCategory = () => {
 
       // Send the request
       const response = await axios.put(
-        `https://api.cakecrazzy.com/api/update-subcategory/${id}`,
+        `http://localhost:7000/api/update-subcategory/${id}`,
         formDataToSend,
         {
           headers: {

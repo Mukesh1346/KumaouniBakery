@@ -84,7 +84,7 @@ const Cart = () => {
                   className="cart-item"
                 >
                   <img
-                    src={`https://api.cakecrazzy.com/${item.image}`}
+                    src={`http://localhost:7000/${item.image}`}
                     alt={item.name}
                     className="item-image"
                   />

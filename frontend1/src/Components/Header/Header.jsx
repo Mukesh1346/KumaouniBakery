@@ -8,64 +8,131 @@ import LocationPopup from "../LocationPopup/LocationPopup";
 
 
 
+// const megaCategories = [
+//   {
+//     name: "Cakes",
+//     items: [
+//       "Birthday Cakes","Anniversary Cakes","Photo Cakes","Designer Cakes",
+//       "Chocolate Cakes","Butterscotch Cakes","Red Velvet Cakes","Black Forest",
+//       "Cup Cakes","Dry Cakes","Eggless Cakes","Kids Cakes",
+//       "Theme Cakes","Wedding Cakes","Pinata Cakes","Pull Me Up Cakes",
+//       "Midnight Cakes","Same Day Cakes","Premium Cakes","Heart Shape Cakes",
+//       "Tall Cakes","Jar Cakes","Bento Cakes","Fusion Cakes",
+//       "Classic Cakes","Luxury Cakes","Fresh Cream Cakes","Fruit Cakes",
+//       "Vanilla Cakes","Coffee Cakes","Hazelnut Cakes","Truffle Cakes"
+//     ]
+//   },
+//   {
+//     name: "Flowers",
+//     items: [
+//       "Roses","Lilies","Orchids","Carnations",
+//       "Gerberas","Tulips","Sunflowers","Mixed Flowers",
+//       "Bouquets","Flower Baskets","Vase Arrangements","Luxury Flowers",
+//       "Red Roses","Pink Roses","Yellow Roses","White Roses",
+//       "Birthday Flowers","Anniversary Flowers","Romantic Flowers","Thank You Flowers",
+//       "Congrats Flowers","Get Well Soon","Sorry Flowers","New Baby Flowers",
+//       "Fresh Flowers","Exotic Flowers","Premium Flowers","Artificial Flowers",
+//       "Floral Combos","Flower Hampers","Same Day Flowers","Midnight Flowers"
+//     ]
+//   },
+//   {
+//     name: "Gifts",
+//     items: Array.from({ length: 32 }, (_, i) => `Gift Item ${i + 1}`)
+//   },
+//   {
+//     name: "Combos",
+//     items: Array.from({ length: 32 }, (_, i) => `Combo Item ${i + 1}`)
+//   },
+//   {
+//     name: "Personalised",
+//     items: Array.from({ length: 32 }, (_, i) => `Personalised Item ${i + 1}`)
+//   },
+//   {
+//     name: "Plants",
+//     items: Array.from({ length: 32 }, (_, i) => `Plant Item ${i + 1}`)
+//   },
+//   {
+//     name: "Chocolates",
+//     items: Array.from({ length: 32 }, (_, i) => `Chocolate Item ${i + 1}`)
+//   },
+//   {
+//     name: "Occasions",
+//     items: Array.from({ length: 32 }, (_, i) => `Occasion Item ${i + 1}`)
+//   },
+//   {
+//     name: "International",
+//     items: Array.from({ length: 32 }, (_, i) => `International Item ${i + 1}`)
+//   },
+//   {
+//     name: "Offers",
+//     items: Array.from({ length: 32 }, (_, i) => `Offer Item ${i + 1}`)
+//   }
+// ];
+
+
 const megaCategories = [
   {
     name: "Cakes",
-    items: [
-      "Birthday Cakes","Anniversary Cakes","Photo Cakes","Designer Cakes",
-      "Chocolate Cakes","Butterscotch Cakes","Red Velvet Cakes","Black Forest",
-      "Cup Cakes","Dry Cakes","Eggless Cakes","Kids Cakes",
-      "Theme Cakes","Wedding Cakes","Pinata Cakes","Pull Me Up Cakes",
-      "Midnight Cakes","Same Day Cakes","Premium Cakes","Heart Shape Cakes",
-      "Tall Cakes","Jar Cakes","Bento Cakes","Fusion Cakes",
-      "Classic Cakes","Luxury Cakes","Fresh Cream Cakes","Fruit Cakes",
-      "Vanilla Cakes","Coffee Cakes","Hazelnut Cakes","Truffle Cakes"
+    subcategories: [
+      {
+        name: "Birthday Cakes",
+        children: ["Photo Cakes", "Designer Cakes", "Kids Cakes", "Theme Cakes"]
+      },
+      {
+        name: "Anniversary Cakes",
+        children: ["Heart Shape Cakes", "Red Velvet Cakes", "Chocolate Cakes", "Black Forest Cakes"]
+      },
+      {
+        name: "Premium Cakes",
+        children: ["Tall Cakes", "Luxury Cakes", "Fusion Cakes", "Truffle Cakes"]
+      },
+      {
+        name: "Eggless Cakes",
+        children: ["Vanilla Eggless", "Chocolate Eggless", "Fruit Eggless", "Butterscotch Eggless"]
+      }
     ]
   },
   {
     name: "Flowers",
-    items: [
-      "Roses","Lilies","Orchids","Carnations",
-      "Gerberas","Tulips","Sunflowers","Mixed Flowers",
-      "Bouquets","Flower Baskets","Vase Arrangements","Luxury Flowers",
-      "Red Roses","Pink Roses","Yellow Roses","White Roses",
-      "Birthday Flowers","Anniversary Flowers","Romantic Flowers","Thank You Flowers",
-      "Congrats Flowers","Get Well Soon","Sorry Flowers","New Baby Flowers",
-      "Fresh Flowers","Exotic Flowers","Premium Flowers","Artificial Flowers",
-      "Floral Combos","Flower Hampers","Same Day Flowers","Midnight Flowers"
+    subcategories: [
+      {
+        name: "Roses",
+        children: ["Red Roses", "Pink Roses", "White Roses", "Yellow Roses"]
+      },
+      {
+        name: "Lilies",
+        children: ["White Lilies", "Pink Lilies", "Oriental Lilies", "Mixed Lilies"]
+      },
+      {
+        name: "Occasion Flowers",
+        children: ["Birthday Flowers", "Anniversary Flowers", "Get Well Soon", "Congratulations"]
+      },
+      {
+        name: "Flower Arrangements",
+        children: ["Bouquets", "Basket Flowers", "Vase Arrangements", "Luxury Flowers"]
+      }
     ]
   },
   {
     name: "Gifts",
-    items: Array.from({ length: 32 }, (_, i) => `Gift Item ${i + 1}`)
-  },
-  {
-    name: "Combos",
-    items: Array.from({ length: 32 }, (_, i) => `Combo Item ${i + 1}`)
-  },
-  {
-    name: "Personalised",
-    items: Array.from({ length: 32 }, (_, i) => `Personalised Item ${i + 1}`)
-  },
-  {
-    name: "Plants",
-    items: Array.from({ length: 32 }, (_, i) => `Plant Item ${i + 1}`)
-  },
-  {
-    name: "Chocolates",
-    items: Array.from({ length: 32 }, (_, i) => `Chocolate Item ${i + 1}`)
-  },
-  {
-    name: "Occasions",
-    items: Array.from({ length: 32 }, (_, i) => `Occasion Item ${i + 1}`)
-  },
-  {
-    name: "International",
-    items: Array.from({ length: 32 }, (_, i) => `International Item ${i + 1}`)
-  },
-  {
-    name: "Offers",
-    items: Array.from({ length: 32 }, (_, i) => `Offer Item ${i + 1}`)
+    subcategories: [
+      {
+        name: "Personalised Gifts",
+        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
+      },
+      {
+        name: "Soft Toys",
+        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
+      },
+      {
+        name: "Gift Hampers",
+        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
+      },
+      {
+        name: "Greeting Gifts",
+        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
+      }
+    ]
   }
 ];
 
@@ -79,7 +146,7 @@ const Header = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://api.cakecrazzy.com/api/get-category-with-subcategory"
+          "http://localhost:7000/api/get-category-with-subcategory"
         );
 
         if (
@@ -201,19 +268,38 @@ const Header = () => {
       </span>
 
       {/* MEGA MENU */}
-      <div className="mega-menu">
-        <div className="mega-menu-inner">
-          {cat.items.map((item, i) => (
-            <Link
-              key={i}
-              to={`/category/${item.replace(/\s+/g, "-").toLowerCase()}`}
-              className="mega-item"
-            >
-              {item}
-            </Link>
-          ))}
+    <div className="mega-menu">
+  <div className="mega-menu-inner">
+    {cat.subcategories.map((sub, i) => (
+      
+      /* ONE COLUMN */
+      <div key={i}>
+        
+        {/* MAIN SUBCATEGORY – TOP OF COLUMN */}
+        <div
+          className="mega-item"
+          style={{ fontWeight: 600 }}
+        >
+          {sub.name}
         </div>
+
+        {/* CHILD SUBCATEGORIES */}
+        {sub.children.map((child, j) => (
+          <Link
+            key={j}
+            to={`/category/${child.replace(/\s+/g, "-").toLowerCase()}`}
+            className="mega-item"
+          >
+            {child}
+          </Link>
+        ))}
+
       </div>
+    ))}
+  </div>
+</div>
+
+
     </li>
   ))}
 </ul>

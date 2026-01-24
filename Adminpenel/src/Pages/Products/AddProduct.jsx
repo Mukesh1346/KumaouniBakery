@@ -35,13 +35,13 @@ const AddProduct = () => {
     const fetchData = async () => {
       try {
         const categoryResponse = await axios.get(
-          "https://api.cakecrazzy.com/api/get-main-category"
+          "http://localhost:7000/api/get-main-category"
         );
         const subcategoryResponse = await axios.get(
-          "https://api.cakecrazzy.com/api/get-subcategory"
+          "http://localhost:7000/api/get-subcategory"
         );
         const weightResponse = await axios.get(
-          "https://api.cakecrazzy.com/api/get-size"
+          "http://localhost:7000/api/get-size"
         );
 
         setCategories(categoryResponse.data.data);
@@ -142,7 +142,7 @@ const AddProduct = () => {
     }
 
     try {
-      await axios.post("https://api.cakecrazzy.com/api/create-product", form, {
+      await axios.post("http://localhost:7000/api/create-product", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

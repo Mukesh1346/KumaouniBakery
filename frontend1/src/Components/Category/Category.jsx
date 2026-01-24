@@ -17,7 +17,8 @@ const Category = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://api.cakecrazzy.com/api/get-subcategory-by-status"
+          "http://localhost:7000/api/get-subcategory-by-status"
+
         );
         console.log(response.data.data);
         if (response.data.success) {
@@ -77,9 +78,9 @@ const Category = () => {
                 >
                   {/* Use a default image if no image is provided */}
                   <img
-                    src={`https://api.cakecrazzy.com/${item.image}`}
+                    src={`http://localhost:7000/${item.image}`}
                     alt={item.subcategoryName}
-                    className="category-image"
+                    className="category-img"
                   />
                   <p className="category-name">{item.subcategoryName}</p>
                 </Link>

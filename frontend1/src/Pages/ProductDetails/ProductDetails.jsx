@@ -5,6 +5,15 @@ import "./productDetails.css";
 import AllProducts from "../../Components/AllProducts/AllProducts";
 import axios from "axios";
 import Swal from "sweetalert2";
+import pic1 from "../../images/pic/Product2.avif"
+import { FaLocationCrosshairs } from "react-icons/fa6";
+import RecommendedPopup from "../../Components/RecommendedPopup/RecommendedPopup";
+import { SiPaytm } from "react-icons/si";
+import { FaGooglePay } from "react-icons/fa";
+import { FaCcMastercard } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+   import { TbTruckDelivery } from "react-icons/tb";
+                     import { TbMapPinCode } from "react-icons/tb";
 
 const ProductDetails = () => {
   const { name } = useParams();
@@ -14,12 +23,70 @@ const ProductDetails = () => {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [eggOption, setEggOption] = useState("");
   const [message, setMessage] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+ const handleWishlist = () => {
+  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  if (wishlist.includes(data._id)) {
+    wishlist = wishlist.filter(id => id !== data._id);
+    setIsWishlisted(false);
+    Swal.fire("Removed", "Removed from wishlist", "info");
+  } else {
+    wishlist.push(data._id);
+    setIsWishlisted(true);
+    Swal.fire("Added", "Added to wishlist ❤️", "success");
+  }
+
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+};
+
+
+  useEffect(() => {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  if (data?._id) {
+    setIsWishlisted(wishlist.includes(data._id));
+  }
+}, [data]);
+
+
+  const addonSliderSettings = {
+    dots: false,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
 
   // Fetch product data by name
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://api.cakecrazzy.com/api/get-product-by-name/${name}`
+        `http://localhost:7000/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -141,7 +208,7 @@ const ProductDetails = () => {
       return (
         <a>
           <img
-            src={`https://api.cakecrazzy.com/${data.productImage?.[i]}`}
+            src={`http://localhost:7000/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -170,139 +237,251 @@ const ProductDetails = () => {
         </div>
       </section>
 
-      {/* Product Image and Details Section */}
-      <section className="productDetails">
+      <section className="pdx-wrapper">
         <div className="container">
-          <div className="row">
-            <div className="col-md-5">
-              <div className="slider-container">
-                {data.productImage?.length > 0 ? (
-                  <Slider {...settings}>
-                    {data.productImage.map((image, index) => (
-                      <div key={index} className="productImage">
-                        <img
-                          className="productImageMain"
-                          src={`https://api.cakecrazzy.com/${image}`}
-                          style={{ borderRadius: "0.5rem" }}
-                          alt={`Product Image ${index + 1}`}
-                        />
-                      </div>
+          <div className="row gx-4">
+
+            {/* LEFT IMAGE SECTION */}
+            <div className="col-lg-5">
+              <div className="pdx-left-sticky">
+                <div className="d-flex pdxImg" >
+                  <div className="pdx-thumb-column">
+                    {data.productImage?.map((img, i) => (
+                      <img
+                        key={i}
+                        src={`http://localhost:7000/${img}`}
+                        alt="thumb"
+                        className="pdx-thumb"
+                      />
                     ))}
-                  </Slider>
-                ) : (
-                  <p>No images available</p>
-                )}
-              </div>
-            </div>
-            <div className="col-md-7">
-              <div className="detailSection">
-                <h5 className="detailsHeading">{data.productName}</h5>
-                <p className="detailPrice">
-                  ₹ <span>{Math.round(price)}</span>
-                </p>
+                  </div>
 
-                <div className="select_weight">
-                  {data.Variant?.some(
-                    (variant) => variant?.weight?.sizeweight
-                  ) && (
-                    <>
-                      <p>Select Weight:</p>
-                      {data.Variant.map(
-                        (variant) =>
-                          variant?.weight?.sizeweight && (
-                            <button
-                              key={variant._id}
-                              className={`weight_button ${
-                                activeWeight === variant.weight.sizeweight
-                                  ? "active"
-                                  : ""
-                              }`}
-                              onClick={() =>
-                                handleWeightSelection(variant.weight.sizeweight)
-                              }
-                            >
-                              {variant.weight.sizeweight}
-                            </button>
-                          )
-                      )}
-                    </>
-                  )}
-                </div>
-
-                <div className="calander mt-2">
-                  <div>
-                    <label htmlFor="deliveryDate">Select Delivery Date</label>
-                    <input
-                      type="datetime-local"
-                      className="form-control"
-                      id="deliveryDate"
-                      value={deliveryDate}
-                      onChange={(e) => setDeliveryDate(e.target.value)}
+                  <div className="pdx-main-image">
+                    <img
+                      src={`http://localhost:7000/${data.productImage?.[0]}`}
+                      alt="product"
                     />
                   </div>
 
-                  {/* {
-                    data?.categoryName?.mainCategoryName === "cake" ? <div className="mt-3">
-                      <label htmlFor="withEgg" className="custom-radio">
-                        <input
-                          type="radio"
-                          name="eggOption"
-                          id="withEgg"
-                          className="me-1"
-                          value="With Egg"
-                          onChange={(e) => setEggOption(e.target.value)}
-                        />
-                        With Egg
-                      </label>
-                      <label htmlFor="eggless" className="custom-radio ms-3">
-                        <input
-                          type="radio"
-                          name="eggOption"
-                          id="eggless"
-                          className="me-1"
-                          value="Eggless"
-                          onChange={(e) => setEggOption(e.target.value)}
-                        />
-                        Eggless
-                      </label>
-                    </div> : null
-                  } */}
+                </div>
+                <div className="pdx-features">
+                  <div className="text-center"> 
+                 
+                    <TbTruckDelivery className="fs-2" />
+                    <p>20+ Min  Delivered</p>
+                  </div>
+                  <div className="text-center">
+                   
+                    <TbMapPinCode className="fs-2"  />
+                    <p>
+                      Pincodes
+                    </p>
+                     </div>
+
+                  <div className="text-center">
+                     <TbTruckDelivery className="fs-2" />
+                    <p>620+ Cities Same-day Delivery</p>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT DETAILS SECTION */}
+            <div className="col-lg-7">
+              <div className="pdx-right-scroll">
+
+                <div className="pdx-title-row">
+                  <span className="pdx-badge">EGGLESS</span>
+                  <h1>{data.productName}</h1>
+
+<div
+  className={`wishlist-icon ${isWishlisted ? "active" : ""}`}
+  onClick={handleWishlist}
+  role="button"
+  aria-label="Add to wishlist"
+>
+  {isWishlisted ? <FaHeart /> : <FaRegHeart />}
+</div>
+
+                
                 </div>
 
-                <div className="message">
-                  <textarea
+                <div className="pdx-price">₹ {Math.round(price)}</div>
+
+                {/* WEIGHT */}
+                <div className="pdx-block">
+                  <div className="pdx-block-head">
+                    <span>Weight</span>
+                    <small>Serving Info ⓘ</small>
+                  </div>
+
+                  <div className="pdx-weight-group">
+                    {data.Variant?.map((v) => (
+                      <button
+                        key={v._id}
+                        className={`pdx-weight-btn ${activeWeight === v.weight.sizeweight ? "active" : ""
+                          }`}
+                        onClick={() => handleWeightSelection(v.weight.sizeweight)}
+                      >
+                        {v.weight.sizeweight}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* FLAVOUR */}
+                <div className="pdx-block">
+                  <label>Select Flavour</label>
+                  <select className="form-select">
+                    <option>Butterscotch</option>
+                    <option>Chocolate</option>
+                    <option>Vanilla</option>
+                  </select>
+                </div>
+
+                {/* NAME */}
+                <div className="pdx-block">
+                  <label>
+                    Name on Cake <small>0 / 25</small>
+                  </label>
+                  <input
+                    type="text"
                     className="form-control"
-                    placeholder="Enter Message Related To Product..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Write Name Here"
+                    maxLength={25}
                   />
                 </div>
 
-                <div className="productDetail_buttons mt-3">
-                  <button className="add_to_cart" onClick={addToCart}>
-                    <i className="bi bi-cart3"></i> Add To Cart
-                  </button>
-                  {/* <button className="by_now">
-                    <i className="bi bi-lightning-fill"></i> Buy Now
-                  </button> */}
-                </div>
+                {/* ADDONS */}
+                {/* RECOMMENDED ADDONS */}
+                <div className="pdx-block">
+                  <h6 className="pdx-addon-title">Recommended Addon Products</h6>
 
-                <div className="productDescription">
-                  <div className="descrip">
-                    <b>Description:</b>
-                    <hr style={{ marginTop: "5px", marginBottom: "5px" }} />
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: data.productDescription,
-                      }}
-                    />
+                  <div className="pdx-addon-slider">
+                    <Slider {...addonSliderSettings}>
+                      {[1, 2, 3, 4, 5, 6].map((item, index) => (
+                        <div key={index} className="pdx-addon-slide">
+                          <div className="pdx-addon-card">
+                            <img src={pic1} alt="addon" />
+                            <p className="pdx-addon-name">Birthday Cap</p>
+                            <span className="pdx-addon-price">₹ 99</span>
+                            <button className="pdx-addon-btn">ADD</button>
+                          </div>
+                        </div>
+                      ))}
+                    </Slider>
                   </div>
                 </div>
+
+
+                <div>
+                  <div className="locationHead">
+                    <div>
+                      <b>Select Area / Location</b>
+                    </div>
+                    <div className="locationIconSec">
+                      <FaLocationCrosshairs />
+                      <a href="">Use My Location</a>
+                    </div>
+                  </div>
+
+
+                  <div>
+
+
+                  </div>
+                </div>
+
+
+                <div className="offers-wrapper">
+                  {/* Header */}
+                  <div className="offers-header" onClick={() => setOpen(!open)}>
+                    <div className="offers-title">
+                      <span className="gear-icon">⚙</span>
+                      <h6>Offers Available</h6>
+                    </div>
+                    <span className={`arrow ${open ? "open" : ""}`}>⌃</span>
+                  </div>
+
+                  {/* Dropdown Content */}
+                  {open && (
+                    <div className="offers-body">
+                      <div className="offer-card">
+                        <div className="offer-left">
+                         <SiPaytm className="fs-2 text-primary" />
+                          <p>Assured cashback upto ₹300 using Paytm UPI</p>
+                        </div>
+                        <span className="tc">T&amp;C*</span>
+                      </div>
+
+                      <div className="offer-card">
+                        <div className="offer-left">
+                         <FaGooglePay  className="fs-2 text-success" />
+                          <p>Get upto Rs.100 Cashback on transaction via Google Pay wallet</p>
+                        </div>
+                        <span className="tc">T&amp;C*</span>
+                      </div>
+
+                      <div className="offer-card ">
+                        <div className="offer-left">
+                        <FaCcMastercard className="fs-2 text-secondary"  />
+                          <p>Get upto Rs.100 Cashback on transaction via FaCcMastercard </p>
+                        </div>
+                        <span className="tc">T&amp;C*</span>
+                      </div>
+
+                      <div className="offer-card">
+                        <div className="offer-left">
+                          <span className="discount-icon">✽</span>
+                          <p>
+                            Flat 15% off on orders above Rs.1499, for first time users;
+                            Code: <b>NEW15</b>
+                          </p>
+                        </div>
+                        <span className="tc">T&amp;C*</span>
+                      </div>
+                    </div>
+                  )}
+
+
+                </div>
+
+                {/* Description */}
+                <div className="description-box">
+                  <h6>Description</h6>
+                  <p>
+                    Turn your little one’s special day into a joyful celebration with this
+                    Bluey-themed cake. Inspired by the much-loved cartoon, it features
+                    adorable edible toppers of Bluey and friends, making it a treat that’s
+                    as fun to look at as it is to eat. The soft sponge layers are filled
+                    with rich flavour, beautifully frosted, and decorated with colourful
+                    details that capture the playful spirit of the show.
+                  </p>
+                </div>
+
+
+
+                <RecommendedPopup open={openPopup}
+                  onClose={() => setOpenPopup(false)}
+                />
+
+                {/* CTA */}
+                <div className="pdx-cta">  
+                  <button className="pdx-cart" onClick={() => setOpenPopup(true)} >ADD TO CART</button>
+                  <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
+                    BUY NOW | ₹ {Math.round(price)}
+                  </button>
+                </div>
+
               </div>
             </div>
+
           </div>
         </div>
       </section>
+
+
+
 
       {/* Related Products Section */}
       <section className="relatedProducts">

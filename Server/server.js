@@ -25,8 +25,9 @@ const app = express()
 
 
 const allowedOrigins = [
-    'http://localhost:3000',
+    'http://localhost:7000',
     'http://localhost:3001',
+    'http://localhost:3000',
     'http://localhost:3002',
     'https://www.cakecrazzy.com',
     'https://cakecrazzy.com',
@@ -49,9 +50,12 @@ app.use(express.json())
 app.set(express.static("./Public"))
 app.use("/Public", express.static("Public"))
 
+connectDb()
+
 app.get("/", (req, res) => {
     res.send("Server Is Running")
 })
+
 
 app.use("/api", BannerRouter)
 app.use("/api", MainCategoryRouter)
@@ -69,11 +73,11 @@ app.use("/api", checkoutRouter)
 app.use("/api", userRouter)
 app.use("/api", ContactRouter)
 
+
+
 app.listen(process.env.PORT, () => {
-    console.log(`Server Start in ${process.env.PORT}`)
+  console.log(`Server Start in ${process.env.PORT}`)
 })
 
-console.log("MONGO_URI =>", process.env.MONGO_URI);
+console.log("MONGO_URI =>", process.env.MONGODB_URI);
 
-
-connectDb()
