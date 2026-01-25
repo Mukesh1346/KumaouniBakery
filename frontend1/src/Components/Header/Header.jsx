@@ -3,8 +3,8 @@ import "./header.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import LocationPopup from "../LocationPopup/LocationPopup";
-
-
+import { IoIosArrowDown } from "react-icons/io";
+import Banner from "../../images/pic/topBanner.png";
 
 
 
@@ -166,14 +166,18 @@ const Header = () => {
   return (
     <>
       {/* ===== TOP HEADER ===== */}
-    
- <div className="container">
+    <div className="">
+        <img src={Banner} alt="" className="header-topBanner" />
+    </div>
+ <div className="HeaderContainer">
     <header className="custom-navbar">
         <div className="container-fluid">
           <div className="top-header-wrapper">
             {/* LOGO */}
 
-            <img src="/Logo.svg" alt="" className="logoImage" />
+             <Link to="/" className="brand-title">
+                         <img src="/Logo.svg" alt="" className="logoImage" />
+             </Link>
             {/* <Link to="/" className="brand-title">
               Cake Crazzy
             </Link> */}
@@ -264,7 +268,7 @@ const Header = () => {
   {megaCategories.map((cat, index) => (
     <li className="nav-item mega-dropdown" key={index}>
       <span className="nav-link mega-toggle">
-        {cat.name}
+        {cat.name} <IoIosArrowDown style={{ marginLeft: "4px" }} />
       </span>
 
       {/* MEGA MENU */}
@@ -273,14 +277,14 @@ const Header = () => {
     {cat.subcategories.map((sub, i) => (
       
       /* ONE COLUMN */
-      <div key={i}>
+      <div key={i}  >
         
         {/* MAIN SUBCATEGORY – TOP OF COLUMN */}
         <div
           className="mega-item"
           style={{ fontWeight: 600 }}
         >
-          {sub.name}
+          {sub.name} 
         </div>
 
         {/* CHILD SUBCATEGORIES */}
@@ -288,12 +292,12 @@ const Header = () => {
           <Link
             key={j}
             to={`/category/${child.replace(/\s+/g, "-").toLowerCase()}`}
-            className="mega-item"
+            className="mega-item mega-child"
           >
             {child}
           </Link>
         ))}
-
+ 
       </div>
     ))}
   </div>

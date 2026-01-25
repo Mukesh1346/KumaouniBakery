@@ -1,7 +1,13 @@
 /* ============================= */
 /* HEADER BASE */
 /* ============================= */
-
+  .HeaderContainer{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+  }
 .custom-navbar {
   border-bottom: 1px solid #eee;
   background: #fff;
@@ -10,9 +16,26 @@
 .top-header-wrapper {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: space-around;
   padding: 10px 0;
 }
+
+
+/* Mega menu column base style */
+.mega-menu-inner > div {
+  padding: 16px;
+}
+
+/* EVEN columns → aliceblue */
+.mega-menu-inner > div:nth-child(even) {
+  background-color: aliceblue;
+}
+
+/* ODD columns → no background */
+.mega-menu-inner > div:nth-child(odd) {
+  background-color: transparent;
+}
+
 
 /* ============================= */
 /* LOGO */
@@ -104,10 +127,10 @@
 .mega-menu {
   position: absolute;
   left: 0;
-  top: 100%;
+  top: 80%;
   width: 100vw;
   background: #fff;
-  padding: 36px 0;
+ padding: 15px 0;
   display: none;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   z-index: 999;
@@ -118,20 +141,25 @@
   display: block;
 }
 
+.header-topBanner{
+  width: 100%;
+  height: auto;
+}
 /* Grid layout */
 .mega-menu-inner {
   max-width: 1400px;
   margin: auto;
   padding: 0 40px;
+    gap: 24px 0px;
 
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 24px 32px;
+ 
 }
 
 /* Items */
 .mega-item {
-  font-size: 14px;
+  font-size: 15px;
   color: #333;
   text-decoration: none;
   padding: 8px 6px;
@@ -139,6 +167,42 @@
   transition: all 0.25s ease;
   display: block;
 }
+
+
+/* ============================= */
+/* CHILD SUBCATEGORY UNDERLINE */
+/* ============================= */
+
+.mega-child {
+  position: relative;
+  width: fit-content;
+}
+
+/* underline */
+.mega-child::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-pink);
+  transform: translateX(-50%);
+  transition: width 0.35s ease;
+}
+
+/* animate underline */
+.mega-child:hover::after {
+  width: 100%;
+}
+
+/* keep your existing hover effects */
+.mega-child:hover {
+  color: var(--color-pink);
+}
+
+
+
 
 .mega-item:hover {
   background: #f5f7ff;

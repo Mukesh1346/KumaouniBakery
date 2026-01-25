@@ -332,7 +332,7 @@ const ProductDetails = () => {
                 {/* FLAVOUR */}
                 <div className="pdx-block">
                   <label>Select Flavour</label>
-                  <select className="form-select">
+                  <select className="form-select w-75">
                     <option>Butterscotch</option>
                     <option>Chocolate</option>
                     <option>Vanilla</option>
