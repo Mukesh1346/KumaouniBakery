@@ -9,7 +9,7 @@ const HomeBannerSlider = () => {
   // Function to fetch API data
   const getApiData = async () => {
     try {
-      const res = await axios.get("http://localhost:7000/api/get-banners");
+      const res = await axios.get("https://bakery-46ac.onrender.com/api/get-banners");
       if (res.status === 200) {
         setData(res.data.data);
       }
@@ -45,7 +45,7 @@ const HomeBannerSlider = () => {
               <img
                 className="banner-Image"
                 alt={banner.bannerName}
-                src={`http://localhost:7000/${banner.bannerImage}`}
+                src={`https://bakery-46ac.onrender.com/${banner.bannerImage}`}
               />
               {/* <div className="overlay-content start-50 translate-middle text-center text-white">
                 <div className="overlay">

@@ -16,7 +16,7 @@ const AllProducts = () => {
   }, []);
 
   const getApiData = async () => {
-    const res = await axios.get("http://localhost:7000/api/get-main-category");
+    const res = await axios.get("https://bakery-46ac.onrender.com/api/get-main-category");
     if (res.status === 200) {
       setCategoryData(res.data.data);
       const pageState = {};
@@ -26,7 +26,7 @@ const AllProducts = () => {
   };
 
   const getApiProductData = async () => {
-    const res = await axios.get("http://localhost:7000/api/all-product");
+    const res = await axios.get("https://bakery-46ac.onrender.com/api/all-product");
     if (res.status === 200) {
       const grouped = {};
       res.data.data.forEach((p) => {
@@ -70,7 +70,7 @@ const AllProducts = () => {
                     {/* IMAGE */}
                     <div className="product-img">
                       <img
-                        src={`http://localhost:7000/${product.productImage[0]}`}
+                        src={`https://bakery-46ac.onrender.com/${product.productImage[0]}`}
                         alt={product.productName}
                       />
                       <span className="wishlist">♡</span>

@@ -56,7 +56,7 @@ const OrderTracking = () => {
               <div className="route">
                 <span>Malang, Indonesia</span>
                 <span className="dots">··············</span>
-                <span>Emir’s House, Indonesia</span>
+                <span>Emirs House, Indonesia</span>
               </div>
 
               <div className="progress mt-3">

@@ -155,7 +155,7 @@ const toggleDropdown = (key) => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:7000/api/get-category-with-subcategory"
+          "https://bakery-46ac.onrender.com/api/get-category-with-subcategory"
         );
 
         if (

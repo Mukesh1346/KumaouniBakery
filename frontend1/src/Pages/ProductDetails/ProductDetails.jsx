@@ -86,7 +86,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:7000/api/get-product-by-name/${name}`
+        `https://bakery-46ac.onrender.com/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -208,7 +208,7 @@ const ProductDetails = () => {
       return (
         <a>
           <img
-            src={`http://localhost:7000/${data.productImage?.[i]}`}
+            src={`https://bakery-46ac.onrender.com/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -249,7 +249,7 @@ const ProductDetails = () => {
                     {data.productImage?.map((img, i) => (
                       <img
                         key={i}
-                        src={`http://localhost:7000/${img}`}
+                        src={`https://bakery-46ac.onrender.com/${img}`}
                         alt="thumb"
                         className="pdx-thumb"
                       />
@@ -258,7 +258,7 @@ const ProductDetails = () => {
 
                   <div className="pdx-main-image">
                     <img
-                      src={`http://localhost:7000/${data.productImage?.[0]}`}
+                      src={`https://bakery-46ac.onrender.com/${data.productImage?.[0]}`}
                       alt="product"
                     />
                   </div>
