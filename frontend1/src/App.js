@@ -23,6 +23,10 @@ import AllProducts from "./Pages/AllProducts/AllProducts";
 import CheckOut from "./Pages/checkout/Checkout";
 import SuccessPage from "./Pages/successpage/SuccessPage";
 import Profile from "./Pages/Profile/Profile";
+import OrderTracking from "./Pages/OrderTracking/OrderTracking";
+import QA from "./Pages/Faq/Faq"
+import ReferAndEarn from "./Pages/ReferEarn/ReferEarn";
+
 const App = () => {
   return (
     <>
@@ -44,6 +48,9 @@ const App = () => {
           <Route path="/frequently-asked-questions" element={<FAQ />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/track-order" element={<OrderTracking/>} />
+           <Route path="/faq" element={<QA/>} />
+           <Route path="/refer" element={<ReferAndEarn/>} />
         </Routes>
         <Footer />
       </BrowserRouter>

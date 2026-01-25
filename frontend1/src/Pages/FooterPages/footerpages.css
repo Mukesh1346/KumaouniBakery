@@ -150,14 +150,14 @@
   }
   
   .faqSection h4 {
-    color: var(--color-brown);
+    /* color: var(--color-brown); */
     font-family: var(--font-family-design);
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
   }
   
   .faqSection p {
-    color: var(--color-brown);
+    /* color: var(--color-brown); */
     line-height: 1.6;
   }
   

@@ -1,0 +1,152 @@
+body {
+  background: #f6f6f6;
+}
+
+/* TOP BAR */
+.top-bar {
+  background: #111;
+  color: #ccc;
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+.top-links span {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+/* HEADER */
+.main-header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.search-box input {
+  width: 320px;
+  padding: 10px 14px;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+}
+
+.header-right span {
+  margin-left: 15px;
+  font-size: 14px;
+}
+
+/* PAGE */
+.order-container {
+    background: #fbbbbb;
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
+/* COMMON CARD */
+.card-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid #eee;
+}
+
+.center {
+  text-align: center;
+}
+
+.status-badge {
+  background: #e6f7e6;
+  color: #2e7d32;
+  padding: 6px 16px;
+  border-radius: 20px;
+}
+
+/* ROUTE */
+.route {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.dots {
+  color: #aaa;
+}
+
+.progress {
+  height: 6px;
+  background: #eee;
+}
+
+.progress-bar {
+  width: 65%;
+  background: linear-gradient(to right, #ff9800, #ff5722);
+}
+
+/* TIMELINE */
+.timeline {
+  border-left: 2px solid #eee;
+  padding-left: 15px;
+  margin-bottom: 18px;
+}
+
+.timeline.active {
+  border-color: #ff5722;
+}
+
+.timeline .date {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* SHIPMENT */
+.ship-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* ITEMS */
+.item-card {
+  display: flex;
+  gap: 15px;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  align-items: center;
+}
+
+.item-img {
+  width: 70px;
+  height: 70px;
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.price {
+  color: #ff5722;
+  font-weight: 600;
+}
+
+/* SUMMARY */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.payment-success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 12px;
+  border-radius: 14px;
+}

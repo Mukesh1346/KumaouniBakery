@@ -7,12 +7,14 @@ import Category from "../Category/Category";
 import Occasions from "../Occasions/Occasions";
 import CategorySection from "../CategoryCard/CategoryCard";
 import BestSellingProduct from "../BestSelling/BestSellingProject";
+import WhatsAppChat from "../WhatsApp/WhatsApp";
 
 const Home = () => {
   return (
     <>
       <HomeBannerSlider />
       <Category />
+      <WhatsAppChat />
       <Hero />
       <AllProducts />
       <Occasions/>

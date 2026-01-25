@@ -6,135 +6,110 @@ import { Link } from "react-router-dom";
 const AllProducts = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [productData, setProductData] = useState({});
-  const [currentPage, setCurrentPage] = useState({}); // Stores current page for each category
-  const productsPerPage = 20; // Set limit
+  const [currentPage, setCurrentPage] = useState({});
+  const productsPerPage = 20;
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     getApiData();
     getApiProductData();
   }, []);
 
-
-
   const getApiData = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:7000/api/get-main-category"
-      );
-      if (res.status === 200) {
-        setCategoryData(res.data.data);
-        const initialPageState = res.data.data.reduce((acc, item) => {
-          acc[item._id] = 1; // Set default page to 1 for each category
-          return acc;
-        }, {});
-        setCurrentPage(initialPageState);
-      }
-    } catch (error) {
-      console.log(error);
+    const res = await axios.get("http://localhost:7000/api/get-main-category");
+    if (res.status === 200) {
+      setCategoryData(res.data.data);
+      const pageState = {};
+      res.data.data.forEach((c) => (pageState[c._id] = 1));
+      setCurrentPage(pageState);
     }
   };
 
   const getApiProductData = async () => {
-    try {
-      const res = await axios.get("http://localhost:7000/api/all-product");
-      if (res.status === 200) {
-        const groupedProducts = res.data.data.reduce((acc, product) => {
-          const categoryId = product.categoryName._id;
-          if (!acc[categoryId]) acc[categoryId] = [];
-          acc[categoryId].push(product);
-          return acc;
-        }, {});
-        setProductData(groupedProducts);
-      }
-    } catch (error) {
-      console.log(error);
+    const res = await axios.get("http://localhost:7000/api/all-product");
+    if (res.status === 200) {
+      const grouped = {};
+      res.data.data.forEach((p) => {
+        const cid = p.categoryName._id;
+        if (!grouped[cid]) grouped[cid] = [];
+        grouped[cid].push(p);
+      });
+      setProductData(grouped);
     }
   };
 
-  // Handle Next & Previous Pagination
-  const handleNextPage = (categoryId) => {
-    setCurrentPage((prev) => ({
-      ...prev,
-      [categoryId]: prev[categoryId] + 1,
-    }));
-  };
-
-  const handlePrevPage = (categoryId) => {
-    setCurrentPage((prev) => ({
-      ...prev,
-      [categoryId]: prev[categoryId] > 1 ? prev[categoryId] - 1 : 1,
-    }));
-  };
-
   return (
-    <div className="allproducts container-fluid">
+    <div className="container my-5">
       {categoryData.map((category) => {
-        const categoryId = category._id;
-        const allProducts = productData[categoryId] || [];
-        const totalProducts = allProducts.length;
-        const startIndex = (currentPage[categoryId] - 1) * productsPerPage;
-        const visibleProducts = allProducts.slice(
-          startIndex,
-          startIndex + productsPerPage
-        );
-        const hasNextPage = startIndex + productsPerPage < totalProducts;
-        const hasPrevPage = currentPage[categoryId] > 1;
+        const products = productData[category._id] || [];
+        const start = (currentPage[category._id] - 1) * productsPerPage;
+        const visible = products.slice(start, start + productsPerPage);
 
         return (
-          <div key={categoryId} className="featured-menu">
-            <h2 className="featured-menu-title text-uppercase">
-              {category.mainCategoryName}
-            </h2>
-            <div className="product-main-category">
-              {visibleProducts.map((product) => (
-                <div key={product._id} className="product-card">
-                  <div className="product-image">
-                    <img
-                      src={`http://localhost:7000/${product.productImage[0]}`}
-                      alt={product.productName}
-                      loading="lazy"
-                    />
+          <div key={category._id} className="mb-5">
+
+            {/* CATEGORY HEADER */}
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <div>
+                <h4 className="fw-bold mb-1 text-uppercase">
+                  {category.mainCategoryName}
+                </h4>
+                <p className="text-muted mb-0">Best Gifts For Your Loved Ones</p>
+              </div>
+            </div>
+
+            {/* PRODUCTS GRID (SAME AS BEST SELLING) */}
+            <div className="row g-4">
+              {visible.map((product) => (
+                <div
+                  key={product._id}
+                  className="col-xl-3 col-lg-4 col-md-4 col-sm-6"
+                >
+                  <div className="product-card">
+
+                    {/* IMAGE */}
+                    <div className="product-img">
+                      <img
+                        src={`http://localhost:7000/${product.productImage[0]}`}
+                        alt={product.productName}
+                      />
+                      <span className="wishlist">♡</span>
+                      <span className="off-badge">20% OFF</span>
+                    </div>
+
+                    {/* CONTENT */}
+                    <div className="product-body">
+                      <p className="product-title">
+                        {product.productName}
+                      </p>
+
+                      <div className="price-row">
+                        <span className="price">₹ 300</span>
+                        <span className="old-price">₹ 375</span>
+                        <span className="off">20% OFF</span>
+                      </div>
+
+                      <div className="rating">
+                        ⭐ 4.8 <span>(245 Reviews)</span>
+                      </div>
+
+                      <p className="delivery">
+                        Earliest Delivery : <span>In 3 hours</span>
+                      </p>
+
+                      <Link
+                        to={`/product-details/${product.productName}`}
+                        className="btn btn-dark w-100 mt-2"
+                      >
+                        Buy Now
+                      </Link>
+                    </div>
+
                   </div>
-                  <h3 className="product-title">{product.productName}</h3>
-                  <p className="d-flex gap-2 align-items-center">
-                    <span className="product-main-price"> ₹ 300</span>
-                    <span className="discount-price">
-                      ₹ <del>375</del> 20% OFF
-                    </span>
-                  </p>
-                  <Link
-                    to={`/product-details/${product.productName}`}
-                    className="order-button"
-                  >
-                    Buy Now
-                  </Link>
                 </div>
               ))}
             </div>
 
-            {/* Pagination Controls */}
-            <div className="pagination-controls">
-              {hasPrevPage && (
-                <button
-                  className="prev-btn"
-                  onClick={() => handlePrevPage(categoryId)}
-                >
-                  Previous
-                </button>
-              )}
-              {hasNextPage && (
-                <button
-                  className="next-btn"
-                  onClick={() => handleNextPage(categoryId)}
-                >
-                  Next
-                </button>
-              )}
-            </div>
           </div>
         );
       })}

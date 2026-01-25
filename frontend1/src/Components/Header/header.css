@@ -49,8 +49,9 @@
 }
 
 .logoImage {
-  height: 60px;
-  width: auto;
+    height: 80px;
+    width: 90px;
+
 }
 
 /* ============================= */
@@ -232,6 +233,109 @@
   font-size: 20px;
 }
 
+
+/* ============================= */
+/* HEADER MENU DROPDOWN */
+/* ============================= */
+
+.hdr-menu-trigger {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+}
+
+.hdr-menu-trigger i {
+  font-size: 20px;
+}
+
+/* DROPDOWN BOX */
+
+
+
+/* ============================= */
+/* HEADER MENU DROPDOWN */
+/* ============================= */
+
+.hdr-menu-trigger {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+}
+
+.hdr-menu-trigger i {
+  font-size: 20px;
+}
+
+/* DROPDOWN BOX */
+.hdr-menu-dropdown {
+  position: absolute;
+  top: 115%;
+  right: 0;
+  width: 260px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  z-index: 9999;
+  overflow: hidden;
+  animation: hdrFadeDown 0.25s ease;
+}
+
+/* MENU ITEMS */
+.hdr-menu-link {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+}
+
+.hdr-menu-link:hover {
+  background: #f7f7f7;
+}
+
+.hdr-menu-link:last-child {
+  border-bottom: none;
+}
+
+/* BADGE */
+.hdr-badge-new {
+  background: #0aa;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: auto;
+}
+
+/* WHATSAPP */
+.hdr-whatsapp {
+  color: #25d366;
+  font-weight: 600;
+}
+
+/* ANIMATION */
+@keyframes hdrFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 /* ============================= */
 /* BOTTOM NAVBAR */
 /* ============================= */
@@ -250,6 +354,7 @@
     display: none;
   }
 
+
   .mega-menu {
     display: none !important;
   }
@@ -257,6 +362,17 @@
   .top-header-wrapper {
     justify-content: center;
     flex-wrap: wrap;
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px){
+  .navbarContainer{
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  .navbar-nav{
     text-align: center;
   }
 }

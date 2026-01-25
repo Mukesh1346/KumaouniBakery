@@ -5,6 +5,7 @@ import axios from "axios";
 import LocationPopup from "../LocationPopup/LocationPopup";
 import { IoIosArrowDown } from "react-icons/io";
 import Banner from "../../images/pic/topBanner.png";
+import logo from "../../images/pic/logo.png"
 
 
 
@@ -141,7 +142,15 @@ const Header = () => {
   const loginvalue = sessionStorage.getItem("login");
   const [categories, setCategories] = useState([]);
   const [ showLocationModal, setShowLocationModal] = useState(false);
+   const [openIndex, setOpenIndex] = useState(null);
 
+const toggleDropdown = (key) => {
+  setOpenIndex(openIndex === key ? null : key);
+};
+
+
+
+ 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -176,7 +185,7 @@ const Header = () => {
             {/* LOGO */}
 
              <Link to="/" className="brand-title">
-                         <img src="/Logo.svg" alt="" className="logoImage" />
+                         <img src={logo} alt="" className="logoImage" />
              </Link>
             {/* <Link to="/" className="brand-title">
               Cake Crazzy
@@ -234,10 +243,78 @@ const Header = () => {
                 </Link>
               )}
 
-               <Link to="/menu" className="icon-box">
-                <i className="bi bi-grid"></i>
-                <span>Menu</span>
-              </Link>
+       
+               
+
+               {/* MENU DROPDOWN */}
+{/* MENU DROPDOWN */}
+<div
+  className="hdr-menu-trigger"
+  onClick={() => toggleDropdown("menu")}
+>
+  <i className="bi bi-grid"></i>
+  <span>Menu</span>
+
+  {openIndex === "menu" && (
+    <div className="hdr-menu-dropdown">
+      <Link to="/corporate-gifts" className="hdr-menu-link">
+        Corporate Gifts
+      </Link>
+
+      <Link to="/wishlist" className="hdr-menu-link">
+        My Favourites
+      </Link>
+
+     
+      <Link to="/refer" className="hdr-menu-link">
+        Refer and Earn <span className="hdr-badge-new">New</span>
+      </Link>
+
+      <Link to="/franchise" className="hdr-menu-link">
+        Franchise
+      </Link>
+
+      <Link to="/faq" className="hdr-menu-link">
+        FAQ
+      </Link>
+
+      <Link to="/about-us" className="hdr-menu-link">
+        About Us
+      </Link>
+
+    
+
+      <Link to="/contact-us" className="hdr-menu-link">
+        Contact Us
+      </Link>
+
+      <a
+        href="https://wa.me/91XXXXXXXXXX"
+        target="_blank"
+        rel="noreferrer"
+        className="hdr-menu-link hdr-whatsapp"
+      >
+        WhatsApp
+      </a>
+    </div>
+  )}
+</div>
+
+
+
+      
+    
+
+                 <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+              
             </div>
           </div>
         </div>
@@ -253,7 +330,7 @@ const Header = () => {
  </div>
       {/* ===== BOTTOM NAVBAR ===== */}
       <nav className="navbar navbar-expand-lg bottom-navbar">
-        <div className="container">
+        <div className="container navbarContainer">
           <button
             className="navbar-toggler"
             type="button"

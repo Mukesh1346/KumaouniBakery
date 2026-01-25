@@ -29,7 +29,7 @@
 .contactSectionBox p {
   margin-bottom: 0;
   font-size: 20px;
-  color: var(--color-brown);
+  /* color: var(--color-brown); */
   font-weight: 700;
 }
 .contactSectionBox a {
