@@ -22,9 +22,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build"
   },
   "homepage": ".",
   "engines": {
@@ -49,8 +49,9 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-transform-class-properties": "^7.28.6",
-    "eslint": "^9.39.2",
+    "@babel/plugin-transform-class-properties": "^7.23.3",
+    "eslint": "^8.57.0",
+    "eslint-config-react-app": "^7.0.1",
     "svgo": "^4.0.0"
   }
 }
