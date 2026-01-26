@@ -21,7 +21,7 @@ const ContactUs = () => {
     console.log(formData);
     try {
       // Simulating an API call (replace with actual API endpoint)
-      const response = await fetch("https://bakery-46ac.onrender.com/api/send-query", {
+      const response = await fetch("${process.env.REACT_APP_API_URL}/api/send-query", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

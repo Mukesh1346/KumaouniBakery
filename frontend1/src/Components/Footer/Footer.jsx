@@ -11,7 +11,7 @@
 //     const fetchCategories = async () => {
 //       try {
 //         const response = await axios.get(
-//           "https://bakery-46ac.onrender.com/api/get-category-with-subcategory"
+//           "${process.env.REACT_APP_API_URL}/api/get-category-with-subcategory"
 //         );
 //         if (
 //           response.data.message ===
@@ -118,7 +118,7 @@ const Footer = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-category-with-subcategory"
+          `${process.env.REACT_APP_API_URL}/api/get-category-with-subcategory`
         );
 
         if (

@@ -11,7 +11,7 @@ const Profile = () => {
 
   const getApiData = async () => {
     try {
-      const res = await axios.get("https://bakery-46ac.onrender.com/api/user/" + userid);
+      const res = await axios.get("${process.env.REACT_APP_API_URL}/api/user/" + userid);
       if (res.status === 200) {
         setUser(res.data.data);
       }
@@ -23,7 +23,7 @@ const Profile = () => {
   const getOrderData = async () => {
     try {
       const res = await axios.get(
-        "https://bakery-46ac.onrender.com/api/checkout/user/" + userid
+        "${process.env.REACT_APP_API_URL}/api/checkout/user/" + userid
       );
       if (res.status === 200) {
         setOrders(res.data.data); // Store orders in state
@@ -116,7 +116,7 @@ const Profile = () => {
                         <tr key={item._id}>
                           <td>
                             <img
-                              src={`https://bakery-46ac.onrender.com/${item.image}`}
+                              src={`${process.env.REACT_APP_API_URL}/${item.image}`}
                               alt=""
                               style={{ height: 50 }}
                             />

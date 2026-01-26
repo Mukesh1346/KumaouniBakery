@@ -15,8 +15,12 @@ const AllProducts = () => {
     getApiProductData();
   }, []);
 
+  console.log("API URL =>", process.env.REACT_APP_API_URL);
+
   const getApiData = async () => {
-    const res = await axios.get("https://bakery-46ac.onrender.com/api/get-main-category");
+    const res =await axios.get(
+  `${process.env.REACT_APP_API_URL}/api/get-main-category`
+);
     if (res.status === 200) {
       setCategoryData(res.data.data);
       const pageState = {};
@@ -26,7 +30,10 @@ const AllProducts = () => {
   };
 
   const getApiProductData = async () => {
-    const res = await axios.get("https://bakery-46ac.onrender.com/api/all-product");
+    const res = await axios.get(
+  `${process.env.REACT_APP_API_URL}/api/all-product`
+);
+
     if (res.status === 200) {
       const grouped = {};
       res.data.data.forEach((p) => {
@@ -69,10 +76,11 @@ const AllProducts = () => {
 
                     {/* IMAGE */}
                     <div className="product-img">
-                      <img
-                        src={`https://bakery-46ac.onrender.com/${product.productImage[0]}`}
-                        alt={product.productName}
-                      />
+                    <img
+  src={`${process.env.REACT_APP_API_URL}/${product.productImage[0]}`}
+  alt={product.productName}
+/>
+
                       <span className="wishlist">♡</span>
                       <span className="off-badge">20% OFF</span>
                     </div>

@@ -33,7 +33,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "https://bakery-46ac.onrender.com/api/user/login",
+        "${process.env.REACT_APP_API_URL}/api/user/login",
         loginData
       ); // Make API call to login route
       if (response.status === 200) {
@@ -76,7 +76,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "https://bakery-46ac.onrender.com/api/user",
+        "${process.env.REACT_APP_API_URL}/api/user",
         registerData
       );
       //console.log(response);

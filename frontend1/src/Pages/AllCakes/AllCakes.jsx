@@ -12,7 +12,7 @@ const AllCakes = () => {
   // Function to fetch products based on selected price range
   const getProductrelatedSubcategory = async () => {
     try {
-      let url = `https://bakery-46ac.onrender.com/api/get-product-by-subcatname/${subcatname}`;
+      let url = `${process.env.REACT_APP_API_URL}/api/get-product-by-subcatname/${subcatname}`;
 
       // Add price filter if selected
       if (selectedPrice) {
@@ -91,7 +91,7 @@ const AllCakes = () => {
                     <div className="card">
                       <Link to={`/product-details/${item.productName}`}>
                         <img
-                          src={`https://bakery-46ac.onrender.com/${item.productImage[0]}`}
+                          src={`${process.env.REACT_APP_API_URL}/${item.productImage[0]}`}
                           className="w-100"
                           alt="images"
                         />

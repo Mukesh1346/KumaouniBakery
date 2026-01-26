@@ -17,7 +17,7 @@ const Category = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-subcategory-by-status"
+          `${process.env.REACT_APP_API_URL}/api/get-subcategory-by-status`
 
         );
         console.log(response.data.data);
@@ -78,7 +78,7 @@ const Category = () => {
                 >
                   {/* Use a default image if no image is provided */}
                   <img
-                    src={`https://bakery-46ac.onrender.com/${item.image}`}
+                    src={`${process.env.REACT_APP_API_URL}/${item.image}`}
                     alt={item.subcategoryName}
                     className="category-img"
                   />

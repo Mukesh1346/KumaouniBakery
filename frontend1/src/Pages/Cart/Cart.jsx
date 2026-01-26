@@ -84,7 +84,7 @@ const Cart = () => {
                   className="cart-item"
                 >
                   <img
-                    src={`https://bakery-46ac.onrender.com/${item.image}`}
+                    src={`${process.env.REACT_APP_API_URL}/${item.image}`}
                     alt={item.name}
                     className="item-image"
                   />

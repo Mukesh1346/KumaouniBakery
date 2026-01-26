@@ -86,7 +86,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://bakery-46ac.onrender.com/api/get-product-by-name/${name}`
+        `${process.env.REACT_APP_API_URL}/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -208,7 +208,7 @@ const ProductDetails = () => {
       return (
         <a>
           <img
-            src={`https://bakery-46ac.onrender.com/${data.productImage?.[i]}`}
+            src={`${process.env.REACT_APP_API_URL}/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -249,7 +249,7 @@ const ProductDetails = () => {
                     {data.productImage?.map((img, i) => (
                       <img
                         key={i}
-                        src={`https://bakery-46ac.onrender.com/${img}`}
+                        src={`${process.env.REACT_APP_API_URL}/${img}`}
                         alt="thumb"
                         className="pdx-thumb"
                       />
@@ -258,7 +258,7 @@ const ProductDetails = () => {
 
                   <div className="pdx-main-image">
                     <img
-                      src={`https://bakery-46ac.onrender.com/${data.productImage?.[0]}`}
+                      src={`${process.env.REACT_APP_API_URL}/${data.productImage?.[0]}`}
                       alt="product"
                     />
                   </div>
