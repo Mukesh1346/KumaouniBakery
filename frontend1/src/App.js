@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import "./allResponsive.css";
 import "./responsive.css";
-import { HashRouter as Router } from 'react-router-dom';
+// import { HashRouter as Router } from 'react-router-dom';
 // import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 

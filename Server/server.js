@@ -23,16 +23,16 @@ const ContactRouter = require("./Router/contactRoutes")
 
 const app = express()
 
-
 const allowedOrigins = [
-  'https://bakery-46ac.onrender.com',
-    'http://localhost:7000',
-    'http://localhost:3001',
-    'http://localhost:3000',
-    'http://localhost:3002',
-    'https://www.cakecrazzy.com',
-    'https://cakecrazzy.com',
-    'https://admin.cakecrazzy.com',
+  'https://bakery-46ac.onrender.com',   // backend (optional)
+  'https://kumaounibakery.vercel.app',  // ✅ REAL frontend
+  'http://localhost:7000',
+  'http://localhost:3001',
+  'http://localhost:3000',
+  'http://localhost:3002',
+  'https://www.cakecrazzy.com',
+  'https://cakecrazzy.com',
+  'https://admin.cakecrazzy.com',
 ];
 
 
