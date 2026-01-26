@@ -49,7 +49,7 @@ const CheckOut = () => {
   const initiateOnlinePayment = async () => {
     try {
       const response = await axios.post(
-        "${process.env.REACT_APP_API_URL}/api/checkout",
+        `${process.env.REACT_APP_API_URL}/api/checkout`,
         formData
       );
       //console.log(response);

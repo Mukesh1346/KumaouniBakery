@@ -115,6 +115,7 @@ const ProductDetails = () => {
   };
 
   const addToCart = () => {
+
     // Check if variants exist and contain weights
     const hasWeightVariants = data.Variant?.some(
       (variant) => variant?.weight?.sizeweight
@@ -137,6 +138,8 @@ const ProductDetails = () => {
         title: "Oops...",
         text: "Please select a delivery date before adding the product to the cart.",
       });
+
+      setOpenPopup(true);
       return;
     }
 
@@ -206,14 +209,18 @@ const ProductDetails = () => {
   const settings = {
     customPaging: function (i) {
       return (
-        <a>
-          <img
-            src={`${process.env.REACT_APP_API_URL}/${data.productImage?.[i]}`}
-            className="w-100"
-            style={{ borderRadius: "1rem" }}
-            alt={`Thumbnail ${i + 1}`}
-          />
-        </a>
+       <button
+  type="button"
+  className="p-0 border-0 bg-transparent"
+>
+  <img
+    src={`${process.env.REACT_APP_API_URL}/${data.productImage?.[i]}`}
+    className="w-100"
+    style={{ borderRadius: "1rem" }}
+    alt={`Thumbnail ${i + 1}`}
+  />
+</button>
+
       );
     },
     dots: true,
@@ -256,12 +263,18 @@ const ProductDetails = () => {
                     ))}
                   </div>
 
-                  <div className="pdx-main-image">
-                    <img
-                      src={`${process.env.REACT_APP_API_URL}/${data.productImage?.[0]}`}
-                      alt="product"
-                    />
-                  </div>
+                 <div className="pdx-main-image">
+ 
+    {data.productImage?.map((img, i) => (
+      <img
+        key={i}
+        src={`${process.env.REACT_APP_API_URL}/${img}`}
+        alt="product"
+      />
+    ))}
+
+</div>
+
 
                 </div>
                 <div className="pdx-features">
@@ -381,7 +394,13 @@ const ProductDetails = () => {
                     </div>
                     <div className="locationIconSec">
                       <FaLocationCrosshairs />
-                      <a href="">Use My Location</a>
+                      <button
+  type="button"
+  className="btn btn-link p-0"
+>
+  Use My Location
+</button>
+
                     </div>
                   </div>
 
@@ -450,9 +469,9 @@ const ProductDetails = () => {
                 <div className="description-box">
                   <h6>Description</h6>
                   <p>
-                    Turn your little one’s special day into a joyful celebration with this
+                    Turn your little one s special day into a joyful celebration with this
                     Bluey-themed cake. Inspired by the much-loved cartoon, it features
-                    adorable edible toppers of Bluey and friends, making it a treat that’s
+                    adorable edible toppers of Bluey and friends, making it a treat that s
                     as fun to look at as it is to eat. The soft sponge layers are filled
                     with rich flavour, beautifully frosted, and decorated with colourful
                     details that capture the playful spirit of the show.
@@ -467,7 +486,7 @@ const ProductDetails = () => {
 
                 {/* CTA */}
                 <div className="pdx-cta">  
-                  <button className="pdx-cart" onClick={() => setOpenPopup(true)} >ADD TO CART</button>
+                  <button className="pdx-cart" onClick={() => addToCart(true)} >ADD TO CART</button>
                   <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
                     BUY NOW | ₹ {Math.round(price)}
                   </button>

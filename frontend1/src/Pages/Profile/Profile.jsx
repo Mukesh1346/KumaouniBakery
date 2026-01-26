@@ -11,7 +11,7 @@ const Profile = () => {
 
   const getApiData = async () => {
     try {
-      const res = await axios.get("${process.env.REACT_APP_API_URL}/api/user/" + userid);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/` + userid);
       if (res.status === 200) {
         setUser(res.data.data);
       }
@@ -33,10 +33,17 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    getApiData();
-    getOrderData();
-  }, [userid]);
+  // useEffect(() => {
+  //   getApiData();
+  //   getOrderData();
+  // }, [userid]);
+
+useEffect(() => {
+  getApiData();
+  getOrderData();
+}, [getApiData, getOrderData]);
+
+
 
   const handleLogout = () => {
     sessionStorage.clear();
