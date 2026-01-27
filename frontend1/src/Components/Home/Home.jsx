@@ -8,6 +8,8 @@ import Occasions from "../Occasions/Occasions";
 import CategorySection from "../CategoryCard/CategoryCard";
 import BestSellingProduct from "../BestSelling/BestSellingProject";
 import WhatsAppChat from "../WhatsApp/WhatsApp";
+import PromoBanner from "../PromoBanner/PromoBanner";
+import CakeBanners from "../CakeBanner/CakeBanner";
 
 const Home = () => {
   return (
@@ -15,8 +17,10 @@ const Home = () => {
       <HomeBannerSlider />
       <Category />
       <WhatsAppChat />
+      <CakeBanners/>
       <Hero />
       <AllProducts />
+      <PromoBanner/>
       <Occasions/>
       <BestSellingProduct/>
       <CategorySection/>
