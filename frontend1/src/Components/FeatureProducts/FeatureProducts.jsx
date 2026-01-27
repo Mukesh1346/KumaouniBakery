@@ -101,7 +101,7 @@ const FeaturedProducts = () => {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 className="fw-bold mb-1">Featured Products</h4>
+          <h4 className="fw-bold featuretitle mb-1">Featured Products</h4>
           <p className="text-muted mb-0">Life Is Celebration - We Deliver Happiness</p>
         </div>
         <button className="btn btn-dark px-4">View All</button>

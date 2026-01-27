@@ -100,7 +100,7 @@ const BestSellingProduct = () => {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 className="fw-bold mb-1">Best Selling Flowers & Gifts</h4>
+          <h4 className="fw-bold BestSellingtitle mb-1">Best Selling Flowers & Gifts</h4>
           <p className="text-muted mb-0">Surprise Your Loved Ones</p>
         </div>
         <button className="btn btn-dark px-4">View All</button>

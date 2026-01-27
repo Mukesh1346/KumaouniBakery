@@ -53,16 +53,20 @@ const Hero = () => {
     <>
       <div className="hero container topspacing">
         <div className="row align-items-center">
-          <div className="col-md-7 text-center">
-            <p className="heroPinkHeading mb-0">Made For You</p>
-            <p className="brownHeading">With Love</p>
-            <p className="hero-description">
-              Established in 2015, Cake Story has been delivering a wide range
-              of scrumptious bakery items to the entire Gurgaon. The Cake Story
-              has just launched this premiere website to add sweetness in your
-              routine life without you making an extra attempt.
-            </p>
-          </div>
+         
+  <div className="col-md-7 text-center">
+    <p className="heroPinkHeading mb-0">Crafted With Care</p>
+    <p className="brownHeading">Baked With Love</p>
+    <p className="hero-description">
+      At <strong>cakenpetals</strong>, every cake is a celebration of beauty,
+      flavor, and emotion. Inspired by delicate petals and the joy of freshly
+      baked creations, we design desserts that look as exquisite as they taste.
+      From quiet, intimate moments to grand celebrations, we add sweetness to
+      your life—one thoughtfully crafted slice at a time.
+    </p>
+  </div>
+
+
           <div className="col-md-5">
             <div className="image-grid row gx-2">
               <div className="col-6 mb-2">
