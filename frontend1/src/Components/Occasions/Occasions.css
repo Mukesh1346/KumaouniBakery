@@ -47,7 +47,8 @@
 ===================== */
 .occasionalPic {
     width: 100%;
-    border-radius: 14px;
+    height:400px;
+    border-radius: 50% 50% 5% 5%;
     transition: transform 0.4s ease;
 }
 

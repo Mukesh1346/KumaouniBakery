@@ -62,7 +62,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(90deg, #6d4ebf 0%, #f0f9ff 100%);
+  background: linear-gradient(90deg, #df4444 0%, #de9696 100%);
   padding: 10px;
   border-radius: 6px;
   cursor: pointer;
@@ -355,6 +355,7 @@
 
 .delivery-country {
   font-size: 13px;
+  color:white;
   font-weight: 600;
   max-width: 120px;
   white-space: nowrap;

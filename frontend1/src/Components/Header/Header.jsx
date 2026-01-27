@@ -305,7 +305,7 @@ const toggleDropdown = (key) => {
   )}
 
   <div className="DeliverSection">
-    <small>Deliver to</small>
+    <small className="text-light">Deliver to</small>
     <span className="delivery-country">
       {selectedCountry?.name || "Select Country"}
     </span>

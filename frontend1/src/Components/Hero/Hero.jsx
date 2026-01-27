@@ -55,8 +55,8 @@ const Hero = () => {
         <div className="row align-items-center">
          
   <div className="col-md-7 text-center">
-    <p className="heroPinkHeading mb-0">Crafted With Care</p>
-    <p className="brownHeading">Baked With Love</p>
+    <p className="heroPinkHeading mb-0">Delicate Designs. Decadent Flavors.</p>
+    <p className="brownHeading">Turning Sweet Moments into Beautiful Memories.</p>
     <p className="hero-description">
       At <strong>cakenpetals</strong>, every cake is a celebration of beauty,
       flavor, and emotion. Inspired by delicate petals and the joy of freshly
