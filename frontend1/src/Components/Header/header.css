@@ -62,7 +62,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(90deg, #cde7f6 0%, #f0f9ff 100%);
+  background: linear-gradient(90deg, #6d4ebf 0%, #f0f9ff 100%);
   padding: 10px;
   border-radius: 6px;
   cursor: pointer;
@@ -350,7 +350,7 @@
 
 .DeliverSection small {
   font-size: 11px;
-  color: #666;
+  color: #000000;
 }
 
 .delivery-country {

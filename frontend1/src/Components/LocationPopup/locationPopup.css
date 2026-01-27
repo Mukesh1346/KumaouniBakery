@@ -20,19 +20,20 @@
 
 /* HEADER */
 .popup-header {
-  background: #e9f6ff;
+  background: #9680d4;
   padding: 20px;
   position: relative;
 }
 
 .popup-header h5 {
+  color:white;
   margin: 0;
   font-weight: 600;
 }
 
 .popup-header p {
   margin: 6px 0 0;
-  color: #0077b6;
+  color: #ffffff;
   font-size: 14px;
 }
 
