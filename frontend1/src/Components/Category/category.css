@@ -415,6 +415,7 @@
     padding: 1rem 0;
   }
   .category-container .slick-track {
+    width: auto !important;
     gap: 10px;
   }
   .category-name {

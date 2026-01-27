@@ -1,4 +1,6 @@
-/* Heading */
+/* =====================
+   HEADING
+===================== */
 .OccasionHeadSec {
     text-align: center;
     margin-bottom: 40px;
@@ -15,20 +17,34 @@
     letter-spacing: 1px;
 }
 
-/* Grid layout */
+/* =====================
+   GRID LAYOUT
+===================== */
 .OccasionCardSec {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
 }
 
-/* Card */
+/* ✅ FORCE 2 CARDS ON SMALL SCREENS */
+@media (max-width: 576px) {
+    .OccasionCardSec {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+}
+
+/* =====================
+   CARD
+===================== */
 .OccasionCard {
     text-align: center;
     cursor: pointer;
 }
 
-/* Image */
+/* =====================
+   IMAGE
+===================== */
 .occasionalPic {
     width: 100%;
     border-radius: 14px;
@@ -40,7 +56,9 @@
     transform: scale(1.05);
 }
 
-/* Title */
+/* =====================
+   TITLE
+===================== */
 .OccasionCard h3 {
     margin-top: 12px;
     font-size: 16px;
@@ -48,15 +66,11 @@
     color: #0E4D65;
 }
 
-/* Extra safety for very small screens */
+/* =====================
+   VERY SMALL SCREENS
+===================== */
 @media (max-width: 360px) {
     .OccasionCard h3 {
         font-size: 14px;
     }
-}
-
-@media(max-width:768px){
-    .occasionalPic {
-    width: 80%;
-}
 }

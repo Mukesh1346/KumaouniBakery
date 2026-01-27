@@ -5,7 +5,7 @@ import "./productDetails.css";
 import AllProducts from "../../Components/AllProducts/AllProducts";
 import axios from "axios";
 import Swal from "sweetalert2";
-import pic1 from "../../images/pic/Product2.avif"
+import Pic1 from "../../images/pic/Product3.avif"
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import RecommendedPopup from "../../Components/RecommendedPopup/RecommendedPopup";
 import { SiPaytm } from "react-icons/si";
@@ -375,7 +375,7 @@ const ProductDetails = () => {
                       {[1, 2, 3, 4, 5, 6].map((item, index) => (
                         <div key={index} className="pdx-addon-slide">
                           <div className="pdx-addon-card">
-                            <img src={pic1} alt="addon" />
+                            <img src={Pic1} alt="addon" />
                             <p className="pdx-addon-name">Birthday Cap</p>
                             <span className="pdx-addon-price">₹ 99</span>
                             <button className="pdx-addon-btn">ADD</button>

@@ -9,97 +9,95 @@ import logo from "../../images/pic/logo.png"
 
 
 
-// const megaCategories = [
-//   {
-//     name: "Cakes",
-//     items: [
-//       "Birthday Cakes","Anniversary Cakes","Photo Cakes","Designer Cakes",
-//       "Chocolate Cakes","Butterscotch Cakes","Red Velvet Cakes","Black Forest",
-//       "Cup Cakes","Dry Cakes","Eggless Cakes","Kids Cakes",
-//       "Theme Cakes","Wedding Cakes","Pinata Cakes","Pull Me Up Cakes",
-//       "Midnight Cakes","Same Day Cakes","Premium Cakes","Heart Shape Cakes",
-//       "Tall Cakes","Jar Cakes","Bento Cakes","Fusion Cakes",
-//       "Classic Cakes","Luxury Cakes","Fresh Cream Cakes","Fruit Cakes",
-//       "Vanilla Cakes","Coffee Cakes","Hazelnut Cakes","Truffle Cakes"
-//     ]
-//   },
-//   {
-//     name: "Flowers",
-//     items: [
-//       "Roses","Lilies","Orchids","Carnations",
-//       "Gerberas","Tulips","Sunflowers","Mixed Flowers",
-//       "Bouquets","Flower Baskets","Vase Arrangements","Luxury Flowers",
-//       "Red Roses","Pink Roses","Yellow Roses","White Roses",
-//       "Birthday Flowers","Anniversary Flowers","Romantic Flowers","Thank You Flowers",
-//       "Congrats Flowers","Get Well Soon","Sorry Flowers","New Baby Flowers",
-//       "Fresh Flowers","Exotic Flowers","Premium Flowers","Artificial Flowers",
-//       "Floral Combos","Flower Hampers","Same Day Flowers","Midnight Flowers"
-//     ]
-//   },
-//   {
-//     name: "Gifts",
-//     items: Array.from({ length: 32 }, (_, i) => `Gift Item ${i + 1}`)
-//   },
-//   {
-//     name: "Combos",
-//     items: Array.from({ length: 32 }, (_, i) => `Combo Item ${i + 1}`)
-//   },
-//   {
-//     name: "Personalised",
-//     items: Array.from({ length: 32 }, (_, i) => `Personalised Item ${i + 1}`)
-//   },
-//   {
-//     name: "Plants",
-//     items: Array.from({ length: 32 }, (_, i) => `Plant Item ${i + 1}`)
-//   },
-//   {
-//     name: "Chocolates",
-//     items: Array.from({ length: 32 }, (_, i) => `Chocolate Item ${i + 1}`)
-//   },
-//   {
-//     name: "Occasions",
-//     items: Array.from({ length: 32 }, (_, i) => `Occasion Item ${i + 1}`)
-//   },
-//   {
-//     name: "International",
-//     items: Array.from({ length: 32 }, (_, i) => `International Item ${i + 1}`)
-//   },
-//   {
-//     name: "Offers",
-//     items: Array.from({ length: 32 }, (_, i) => `Offer Item ${i + 1}`)
-//   }
-// ];
+
 
 
 const megaCategories = [
   {
-    name: "Cakes",
+    name: "Cake",
     subcategories: [
       {
-        name: "Birthday Cakes",
-        children: ["Photo Cakes", "Designer Cakes", "Kids Cakes", "Theme Cakes"]
+        name: "CAKES",
+        children: [" Pineapple", "Butterscotch", "Fruit ", " Vannilla fruit","Blueberry ","red velvet","heart","truffle ","choco vannila","Black forest ","Chocolate german"]
       },
       {
-        name: "Anniversary Cakes",
-        children: ["Heart Shape Cakes", "Red Velvet Cakes", "Chocolate Cakes", "Black Forest Cakes"]
+        name: "Tub cakes",
+        children: ["fruit", 
+"blueberry", 
+ "pineapple", 
+ "Red velvet", 
+ "Black forest"
+
+]
       },
       {
         name: "Premium Cakes",
-        children: ["Tall Cakes", "Luxury Cakes", "Fusion Cakes", "Truffle Cakes"]
+       children: [
+        "Hawai Pineapple",
+        "Rasmalai",
+        "Gulab Jamun",
+        "Pistachio",
+        "Strawberry Rose",
+      ]
       },
       {
-        name: "Eggless Cakes",
-        children: ["Vanilla Eggless", "Chocolate Eggless", "Fruit Eggless", "Butterscotch Eggless"]
-      }
+         name: "Pastry",
+      children: [
+        "Black Forest",
+        "Pineapple",
+        "Truffle",
+        "Red Velvet",
+        "Butterscotch",
+      ], },
+      {
+         name: "Jar Cakes",
+      children: [
+        "Chocolate",
+        "Red Velvet",
+        "Blueberry",
+        "Crunchy Chocolate",
+      ],
+      },
+       {
+      name: "Cheese Cakes",
+      children: [
+        "Blueberry",
+        "Biscoff",
+        "Mango",
+        "Strawberry",
+      ],
+    },
+     {
+      name: "Cheese Cake Slice",
+      children: [
+        "Biscoff",
+        "Nutella",
+        "Blueberry",
+      ],
+    },
+     {
+      name: "Cup Cakes",
+      children: [
+        "Blueberry",
+        "Red Velvet",
+        "Vanilla",
+        "Biscoff",
+        "Coffee",
+        "Chocolate",
+      ],
+    }
     ]
   },
   {
     name: "Flowers",
     subcategories: [
       {
-        name: "Roses",
-        children: ["Red Roses", "Pink Roses", "White Roses", "Yellow Roses"]
-      },
+      name: "Flower Combos",
+      children: [
+        "Truffle with Red Roses Box",
+        "Truffle with Red Roses Box + Teddy + Chocolate",
+      ],
+    },
       {
         name: "Lilies",
         children: ["White Lilies", "Pink Lilies", "Oriental Lilies", "Mixed Lilies"]
@@ -115,7 +113,7 @@ const megaCategories = [
     ]
   },
   {
-    name: "Gifts",
+    name: "Anniversary",
     subcategories: [
       {
         name: "Personalised Gifts",
@@ -134,8 +132,76 @@ const megaCategories = [
         children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
       }
     ]
-  }
+  },
+   {
+    name: "Wedding",
+    subcategories: [
+      {
+        name: "Personalised Gifts",
+        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
+      },
+      {
+        name: "Soft Toys",
+        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
+      },
+      {
+        name: "Gift Hampers",
+        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
+      },
+      {
+        name: "Greeting Gifts",
+        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
+      }
+    ]
+  },
+  {
+   name: "Festivals",
+    subcategories: [
+      {
+        name: "Personalised Gifts",
+        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
+      },
+      {
+        name: "Soft Toys",
+        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
+      },
+      {
+        name: "Gift Hampers",
+        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
+      },
+      {
+        name: "Greeting Gifts",
+        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
+      }
+    ]
+  },
+
+   {
+   name: "Friendships",
+    subcategories: [
+      {
+        name: "Personalised Gifts",
+        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
+      },
+      {
+        name: "Soft Toys",
+        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
+      },
+      {
+        name: "Gift Hampers",
+        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
+      },
+      {
+        name: "Greeting Gifts",
+        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
+      }
+    ]
+  },
+
+
 ];
+
+
 
 
 const Header = () => {
@@ -143,6 +209,9 @@ const Header = () => {
   const [categories, setCategories] = useState([]);
   const [ showLocationModal, setShowLocationModal] = useState(false);
    const [openIndex, setOpenIndex] = useState(null);
+const [countries, setCountries] = useState([]);
+const [selectedCountry, setSelectedCountry] = useState(null);
+
 
 const toggleDropdown = (key) => {
   setOpenIndex(openIndex === key ? null : key);
@@ -172,6 +241,37 @@ const toggleDropdown = (key) => {
     fetchCategories();
   }, []);
 
+
+
+  useEffect(() => {
+  const fetchCountries = async () => {
+    try {
+      const res = await axios.get(
+        "https://restcountries.com/v3.1/all?fields=name,flags,cca2"
+      );
+
+      const formatted = res.data.map((item) => ({
+        name: item.name.common,
+        flag: item.flags.png,
+        code: item.cca2,
+      }));
+
+      setCountries(formatted);
+
+      // ✅ SET DEFAULT COUNTRY (INDIA)
+      const india = formatted.find((c) => c.code === "IN");
+      if (india) {
+        setSelectedCountry(india);
+      }
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+    }
+  };
+
+  fetchCountries();
+}, []);
+
+
   return (
     <>
       {/* ===== TOP HEADER ===== */}
@@ -192,13 +292,27 @@ const toggleDropdown = (key) => {
             </Link> */}
 
             {/* DELIVERY LOCATION */}
-            <div className="delivery-box"  onClick={() => setShowLocationModal(true) } >
-              <i className="bi bi-geo-alt"></i>
-              <div className="DeliverSection">
-                <small>Deliver to</small>
-                 <img src="/pen.svg" alt="" />
-              </div>
-            </div>
+         <div
+  className="delivery-box"
+  onClick={() => setShowLocationModal(true)}
+>
+  {selectedCountry && (
+    <img
+      src={selectedCountry.flag}
+      alt={selectedCountry.name}
+      className="delivery-flag"
+    />
+  )}
+
+  <div className="DeliverSection">
+    <small>Deliver to</small>
+    <span className="delivery-country">
+      {selectedCountry?.name || "Select Country"}
+    </span>
+  </div>
+
+  <IoIosArrowDown className="delivery-arrow" />
+</div>
 
          
 {/* SEARCH (ICON ONLY – SAME AS ORIGINAL) */}
@@ -320,11 +434,15 @@ const toggleDropdown = (key) => {
         </div>
       </header>
 
-      {  showLocationModal && (
-        <LocationPopup  onClose={() => setShowLocationModal(false)}/>
-      )
+    {showLocationModal && (
+  <LocationPopup
+    onClose={() => setShowLocationModal(false)}
+    countries={countries}
+    selectedCountry={selectedCountry}
+    setSelectedCountry={setSelectedCountry}
+  />
+)}
 
-      }
 
 
  </div>

@@ -2,6 +2,11 @@ body {
   background: #f6f6f6;
 }
 
+
+.logoImg{
+  height: 80px;
+  width: 80px;
+}
 /* TOP BAR */
 .top-bar {
   background: #111;
@@ -25,7 +30,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 0;
+  padding: 5px 0;
+}
+.productImg{
+  height:70px;
+  width: 70px;
 }
 
 .logo {

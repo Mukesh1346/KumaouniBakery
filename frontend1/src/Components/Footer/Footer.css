@@ -138,9 +138,9 @@
 
 
 .fnp-footer {
-  background: #f0f9ff;;
+  background:#df4444;
   font-size: 14px;
-  color: #333;
+  color: #ffffff;
 }
 
 /* TOP */
@@ -166,7 +166,7 @@
 
 .footer-top ul li a {
   text-decoration: none;
-  color: #555;
+  color: #ffffff;
 }
 
 .footer-top ul li a:hover {
@@ -182,7 +182,7 @@
 /* SUBSCRIBE */
 .subscribe-text {
   font-size: 13px;
-  color: #666;
+  color: #ffffff;
 }
 
 .subscribe-box {
@@ -241,6 +241,10 @@
   .footer-bottom .container {
     flex-direction: column;
     gap: 10px;
+    text-align: center;
+  }
+
+  .footer-column{
     text-align: center;
   }
 }

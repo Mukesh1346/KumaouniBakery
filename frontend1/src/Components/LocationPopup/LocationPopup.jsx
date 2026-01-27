@@ -1,10 +1,15 @@
 import "./locationPopup.css";
 
-const LocationPopup = ({ onClose }) => {
+const LocationPopup = ({
+  onClose,
+  countries = [],
+  selectedCountry,
+  setSelectedCountry,
+}) => {
   return (
     <div className="location-overlay" onClick={onClose}>
       <div className="location-popup" onClick={(e) => e.stopPropagation()}>
-        
+
         {/* HEADER */}
         <div className="popup-header">
           <h5>Enter delivery location</h5>
@@ -13,19 +18,30 @@ const LocationPopup = ({ onClose }) => {
         </div>
 
         {/* INPUT */}
-      <div className="location-input">
-  <div className="country-box">
-    <select className="country-select">
-      <option className="">🇮🇳 India</option>
-      <option className="">🇳🇵 Nepal</option>
-      <option className="">🇧🇹 Bhutan</option>
-      <option className="">🇱🇰 Sri Lanka</option>
-    </select>
-  </div>
+        <div className="location-input">
+          <div className="country-box">
+            <select
+              className="country-select"
+              value={selectedCountry?.code || ""}
+              onChange={(e) => {
+                const country = countries.find(
+                  (c) => c.code === e.target.value
+                );
+                setSelectedCountry(country);
+              }}
+            >
+              <option value="">Select Country</option>
 
-  <input type="text" placeholder="Enter Area / location" />
-</div>
+              {countries.map((country) => (
+                <option key={country.code} value={country.code}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
+          <input type="text" placeholder="Enter Area / location" />
+        </div>
 
         {/* CURRENT LOCATION */}
         <div className="current-location">

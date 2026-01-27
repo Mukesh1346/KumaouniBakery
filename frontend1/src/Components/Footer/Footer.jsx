@@ -142,10 +142,10 @@ const Footer = () => {
         <div className="row footer-top">
 
           {/* Policy Info */}
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
             <h6>Policy Info</h6>
-            <ul>
-              <li><Link to="/terms-&-conditions">Terms & Conditions</Link></li>
+            <ul className="text-light">
+              <li className="text-light"><Link to="/terms-&-conditions">Terms & Conditions</Link></li>
               <li><Link to="/privacy-policy">Privacy Policy</Link></li>
               <li><Link to="#">Terms of Use</Link></li>
               <li><Link to="#">Disclaimer</Link></li>
@@ -153,7 +153,7 @@ const Footer = () => {
           </div>
 
           {/* About Company */}
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
             <h6>About Company</h6>
             <ul>
               <li><Link to="/about-us">About Us</Link></li>
@@ -164,7 +164,7 @@ const Footer = () => {
           </div>
 
           {/* API CATEGORY SECTION */}
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
             <h6>Our Bakery</h6>
             <ul className="footer-scroll">
               {categories.map((cat) =>
@@ -180,7 +180,7 @@ const Footer = () => {
           </div>
 
           {/* Need Help */}
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
             <h6>Need Help ?</h6>
             <ul>
               <li><Link to="/contact-us">Contact Us</Link></li>
@@ -189,7 +189,7 @@ const Footer = () => {
           </div>
 
           {/* International */}
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
             <h6>International Presence</h6>
             <ul>
               <li>Dubai</li>
@@ -200,7 +200,7 @@ const Footer = () => {
           </div>
 
           {/* Subscribe */}
-          <div className="col-lg-2 col-md-8">
+          <div className="col-lg-2 footer-column col-md-8">
             <h6>Subscribe Now</h6>
             <p className="subscribe-text">
               Get updates on promotions and offers coupons.

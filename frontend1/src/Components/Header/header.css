@@ -323,6 +323,67 @@
   font-weight: 600;
 }
 
+
+
+/* DELIVERY BOX */
+.delivery-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.delivery-flag {
+  width: 22px;
+  height: 16px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.DeliverSection {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.DeliverSection small {
+  font-size: 11px;
+  color: #666;
+}
+
+.delivery-country {
+  font-size: 13px;
+  font-weight: 600;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delivery-arrow {
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .delivery-country {
+    max-width: 90px;
+    font-size: 12px;
+  }
+
+  .delivery-flag {
+    width: 20px;
+    height: 14px;
+  }
+}
+
+
+
+
+
 /* ANIMATION */
 @keyframes hdrFadeDown {
   from {

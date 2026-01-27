@@ -1,12 +1,14 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./orderTracking.css";
+import logo from "../../images/pic/logo.png"
+import pic1 from "../../images/pic/Product1.avif"
 
 const OrderTracking = () => {
   return (
     <>
       {/* ================= TOP BLACK BAR ================= */}
-      <div className="top-bar">
+      {/* <div className="top-bar">
         <div className="container d-flex justify-content-between">
           <div className="top-links">
             <span>Start Selling</span>
@@ -15,12 +17,14 @@ const OrderTracking = () => {
           </div>
           <div className="lang">English</div>
         </div>
-      </div>
+      </div> */}
 
       {/* ================= HEADER ================= */}
       <div className="main-header">
         <div className="container header-inner">
-          <div className="logo">∞</div>
+          <div className="logo">
+           <img src={logo} className=" logoImg" alt=""/>
+          </div>
 
           <div className="search-box">
             <input type="text" placeholder='Try "Nike Air Jordan"' />
@@ -146,7 +150,9 @@ const OrderTracking = () => {
             ].map((name, index) => (
               <div className="col-md-6" key={index}>
                 <div className="item-card">
-                  <div className="item-img"></div>
+                  <div className="item-img">
+                    <img src={pic1} alt="" className="productImg" />
+                  </div>
                   <div>
                     <p className="fw-semibold mb-1">{name}</p>
                     <p className="price">Rp 2,379,000</p>

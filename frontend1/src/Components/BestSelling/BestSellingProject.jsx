@@ -109,7 +109,7 @@ const BestSellingProduct = () => {
       {/* Product Grid */}
       <div className="row g-4">
         {products.map((item, index) => (
-          <div className="col-xl-3 col-lg-4 col-md-4 col-sm-6" key={index}>
+          <div className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6" key={index}>
             <div className="product-card">
 
               {/* Image */}

@@ -10,6 +10,8 @@ import BestSellingProduct from "../BestSelling/BestSellingProject";
 import WhatsAppChat from "../WhatsApp/WhatsApp";
 import PromoBanner from "../PromoBanner/PromoBanner";
 import CakeBanners from "../CakeBanner/CakeBanner";
+import Banner from "../BottomBanner/Banner";
+import FeaturedProducts from "../FeatureProducts/FeatureProducts";
 
 const Home = () => {
   return (
@@ -18,13 +20,15 @@ const Home = () => {
       <Category />
       <WhatsAppChat />
       <CakeBanners/>
-      <Hero />
       <AllProducts />
+      <Hero />
+      <FeaturedProducts/>
       <PromoBanner/>
       <Occasions/>
       <BestSellingProduct/>
       <CategorySection/>
       <Testimonial />
+      <Banner/>
     </>
   );
 };
