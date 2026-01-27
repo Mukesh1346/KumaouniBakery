@@ -26,7 +26,7 @@ const Home = () => {
       <PromoBanner/>
       <Occasions/>
       <BestSellingProduct/>
-      <CategorySection/>
+      {/* <CategorySection/> */}
       <Testimonial />
       <Banner/>
     </>

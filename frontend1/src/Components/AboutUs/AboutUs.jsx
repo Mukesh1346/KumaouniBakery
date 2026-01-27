@@ -112,7 +112,7 @@ const AboutUs = () => {
       </section>
 
       {/* ---------- Our Team ---------- */}
-      <section className="OurTeam">
+      {/* <section className="OurTeam">
         <div className="team-section container">
           <p className="ourTeam_miniHeading">// Our Team</p>
           <h2>The Hearts Behind cakenpetals</h2>
@@ -129,7 +129,7 @@ const AboutUs = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 };

@@ -411,9 +411,9 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-
+{/* 
                 <div className="offers-wrapper">
-                  {/* Header */}
+                
                   <div className="offers-header" onClick={() => setOpen(!open)}>
                     <div className="offers-title">
                       <span className="gear-icon">⚙</span>
@@ -422,7 +422,6 @@ const ProductDetails = () => {
                     <span className={`arrow ${open ? "open" : ""}`}>⌃</span>
                   </div>
 
-                  {/* Dropdown Content */}
                   {open && (
                     <div className="offers-body">
                       <div className="offer-card">
@@ -463,7 +462,7 @@ const ProductDetails = () => {
                   )}
 
 
-                </div>
+                </div> */}
 
                 {/* Description */}
                 <div className="description-box">
