@@ -29,7 +29,7 @@ import Profile from "./Pages/Profile/Profile";
 import OrderTracking from "./Pages/OrderTracking/OrderTracking";
 import QA from "./Pages/Faq/Faq"
 import ReferAndEarn from "./Pages/ReferEarn/ReferEarn";
-
+import Subcategory from "./Pages/SubSubCategory/SubSubCategory"
 const App = () => {
   return (
     <>
@@ -40,6 +40,7 @@ const App = () => {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/all-products" element={<AllProducts />} />
           <Route path="/product-related/:subcatname" element={<AllCakes />} />
+          <Route path="/sub-subcategory/:subcatname" element={<Subcategory/>} />
           <Route path="/candle/all-candles" element={<AllCandles />} />
           <Route path="/product-details/:name" element={<ProductDetails />} />
           <Route path="/contact-us" element={<ContactUs />} />

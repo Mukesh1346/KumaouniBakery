@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import "./subsubcategory.css";
 import axios from "axios";
 
-const AllCakes = () => {
+const SubSubCategory = () => {
   const { subcatname } = useParams();
   const [priceOpen, setPriceOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(null); // New state for selected price range
@@ -119,4 +119,4 @@ const AllCakes = () => {
   );
 };
 
-export default AllCakes;
+export default SubSubCategory;

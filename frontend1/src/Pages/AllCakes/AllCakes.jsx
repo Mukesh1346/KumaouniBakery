@@ -90,6 +90,7 @@ const AllCakes = () => {
                   <div className="col-md-3 col-6 mb-3" key={index}>
                     <div className="card">
                       <Link to={`/product-details/${item.productName}`}>
+                      {/* <Link to={`/sub-subcategory/${item.productName}`}> */}
                         <img
                           src={`${process.env.REACT_APP_API_URL}/${item.productImage[0]}`}
                           className="w-100"
