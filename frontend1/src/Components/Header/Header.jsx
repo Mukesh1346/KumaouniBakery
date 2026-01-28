@@ -7,11 +7,6 @@ import { IoIosArrowDown } from "react-icons/io";
 import Banner from "../../images/pic/topBanner.png";
 import logo from "../../images/pic/logo.png"
 
-
-
-
-
-
 const megaCategories = [
   {
     name: "Cake",

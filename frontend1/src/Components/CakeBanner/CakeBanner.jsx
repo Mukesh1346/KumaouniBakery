@@ -1,7 +1,7 @@
 import React from "react";
 import "./CakeBanners.css";
-import pic2 from "../../images/pic/promo2.jpg"
-import pic1 from "../../images/pic/promo3.webp"
+import pic2 from "../../images/1200 by 600 banner/Banner1.jpg"
+import pic1 from "../../images/1200 by 600 banner/Banner2.jpg"
 
 const cakeBannerData = [
   {
