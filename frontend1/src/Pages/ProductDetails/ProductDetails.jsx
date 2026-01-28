@@ -5,7 +5,7 @@ import "./productDetails.css";
 import AllProducts from "../../Components/AllProducts/AllProducts";
 import axios from "axios";
 import Swal from "sweetalert2";
-import Pic1 from "../../images/pic/Product3.avif"
+import Pic1 from "../../images/pic/redVelvet.jpg"
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import RecommendedPopup from "../../Components/RecommendedPopup/RecommendedPopup";
 import { SiPaytm } from "react-icons/si";
