@@ -1,8 +1,8 @@
 import React from 'react'
 import './Occasions.css'
-import pic1 from "../../images/pic/BirdayG.avif"
+import pic1 from "../../images/pic/briday6.jpg"
 import pic2 from "../../images/pic/party4.jpg"
-import pic3 from "../../images/pic/Anni.jpg"
+import pic3 from "../../images/pic/aniver.jpeg"
 import pic4 from "../../images/pic/wed.jpg"
 
 
