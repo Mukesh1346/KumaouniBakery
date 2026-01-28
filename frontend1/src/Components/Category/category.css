@@ -401,7 +401,7 @@
 
 .category-container .slick-track {
   display: flex;
-  gap: 20px;
+  gap: 0px;
 }
 
 .category-main {

@@ -5,7 +5,7 @@ import axios from "axios";
 import LocationPopup from "../LocationPopup/LocationPopup";
 import { IoIosArrowDown } from "react-icons/io";
 import Banner from "../../images/pic/topBanner.png";
-import logo from "../../images/pic/logo.png"
+import logo from "../../images/pic/logo1.jpg"
 
 const megaCategories = [
   {
