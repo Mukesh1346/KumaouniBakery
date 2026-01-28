@@ -57,13 +57,14 @@ const Hero = () => {
   <div className="col-md-7 text-center">
     <p className="heroPinkHeading mb-0">Delicate Designs. Decadent Flavors.</p>
     <p className="brownHeading">Turning Sweet Moments into Beautiful Memories.</p>
-    <p className="hero-description">
+    <p className="hero-description heropara">
       At <strong>cakenpetals</strong>, every cake is a celebration of beauty,
       flavor, and emotion. Inspired by delicate petals and the joy of freshly
       baked creations, we design desserts that look as exquisite as they taste.
       From quiet, intimate moments to grand celebrations, we add sweetness to
       your life—one thoughtfully crafted slice at a time.
     </p>
+    <p className="heropara">Each cake is crafted with love, premium ingredients, and thoughtful design—bringing together flavor, artistry, and emotion. From intimate moments to grand celebrations, cakenpetals is here to turn your special occasions into unforgettable memories, one slice at a time.</p>
   </div>
 
 

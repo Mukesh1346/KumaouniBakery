@@ -36,12 +36,12 @@ const PromoBanner = () => {
       {cakeBannerData.map((item) => (
         <div className="cake-banner-card" key={item.id}>
           <img src={item.image} alt="cake banner" />
-          <div className="cake-overlay">
+          {/* <div className="cake-overlay">
             <h4>{item.title}</h4>
             <h2>{item.highlight}</h2>
             <p>{item.subtitle}</p>
             <button className="cake-btn">Order Now 🍰</button>
-          </div>
+          </div> */}
         </div>
       ))}
     </div>

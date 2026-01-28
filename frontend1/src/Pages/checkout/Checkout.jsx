@@ -1,178 +1,131 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react";
+import "./checkout.css";
 import Swal from "sweetalert2";
 
-const CheckOut = () => {
-  const navigate = useNavigate();
-  const userid = sessionStorage.getItem("userId");
+const Checkout = () => {
+  const [mode, setMode] = useState("new"); // new | existing | guest
 
-  const [cartItems, setCartItems] = useState([]);
-
-  const [formData, setFormData] = useState({
-    userId: userid || null,
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    state: "",
-    city: "",
-    pin: "",
-    totalPrice: 0,
-    paymentMode: "online",
-    cartItems: [],
-  });
-
-  /* ---------- LOAD CART ---------- */
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-    const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    setCartItems(storedCart);
-
-    setFormData((prev) => ({
-      ...prev,
-      cartItems: storedCart,
-      totalPrice: calculateTotal(storedCart),
-    }));
-  }, []);
-
-  /* ---------- TOTAL ---------- */
-  const calculateTotal = (items) => {
-    const subtotal = items.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-    const shipping = subtotal < 500 ? 50 : 0;
-    return subtotal + shipping;
-  };
-
-  /* ---------- FORM CHANGE ---------- */
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  /* ---------- VALIDATION ---------- */
-  const validateForm = () => {
-    if (!formData.name || !formData.email || !formData.phone) {
-      Swal.fire("Warning", "Please fill all required fields", "warning");
-      return false;
-    }
-    if (cartItems.length === 0) {
-      Swal.fire("Warning", "Your cart is empty", "warning");
-      return false;
-    }
-    return true;
-  };
-
-  /* ---------- PLACE ORDER ---------- */
-  const handlePlaceOrder = () => {
-    if (!validateForm()) return;
-
-    if (formData.paymentMode === "online") {
-      initiateOnlinePayment();
-    } else {
-      submitOrder();
-    }
-  };
-
-  /* ---------- ONLINE PAYMENT ---------- */
-  const initiateOnlinePayment = async () => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/checkout`,
-        formData
-      );
-
-      const { razorpayOrderId, amount, currency, orderId } = response.data;
-
-      const options = {
-        key: "rzp_test_XPcfzOlm39oYi8",
-        amount,
-        currency,
-        name: "Crazy Cake",
-        description: "Order Payment",
-        order_id: razorpayOrderId,
-
-        handler: async (paymentResponse) => {
-          try {
-            const verifyResponse = await axios.post(
-              `${process.env.REACT_APP_API_URL}/api/verify-payment`,
-              {
-                razorpay_payment_id:
-                  paymentResponse.razorpay_payment_id,
-                razorpay_order_id:
-                  paymentResponse.razorpay_order_id,
-                razorpay_signature:
-                  paymentResponse.razorpay_signature,
-              }
-            );
-
-            if (verifyResponse.data.success) {
-              Swal.fire("Success", "Payment Successful!", "success");
-              sessionStorage.removeItem("cart");
-              navigate("/success", {
-                state: { paymentStatus: "online", orderId },
-              });
-            } else {
-              Swal.fire("Error", "Payment verification failed", "error");
-            }
-          } catch (err) {
-            Swal.fire("Error", "Verification error", "error");
-          }
-        },
-
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.phone,
-        },
-
-        theme: { color: "#F37254" },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      Swal.fire("Error", "Payment initiation failed", "error");
-    }
-  };
-
-  /* ---------- COD ---------- */
-  const submitOrder = async () => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/checkout`,
-        { ...formData, paymentMode: "cod" }
-      );
-
-      Swal.fire("Success", "Order placed successfully!", "success");
-      sessionStorage.removeItem("cart");
-
-      navigate("/success", {
-        state: {
-          paymentStatus: "cod",
-          orderId: response.data.orderId,
-        },
-      });
-    } catch (error) {
-      Swal.fire("Error", "Order failed", "error");
-    }
+  const handleContinue = () => {
+    Swal.fire("Success", "Proceeding to next step", "success");
   };
 
   return (
-    <button className="btn btn-primary" onClick={handlePlaceOrder}>
-      Place Order
-    </button>
+    <div className="checkout-page container">
+      <div className="row">
+
+        {/* LEFT SECTION */}
+        <div className="col-lg-7 checkout-left">
+          <h2 className="checkout-title">Checkout</h2>
+
+          <div className="info-bar">
+            <span>Not quite finished?</span>
+            <a href="#">Continue shopping →</a>
+          </div>
+
+          <div className="auth-box">
+            <div className="auth-header">AUTHENTICATE</div>
+
+            {/* New Customer */}
+            <div
+              className={`auth-card ${mode === "new" ? "active" : ""}`}
+              onClick={() => setMode("new")}
+            >
+              <div className="auth-icon">👤+</div>
+              <div>
+                <h6>New customer</h6>
+                <p>Create an account for faster checkout and order history.</p>
+              </div>
+              {mode === "new" && <span className="check">✔</span>}
+            </div>
+
+            {/* Existing Customer */}
+            <div
+              className={`auth-card ${mode === "existing" ? "active" : ""}`}
+              onClick={() => setMode("existing")}
+            >
+              <div className="auth-icon">👤</div>
+              <div>
+                <h6>Existing customer</h6>
+                <p>Login to your account for a faster checkout.</p>
+              </div>
+            </div>
+
+            {/* Guest */}
+            <div className="guest-line">
+              🏃 In a hurry?{" "}
+              <span onClick={() => setMode("guest")}>
+                Checkout as a guest
+              </span>
+            </div>
+
+            {/* FORM */}
+            <div className="form-section">
+              {mode !== "existing" && (
+                <div className="row">
+                  <div className="col-md-6">
+                    <input className="form-control" placeholder="First name*" />
+                  </div>
+                  <div className="col-md-6">
+                    <input className="form-control" placeholder="Last name*" />
+                  </div>
+                </div>
+              )}
+
+              <input
+                className="form-control mt-3"
+                placeholder="Your email*"
+              />
+
+              {mode !== "guest" && (
+                <input
+                  className="form-control mt-3"
+                  type="password"
+                  placeholder="Password*"
+                />
+              )}
+
+              <button className="btn continueBtn w-100 mt-4" onClick={handleContinue}>
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SECTION */}
+        <div className="col-lg-5 checkout-right">
+          <div className="summary-box">
+            <div className="product">
+              <div className="img-placeholder"></div>
+              <div>
+                <small>Classic Burger</small>
+                <h6>Cheese Burger with French Fries One Time</h6>
+                <strong>IDR 106,382.98</strong>
+              </div>
+            </div>
+
+            <div className="coupon">
+              <input placeholder="Discount code?" />
+              <button>Apply</button>
+            </div>
+
+            <div className="price-row">
+              <span>Subtotal:</span>
+              <span>IDR 106,382.98</span>
+            </div>
+
+            <div className="total">
+              <span>Total to pay</span>
+              <strong>IDR 106,382.98</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   );
 };
 
-export default CheckOut;
-
-
-
-
-
+export default Checkout;
 
 
 

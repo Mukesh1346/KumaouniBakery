@@ -14,6 +14,7 @@
 }
 
 .brownHeading {
+      line-height: initial;
   font-size: 35px;
   font-weight: 700;
   font-family: var(--font-family-design);
@@ -22,7 +23,7 @@
 }
 
 .hero-description {
-  font-size: 1.1rem;
+  /* font-size: 1.1rem; */
   color: #333;
   line-height: 1.5;
   margin-top: 1rem;
@@ -86,7 +87,11 @@
 }
 
 /* ------------- featured end ----------------  */
-
+ .heropara{
+    text-align: justify;
+    padding:0px 10px;
+    font-size: 1rem;
+ }
 
 @media (max-width: 768px) {
   .hero{
