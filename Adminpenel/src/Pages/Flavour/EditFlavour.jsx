@@ -17,7 +17,7 @@ const EditFlavour = () => {
     const fetchFlavour = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7000/api/get-single-flover/${id}`
+          `https://bakery-46ac.onrender.com/api/get-single-flover/${id}`
         );
         // //console.log(response);
         if (response.data && response.data.data) {
@@ -59,7 +59,7 @@ const EditFlavour = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:7000/api/update-flover/${id}`,
+        `https://bakery-46ac.onrender.com/api/update-flover/${id}`,
         updatedData
       );
       toast.success(response.data.message); // Show success message

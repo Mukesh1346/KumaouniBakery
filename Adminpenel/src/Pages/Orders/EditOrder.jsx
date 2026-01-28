@@ -14,7 +14,7 @@ const EditOrder = () => {
   // Fetch API data
   const getApiData = async () => {
     try {
-      const res = await axios.get(`http://localhost:7000/api/checkout/${id}`);
+      const res = await axios.get(`https://bakery-46ac.onrender.com/api/checkout/${id}`);
       setOrderData(res.data);
       setOrderStatus(res.data.orderStatus);
       setPaymentStatus(res.data.paymentStatus);
@@ -36,7 +36,7 @@ const EditOrder = () => {
         paymentStatus,
       };
       const res = await axios.put(
-        `http://localhost:7000/api/checkout/${id}`,
+        `https://bakery-46ac.onrender.com/api/checkout/${id}`,
         updatedData
       );
       toast.success("Order updated successfully!");
@@ -169,7 +169,7 @@ const EditOrder = () => {
                       </p>
                       <p className="mb-0">Message: {item.message}</p>
                       <img
-                        src={`http://localhost:7000/${item.image}`}
+                        src={`https://bakery-46ac.onrender.com/${item.image}`}
                         alt={item.name}
                         style={{
                           width: "100px",

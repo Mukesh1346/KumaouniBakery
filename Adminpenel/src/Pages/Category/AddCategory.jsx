@@ -22,7 +22,7 @@ const AddCategory = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:7000/api/create-main-category", 
+        "https://bakery-46ac.onrender.com/api/create-main-category", 
         formData,
         {
           headers: {

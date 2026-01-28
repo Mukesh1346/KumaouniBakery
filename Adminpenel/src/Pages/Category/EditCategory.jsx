@@ -16,7 +16,7 @@ const EditCategory = () => {
     const fetchCategory = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7000/api/get-single-main-category/${id}`
+          `https://bakery-46ac.onrender.com/api/get-single-main-category/${id}`
         );
         const { mainCategoryName, mainCategoryStatus } = response.data.data;
         setCategory({
@@ -41,7 +41,7 @@ const EditCategory = () => {
     setBtnLoading(true);
     try {
       const response = await axios.put(
-        `http://localhost:7000/api/update-main-category/${id}`,
+        `https://bakery-46ac.onrender.com/api/update-main-category/${id}`,
         category,
         {
           headers: {

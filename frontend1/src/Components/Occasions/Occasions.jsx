@@ -14,8 +14,6 @@ export default function Occasions() {
         { id: 2, img: pic2, title: "party"},
         { id: 3, img: pic3, title: "Anniversary"},
         { id: 4, img: pic4, title: "wedding"},
-
-
     ]
   return (
     <>

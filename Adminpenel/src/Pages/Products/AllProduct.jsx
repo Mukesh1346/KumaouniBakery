@@ -16,7 +16,7 @@ const AllProduct = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:7000/api/all-product"
+          "https://bakery-46ac.onrender.com/api/all-product"
         );
         //console.log(response);
         setProducts(response.data.data || []);
@@ -45,7 +45,7 @@ const AllProduct = () => {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:7000/api/delete-product/${productId}`
+          `https://bakery-46ac.onrender.com/api/delete-product/${productId}`
         );
         setProducts(products.filter((product) => product._id !== productId));
         toast.success("Product deleted successfully!");
@@ -124,7 +124,7 @@ const AllProduct = () => {
                     {product.productImage.map((image, imgIndex) => (
                       <img
                         key={imgIndex}
-                        src={`http://localhost:7000/${image}`}
+                        src={`https://bakery-46ac.onrender.com/${image}`}
                         alt="Product"
                         style={{ width: "50px", marginRight: "5px" }}
                       />

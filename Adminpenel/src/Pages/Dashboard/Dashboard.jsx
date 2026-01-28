@@ -42,64 +42,64 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         // Fetch users
-        const usersResponse = await axios.get("http://localhost:7000/api/user");
+        const usersResponse = await axios.get("https://bakery-46ac.onrender.com/api/user");
         setUsers(usersResponse.data.data);
 
         // Fetch banners
         const bannersResponse = await axios.get(
-          "http://localhost:7000/api/get-banners"
+          "https://bakery-46ac.onrender.com/api/get-banners"
         );
         setBanners(bannersResponse.data.data);
 
         // Fetch categories
         const categoriesResponse = await axios.get(
-          "http://localhost:7000/api/get-main-category"
+          "https://bakery-46ac.onrender.com/api/get-main-category"
         );
         setCategories(categoriesResponse.data.data);
 
         // Fetch sub-categories
         const subCategoriesResponse = await axios.get(
-          "http://localhost:7000/api/get-subcategory"
+          "https://bakery-46ac.onrender.com/api/get-subcategory"
         );
         setSubCategories(subCategoriesResponse.data.data);
 
         // Fetch colors
         const colorsResponse = await axios.get(
-          "http://localhost:7000/api/get-color"
+          "https://bakery-46ac.onrender.com/api/get-color"
         );
         setColors(colorsResponse.data.data);
 
         // Fetch sizes
         const sizesResponse = await axios.get(
-          "http://localhost:7000/api/get-size"
+          "https://bakery-46ac.onrender.com/api/get-size"
         );
         setSizes(sizesResponse.data.data);
 
         // Fetch flowers
         const flowersResponse = await axios.get(
-          "http://localhost:7000/api/get-flover"
+          "https://bakery-46ac.onrender.com/api/get-flover"
         );
         setFlowers(flowersResponse.data.data);
 
         // Fetch products
         const productsResponse = await axios.get(
-          "http://localhost:7000/api/all-product"
+          "https://bakery-46ac.onrender.com/api/all-product"
         );
         setProducts(productsResponse.data.data);
 
         // Fetch tags
         const tagsResponse = await axios.get(
-          "http://localhost:7000/api/get-tags"
+          "https://bakery-46ac.onrender.com/api/get-tags"
         );
         setTags(tagsResponse.data.data);
 
         // Fetch vouchers
-        // const vouchersResponse = await axios.get('http://localhost:7000/api/vouchers');
+        // const vouchersResponse = await axios.get('https://bakery-46ac.onrender.com/api/vouchers');
         // setVouchers(vouchersResponse.data);
 
         // Fetch orders
         const ordersResponse = await axios.get(
-          "http://localhost:7000/api/checkouts"
+          "https://bakery-46ac.onrender.com/api/checkouts"
         );
         // console.log(ordersResponse)
         setOrders(ordersResponse.data.data);
@@ -120,11 +120,11 @@ const Dashboard = () => {
   //   const fetchData = async () => {
   //     try {
   //       // Fetch orders for show order graph
-  //       const ordersResponse = await axios.get('http://localhost:7000/api/orders');
+  //       const ordersResponse = await axios.get('https://bakery-46ac.onrender.com/api/orders');
   //       setOrderss(ordersResponse.data);
 
   //       // Fetch day-by-day sale data for the graph
-  //       const salesResponse = await axios.get('http://localhost:7000/api/day-sales');
+  //       const salesResponse = await axios.get('https://bakery-46ac.onrender.com/api/day-sales');
   //       setDaySales(salesResponse.data);
 
   //     } catch (error) {
