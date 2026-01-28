@@ -7,6 +7,7 @@
 }
 
 .heroPinkHeading {
+  line-height: normal;
   font-size: 40px;
   font-weight: 700;
   font-family: var(--font-family-design);
