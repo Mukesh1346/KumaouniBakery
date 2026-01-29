@@ -1,0 +1,171 @@
+/* PAGE */
+.wishlist-page {
+  background: #fff;
+  padding-bottom: 60px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+.wishlist-header {
+  padding: 70px 15px 40px;
+  text-align: center;
+}
+
+.wishlist-header .heart {
+  font-size: 38px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.wishlist-header h1 {
+  font-size: 46px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* TABLE WRAPPER */
+.wishlist-table {
+  border-top: 1px solid #ddd;
+  width: 100%;
+}
+
+/* ROW */
+.wishlist-row {
+  display: grid;
+  grid-template-columns: 50px 2.2fr 1.2fr 1fr 1.6fr;
+  align-items: center;
+  padding: 24px 10px;
+  border-bottom: 1px solid #ddd;
+  gap: 10px;
+}
+
+.wishlist-head {
+  font-weight: 600;
+  padding: 16px 10px;
+}
+
+/* REMOVE */
+.remove-icon {
+  cursor: pointer;
+  font-size: 18px;
+  color: #999;
+}
+
+/* PRODUCT */
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.product-info img {
+  width: 70px;
+  max-width: 100%;
+}
+
+/* PRICE */
+.price del {
+  color: #999;
+  margin-right: 6px;
+}
+
+.price .sale {
+  background: #fff2a8;
+  padding: 2px 6px;
+  font-weight: 500;
+}
+
+/* STOCK */
+.stock {
+  color: #333;
+}
+
+/* ACTION */
+.action {
+  text-align: right;
+}
+
+.action button {
+  background: #5f9e94;
+  border: none;
+  color: #fff;
+  padding: 8px 22px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.action small {
+  display: block;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+/* ================= TABLET ================= */
+@media (max-width: 991px) {
+  .wishlist-row {
+    grid-template-columns: 40px 1fr;
+    grid-template-areas:
+      "remove product"
+      ". price"
+      ". stock"
+      ". action";
+    row-gap: 12px;
+  }
+
+  .remove-icon {
+    grid-area: remove;
+  }
+
+  .product-info {
+    grid-area: product;
+  }
+
+  .price {
+    grid-area: price;
+  }
+
+  .stock {
+    grid-area: stock;
+  }
+
+  .action {
+    grid-area: action;
+    text-align: left;
+  }
+
+  .wishlist-head {
+    display: none;
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 576px) {
+  .wishlist-header h1 {
+    font-size: 32px;
+  }
+
+  .wishlist-row {
+    padding: 20px 0;
+  }
+
+  .product-info img {
+    width: 55px;
+  }
+
+  .action button {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+/* ================= SMALL PHONES ================= */
+@media (max-width: 360px) {
+  .wishlist-header h1 {
+    font-size: 28px;
+  }
+
+  .product-info {
+    gap: 10px;
+  }
+}

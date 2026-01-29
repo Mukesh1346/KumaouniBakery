@@ -1,4 +1,174 @@
-.cart-container {
+.shopping-bag-wrapper {
+  padding: 40px 20px;
+  background: #fff;
+}
+
+/* TITLE */
+.bag-title {
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+/* PRODUCT ITEM */
+.bag-item {
+  display: flex;
+  gap: 20px;
+  padding: 25px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.bag-img {
+  width: 80px;
+  height: auto;
+}
+
+.bag-info {
+  flex: 1;
+  font-size: 13px;
+}
+
+.bag-info h6 {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.bag-info p {
+  margin: 2px 0;
+  color: #555;
+}
+
+.bag-actions {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.bag-actions span {
+  cursor: pointer;
+  margin-right: 6px;
+  color: #000;
+}
+
+/* PRICE */
+.bag-price {
+  text-align: right;
+  min-width: 100px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 13px;
+}
+
+.new-price {
+  font-weight: 600;
+}
+
+/* SUMMARY */
+.bag-right {
+  padding-left: 30px;
+}
+
+.summary-box {
+  border-left: 1px solid #ddd;
+  padding-left: 25px;
+}
+
+.summary-box h6 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.promo p {
+  font-size: 13px;
+}
+
+.promo-input {
+  display: flex;
+  gap: 5px;
+}
+
+.promo-input input {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 6px;
+}
+
+.promo-input button {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 15px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.summary-row.total {
+  font-weight: 600;
+}
+
+.checkout-btn {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  margin-top: 20px;
+}
+
+.help-text {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+  .summary-box {
+    border-left: none;
+    padding-left: 0;
+    margin-top: 40px;
+  }
+
+  .bag-price {
+    text-align: left;
+  }
+}
+
+@media (max-width: 576px) {
+  .bag-item {
+    flex-direction: column;
+  }
+
+  .bag-price {
+    text-align: left;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .cart-container {
   display: flex;
   justify-content: space-between;
   padding: 20px;
@@ -159,7 +329,7 @@
   }
 
   .cart-item {
-    /* flex-direction: column; */
+   
     align-items: flex-start;
     flex-wrap: nowrap;
   }
@@ -202,4 +372,4 @@
     font-size: 14px;
     padding: 8px;
   }
-}
+} */

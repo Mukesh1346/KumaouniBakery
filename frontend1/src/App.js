@@ -30,6 +30,10 @@ import OrderTracking from "./Pages/OrderTracking/OrderTracking";
 import QA from "./Pages/Faq/Faq"
 import ReferAndEarn from "./Pages/ReferEarn/ReferEarn";
 import Subcategory from "./Pages/SubSubCategory/SubSubCategory"
+import Wishlist from './Components/Wishlist/Wishlist'
+
+
+
 const App = () => {
   return (
     <>
@@ -55,6 +59,7 @@ const App = () => {
           <Route path="/track-order" element={<OrderTracking/>} />
            <Route path="/faq" element={<QA/>} />
            <Route path="/refer" element={<ReferAndEarn/>} />
+           <Route path="/wishlist" element={<Wishlist/>} />
         </Routes>
         <Footer />
       </BrowserRouter>
