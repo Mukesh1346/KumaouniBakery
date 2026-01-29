@@ -35,13 +35,13 @@ const AddProduct = () => {
     const fetchData = async () => {
       try {
         const categoryResponse = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-main-category"
+          "https://api.ssdipl.com/api/get-main-category"
         );
         const subcategoryResponse = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-subcategory"
+          "https://api.ssdipl.com/api/get-subcategory"
         );
         const weightResponse = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-size"
+          "https://api.ssdipl.com/api/get-size"
         );
 
         setCategories(categoryResponse.data.data);
@@ -142,7 +142,7 @@ const AddProduct = () => {
     }
 
     try {
-      await axios.post("https://bakery-46ac.onrender.com/api/create-product", form, {
+      await axios.post("https://api.ssdipl.com/api/create-product", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

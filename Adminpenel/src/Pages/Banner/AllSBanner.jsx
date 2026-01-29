@@ -14,7 +14,7 @@ const AllSBanner = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-banners"
+          "https://api.ssdipl.com/api/get-banners"
         );
         if (response.data.success) {
           setBanners(response.data.data);
@@ -44,7 +44,7 @@ const AllSBanner = () => {
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`https://bakery-46ac.onrender.com/api/delete-banner/${id}`);
+        await axios.delete(`https://api.ssdipl.com/api/delete-banner/${id}`);
         setBanners(banners.filter((banner) => banner._id !== id));
         toast.success("Banner deleted successfully");
       }
@@ -106,7 +106,7 @@ const AllSBanner = () => {
                   <td>{banner.bannerName}</td>
                   <td>
                     <img
-                      src={`https://bakery-46ac.onrender.com/${banner.bannerImage}`}
+                      src={`https://api.ssdipl.com/${banner.bannerImage}`}
                       alt={banner.bannerName}
                       style={{ width: "100px", height: "auto" }}
                     />

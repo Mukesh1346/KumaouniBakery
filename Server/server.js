@@ -24,7 +24,7 @@ const ContactRouter = require("./Router/contactRoutes")
 const app = express()
 
 const allowedOrigins = [
-  'https://bakery-46ac.onrender.com',   // backend (optional)
+  'https://api.ssdipl.com',   // backend (optional)
   'https://kumaounibakery.vercel.app',  // ✅ REAL frontend
   'http://localhost:7000',
   'http://localhost:3001',

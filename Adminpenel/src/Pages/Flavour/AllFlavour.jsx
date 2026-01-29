@@ -13,7 +13,7 @@ const AllFlavour = () => {
     const fetchFlovers = async () => {
       try {
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-flover"
+          "https://api.ssdipl.com/api/get-flover"
         ); // Adjusted the URL to fetch flovers
         if (response.data && response.data.data) {
           setFlovers(response.data.data); // Set the fetched flovers
@@ -47,7 +47,7 @@ const AllFlavour = () => {
     if (confirmed.isConfirmed) {
       try {
         const response = await axios.delete(
-          `https://bakery-46ac.onrender.com/api/delete-flover/${id}`
+          `https://api.ssdipl.com/api/delete-flover/${id}`
         ); // Adjusted the delete URL
         toast.success(response.data.message);
         setFlovers(flovers.filter((flover) => flover._id !== id)); // Remove deleted flover from state

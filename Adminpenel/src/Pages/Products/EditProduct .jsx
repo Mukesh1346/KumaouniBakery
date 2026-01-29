@@ -45,13 +45,13 @@ const EditProduct = () => {
             try {
                 // Fetch dynamic data
                 const categoryResponse = await axios.get(
-                    "https://bakery-46ac.onrender.com/api/get-main-category"
+                    "https://api.ssdipl.com/api/get-main-category"
                 );
                 const subcategoryResponse = await axios.get(
-                    "https://bakery-46ac.onrender.com/api/get-subcategory"
+                    "https://api.ssdipl.com/api/get-subcategory"
                 );
                 const weightResponse = await axios.get(
-                    "https://bakery-46ac.onrender.com/api/get-size"
+                    "https://api.ssdipl.com/api/get-size"
                 );
                 setCategories(categoryResponse.data.data);
                 setSubcategories(subcategoryResponse.data.data);
@@ -59,7 +59,7 @@ const EditProduct = () => {
 
                 // Fetch product details
                 const productResponse = await axios.get(
-                    `https://bakery-46ac.onrender.com/api/get-single-product/${id}`
+                    `https://api.ssdipl.com/api/get-single-product/${id}`
                 );
                 const productData = productResponse.data.data;
                 setFormData({
@@ -178,7 +178,7 @@ const EditProduct = () => {
         }
 
         try {
-            await axios.put(`https://bakery-46ac.onrender.com/api/update-product/${id}`, form, {
+            await axios.put(`https://api.ssdipl.com/api/update-product/${id}`, form, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

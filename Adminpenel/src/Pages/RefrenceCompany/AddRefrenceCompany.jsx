@@ -26,7 +26,7 @@ const AddRefrenceCompany = () => {
     try {
       // Send POST request to create reference company
       const response = await axios.post(
-        "https://bakery-46ac.onrender.com/api/create-ref-company",
+        "https://api.ssdipl.com/api/create-ref-company",
         formData
       );
       toast.success(response.data.message);

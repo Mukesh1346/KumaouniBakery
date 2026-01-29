@@ -19,7 +19,7 @@ const AddSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-main-category"
+          "https://api.ssdipl.com/api/get-main-category"
         );
         setMainCategories(response.data.data);
       } catch (error) {
@@ -76,7 +76,7 @@ const AddSubCategory = () => {
       // Send the request
       console.log(formDataToSend)
       const response = await axios.post(
-        "https://bakery-46ac.onrender.com/api/create-subcategory",
+        "https://api.ssdipl.com/api/create-subcategory",
         formDataToSend,
         {
           headers: {

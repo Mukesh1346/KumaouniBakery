@@ -13,7 +13,7 @@ const AllSubCategory = () => {
     const fetchSubcategories = async () => {
       try {
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-subcategory"
+          "https://api.ssdipl.com/api/get-subcategory"
         );
         setSubcategories(response.data.data); // assuming the data is in response.data.data
       } catch (error) {
@@ -41,7 +41,7 @@ const AllSubCategory = () => {
     if (confirmDelete.isConfirmed) {
       try {
         await axios.delete(
-          `https://bakery-46ac.onrender.com/api/delete-subcategory/${id}`
+          `https://api.ssdipl.com/api/delete-subcategory/${id}`
         );
         setSubcategories(
           subcategories.filter((subcategory) => subcategory._id !== id)

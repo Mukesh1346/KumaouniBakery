@@ -15,7 +15,7 @@ const EditTag = () => {
   const fetchTagData = async () => {
     try {
       const response = await axios.get(
-        `https://bakery-46ac.onrender.com/api/get-single-tags/${id}`
+        `https://api.ssdipl.com/api/get-single-tags/${id}`
       );
       // //console.log(response)
       const tag = response.data.data;
@@ -40,7 +40,7 @@ const EditTag = () => {
         tagColor,
       };
       const response = await axios.put(
-        `https://bakery-46ac.onrender.com/api/update-tags/${id}`,
+        `https://api.ssdipl.com/api/update-tags/${id}`,
         updatedTag
       );
       toast.success("Tag updated successfully!");

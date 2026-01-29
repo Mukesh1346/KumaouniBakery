@@ -45,7 +45,7 @@ const AddBanner = () => {
 
         try {
             setIsLoading(true);
-            const response = await axios.post('https://bakery-46ac.onrender.com/api/create-banner', submitData, {
+            const response = await axios.post('https://api.ssdipl.com/api/create-banner', submitData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

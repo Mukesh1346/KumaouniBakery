@@ -20,7 +20,7 @@ const AddCategoryTitel = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-main-category"
+          "https://api.ssdipl.com/api/get-main-category"
         );
         if (response.data && response.data.data) {
           setCategoriesList(response.data.data); // Set fetched categories
@@ -84,7 +84,7 @@ const AddCategoryTitel = () => {
 
     try {
       const response = await axios.post(
-        "https://bakery-46ac.onrender.com/api/create-main-category",
+        "https://api.ssdipl.com/api/create-main-category",
         uploadData,
         {
           headers: {

@@ -32,7 +32,7 @@ const AddShopBanner = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://bakery-46ac.onrender.com/api/send-sale",
+        "https://api.ssdipl.com/api/send-sale",
         data,
         { responseType: "blob" }
       );

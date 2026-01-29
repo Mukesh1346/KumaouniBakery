@@ -21,7 +21,7 @@ const AddInnerSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-main-category"
+          "https://api.ssdipl.com/api/get-main-category"
         );
         setMainCategories(response.data.data);
       } catch (error) {
@@ -36,7 +36,7 @@ const AddInnerSubCategory = () => {
     const fetchSubCategories = async () => {
       try {
         const response = await axios.get(
-          "https://bakery-46ac.onrender.com/api/get-subcategory"
+          "https://api.ssdipl.com/api/get-subcategory"
         );
         setSubCategories(response.data.data);
       } catch (error) {
@@ -94,7 +94,7 @@ const AddInnerSubCategory = () => {
 
     try {
       const response = await axios.post(
-        "https://bakery-46ac.onrender.com/api/create-inner-subcategory",
+        "https://api.ssdipl.com/api/create-inner-subcategory",
         data,
         {
           headers: {

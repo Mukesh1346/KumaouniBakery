@@ -8,7 +8,7 @@ const AllContactQuery = () => {
   // Fetch users from the API
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("https://bakery-46ac.onrender.com/api/contacts");
+      const response = await axios.get("https://api.ssdipl.com/api/contacts");
       // //console.log(response);
       if (response.data.success) {
         setUsers(response.data.data); // Save the user data
@@ -36,7 +36,7 @@ const AllContactQuery = () => {
     if (result.isConfirmed) {
       try {
         const response = await axios.delete(
-          `https://bakery-46ac.onrender.com/api/contact/${id}`
+          `https://api.ssdipl.com/api/contact/${id}`
         );
         if (response.data.success) {
           // Remove the deleted user from the local state (UI update)
