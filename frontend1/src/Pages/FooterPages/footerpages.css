@@ -98,12 +98,12 @@
   
   .privacyPolicy h1 {
     text-align: center;
-    color: var(--color-brown);
+    color: black;
     margin-bottom: 1rem;
   }
   
   .privacySection h4 {
-    color: var(--color-brown);
+    color: black;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
     font-family: var(--font-family-design);
@@ -111,7 +111,7 @@
   }
   
   .privacySection p {
-    color: var(--color-brown);
+    color: black;
 
     line-height: 1.6;
   }

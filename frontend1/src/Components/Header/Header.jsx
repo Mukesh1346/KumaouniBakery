@@ -206,6 +206,12 @@ const Header = () => {
    const [openIndex, setOpenIndex] = useState(null);
 const [countries, setCountries] = useState([]);
 const [selectedCountry, setSelectedCountry] = useState(null);
+  
+const [mobileOpen, setMobileOpen] = useState(null);
+
+const toggleMobileCategory = (index) => {
+  setMobileOpen(mobileOpen === index ? null : index);
+};
 
 
 const toggleDropdown = (key) => {
@@ -457,17 +463,29 @@ const toggleDropdown = (key) => {
               <ul className="navbar-nav mx-auto">
   {megaCategories.map((cat, index) => (
     <li className="nav-item mega-dropdown" key={index}>
-      <span className="nav-link mega-toggle">
-        {cat.name} <IoIosArrowDown style={{ marginLeft: "4px" }} />
-      </span>
+     <span
+  className="nav-link mega-toggle"
+  onClick={() => toggleMobileCategory(index)}
+>
+  {cat.name}
+  <IoIosArrowDown
+    className={`arrow ${mobileOpen === index ? "rotate" : ""}`}
+  />
+</span>
+
 
       {/* MEGA MENU */}
-    <div className="mega-menu">
+   <div
+  className={`mega-menu ${
+    mobileOpen === index ? "mobile-open" : ""
+  } ${cat.name === "Cake" ? "cake-mobile-grid" : ""}`}
+>
+
   <div className="mega-menu-inner">
     {cat.subcategories.map((sub, i) => (
       
       /* ONE COLUMN */
-      <div key={i}  >
+      <div key={i}  className="column-mega" >
         
         {/* MAIN SUBCATEGORY – TOP OF COLUMN */}
         <div

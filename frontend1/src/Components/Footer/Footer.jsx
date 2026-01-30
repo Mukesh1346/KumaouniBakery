@@ -50,9 +50,9 @@ const Footer = () => {
             <h6>About Company</h6>
             <ul>
               <li><Link to="/about-us">About Us</Link></li>
-              <li><Link to="#">Careers</Link></li>
-              <li><Link to="#">Testimonials</Link></li>
-              <li><Link to="#">Blog</Link></li>
+              <li><Link to="/contact-us">Contact Us</Link></li>
+              <li><Link to="/refer">Refer and Earn</Link></li>
+              <li><Link to="/faq">FAQ</Link></li>
             </ul>
           </div>
 
@@ -77,7 +77,7 @@ const Footer = () => {
             <h6>Need Help ?</h6>
             <ul>
               <li><Link to="/contact-us">Contact Us</Link></li>
-              <li><Link to="/frequently-asked-questions">FAQs</Link></li>
+              <li><Link to="/wishlist">Whislist</Link></li>
             </ul>
           </div>
 
