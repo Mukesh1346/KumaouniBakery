@@ -110,12 +110,7 @@ const imageUrl =
 </section>
 
 
-      {/* PRODUCTS */}
-      {/* {cakesArr.length > 0 ? (
-        <AllProducts data={cakesArr} />
-      ) : (
-        <p className="text-center mt-5">No cakes available.</p>
-      )} */}
+     
 
       <AllProducts/>
     </>
