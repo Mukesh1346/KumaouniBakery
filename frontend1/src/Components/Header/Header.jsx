@@ -89,8 +89,8 @@ const megaCategories = [
       {
       name: "Flower Combos",
       children: [
-        "Truffle with Red Roses Box",
-        "Truffle with Red Roses Box + Teddy + Chocolate",
+        "Truffle Roses",
+        "Truffle ",
       ],
     },
       {
@@ -475,11 +475,12 @@ const toggleDropdown = (key) => {
 
 
       {/* MEGA MENU */}
-   <div
+ <div
   className={`mega-menu ${
     mobileOpen === index ? "mobile-open" : ""
-  } ${cat.name === "Cake" ? "cake-mobile-grid" : ""}`}
+  }`}
 >
+
 
   <div className="mega-menu-inner">
     {cat.subcategories.map((sub, i) => (

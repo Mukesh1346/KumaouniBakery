@@ -412,34 +412,16 @@
 /* ============================= */
 
 @media (max-width: 991px) {
+
   .search-container,
   .delivery-box {
     display: none;
   }
 
-
-  .cake-mobile-grid .mega-menu-inner {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .cake-mobile-grid .mega-menu-inner > div {
-    border-bottom: none;
-    padding: 10px;
-    background: #fafafa;
-    border-radius: 8px;
-  }
-
-  .cake-mobile-grid .mega-item {
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .cake-mobile-grid .mega-child {
-    font-size: 13px;
-    padding-left: 0;
-  }
+  .logoImage {
+    height: 35px;
+    width: 112px;
+}
 
   .navbar-collapse {
     max-height: 80vh;
@@ -450,68 +432,58 @@
     display: none;
   }
 
-
-   .bottom-navbar {
-    position: relative;
-  }
-
+  .bottom-navbar,
   .mega-dropdown {
     position: relative;
   }
 
   .mega-menu {
-        text-align: left;
-
     position: static;
     width: 100%;
     box-shadow: none;
     padding: 0;
     display: none;
+    text-align: left;
   }
 
-  /* show only when clicked */
+  /* open on click */
   .mega-menu.mobile-open {
     display: block;
   }
 
-  .mega-menu-inner {
-    padding: 10px 16px;
-       
-  }
-  .column-mega{
- border: 1px dashed;
+  /* ✅ ALL CATEGORIES → 2 COLUMNS */
+  .mega-menu.mobile-open .mega-menu-inner {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px 16px;
   }
 
-  .mega-menu-inner > div {
-    padding: 10px 0;
-    background: transparent !important;
-    border-bottom: 1px solid #eee;
+  .mega-menu.mobile-open .mega-menu-inner > div {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #eee;
   }
 
   .mega-item {
     font-size: 14px;
-    padding: 8px 0;
+    font-weight: 600;
   }
 
+  /* text truncate */
   .mega-child {
-    padding-left: 14px;
     font-size: 13px;
     color: #555;
-  }
- .mega-child {
-    display: block;
-    max-width: 100%;
-    white-space: nowrap;      /* single line */
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;  /* ... */
+    text-overflow: ellipsis;
   }
-  
 
   .mega-child:hover {
     transform: none;
   }
 
-  /* arrow animation */
   .arrow {
     transition: transform 0.3s ease;
   }
@@ -519,28 +491,8 @@
   .arrow.rotate {
     transform: rotate(180deg);
   }
-
-
-  .top-header-wrapper {
-    justify-content: center;
-    flex-wrap: wrap;
-    text-align: center;
-  }
-
- .cake-mobile-grid .mega-menu-inner {
-    /* display: block; */
-  }
-
-  .cake-mobile-grid .mega-menu-inner > div {
-    margin-bottom: 16px;
-  }
-
-  .cake-mobile-grid .mega-menu-inner > div > a {
-    display: inline-block;
-    width: 48%;
-  }
-
 }
+
 
 @media (max-width: 576px){
   .navbarContainer{

@@ -14,6 +14,7 @@ import Footer from "./Components/Footer/Footer";
 import AboutUs from "./Components/AboutUs/AboutUs";
 import ContactUs from "./Pages/ContactUs/ContactUs";
 import AllCakes from "./Pages/AllCakes/AllCakes";
+import SubSubCat from "./Pages/SubSubCategories/SubSubCategories";
 import AllCandles from "./Pages/AllCandles/AllCandles";
 import ProductDetails from "./Pages/ProductDetails/ProductDetails";
 import Cart from "./Pages/Cart/Cart";
@@ -29,7 +30,7 @@ import Profile from "./Pages/Profile/Profile";
 import OrderTracking from "./Pages/OrderTracking/OrderTracking";
 import QA from "./Pages/Faq/Faq"
 import ReferAndEarn from "./Pages/ReferEarn/ReferEarn";
-import Subcategory from "./Pages/SubSubCategory/SubSubCategory"
+import SubSubcategory from "./Pages/SubSubCategories/SubSubCategories"
 import Wishlist from './Components/Wishlist/Wishlist'
 
 
@@ -44,7 +45,7 @@ const App = () => {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/all-products" element={<AllProducts />} />
           <Route path="/product-related/:subcatname" element={<AllCakes />} />
-          <Route path="/sub-subcategory/:subcatname" element={<Subcategory/>} />
+          <Route path="/sub-subcategory/:subcatname" element={<SubSubcategory/>} />
           <Route path="/candle/all-candles" element={<AllCandles />} />
           <Route path="/product-details/:name" element={<ProductDetails />} />
           <Route path="/contact-us" element={<ContactUs />} />

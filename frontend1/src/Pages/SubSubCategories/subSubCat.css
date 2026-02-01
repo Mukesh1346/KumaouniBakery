@@ -1,0 +1,142 @@
+
+/* TOP CATEGORY */
+.SubSubCategorySection {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  padding: 30px 15px;
+  overflow-x: auto;
+}
+
+.SubSubCategoryCard {
+  min-width: 130px;
+  text-align: center;
+}
+
+.SubSubCategoryCard img {
+  width: 120px;
+  height: 120px;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.SubSubCategoryCard p {
+  margin-top: 8px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* BANNER SLIDER */
+/* .SubSubCategorySlider {
+  padding: 20px;
+}
+
+.SubSubCatBannerBox {
+  background: #f3f1ef;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bannerText h1 {
+  font-size: 48px;
+  color: #0b3c49;
+}
+
+.bannerText p {
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.SubSubCatBannerBox img {
+  max-width: 420px;
+}
+ */
+
+
+
+
+
+
+
+
+/* Banner slider wrapper */
+.SubSubCategorySlider {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Banner container */
+.SubSubCatBannerBox {
+  width: 100%;
+}
+
+/* Banner image full width */
+.SubSubCatBannerBox img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Optional: fixed height banner */
+@media (min-width: 768px) {
+  .SubSubCatBannerBox img {
+    height: 420px;
+  }
+}
+
+@media (max-width: 767px) {
+  .SubSubCatBannerBox img {
+    height: 220px;
+  }
+}
+
+
+
+
+
+
+
+
+/* PRODUCT GRID */
+.productCard {
+  text-decoration: none;
+  color: #000;
+}
+
+.productCard img {
+  width: 100%;
+  border-radius: 14px;
+}
+
+.productInfo {
+  padding-top: 8px;
+}
+
+.productInfo p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.productInfo h6 {
+  font-weight: 600;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .SubSubCatBannerBox {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .SubSubCatBannerBox img {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+
+

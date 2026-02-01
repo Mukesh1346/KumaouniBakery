@@ -1,140 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import Slider from "react-slick";
-import axios from "axios";
-// import AllProducts from "../AllProducts/AllProducts";
-import AllProducts from "../../Components/AllProducts/AllProducts";
-import "./allcakes.css";
-
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-import Banner1 from "../../images/1583 by 426 banner/Banner1.jpg";
-import Banner2 from "../../images/1583 by 426 banner/Banner2.jpg";
-
-const staticProducts = [
-  {
-    productName: "Chocolate Truffle Cake",
-    productImage: [Banner1],
-    Variant: [{ finalPrice: 599 }],
-  },
-  {
-    productName: "Red Velvet Cake",
-    productImage: [Banner2],
-    Variant: [{ finalPrice: 699 }],
-  },
-];
-
-const AllCakes = () => {
-  const { subcatname } = useParams();
-  const [cakesArr, setCakesArr] = useState([]);
-  const [subcategoryInfo, setSubcategoryInfo] = useState(null);
-
-
-
-
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/get-product-by-subcatname/${subcatname}`
-      );
-
-      if (res.data?.data?.length > 0) {
-        setCakesArr(res.data.data);
-        console.log(res.data?.data)
-        setSubcategoryInfo(res.data.data[0].subcategoryName);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  fetchProducts();
-}, [subcatname]);
-
-  const bannerSettings = {
-    dots: true,
-    arrows: false,
-    autoplay: true,
-    infinite: true,
-    speed: 800,
-    autoplaySpeed: 3000,
-  };
-
-const imageUrl =
-  subcategoryInfo?.image
-    ? subcategoryInfo.image.startsWith("http")
-      ? subcategoryInfo.image
-      : `${process.env.REACT_APP_API_URL}/${subcategoryInfo.image}`
-    : Banner1;
-
-
-  return (
-    <>
-      {/* TOP SUBCATEGORY */}
-    {subcategoryInfo && (
-  <section className="topCategorySection">
-    <div className="topCategoryCard active">
-       <Link
-                              to={`/sub-subcategory/anniversary%20flowers`}
-                              className="category-link"
-                            >
-     <img
-  src={imageUrl}
-  alt={subcategoryInfo?.subcategoryName || "subcategory"}
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = Banner1;
-  }}
-/>
-
-      <p>{subcategoryInfo.subcategoryName}</p>
-      </Link>
-    </div>
-  </section>
-)}
-
-
-      {/* BANNER SLIDER */}
-     <section className="cakeBannerSlider">
-  <Slider {...bannerSettings}>
-    {[Banner1, Banner2].map((img, index) => (
-      <div key={index}>
-        <div className="bannerBox">
-          <img src={img} alt="Cake Banner" />
-        </div>
-      </div>
-    ))}
-  </Slider>
-</section>
-
-
-      {/* PRODUCTS */}
-      {/* {cakesArr.length > 0 ? (
-        <AllProducts data={cakesArr} />
-      ) : (
-        <p className="text-center mt-5">No cakes available.</p>
-      )} */}
-
-      <AllProducts/>
-    </>
-  );
-};
-
-export default AllCakes;
-
-
-
-
-
-
 // import React, { useEffect, useState } from "react";
 // import { Link, useParams } from "react-router-dom";
-// import "./allcakes.css";
+// import "./subsubcategory.css";
 // import axios from "axios";
 
-// const AllCakes = () => {
+// const SubSubCategory = () => {
 //   const { subcatname } = useParams();
 //   const [priceOpen, setPriceOpen] = useState(false);
 //   const [selectedPrice, setSelectedPrice] = useState(null); // New state for selected price range
@@ -221,7 +90,6 @@ export default AllCakes;
 //                   <div className="col-md-3 col-6 mb-3" key={index}>
 //                     <div className="card">
 //                       <Link to={`/product-details/${item.productName}`}>
-//                       {/* <Link to={`/sub-subcategory/${item.productName}`}> */}
 //                         <img
 //                           src={`${process.env.REACT_APP_API_URL}/${item.productImage[0]}`}
 //                           className="w-100"
@@ -251,4 +119,4 @@ export default AllCakes;
 //   );
 // };
 
-// export default AllCakes;
+// export default SubSubCategory;

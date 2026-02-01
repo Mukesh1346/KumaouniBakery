@@ -1,133 +1,236 @@
 import React, { useState } from "react";
+
 import "./checkout.css";
-import Swal from "sweetalert2";
 
 const Checkout = () => {
-  const [mode, setMode] = useState("new"); // new | existing | guest
+  // step: 2 = delivery address (as per image)
+  const [step, setStep] = useState(2);
 
-  const handleContinue = () => {
-    Swal.fire("Success", "Proceeding to next step", "success");
+  const [checkoutData, setCheckoutData] = useState({
+    user: {
+      userId: "USER123",
+      name: "Mukesh Mahar",
+      phone: "7827433992",
+      email: "mukeshmahar00@gmail.com",
+      address:"C-28 New Ashok Nagar Noida"
+    },
+    address: {},
+    delivery: {},
+    payment: {},
+  });
+
+  /* ================= HANDLERS ================= */
+
+  const handleAddressSubmit = (e) => {
+    e.preventDefault();
+
+    setCheckoutData({
+      ...checkoutData,
+      address: {
+        receiverName: e.target.receiverName.value,
+        house: e.target.house.value,
+        area: e.target.area.value,
+        pincode: e.target.pincode.value,
+        city: e.target.city.value,
+        phone: e.target.phone.value,
+        addressType: "Home",
+      },
+    });
+
+    setStep(3);
+  };
+
+  const handleDeliverySubmit = (e) => {
+    e.preventDefault();
+
+    setCheckoutData({
+      ...checkoutData,
+      delivery: {
+        date: e.target.date.value,
+        time: e.target.time.value,
+      },
+    });
+
+    setStep(4);
+  };
+
+  const placeOrder = () => {
+    const finalPayload = checkoutData;
+    console.log("FINAL PAYLOAD (SEND TO BACKEND):", finalPayload);
+    alert("Order placed successfully");
   };
 
   return (
-    <div className="checkout-page container">
-      <div className="row">
-
-        {/* LEFT SECTION */}
-        <div className="col-lg-7 checkout-left">
-          <h2 className="checkout-title">Checkout</h2>
-
-          <div className="info-bar">
-            <span>Not quite finished?</span>
-            <a href="#">Continue shopping →</a>
+    <>
+      {/* ================= LOGIN DETAILS (TOP – NOT A TAB) ================= */}
+      <div className="container mt-4">
+        <div className="login-box">
+          <div className="row">
+            <div className="col-md-3">
+              <small>Full name</small>
+              <p>{checkoutData.user.name}</p>
+            </div>
+            <div className="col-md-3">
+              <small>Phone Number</small>
+              <p>{checkoutData.user.phone}</p>
+            </div>
+            <div className="col-md-3">
+              <small>E-Mail ID</small>
+              <p>{checkoutData.user.email}</p>
+            </div>
+             <div className="col-md-3">
+              <small>Address</small>
+              <p>{checkoutData.user.address}</p>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <div className="auth-box">
-            <div className="auth-header">AUTHENTICATE</div>
-
-            {/* New Customer */}
-            <div
-              className={`auth-card ${mode === "new" ? "active" : ""}`}
-              onClick={() => setMode("new")}
-            >
-              <div className="auth-icon">👤+</div>
-              <div>
-                <h6>New customer</h6>
-                <p>Create an account for faster checkout and order history.</p>
-              </div>
-              {mode === "new" && <span className="check">✔</span>}
-            </div>
-
-            {/* Existing Customer */}
-            <div
-              className={`auth-card ${mode === "existing" ? "active" : ""}`}
-              onClick={() => setMode("existing")}
-            >
-              <div className="auth-icon">👤</div>
-              <div>
-                <h6>Existing customer</h6>
-                <p>Login to your account for a faster checkout.</p>
+      {/* ================= MAIN CHECKOUT ================= */}
+      <div className="checkout-wrapper">
+        <div className="container">
+          <div className="row">
+            {/* LEFT STEPS (DISPLAY ONLY) */}
+            <div className="col-lg-3 mb-4">
+              <div className="steps-box">
+                <div className={`step ${step >= 1 ? "active" : ""}`}>
+                  Login Details <span>Step 1/5</span>
+                </div>
+                <div className={`step ${step >= 2 ? "active" : ""}`}>
+                  Delivery Address <span>Step 2/5</span>
+                </div>
+                <div className={`step ${step >= 3 ? "active" : ""}`}>
+                  Delivery Date & Time <span>Step 3/5</span>
+                </div>
+                <div className={`step ${step >= 4 ? "active" : ""}`}>
+                  Payment & Summary <span>Step 4/5</span>
+                </div>
               </div>
             </div>
 
-            {/* Guest */}
-            <div className="guest-line">
-              🏃 In a hurry?{" "}
-              <span onClick={() => setMode("guest")}>
-                Checkout as a guest
-              </span>
-            </div>
+            {/* RIGHT CONTENT */}
+            <div className="col-lg-9">
+              {/* STEP 2 — DELIVERY ADDRESS */}
+              {step === 2 && (
+                <form className="checkout-card" onSubmit={handleAddressSubmit}>
+                  <h4>
+                    Awesome Mukesh mahar!{" "}
+                    <span>Let us know where to deliver</span>
+                  </h4>
+                  <p>
+                    A detailed address will help us deliver the parcel smoothly
+                  </p>
 
-            {/* FORM */}
-            <div className="form-section">
-              {mode !== "existing" && (
-                <div className="row">
-                  <div className="col-md-6">
-                    <input className="form-control" placeholder="First name*" />
+                  <input
+                    name="receiverName"
+                    className="form-control mb-3"
+                    placeholder="Receiver Name*"
+                    required
+                  />
+
+                  <input
+                    name="house"
+                    className="form-control mb-3"
+                    placeholder="Apartment / House No. / Floor*"
+                    required
+                  />
+
+                  <input
+                    name="area"
+                    className="form-control mb-3"
+                    defaultValue="Asthal Colony, Bawana"
+                  />
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <input
+                        name="pincode"
+                        className="form-control mb-3"
+                        defaultValue="110039"
+                        required
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <input
+                        name="city"
+                        className="form-control mb-3"
+                        defaultValue="Delhi"
+                      />
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <input className="form-control" placeholder="Last name*" />
+
+                  <input
+                    name="phone"
+                    className="form-control mb-3"
+                    placeholder="Receiver Number*"
+                    required
+                  />
+
+                  <div className="address-type">
+                    <button type="button" className="type-btn active">
+                      Home
+                    </button>
+                    <button type="button" className="type-btn">
+                      Office
+                    </button>
+                    <button type="button" className="type-btn">
+                      Others
+                    </button>
                   </div>
+
+                  <button className="continue-btn">Continue</button>
+                </form>
+              )}
+
+              {/* STEP 3 — DELIVERY DATE */}
+              {step === 3 && (
+                <form className="checkout-card" onSubmit={handleDeliverySubmit}>
+                  <h4>Delivery Date & Time</h4>
+
+                  <input
+                    type="date"
+                    name="date"
+                    className="form-control mb-3"
+                    required
+                  />
+
+                  <select
+                    name="time"
+                    className="form-control mb-4"
+                    required
+                  >
+                    <option value="">Select Time Slot</option>
+                    <option>10AM - 12PM</option>
+                    <option>12PM - 2PM</option>
+                    <option>4PM - 6PM</option>
+                  </select>
+
+                  <button className="continue-btn">
+                    Continue to Payment
+                  </button>
+                </form>
+              )}
+
+              {/* STEP 4 — PAYMENT */}
+              {step === 4 && (
+                <div className="checkout-card">
+                  <h4>Payment</h4>
+                  <p>Cash on Delivery / Online Payment</p>
+
+                  <button className="continue-btn" onClick={placeOrder}>
+                    Place Order
+                  </button>
                 </div>
               )}
-
-              <input
-                className="form-control mt-3"
-                placeholder="Your email*"
-              />
-
-              {mode !== "guest" && (
-                <input
-                  className="form-control mt-3"
-                  type="password"
-                  placeholder="Password*"
-                />
-              )}
-
-              <button className="btn continueBtn w-100 mt-4" onClick={handleContinue}>
-                Continue
-              </button>
             </div>
           </div>
         </div>
-
-        {/* RIGHT SECTION */}
-        <div className="col-lg-5 checkout-right">
-          <div className="summary-box">
-            <div className="product">
-              <div className="img-placeholder"></div>
-              <div>
-                <small>Classic Burger</small>
-                <h6>Cheese Burger with French Fries One Time</h6>
-                <strong>IDR 106,382.98</strong>
-              </div>
-            </div>
-
-            <div className="coupon">
-              <input placeholder="Discount code?" />
-              <button>Apply</button>
-            </div>
-
-            <div className="price-row">
-              <span>Subtotal:</span>
-              <span>IDR 106,382.98</span>
-            </div>
-
-            <div className="total">
-              <span>Total to pay</span>
-              <strong>IDR 106,382.98</strong>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </div>
+    </>
   );
 };
 
 export default Checkout;
-
-
 
 
 
