@@ -17,13 +17,13 @@
 
 /* ================= HEADER ================= */
 .wishlist-header {
-  padding: 10px 10px 40px;
+  padding: 10px 10px 10px;
   text-align: center;
 }
 
 .wishlist-header .heart {
   font-size: 38px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   color: #333;
 }
 

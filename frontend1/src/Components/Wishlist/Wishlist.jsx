@@ -5,6 +5,7 @@ import pic1 from '../../images/pic/redVelvet.jpg'
 import pic2 from '../../images/pic/Product2.avif'
 import pic3 from '../../images/pic/vanilla.jpg'
 import { FaRegTrashCan } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 
 
 const Wishlist = () => {
@@ -53,7 +54,7 @@ const Wishlist = () => {
     <div className="wishlist-page">
       {/* TITLE */}
       <div className="wishlist-header text-center">
-        <div className="heart">♡</div>
+        <div className="heart"> <FaHeart  className="text-danger"/></div>
         <h1>My Wishlist</h1>
       </div>
 
