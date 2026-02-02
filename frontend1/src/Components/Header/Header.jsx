@@ -372,9 +372,9 @@ const toggleDropdown = (key) => {
 
   {openIndex === "menu" && (
     <div className="hdr-menu-dropdown">
-      <Link to="/corporate-gifts" className="hdr-menu-link">
+      {/* <Link to="/corporate-gifts" className="hdr-menu-link">
         Corporate Gifts
-      </Link>
+      </Link> */}
 
       <Link to="/wishlist" className="hdr-menu-link">
         My Favourites
@@ -385,9 +385,9 @@ const toggleDropdown = (key) => {
         Refer and Earn <span className="hdr-badge-new">New</span>
       </Link>
 
-      <Link to="/franchise" className="hdr-menu-link">
+      {/* <Link to="/franchise" className="hdr-menu-link">
         Franchise
-      </Link>
+      </Link> */}
 
       <Link to="/faq" className="hdr-menu-link">
         FAQ

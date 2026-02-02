@@ -139,20 +139,7 @@ const Login = () => {
               Login
             </button>
             <p>or login with social platforms</p>
-            {/* <div className="social-icon">
-              <a href="#">
-                <i className="bi bi-facebook"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-github"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-whatsapp"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-linkedin"></i>
-              </a>
-            </div> */}
+          
           </form>
         </div>
 
@@ -193,21 +180,7 @@ const Login = () => {
             <button type="submit" className="btnLogin">
               Register
             </button>
-            {/* <p>or register with social platforms</p>
-            <div className="social-icon">
-              <a href="#">
-                <i className="bi bi-facebook"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-github"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-whatsapp"></i>
-              </a>
-              <a href="#">
-                <i className="bi bi-linkedin"></i>
-              </a>
-            </div> */}
+          
           </form>
         </div>
 

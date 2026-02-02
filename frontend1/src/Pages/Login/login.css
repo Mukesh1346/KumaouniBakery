@@ -124,7 +124,7 @@ form {
   left: -250%;
   width: 300%;
   height: 100%;
-  background: var(--color-pink);
+  background:#df4444;
   /* border: 2px solid red; */
   border-radius: 150px;
   z-index: 2;

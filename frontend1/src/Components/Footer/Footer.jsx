@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { FaCcAmazonPay } from "react-icons/fa6";
 
 const Footer = () => {
   const [categories, setCategories] = useState([]);
@@ -142,7 +143,7 @@ const Footer = () => {
           </p>
 
           <div className="payment-icons">
-            <img src="/payments.png" alt="payments" />
+            <FaCcAmazonPay className="fs-3 " />
           </div>
 
         </div>

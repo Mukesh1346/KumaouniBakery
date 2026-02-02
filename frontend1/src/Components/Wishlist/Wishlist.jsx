@@ -4,6 +4,8 @@ import "./wishlist.css";
 import pic1 from '../../images/pic/redVelvet.jpg'
 import pic2 from '../../images/pic/Product2.avif'
 import pic3 from '../../images/pic/vanilla.jpg'
+import { FaRegTrashCan } from "react-icons/fa6";
+
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -56,7 +58,7 @@ const Wishlist = () => {
       </div>
 
       {/* TABLE */}
-      <div className="container">
+      <div className="container wishlistContainer">
         <div className="wishlist-table">
           <div className="wishlist-row wishlist-head">
             <div></div>
@@ -69,12 +71,12 @@ const Wishlist = () => {
           {wishlist.map((item) => (
             <div className="wishlist-row" key={item.id}>
               <div className="remove-icon" onClick={() => handleRemove(item.id)}>
-                🗑
+                  < FaRegTrashCan className="fs-4" />
               </div>
 
               <div className="product-info">
                 <img src={item.image} alt={item.name} />
-                <span>{item.name}</span>
+                <span className="text-success">{item.name}</span>
               </div>
 
               <div className="price">

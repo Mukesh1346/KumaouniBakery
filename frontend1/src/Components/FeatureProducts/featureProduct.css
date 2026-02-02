@@ -3,7 +3,7 @@
 ===================== */
 
 .featured-products {
-  background: #ffffff;
+  /* background: #ffffff; */
 }
 
 /* =====================
@@ -18,6 +18,27 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   height: 100%;
 }
+
+
+.featured-products .wishlist-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 7px 9px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.featured-products .wishlist-icon:hover {
+  background: #ffebee;
+  transform: scale(1.15);
+}
+
 
 .featured-products .product-card:hover {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);

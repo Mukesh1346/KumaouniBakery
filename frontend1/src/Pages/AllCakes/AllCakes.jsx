@@ -109,9 +109,6 @@ const imageUrl =
   </Slider>
 </section>
 
-
-     
-
       <AllProducts/>
     </>
   );

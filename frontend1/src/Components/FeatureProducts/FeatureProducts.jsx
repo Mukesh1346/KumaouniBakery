@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./featureProduct.css";
-import pic1 from "../../images/pic/Product1.avif"
-import pic2 from "../../images/pic/Product2.avif"
-import pic3 from "../../images/pic/Product3.avif"
-import pic4 from "../../images/pic/Product4.avif"
-import pic5 from "../../images/pic/Product4.avif"
-import pic6 from "../../images/pic/Product4.avif"
-import pic7 from "../../images/pic/Product4.avif"
-import pic8 from "../../images/pic/Product4.avif"
+import pic1 from "../../images/pic/Product1.avif";
+import pic2 from "../../images/pic/Product2.avif";
+import pic3 from "../../images/pic/Product3.avif";
+import pic4 from "../../images/pic/Product4.avif";
+import pic5 from "../../images/pic/Product4.avif";
+import pic6 from "../../images/pic/Product4.avif";
+import pic7 from "../../images/pic/Product4.avif";
+import pic8 from "../../images/pic/Product4.avif";
+import { Link } from "react-router-dom";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-
-
-// 🔒 STATIC FEATURED PRODUCTS DATA
+/* 🔒 STATIC FEATURED PRODUCTS DATA */
 const featuredProductsData = [
   {
     id: 1,
@@ -26,7 +26,7 @@ const featuredProductsData = [
   {
     id: 2,
     name: "Blush Heart Chocolate Cake",
-    image:  pic2,
+    image: pic2,
     price: 775,
     oldPrice: 995,
     rating: 4.8,
@@ -36,7 +36,7 @@ const featuredProductsData = [
   {
     id: 3,
     name: "Aromatic Choco Hamper",
-    image:  pic3,
+    image: pic3,
     price: 1165,
     oldPrice: 1445,
     rating: 4.7,
@@ -56,7 +56,7 @@ const featuredProductsData = [
   {
     id: 5,
     name: "Money Plant In Black Mandala Pot",
-    image:  pic5,
+    image: pic5,
     price: 595,
     oldPrice: 699,
     rating: 4.6,
@@ -76,7 +76,7 @@ const featuredProductsData = [
   {
     id: 7,
     name: "Blue Orchid Jute Bouquet",
-    image:  pic7,
+    image: pic7,
     price: 895,
     oldPrice: 1095,
     rating: 4.9,
@@ -86,7 +86,7 @@ const featuredProductsData = [
   {
     id: 8,
     name: "Bows N Blush Chocolate Cream Cake",
-    image:  pic8,
+    image: pic8,
     price: 695,
     oldPrice: null,
     rating: 4.7,
@@ -96,13 +96,27 @@ const featuredProductsData = [
 ];
 
 const FeaturedProducts = () => {
+  // ✅ Wishlist state (store product IDs)
+  const [wishlist, setWishlist] = useState([]);
+
+  // ✅ Toggle wishlist per product
+  const toggleWishlist = (id) => {
+    setWishlist((prev) =>
+      prev.includes(id)
+        ? prev.filter((itemId) => itemId !== id) // remove
+        : [...prev, id] // add
+    );
+  };
+
   return (
     <div className="container my-5 featured-products">
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h4 className="fw-bold featuretitle mb-1">Featured Products</h4>
-          <p className="text-muted mb-0">Life Is Celebration - We Deliver Happiness</p>
+          <p className="text-muted mb-0">
+            Life Is Celebration - We Deliver Happiness
+          </p>
         </div>
         <button className="btn btn-dark px-4">View All</button>
       </div>
@@ -118,7 +132,18 @@ const FeaturedProducts = () => {
               {/* Image */}
               <div className="product-img">
                 <img src={item.image} alt={item.name} />
-                <span className="wishlist">♡</span>
+
+                {/* ❤️ Wishlist */}
+                <span
+                  className="wishlist-icon"
+                  onClick={() => toggleWishlist(item.id)}
+                >
+                  {wishlist.includes(item.id) ? (
+                    <FaHeart size={22} color="red" />
+                  ) : (
+                    <FaRegHeart size={22} color="#555" />
+                  )}
+                </span>
               </div>
 
               {/* Content */}
@@ -142,13 +167,19 @@ const FeaturedProducts = () => {
                 </div>
 
                 <div className="rating">
-                  ⭐ {item.rating}{" "}
-                  <span>({item.reviews} Reviews)</span>
+                  ⭐ {item.rating} <span>({item.reviews} Reviews)</span>
                 </div>
 
                 <p className="delivery">
                   Earliest Delivery : <span>{item.delivery}</span>
                 </p>
+
+                <Link
+                  to={`/product-details/${item.name}`}
+                  className="btn btn-dark w-100 mt-2"
+                >
+                  Buy Now
+                </Link>
               </div>
             </div>
           </div>

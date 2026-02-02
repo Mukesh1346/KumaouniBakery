@@ -130,13 +130,17 @@
   position: absolute;
   left: 0;
   top: 80%;
-  width: 100vw;
+  width: 100%;
   background: #fff;
  padding: 15px 0;
   display: none;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   z-index: 999;
 }
+
+
+
+
 
 /* Show on hover */
 .mega-dropdown:hover .mega-menu {
@@ -191,6 +195,7 @@
   background-color: var(--color-pink);
   transform: translateX(-50%);
   transition: width 0.35s ease;
+
 }
 
 /* animate underline */
@@ -206,11 +211,6 @@
 
 
 
-.mega-item:hover {
-  background: #f5f7ff;
-  color: var(--color-pink);
-  transform: translateX(6px);
-}
 
 /* ============================= */
 /* ICONS */

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./allproducts.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const AllProducts = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [productData, setProductData] = useState({});
   const [currentPage, setCurrentPage] = useState({});
+  const [wishlist, setWishlist] = useState([]); // ✅ added
   const productsPerPage = 20;
 
   useEffect(() => {
@@ -15,12 +17,10 @@ const AllProducts = () => {
     getApiProductData();
   }, []);
 
-  console.log("API URL =>", process.env.REACT_APP_API_URL);
-
   const getApiData = async () => {
-    const res =await axios.get(
-  `${process.env.REACT_APP_API_URL}/api/get-main-category`
-);
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/get-main-category`
+    );
     if (res.status === 200) {
       setCategoryData(res.data.data);
       const pageState = {};
@@ -31,8 +31,8 @@ const AllProducts = () => {
 
   const getApiProductData = async () => {
     const res = await axios.get(
-  `${process.env.REACT_APP_API_URL}/api/all-product`
-);
+      `${process.env.REACT_APP_API_URL}/api/all-product`
+    );
 
     if (res.status === 200) {
       const grouped = {};
@@ -43,6 +43,15 @@ const AllProducts = () => {
       });
       setProductData(grouped);
     }
+  };
+
+  // ✅ wishlist toggle (added)
+  const toggleWishlist = (id) => {
+    setWishlist((prev) =>
+      prev.includes(id)
+        ? prev.filter((pid) => pid !== id)
+        : [...prev, id]
+    );
   };
 
   return (
@@ -65,23 +74,34 @@ const AllProducts = () => {
               </div>
             </div>
 
-            {/* PRODUCTS GRID (SAME AS BEST SELLING) */}
+            {/* PRODUCTS GRID */}
             <div className="row g-4">
               {visible.map((product) => (
                 <div
                   key={product._id}
-                  className="col-xl-3 col-lg-4 col-md-4 col-sm-6"
+                  className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
                 >
                   <div className="product-card">
 
                     {/* IMAGE */}
                     <div className="product-img">
-                    <img
-  src={`${process.env.REACT_APP_API_URL}/${product.productImage[0]}`}
-  alt={product.productName}
-/>
+                      <img
+                        src={`${process.env.REACT_APP_API_URL}/${product.productImage[0]}`}
+                        alt={product.productName}
+                      />
 
-                      <span className="wishlist">♡</span>
+                      {/* ❤️ Wishlist (added only this part) */}
+                      <span
+                        className="wishlist"
+                        onClick={() => toggleWishlist(product._id)}
+                      >
+                        {wishlist.includes(product._id) ? (
+                          <FaHeart color="red" />
+                        ) : (
+                          <FaRegHeart />
+                        )}
+                      </span>
+
                       <span className="off-badge">20% OFF</span>
                     </div>
 
