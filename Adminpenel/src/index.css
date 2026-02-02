@@ -15,15 +15,15 @@
 
   --light-white: #f0f0f0;
   --light-white-p: #6c757d;
-  --color-main: #EC008C;
-  --color-main-light: #EC008C;
+  --color-main: #df4444;
+  --color-main-light: #df4444;
   --color-anchor: #0d6efd;
   --color-blue: #4d8aff;
   --color-dark-blue: #004269;
-  --color-blu: #EC008C;
+  --color-blu: #df4444;
   --color-blue-light: #00AAA9;
   --color-orange: orange;
-  --color-green: #EC008C;
+  --color-green: #df4444;
 
   --border-color-1: rgba(101, 119, 134, 0.36);
   --transition-3: all 300ms ease-in;
@@ -129,7 +129,7 @@ ul {
   min-width: max-content;
   resize: horizontal;
   overflow: auto;
-  background: #EC008C !important;
+  background: #df4444 !important;
   color: white;
 }
 

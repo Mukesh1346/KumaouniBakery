@@ -93,7 +93,7 @@
 
   .pdx-right-scroll {
   /* height: calc(100vh - 120px); */
-  overflow-y: auto;
+  overflow-y:unset;
   padding-right: 10px;
   width: 90%;
 }
@@ -123,7 +123,7 @@
 }
 
 .pdx-title-row h1 {
-  font-size: 26px;
+  font-size: 28px !important;
   flex: 1;
 }
 
@@ -166,10 +166,13 @@
 }
 
 .pdx-weight-btn {
-  padding: 8px 18px;
+  padding: 2px 18px;
   border: 1px solid #004d40;
   background: #fff;
   border-radius: 6px;
+}
+.formInput{
+  height:40px !important;
 }
 
 .pdx-weight-btn.active {
@@ -207,11 +210,14 @@
   margin-top: 8px;
   border: 1px solid #004d40;
   background: transparent;
-  padding: 6px;
+  padding: 3px;
   width: 100%;
   border-radius: 6px;
 }
 
+.pdx-addon-name {
+  margin: 0px;
+}
 /* CTA */
 .pdx-cta {
   display: flex;

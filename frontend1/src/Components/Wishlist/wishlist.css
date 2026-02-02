@@ -28,21 +28,14 @@
 }
 
 
-.pdx-title-row h1 {
 
-  font-size: 12px;
-}
 /* ================= TABLE ================= */
 .wishlist-table {
   border-top: 1px solid #ddd;
   width: 100%;
 }
 
-.pdx-price {
-    font-size: 14px;
-    font-weight: 700;
-    margin: 10px 0;
-}
+
 
 .pdx-main-image img {
     width: 100%;

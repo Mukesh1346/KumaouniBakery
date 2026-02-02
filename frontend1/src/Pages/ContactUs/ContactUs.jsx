@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./contactUs.css";
+import { FaInstagram } from "react-icons/fa";
+import { IoLogoYoutube } from "react-icons/io";
+import { FaSquareXTwitter } from "react-icons/fa6";
+import { FaWhatsapp } from "react-icons/fa6";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -94,8 +98,8 @@ const ContactUs = () => {
           <div className="row">
             <div className="col-md-3">
               <div className="contactSectionBox">
-                <p>Address</p>
-                <address>
+                <p className="text-light">Address</p>
+                <address className="text-light">
                   cakenpetals Bakery  
                   <br />
                   Gurugram, Haryana, India
@@ -105,15 +109,15 @@ const ContactUs = () => {
 
             <div className="col-md-3">
               <div className="contactSectionBox">
-                <p>Call Us</p>
-                <a href="tel:+919508080807">+91 95080 80807</a>
+                <p className="text-light">Call Us</p>
+                <a href="tel:+919508080807" className="text-light">+91 95080 80807</a>
               </div>
             </div>
 
             <div className="col-md-3">
               <div className="contactSectionBox">
-                <p>Email Us</p>
-                <a href="mailto:hello@cakenpetals.com">
+                <p className="text-light">Email Us</p> 
+                <a href="mailto:hello@cakenpetals.com" className="text-light" >
                   hello@cakenpetals.com
                 </a>
               </div>
@@ -121,22 +125,13 @@ const ContactUs = () => {
 
             <div className="col-md-3">
               <div className="contactSectionBox">
-                <p>Follow Us</p>
-                <div className="socialMediaLinks">
-                  <a
-                    href="https://www.instagram.com/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <i className="bi bi-instagram"></i>
-                  </a>
-                  <a
-                    href="https://wa.me/919508080807"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <i className="bi bi-whatsapp"></i>
-                  </a>
+                <p className="text-light">Follow Us</p>
+                <div className="socialMediaLinks text-light">
+                  < FaWhatsapp className="fs-3"/>
+                  <  IoLogoYoutube className="fs-3"/>
+                  <FaSquareXTwitter className="fs-3"/>
+                  < FaInstagram className="fs-3"/>
+
                 </div>
               </div>
             </div>

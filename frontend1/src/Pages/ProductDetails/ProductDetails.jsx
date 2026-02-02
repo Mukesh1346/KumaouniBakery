@@ -343,7 +343,7 @@ const ProductDetails = () => {
                 </div>
 
                 {/* FLAVOUR */}
-                <div className="pdx-block">
+                <div className="pdx-block formInput">
                   <label>Select Flavour</label>
                   <select className="form-select w-75">
                     <option>Butterscotch</option>
@@ -359,7 +359,7 @@ const ProductDetails = () => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control formInput w-75"
                     placeholder="Write Name Here"
                     maxLength={25}
                   />
@@ -376,7 +376,7 @@ const ProductDetails = () => {
                         <div key={index} className="pdx-addon-slide">
                           <div className="pdx-addon-card">
                             <img src={Pic1} alt="addon" />
-                            <p className="pdx-addon-name">Birthday Cap</p>
+                            <p className="pdx-addon-name ">Birthday Cap</p>
                             <span className="pdx-addon-price">₹ 99</span>
                             <button className="pdx-addon-btn">ADD</button>
                           </div>

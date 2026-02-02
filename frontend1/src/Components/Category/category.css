@@ -388,10 +388,10 @@
 }
 
 .category-name {
-  margin-top: 10px;
+  padding:20px 0px; 
   font-size: 14px;
   margin-bottom: 0;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .category-link {
