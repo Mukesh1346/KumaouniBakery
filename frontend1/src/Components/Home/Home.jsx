@@ -12,6 +12,7 @@ import PromoBanner from "../PromoBanner/PromoBanner";
 import CakeBanners from "../CakeBanner/CakeBanner";
 import Banner from "../BottomBanner/Banner";
 import FeaturedProducts from "../FeatureProducts/FeatureProducts";
+import ReelSection from "../ReelSection/ReelSection";
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
       <Category />
       <WhatsAppChat />
       <CakeBanners/>
+      <ReelSection/>
       <AllProducts />
       <Hero />
       <FeaturedProducts/>
