@@ -13,6 +13,8 @@ import CakeBanners from "../CakeBanner/CakeBanner";
 import Banner from "../BottomBanner/Banner";
 import FeaturedProducts from "../FeatureProducts/FeatureProducts";
 import ReelSection from "../ReelSection/ReelSection";
+import Coustomize from "../Coustomize/Coustomize";
+import FillingCustomizer from "../FillingCoustomise/FillingCoustomise";
 
 const Home = () => {
   return (
@@ -23,8 +25,10 @@ const Home = () => {
       <CakeBanners/>
       <ReelSection/>
       <AllProducts />
+      <Coustomize/>
       <Hero />
       <FeaturedProducts/>
+      <FillingCustomizer/>
       <PromoBanner/>
       <Occasions/>
       <BestSellingProduct/>

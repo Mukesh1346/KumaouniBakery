@@ -388,8 +388,9 @@
 }
 
 .category-name {
+ font-family: ' Poppins, sans-serif'; 
   padding:20px 0px; 
-  font-size: 14px;
+  font-size: 12px;
   margin-bottom: 0;
   font-weight: 400;
 }
