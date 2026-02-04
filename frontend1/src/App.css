@@ -9,13 +9,16 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", "Poppins Fallback";
+  /* font-family: "Poppins", "Poppins Fallback"; */
+  /* font-family: 'Poppins', sans-serif; */
+      font-family: 'Montserrat', sans-serif;
+
 }
 
 :root {
   --color-pink: #df4444;
   --color-brown: #f0f9ff;
-  --font-family-design: sans-serif;
+  /* --font-family-design: sans-serif; */
 }
 
 .topspacing {
