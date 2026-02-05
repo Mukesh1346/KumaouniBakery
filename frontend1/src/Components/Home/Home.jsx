@@ -15,6 +15,8 @@ import FeaturedProducts from "../FeatureProducts/FeatureProducts";
 import ReelSection from "../ReelSection/ReelSection";
 import Coustomize from "../Coustomize/Coustomize";
 import FillingCustomizer from "../FillingCoustomise/FillingCoustomise";
+import CakeStory from "../CakeStory/CakeIngredientScroll";
+import CakeIngredientScroll from "../CakeStory/CakeIngredientScroll";
 
 const Home = () => {
   return (
@@ -28,7 +30,8 @@ const Home = () => {
       <Coustomize/>
       <Hero />
       <FeaturedProducts/>
-      <FillingCustomizer/>
+      <CakeIngredientScroll/>
+      {/* <FillingCustomizer/> */}
       <PromoBanner/>
       <Occasions/>
       <BestSellingProduct/>

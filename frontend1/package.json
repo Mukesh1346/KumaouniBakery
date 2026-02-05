@@ -10,6 +10,7 @@
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "dotenv": "^16.6.1",
+    "gsap": "^3.14.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
@@ -24,12 +25,12 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-"build": "react-scripts build"
+    "build": "react-scripts build"
   },
   "homepage": ".",
- "engines": {
-  "node": ">=20.0.0"
-},
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -48,10 +49,10 @@
       "last 1 safari version"
     ]
   },
-"devDependencies": {
-  "@babel/plugin-transform-class-properties": "^7.23.3",
-  "eslint": "^8.57.0",
-  "svgo": "^4.0.0",
-  "eslint-config-react-app": "^7.0.1"
-}
+  "devDependencies": {
+    "@babel/plugin-transform-class-properties": "^7.23.3",
+    "eslint": "^8.57.0",
+    "eslint-config-react-app": "^7.0.1",
+    "svgo": "^4.0.0"
+  }
 }

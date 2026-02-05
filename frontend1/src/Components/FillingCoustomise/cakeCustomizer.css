@@ -1,54 +1,45 @@
 /* =========================
-   RIGHT SIDE TABS
+   SCROLL CONTAINER
+   (RESERVES SPACE)
 ========================= */
-.cat-btn {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 30px;
-  border: 1px solid #6b2c1f;
-  background: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.CoustomContainer{
-  height : 700px;
-}
-
-.cat-btn.active {
-  background: #6b2c1f;
-  color: #fff;
+.cake-scroll-wrapper {
+  position: relative;
+  height: auto; /* GSAP controls spacing */
 }
 
 /* =========================
-   ORBIT LAYOUT
+   PINNED AREA
 ========================= */
-.orbit-wrapper {
+.cake-pin {
+  height: 100vh;
   position: relative;
-  height: 500px;
+      z-index: 99999;
+  display: flex;
+  align-items: center;
+  background: radial-gradient(circle at center, #fff, #f4e9e6);
 }
 
+/* =========================
+   ORBIT
+========================= */
 .main-cake {
-  width: 320px;
-  height: 350px;
-  position: absolute;
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
-  top: 60%;
-  left: 30%;
-  transform: translate(-50%, -50%);
+  position: absolute;
+  left: 20%;
+  transform: translateX(-50%);
+  z-index: 5;
 }
 
-/* ORBIT ITEMS */
 .orbit-item {
   position: absolute;
-  width: 150px;
-  height: 150px;
-  padding: 5px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  background: #fff;
-  border: 2px dashed #aaa;
-  cursor: pointer;
+  background: white;
+  padding: 6px;
+  border: 2px dashed #caa39b;
 }
 
 .orbit-item img {
@@ -57,30 +48,48 @@
   border-radius: 50%;
 }
 
-.orbit-item.active {
-  border-color: #6b2c1f;
-}
-
 /* POSITIONS */
-.orbit-0 { top: 0%; left: 35%; }
-.orbit-1 { top: 6%; right: 33%; }
-.orbit-2 { bottom: 28%; right: 25%; }
-.orbit-3 { bottom: -5%; left: 54%; }
-.orbit-4 { bottom: -22%; left: 35%; }
+.orbit-0 { top: 10%; left: 42%; }
+.orbit-1 { top: 24%; right: 41%; }
+.orbit-2 { bottom: 42%; right: 33%; }
+.orbit-3 { bottom: 24%; left: 52%; }
+.orbit-4 { top: 74%; left: 43%; }
 
 /* TEXT */
 .cake-info {
-  position: absolute;
-  right: 70%;
-  top: 8%;
-  max-width: 260px;
+  max-width: 320px;
+  margin-left: 80px;
+
+      position: absolute;
+    top: 11%;
+    right: 35%;
 }
 
-.titleFeature{
-  font-size: 35px;
+/* =========================
+   NEXT SECTION
+========================= */
+.next-section {
+  min-height: 100vh;
+  padding: 100px;
+  background: #fff;
 }
 
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  .main-cake {
+    left: 50%;
+    width: 240px;
+    height: 240px;
+  }
 
-.subtitleFeature{
-  font-size : 14px;
+  .cake-info {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    margin-left: 0;
+  }
 }

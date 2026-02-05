@@ -1,35 +1,71 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function OrbitCake({ data }) {
-  const [active, setActive] = useState(data.items[0]);
+gsap.registerPlugin(ScrollTrigger);
 
-  /* RESET ACTIVE ITEM WHEN TAB CHANGES */
+export default function OrbitCake({ items }) {
+  const sectionRef = useRef(null);
+  const pinRef = useRef(null);
+  const orbitRefs = useRef([]);
+  const [active, setActive] = useState(0);
+
   useEffect(() => {
-    setActive(data.items[0]);
-  }, [data]);
+    const total = items.length;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        end: () => `+=${window.innerHeight * total}`,
+        pin: pinRef.current,
+        scrub: 1,
+        pinSpacing: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const index = Math.min(
+            total - 1,
+            Math.floor(self.progress * total)
+          );
+          setActive(index);
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [items]);
 
   return (
-    <div className="orbit-wrapper">
-      {/* BIG CENTER IMAGE */}
-      <img src={active.main} alt="" className="main-cake" />
+    <div
+      ref={sectionRef}
+      className="cake-scroll-wrapper"
+      style={{ height: `${items.length * 100}vh` }}  // 🔥 PERFECT SCROLL HEIGHT
+    >
+      <div ref={pinRef} className="cake-pin">
+        
+        {/* CENTER CAKE */}
+        <img
+          src={items[active].img}
+          className="main-cake"
+          alt={items[active].title}
+        />
 
-      {/* ORBIT CIRCULAR TABS */}
-      {data.items.map((item, index) => (
-        <div
-          key={item.id}
-          className={`orbit-item orbit-${index} ${
-            active.id === item.id ? "active" : ""
-          }`}
-          onClick={() => setActive(item)}
-        >
-          <img src={item.img} alt="" />
+        {/* ORBIT */}
+        {items.map((item, i) => (
+          <div
+            key={item.id}
+            className={`orbit-item orbit-${i}`}
+            ref={(el) => (orbitRefs.current[i] = el)}
+          >
+            <img src={item.img} alt={item.title} />
+          </div>
+        ))}
+
+        {/* TEXT */}
+        <div className="cake-info">
+          <h2>{items[active].title}</h2>
+          <p>{items[active].desc}</p>
         </div>
-      ))}
-
-      {/* TEXT CONTENT */}
-      <div className="cake-info">
-        <h3 className="titleFeature">{active.title}</h3>
-        <p className="subtitleFeature">{active.desc}</p>
       </div>
     </div>
   );
