@@ -1,121 +1,382 @@
-/* Cake scroll wrapper */
-.cake-scroll-wrapper {
+/* ============================================
+   Cake Scroll Section
+============================================ */
+
+/* Main wrapper - creates scroll space */
+.cake-scroll-section {
   position: relative;
   width: 100%;
+  background: #faf6ef;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
-/* Pinned area */
-.cake-pin {
+.cake-scroll-pin {
+  opacity: 1 !important;
+}
+
+
+/* Pinned container */
+.cake-scroll-pin {
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   background: #faf6ef;
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
+  z-index: 101;
+  will-change: transform, opacity;
 }
 
-/* Main image */
-.cake-main {
+/* Container */
+.cake-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  height: 100%;
+}
+
+/* Content layout */
+.cake-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+}
+
+/* Left side */
+.cake-left {
+  flex: 0 0 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 40px;
+}
+
+.cake-main-image-container {
   max-width: 420px;
-  margin: auto;
+  width: 100%;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cake-main-img {
   width: 100%;
   height: auto;
-  transition: opacity 0.4s ease;
+  max-height: 420px;
+  object-fit: contain;
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
-/* Orbit area */
-.orbit-area {
+/* Right side */
+.cake-right {
+  flex: 0 0 55%;
   position: relative;
-  height: 550px;
-  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 40px;
 }
 
-/* Orbit items */
-.orbit-item {
+.cake-orbit-wrapper {
+  position: relative;
+  width: 100%;
+  height: 550px;
+}
+
+/* Orbit units */
+.cake-orbit-unit {
   position: absolute;
   display: flex;
   align-items: center;
   gap: 14px;
-  opacity: 0.45;
-  transform: scale(0.9);
-  transition: all 0.4s ease;
   width: 230px;
   height: 110px;
   border-radius: 15%;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.45;
+  transform: scale(0.9);
+  padding: 15px;
+  z-index: 1;
 }
 
-.orbit-item img {
+.cake-orbit-unit:hover {
+  opacity: 0.7;
+}
+
+/* Active state */
+.cake-orbit-unit.cake-active {
+  opacity: 1;
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 10px 30px rgba(107, 63, 43, 0.15);
+}
+
+/* Orbit image */
+.cake-orbit-img-box {
+  flex-shrink: 0;
+}
+
+.cake-orbit-img {
   width: 70px;
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px dashed #c7b7a3;
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
 }
 
-/* Text */
-.orbit-text h6 {
+.cake-orbit-unit.cake-active .cake-orbit-img {
+  border-color: #6b3f2b;
+  border-width: 3px;
+}
+
+/* Orbit content */
+.cake-orbit-content {
+  flex: 1;
+}
+
+.cake-orbit-heading {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 4px;
   color: #333;
 }
 
-.orbit-text p {
+.cake-orbit-unit.cake-active .cake-orbit-heading {
+  color: #6b3f2b;
+}
+
+.cake-orbit-desc {
   font-size: 12px;
   color: #777;
   max-width: 220px;
   line-height: 1.4;
+  margin: 0;
 }
 
-/* Active state */
-.orbit-item.active {
-  opacity: 1;
-  transform: scale(1.1);
+/* ============================================
+   ORBIT POSITIONS - SAME AS YOUR ORIGINAL
+============================================ */
+
+.cake-orbit-pos-0 { 
+  top: -3%; 
+  left: -15%; 
 }
 
-.orbit-item.active img {
-  border-color: #6b3f2b;
-  border-width: 3px;
+.cake-orbit-pos-1 { 
+  top: 18%; 
+  right: 55%; 
 }
 
-/* Positions */
-.orbit-0 { top: -3%; left: -15%; }
-.orbit-1 { top: 18%; right: 55%; }
-.orbit-2 { top: 39%; right: 35%; }
-.orbit-3 { top: 62%; left: 11%; }
-.orbit-4 { top: 86%; left: -15%; }
+.cake-orbit-pos-2 { 
+  top: 39%; 
+  right: 35%; 
+}
+
+.cake-orbit-pos-3 { 
+  top: 62%; 
+  left: 11%; 
+}
+
+.cake-orbit-pos-4 { 
+  top: 86%; 
+  left: -15%; 
+}
+
+/* ============================================
+   Responsive Design
+============================================ */
+
+/* Desktop large */
+@media (min-width: 1400px) {
+  .cake-container {
+    max-width: 1320px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .cake-container {
+    max-width: 1140px;
+  }
+}
+
+/* Small desktop */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .cake-container {
+    max-width: 960px;
+    padding: 0 30px;
+  }
+  
+  .cake-left {
+    flex: 0 0 50%;
+    padding-right: 30px;
+  }
+  
+  .cake-right {
+    flex: 0 0 50%;
+    padding-left: 30px;
+  }
+  
+  .cake-main-image-container {
+    max-width: 380px;
+    height: 380px;
+  }
+  
+  .cake-orbit-wrapper {
+    height: 500px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+  .cake-content {
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+  }
+  
+  .cake-left,
+  .cake-right {
+    flex: none;
+    width: 100%;
+    padding: 0;
+  }
+  
+  .cake-main-image-container {
+    max-width: 340px;
+    height: 340px;
+    margin: 0 auto;
+  }
+  
+  .cake-orbit-wrapper {
+    height: 450px;
+    margin: 0 auto;
+    max-width: 600px;
+  }
+  
+  /* Adjusted positions for tablet */
+  .cake-orbit-pos-0 { top: 0%; left: 5%; }
+  .cake-orbit-pos-1 { top: 20%; right: 10%; }
+  .cake-orbit-pos-2 { top: 45%; left: 50%; transform: translateX(-50%); }
+  .cake-orbit-pos-3 { top: 70%; left: 10%; }
+  .cake-orbit-pos-4 { top: 90%; right: 10%; }
+}
 
 /* Mobile */
-@media (max-width: 768px) {
-  .cake-scroll-wrapper {
+@media (max-width: 767px) {
+  .cake-scroll-section {
     height: auto !important;
   }
-
-  .cake-pin {
+  
+  .cake-scroll-pin {
     height: auto;
+    min-height: 100vh;
     padding: 80px 0;
   }
-
-  .orbit-area {
+  
+  .cake-container {
+    padding: 0 20px;
+  }
+  
+  .cake-content {
+    flex-direction: column;
+    gap: 50px;
+  }
+  
+  .cake-left {
+    order: 2;
+    width: 100%;
+    padding: 0;
+  }
+  
+  .cake-right {
+    order: 1;
+    width: 100%;
+    padding: 0;
     height: auto;
-    margin-top: 40px;
   }
-
-  .orbit-item {
+  
+  .cake-main-image-container {
+    max-width: 280px;
+    height: 280px;
+    margin: 0 auto;
+  }
+  
+  .cake-orbit-wrapper {
+    height: auto;
     position: relative;
-    margin-bottom: 20px;
-    left: 0 !important;
-    right: 0 !important;
-    top: 0 !important;
-    opacity: 0.6;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 320px;
+    margin: 0 auto;
   }
-
-  .orbit-item.active {
+  
+  .cake-orbit-unit {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100%;
+    opacity: 0.6;
+    transform: scale(0.95);
+    margin: 0 auto;
+  }
+  
+  .cake-orbit-unit.cake-active {
     opacity: 1;
-    transform: scale(1.05);
+    transform: scale(1);
+  }
+  
+  /* Reset all position classes on mobile */
+  .cake-orbit-pos-0,
+  .cake-orbit-pos-1,
+  .cake-orbit-pos-2,
+  .cake-orbit-pos-3,
+  .cake-orbit-pos-4 {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .cake-container {
+    padding: 0 15px;
+  }
+  
+  .cake-orbit-unit {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    height: auto;
+    padding: 20px;
+  }
+  
+  .cake-orbit-img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .cake-orbit-heading {
+    font-size: 13px;
+  }
+  
+  .cake-orbit-desc {
+    font-size: 11px;
   }
 }

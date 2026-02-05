@@ -35,6 +35,10 @@ export default function OrbitCake({ items }) {
   }, [items.length]);
 
   return (
+
+    <>
+
+    
     <section ref={wrapperRef} className="cake-scroll-wrapper">
       <div ref={pinRef} className="cake-pin">
 
@@ -57,5 +61,6 @@ export default function OrbitCake({ items }) {
 
       </div>
     </section>
+    </>
   );
 }

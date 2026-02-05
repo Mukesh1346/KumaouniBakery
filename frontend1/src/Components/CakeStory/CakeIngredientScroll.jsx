@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import './CakeIngredientScroll.css';
@@ -23,88 +23,87 @@ export default function CakeIngredientScroll() {
   const wrapperRef = useRef(null);
   const pinRef = useRef(null);
   const [active, setActive] = useState(0);
-  const [isClient, setIsClient] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const scrollTriggerRef = useRef(null);
 
   useEffect(() => {
-    setIsClient(true);
+    if (typeof window === 'undefined') return;
+    
+    setIsReady(true);
   }, []);
 
-  useEffect(() => {
-    if (!isClient || !wrapperRef.current) return;
+useEffect(() => {
+  if (!wrapperRef.current) return;
 
-    // Use GSAP context for proper cleanup
-    const ctx = gsap.context(() => {
-      const pinHeight = items.length * window.innerHeight;
-      
-      // Main ScrollTrigger
-      ScrollTrigger.create({
-        trigger: wrapperRef.current,
-        start: 'top top',
-        end: `+=${pinHeight}`,
-        pin: pinRef.current,
-        pinSpacing: true,
-        scrub: 1,
-        onUpdate: (self) => {
-          const index = Math.floor(self.progress * items.length);
-          setActive(Math.min(index, items.length - 1));
-        }
-      });
+  const vh = window.innerHeight;
+  const totalScrollDistance = (items.length - 0.5) * vh;
 
-      // Entrance animation
-      gsap.fromTo(
-        pinRef.current,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: 'top 80%',
-            once: true
-          }
-        }
-      );
-    });
+  const trigger = ScrollTrigger.create({
+    trigger: wrapperRef.current,
+    start: 'top top',
+    end: `+=${totalScrollDistance}`,
+    pin: pinRef.current,
+    pinSpacing: true,
+    scrub: true,
+    anticipatePin: 1,
 
-    return () => ctx.revert(); // Proper cleanup
-  }, [isClient]);
+    onUpdate: (self) => {
+      const index = Math.round(self.progress * (items.length - 1));
+      setActive(index);
 
-  if (!isClient) return null; // Avoid SSR issues
+      // ✅ FORCE opacity always 1
+      gsap.set(pinRef.current, { opacity: 1 });
+    }
+  });
+
+  return () => trigger.kill();
+}, []);
+
+  const handleItemClick = useCallback((index) => {
+    setActive(index);
+  }, []);
 
   return (
-    <section ref={wrapperRef} className="cake-scroll-wrapper">
-      <div ref={pinRef} className="cake-pin">
-        <div className="container h-100">
-          <div className="row h-100 align-items-center">
+    <section 
+      ref={wrapperRef} 
+      className="cake-scroll-section"
+      
+    >
+      <div ref={pinRef} className="cake-scroll-pin">
+        <div className="cake-container">
+          <div className="cake-content">
             
             {/* Left Image */}
-            <div className="col-lg-6 text-center">
-              <div className="cake-main">
+            <div className="cake-left">
+              <div className="cake-main-image-container">
                 <img 
-                  src={items[active]?.img?.src || items[active]?.img} 
-                  alt={items[active]?.title}
+                  src={items[active]?.img || items[0].img} 
+                  alt={items[active]?.title || 'Cake'}
                   className="cake-main-img"
+                  key={active}
                 />
               </div>
             </div>
 
-            {/* Right Orbit */}
-            <div className="col-lg-6 position-relative">
-              <div className="orbit-area">
+            {/* Right Orbit - Using your original orbit positions */}
+            <div className="cake-right">
+              <div className="cake-orbit-wrapper">
                 {items.map((item, i) => (
                   <div
                     key={i}
-                    className={`orbit-item orbit-${i} ${active === i ? 'active' : ''}`}
+                    className={`cake-orbit-unit cake-orbit-pos-${i} ${active === i ? 'cake-active' : ''}`}
+                    onClick={() => handleItemClick(i)}
                   >
-                    <img 
-                      src={item.img?.src || item.img} 
-                      alt={item.title}
-                    />
-                    <div className="orbit-text">
-                      <h6>{item.title}</h6>
-                      <p>{item.subtitle}</p>
+                    <div className="cake-orbit-img-box">
+                      <img 
+                        src={item.img} 
+                        alt={item.title}
+                        className="cake-orbit-img"
+                      />
+                    </div>
+                    <div className="cake-orbit-content">
+                      <h4 className="cake-orbit-heading">{item.title}</h4>
+                      <p className="cake-orbit-desc">{item.subtitle}</p>
                     </div>
                   </div>
                 ))}
