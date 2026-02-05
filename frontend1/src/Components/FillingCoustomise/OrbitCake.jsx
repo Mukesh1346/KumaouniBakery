@@ -5,68 +5,57 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function OrbitCake({ items }) {
-  const sectionRef = useRef(null);
+  const wrapperRef = useRef(null);
   const pinRef = useRef(null);
-  const orbitRefs = useRef([]);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const total = items.length;
-
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: () => `+=${window.innerHeight * total}`,
+        trigger: wrapperRef.current,
+
+        // ✅ allow normal partial scroll first
+        start: "top 75%",
+
+        // ✅ pin only when section is fully reached
+        end: `+=${items.length * window.innerHeight}`,
+
         pin: pinRef.current,
-        scrub: 1,
-        pinSpacing: true,
+        scrub: true,
         anticipatePin: 1,
+
         onUpdate: (self) => {
-          const index = Math.min(
-            total - 1,
-            Math.floor(self.progress * total)
-          );
+          const index = Math.round(self.progress * (items.length - 1));
           setActive(index);
         },
       });
-    }, sectionRef);
+    }, wrapperRef);
 
     return () => ctx.revert();
-  }, [items]);
+  }, [items.length]);
 
   return (
-    <div
-      ref={sectionRef}
-      className="cake-scroll-wrapper"
-      style={{ height: `${items.length * 100}vh` }}  // 🔥 PERFECT SCROLL HEIGHT
-    >
+    <section ref={wrapperRef} className="cake-scroll-wrapper">
       <div ref={pinRef} className="cake-pin">
-        
-        {/* CENTER CAKE */}
+
         <img
           src={items[active].img}
           className="main-cake"
           alt={items[active].title}
         />
 
-        {/* ORBIT */}
         {items.map((item, i) => (
-          <div
-            key={item.id}
-            className={`orbit-item orbit-${i}`}
-            ref={(el) => (orbitRefs.current[i] = el)}
-          >
+          <div key={item.id} className={`orbit-item orbit-${i}`}>
             <img src={item.img} alt={item.title} />
           </div>
         ))}
 
-        {/* TEXT */}
         <div className="cake-info">
           <h2>{items[active].title}</h2>
           <p>{items[active].desc}</p>
         </div>
+
       </div>
-    </div>
+    </section>
   );
 }
