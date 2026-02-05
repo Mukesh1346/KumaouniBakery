@@ -38,7 +38,7 @@
 ========================= */
 .orbit-area {
   position: relative;
-  height: 620px;
+  height: 550px;
 }
 
 .orbit-item {
@@ -89,8 +89,8 @@
 .orbit-0 { top: -3%;  left: -15%; }
 .orbit-1 { top: 18%; right: 55%; }
 .orbit-2 { top: 39%; right: 35%; }
-.orbit-3 { top: 58%; left: 11%; }
-.orbit-4 { top: 77%; left: -15%; }
+.orbit-3 { top: 62%; left: 11%; }
+.orbit-4 { top: 86%; left: -15%; }
 
 /* =========================
    MOBILE

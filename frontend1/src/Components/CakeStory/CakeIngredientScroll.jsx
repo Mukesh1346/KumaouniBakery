@@ -65,7 +65,7 @@ export default function CakeIngredientScroll() {
   // ✅ subtle appear animation (only once)
   gsap.fromTo(
     pinRef.current,
-    { opacity: 0, y: 40 },
+    { opacity: 0, y: 40   },
     {
       opacity: 1,
       y: 0,
