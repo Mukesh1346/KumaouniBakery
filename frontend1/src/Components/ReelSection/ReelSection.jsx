@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./reel.css";
 import img1 from '../../images/pic/redVelvet.jpg'
+import { Link } from "react-router-dom";
 export default function ReelSection() {
 
  const reels = [
@@ -93,15 +94,17 @@ export default function ReelSection() {
               autoPlay
               controls
             />
+           <Link to="/all-products">
 
+           
             <div className="modal-product">
               <img src={activeReel.productImg} alt="" />
               <div>
-                <h5>{activeReel.title}</h5>
+                <h5 className="reeltitle">{activeReel.title}</h5>
                 <span>{activeReel.price}</span>
               </div>
-            </div>
-          </div>
+            </div></Link>
+   ="/pages"       </div>
         </div>
       )}
     </>

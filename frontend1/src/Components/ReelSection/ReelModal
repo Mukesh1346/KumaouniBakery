@@ -17,7 +17,7 @@ export default function ReelModal({ reel, onClose }) {
         <div className="modal-product">
           <img src={reel.productImg} alt="" />
           <div>
-            <h4>{reel.title}</h4>
+            <h4 >{reel.title}</h4>
             <span>{reel.price}</span>
           </div>
         </div>

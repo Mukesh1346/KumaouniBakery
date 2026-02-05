@@ -56,7 +56,7 @@
 @media (min-width: 768px) {
 
 .SubSubCatBannerBox img{
-  height: 115px;
+  height: fit-content;
 }
   
 .SubSubCategorySection {
