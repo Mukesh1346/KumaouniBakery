@@ -6,19 +6,23 @@ import pic1 from "../../images/chocolate/chocolate1.jpg";
 import pic2 from "../../images/chocolate/chocolate2.jpg";
 import pic3 from "../../images/chocolate/chocolate3.jpg";
 import pic4 from "../../images/chocolate/chocolate4.jpg";
-
+import img1 from '../../images/pic/img1.png'
+import img2 from '../../images/pic/img2.png'
+import img3 from '../../images/pic/img3.png'
+import img4 from '../../images/pic/img4.png'
+import img5 from '../../images/pic/img5.png'
 /* ===========================
    DATA FOR ALL 6 TABS
 =========================== */
 const cakeSets = {
   cakes: {
     name: "Cakes",
-    items: [
-      { id: 1, title: "Mold Sponge", desc: "Light cocoa sponge layers.", img: pic1, main: pic2 },
-      { id: 2, title: "Chocolate Truffle", desc: "Rich chocolate ganache.", img: pic2, main: pic3 },
-      { id: 3, title: "Soft Caramel", desc: "Buttery caramel layer.", img: pic3, main: pic4 },
-      { id: 4, title: "Berry Confit", desc: "Tangy berry sweetness.", img: pic4, main: pic3 },
-      { id: 5, title: "Crunchy Base", desc: "Crunchy biscuit base.", img: pic2, main: pic4 },
+    items: [   
+      { id: 1, title: "Mold Sponge", desc: "Light cocoa sponge layers.", img: img1, main: img1 },
+      { id: 2, title: "Chocolate Truffle", desc: "Rich chocolate ganache.", img: img2, main: img2 },
+      { id: 3, title: "Soft Caramel", desc: "Buttery caramel layer.", img: img3, main: img3 },
+      { id: 4, title: "Berry Confit", desc: "Tangy berry sweetness.", img: img4, main: img4 },
+      { id: 5, title: "Crunchy Base", desc: "Crunchy biscuit base.", img: img5, main: img5 },
     ],
   },
 
@@ -67,7 +71,7 @@ export default function CakeCustomizer() {
   const [category, setCategory] = useState("cakes");
 
   return (
-    <div className="container py-5">
+    <div className="container-fluid CoustomContainer py-5">
       <div className="row">
         {/* LEFT SECTION */}
         <div className="col-md-8">

@@ -28,8 +28,8 @@ export default function OrbitCake({ data }) {
 
       {/* TEXT CONTENT */}
       <div className="cake-info">
-        <h3>{active.title}</h3>
-        <p>{active.desc}</p>
+        <h3 className="titleFeature">{active.title}</h3>
+        <p className="subtitleFeature">{active.desc}</p>
       </div>
     </div>
   );

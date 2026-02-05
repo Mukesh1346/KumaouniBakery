@@ -12,6 +12,10 @@
   cursor: pointer;
 }
 
+.CoustomContainer{
+  height : 700px;
+}
+
 .cat-btn.active {
   background: #6b2c1f;
   color: #fff;
@@ -27,17 +31,19 @@
 
 .main-cake {
   width: 320px;
+  height: 350px;
   position: absolute;
-  top: 50%;
-  left: 45%;
+  border-radius: 50%;
+  top: 60%;
+  left: 30%;
   transform: translate(-50%, -50%);
 }
 
 /* ORBIT ITEMS */
 .orbit-item {
   position: absolute;
-  width: 90px;
-  height: 90px;
+  width: 150px;
+  height: 150px;
   padding: 5px;
   border-radius: 50%;
   background: #fff;
@@ -56,16 +62,25 @@
 }
 
 /* POSITIONS */
-.orbit-0 { top: 5%; left: 45%; }
-.orbit-1 { top: 20%; right: 5%; }
-.orbit-2 { bottom: 30%; right: 10%; }
-.orbit-3 { bottom: 5%; left: 50%; }
-.orbit-4 { bottom: 30%; left: 10%; }
+.orbit-0 { top: 0%; left: 35%; }
+.orbit-1 { top: 6%; right: 33%; }
+.orbit-2 { bottom: 28%; right: 25%; }
+.orbit-3 { bottom: -5%; left: 54%; }
+.orbit-4 { bottom: -22%; left: 35%; }
 
 /* TEXT */
 .cake-info {
   position: absolute;
-  right: 0;
-  top: 35%;
+  right: 70%;
+  top: 8%;
   max-width: 260px;
+}
+
+.titleFeature{
+  font-size: 35px;
+}
+
+
+.subtitleFeature{
+  font-size : 14px;
 }
