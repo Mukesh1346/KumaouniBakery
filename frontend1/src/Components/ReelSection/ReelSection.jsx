@@ -4,37 +4,37 @@ import img1 from '../../images/pic/redVelvet.jpg'
 import { Link } from "react-router-dom";
 export default function ReelSection() {
 
- const reels = [
-  {
-    id: 1,
-    video: "/video1.mp4",
-    productImg: img1,
-    title: "EZ Masala J – 125 g",
-    price: "₹145",
-  },
-  {
-    id: 2,
-   video: "/video2.mp4",
-    productImg: img1,
-    title: "EZ Masala J – 250 g",
-    price: "₹295",
-  },
-  {
-    id: 3,
-   video: "/video3.mp4",
-    productImg: img1,
-    title: "EZ Masala M – 500 g",
-    price: "₹495",
-  },
-  {
-    id: 4,
-   video: "/video4.mp4",
-    productImg: img1,
-    title: "EZ Masala M – 500 g",
-    price: "₹495",
-  },
+  const reels = [
+    {
+      id: 1,
+      video: "/video1.mp4",
+      productImg: img1,
+      title: "EZ Masala J – 125 g",
+      price: "₹145",
+    },
+    {
+      id: 2,
+      video: "/video2.mp4",
+      productImg: img1,
+      title: "EZ Masala J – 250 g",
+      price: "₹295",
+    },
+    {
+      id: 3,
+      video: "/video3.mp4",
+      productImg: img1,
+      title: "EZ Masala M – 500 g",
+      price: "₹495",
+    },
+    {
+      id: 4,
+      video: "/video4.mp4",
+      productImg: img1,
+      title: "EZ Masala M – 500 g",
+      price: "₹495",
+    },
 
-];
+  ];
 
 
 
@@ -49,38 +49,38 @@ export default function ReelSection() {
   return (
     <>
       {/* REEL LIST */}
-    <div className="container">
-          <section className="reel-section">
-       {reels.map((reel) => (
-  <div
-    key={reel.id}
-    className="reel-card"
-    onClick={() => setActiveReel(reel)}
-  >
-    <video
-      src={reel.video}
-      muted
-      loop
-      preload="metadata"
-      onMouseEnter={(e) => e.target.play()}
-      onMouseLeave={(e) => {
-        e.target.pause();
-        e.target.currentTime = 0;
-      }}
-    />
+      <div className="container">
+        <section className="reel-section">
+          {reels.map((reel) => (
+            <div
+              key={reel.id}
+              className="reel-card"
+              onClick={() => setActiveReel(reel)}
+            >
+              <video
+                src={reel.video}
+                muted
+                loop
+                preload="metadata"
+                onMouseEnter={(e) => e.target.play()}
+                onMouseLeave={(e) => {
+                  e.target.pause();
+                  e.target.currentTime = 0;
+                }}
+              />
 
-    <div className="reel-product">
-      <img src={reel.productImg} alt="" />
-      <div>
-        <p>{reel.title}</p>
-        <span>{reel.price}</span>
+              <div className="reel-product">
+                <img src={reel.productImg} alt="" />
+                <div>
+                  <p>{reel.title}</p>
+                  <span>{reel.price}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+        </section>
       </div>
-    </div>
-  </div>
-))}
-
-      </section>
-    </div>
 
       {/* MODAL */}
       {activeReel && (
@@ -94,17 +94,21 @@ export default function ReelSection() {
               autoPlay
               controls
             />
-           <Link to="/all-products">
 
-           
-            <div className="modal-product">
-              <img src={activeReel.productImg} alt="" />
-              <div>
-                <h5 className="reeltitle">{activeReel.title}</h5>
-                <span>{activeReel.price}</span>
+
+              <div className="modal-product">
+                <img src={activeReel.productImg} alt="" />
+                <div >
+                  <h5 className="reeltitle">{activeReel.title}</h5>
+                 <div className="d-flex gap-3">
+                   <span>{activeReel.price}</span>
+            <Link to="/all-products">
+                  <button className="BuyBtn">Buy Now</button>
+              </Link>
               </div>
-            </div></Link>
-   ="/pages"       </div>
+                 </div>
+                </div>
+               </div>
         </div>
       )}
     </>
