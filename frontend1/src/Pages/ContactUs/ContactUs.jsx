@@ -156,7 +156,7 @@ const ContactUs = () => {
               ></iframe>
             </div>
 
-            <div className="col-md-6">
+            <div className="col-md-6 formSec">
               <form onSubmit={handleSubmit}>
                 <div className="form-input mb-3">
                   <input

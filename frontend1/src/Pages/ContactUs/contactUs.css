@@ -75,3 +75,22 @@
     box-shadow: 0 0 0 .15rem var(--color-brown);
     border: 0px solid !important;
 }
+
+
+@media (max-width: 768px){
+  .contactSection {
+    padding: 2rem;
+}
+
+.contactSectionBox{
+  justify-content: space-evenly !important;
+}
+
+.contactFormSection {
+    padding: 1rem 1rem;
+}
+.formSec{
+  margin-top:10px !important;
+}
+
+}

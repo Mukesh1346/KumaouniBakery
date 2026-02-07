@@ -83,4 +83,11 @@
   .content-block ul li {
     font-size: 15px;
   }
+
+.premium-about-image img {
+    height: 370px;
+    width: 100%;
+   
+}
+
 }
