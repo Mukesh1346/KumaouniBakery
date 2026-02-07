@@ -37,7 +37,7 @@
 }
 
 .navPageText{
-  font-size: 10px;
+  font-size: 12px;
 }
 
 /* ============================= */
@@ -383,6 +383,10 @@
     width: 20px;
     height: 14px;
   }
+  .navPageText{
+  font-size: 12px;
+}
+
 }
 
 
