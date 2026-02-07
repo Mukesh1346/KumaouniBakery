@@ -216,9 +216,20 @@ const Dashboard = () => {
             <i className="fa-solid fa-tag"></i>
             <h3>Manage Sub Category</h3>
             <p>Organize products in sub-categories</p>
-            <p>{subCategories.length} Sub Categories</p>
+            <p>{subCategories.length} Sub-Categories</p>
             {/* Display sub-categories data */}
             {/* <pre>{JSON.stringify(subCategories, null, 2)}</pre> */}
+          </Link>
+        </div>
+
+        <div className="dashboard-card">
+          <Link to="/all-sub-subcategory">
+            <i className="fa-solid fa-users"></i>
+            <h3>Sub-subcategory</h3>
+            <p>View and manage Sub-subcategory</p>
+            <p>{users.length} Sub-Subcategory</p>
+            {/* Display users data */}
+            {/* <pre>{JSON.stringify(users, null, 2)}</pre> */}
           </Link>
         </div>
 
@@ -244,6 +255,39 @@ const Dashboard = () => {
           </Link>
         </div>
 
+         <div className="dashboard-card">
+          <Link to="/all-reels">
+            <i className="fa-solid fa-boxes-stacked"></i>
+            <h3>Manage Reels</h3>
+            <p>Add, update, or remove Reels</p>
+            <p> Reels</p>
+            {/* Display products data */}
+            {/* <pre>{JSON.stringify(products, null, 2)}</pre> */}
+          </Link>
+        </div>
+
+           <div className="dashboard-card">
+          <Link to="/all-promo-banners">
+            <i className="fa-solid fa-boxes-stacked"></i>
+            <h3>Manage PromoBanners</h3>
+            <p>Add, update, or remove PromoBanners</p>
+            <p>PromoBanners</p>
+            {/* Display products data */}
+            {/* <pre>{JSON.stringify(products, null, 2)}</pre> */}
+          </Link>
+        </div>
+
+  <div className="dashboard-card">
+          <Link to="/all-cake-banners">
+            <i className="fa-solid fa-boxes-stacked"></i>
+            <h3>Manage Cake Banners</h3>
+            <p>Add, update, or remove Cake Banners</p>
+            <p>Cake Banners</p>
+            {/* Display products data */}
+            {/* <pre>{JSON.stringify(products, null, 2)}</pre> */}
+          </Link>
+        </div>
+
         <div className="dashboard-card">
           <Link to="/all-users">
             <i className="fa-solid fa-users"></i>
@@ -254,19 +298,14 @@ const Dashboard = () => {
             {/* <pre>{JSON.stringify(users, null, 2)}</pre> */}
           </Link>
         </div>
+
+
+
+
+         
       </div>
 
-      {/* <div className="dashboard-card">
-          <h3>Show Orders</h3>
-          <p>Overview of your orders</p>
-          <Line data={showOrdersData} />
-        </div>
-
-        <div className="dashboard-card">
-          <h3>Day by Day Sales</h3>
-          <p>Overview of your sales</p>
-          <Line data={daySalesData} />
-        </div> */}
+    
     </div>
   );
 };

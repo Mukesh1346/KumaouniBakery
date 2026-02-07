@@ -46,9 +46,13 @@ const Header = () => {
             <li><Link to="/all-contact-query" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Contact Query</Link></li>
             <li><Link to="/all-category" onClick={handletoggleBtn}> <i class="fa-solid fa-tags"></i> Manage Category</Link></li>
             <li><Link to="/all-subcategory" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Sub Category</Link></li>
+            <li><Link to="/all-sub-subcategory" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Sub-SubCategory</Link></li>
             <li><Link to="/all-products" onClick={handletoggleBtn}> <i class="fa-solid fa-boxes-stacked"></i> Manage Product</Link></li>
             <li><Link to="/all-size" onClick={handletoggleBtn}> <i class="fa-solid fa-ruler-combined"></i> Manage Size</Link></li>
             <li><Link to="/all-banners" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Banners</Link></li>
+            <li><Link to="/all-promo-banners" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Promo Banners</Link></li>
+            <li><Link to="/all-cake-banner" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Cake Banners</Link></li>
+            <li><Link to="/all-reels" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Reels</Link></li>
             <li><Link to="/all-users" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Users</Link></li>
 
             <div className="logout" onClick={handleLogout}>

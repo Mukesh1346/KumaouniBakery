@@ -49,6 +49,18 @@ import AddProductTag from '../../Pages/ProductTag/AddProductTag'
 import EditProductTag from '../../Pages/ProductTag/EditProductTag'
 import AllContactQuery from '../../Pages/ContactQuery/AllContactQuery'
 import Login from '../auth/Login'
+import AllSubSubCategory from '../../Pages/SubSubCategory/AllSubSubCategory'
+import AddSubSubCategory from '../../Pages/SubSubCategory/AddSubSubCategory'
+import EditSubSubCategory from '../../Pages/SubSubCategory/EditSubSubCategory'
+import AllReels from '../../Pages/Reels/AllReels'
+import AddReel from '../../Pages/Reels/AddReels'
+import EditReel from '../../Pages/Reels/EditReels'
+import AddPromoBanners from '../../Pages/PromoBanner/AddPromoBanners'
+import AllPromoBanners from '../../Pages/PromoBanner/AllPromoBanners'
+import EditPromoBanners from '../../Pages/PromoBanner/EditPromoBanners'
+import AllCakeBanners from '../../Pages/CakeBanners/AllCakeBanner'
+import AddCakeBanner from '../../Pages/CakeBanners/AddCakeBanner'
+import EditCakeBanner from '../../Pages/CakeBanners/EditCakeBanner'
 
 const Home = () => {
 
@@ -75,6 +87,30 @@ const Home = () => {
                 <Route path={"/all-subcategory"} element={<AllSubCategory />} />
                 <Route path={"/add-subcategory"} element={<AddSubCategory />} />
                 <Route path={"/edit-subcategory/:id"} element={<EditSubCategory />} />
+
+
+                 {/* Sub-Subcategory */}
+
+                <Route path={"/all-sub-subcategory"} element={<AllSubSubCategory />} />
+                <Route path={"/add-sub-subcategory"} element={<AddSubSubCategory />} />
+                <Route path={"/edit-sub-subcategory/:id"} element={<EditSubSubCategory />} />
+
+
+
+
+                      <Route path={"/all-promo-banners"} element={<AllPromoBanners/>} />
+                <Route path={"/add-promo-banners"} element={<AddPromoBanners />} />
+                <Route path={"/edit-promo-banners/:id"} element={<EditPromoBanners />} />
+
+
+
+                   
+                      <Route path={"/all-cake-banner"} element={<AllCakeBanners/>} />
+                <Route path={"/add-cake-banner"} element={<AddCakeBanner />} />
+                <Route path={"/edit-cake-banner/:id"} element={<EditCakeBanner />} />
+
+
+
 
                 {/* Color */}
                 <Route path={"/all-color"} element={<AllColor />} />
@@ -145,6 +181,12 @@ const Home = () => {
                 <Route path={"/all-product-tag"} element={<AllProductTag />} />
                 <Route path={"/add-product-tag"} element={<AddProductTag />} />
                 <Route path={"/edit-product-tag/:id"} element={<EditProductTag />} />
+
+
+                    
+                <Route path={"/all-reels"} element={<AllReels />} />
+                <Route path={"/add-reels"} element={<AddReel />} />
+                <Route path={"/edit-reels/:id"} element={<EditReel />} />
 
                 {/* all-shop */}
 

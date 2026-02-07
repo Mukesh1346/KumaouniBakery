@@ -1,0 +1,251 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const EditSubSubCategory = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [mainCategories, setMainCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+
+  const [formData, setFormData] = useState({
+    mainCategoryId: "",
+    subCategoryId: "",
+    subSubcategoryName: "",
+    activeOnHome: false,
+    image: null,
+  });
+
+  /* ================= FETCH MAIN CATEGORIES ================= */
+  useEffect(() => {
+    const fetchMainCategories = async () => {
+      try {
+        const res = await axios.get(
+          "https://api.ssdipl.com/api/get-main-category"
+        );
+        setMainCategories(res.data?.data || []);
+      } catch {
+        toast.error("Failed to load main categories");
+      }
+    };
+    fetchMainCategories();
+  }, []);
+
+  /* ================= FETCH SUB-SUBCATEGORY ================= */
+  useEffect(() => {
+    const fetchSubSubcategory = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.ssdipl.com/api/get-single-subsubcategory/${id}`
+        );
+
+        const data = res.data.data;
+
+        setFormData({
+          mainCategoryId: data.mainCategoryId?._id || "",
+          subCategoryId: data.subCategoryId?._id || "",
+          subSubcategoryName: data.subSubcategoryName || "",
+          activeOnHome: data.activeOnHome || false,
+          image: null,
+        });
+      } catch {
+        toast.error("Failed to load sub-subcategory");
+      }
+    };
+
+    fetchSubSubcategory();
+  }, [id]);
+
+  /* ================= FETCH SUBCATEGORIES ================= */
+  useEffect(() => {
+    if (!formData.mainCategoryId) return;
+
+    const fetchSubCategories = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.ssdipl.com/api/get-subcategory-by-category/${formData.mainCategoryId}`
+        );
+        setSubCategories(res.data?.data || []);
+      } catch {
+        toast.error("Failed to load subcategories");
+      }
+    };
+
+    fetchSubCategories();
+  }, [formData.mainCategoryId]);
+
+  /* ================= HANDLE CHANGE ================= */
+  const handleChange = (e) => {
+    const { name, type, checked, files, value } = e.target;
+
+    if (type === "file") {
+      setFormData((prev) => ({ ...prev, image: files[0] }));
+    } else if (type === "checkbox") {
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  /* ================= SUBMIT ================= */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.mainCategoryId ||
+      !formData.subCategoryId ||
+      !formData.subSubcategoryName
+    ) {
+      toast.error("All required fields must be filled");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const fd = new FormData();
+      fd.append("mainCategoryId", formData.mainCategoryId);
+      fd.append("subCategoryId", formData.subCategoryId);
+      fd.append("subSubcategoryName", formData.subSubcategoryName);
+      fd.append("activeOnHome", formData.activeOnHome);
+
+      if (formData.image) {
+        fd.append("image", formData.image);
+      }
+
+      const res = await axios.put(
+        `https://api.ssdipl.com/api/update-subsubcategory/${id}`,
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      toast.success(res.data?.message || "Sub-Subcategory updated");
+      navigate("/all-sub-subcategory");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to update sub-subcategory"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <ToastContainer />
+
+      <div className="bread">
+        <div className="head">
+          <h4>Edit Sub-Subcategory</h4>
+        </div>
+        <div className="links">
+          <Link to="/all-sub-subcategory" className="add-new">
+            Back <i className="fa-regular fa-circle-left"></i>
+          </Link>
+        </div>
+      </div>
+
+      <div className="d-form">
+        <form className="row g-3" onSubmit={handleSubmit}>
+          {/* MAIN CATEGORY */}
+          <div className="col-md-6">
+            <label className="form-label">Main Category</label>
+            <select
+              name="mainCategoryId"
+              className="form-control"
+              value={formData.mainCategoryId}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select main category</option>
+              {mainCategories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.mainCategoryName}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* SUB CATEGORY */}
+          <div className="col-md-6">
+            <label className="form-label">Sub Category</label>
+            <select
+              name="subCategoryId"
+              className="form-control"
+              value={formData.subCategoryId}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select sub category</option>
+              {subCategories.map((sub) => (
+                <option key={sub._id} value={sub._id}>
+                  {sub.subCategoryName}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* SUB-SUBCATEGORY NAME */}
+          <div className="col-md-6">
+            <label className="form-label">Sub-Subcategory Name</label>
+            <input
+              type="text"
+              name="subSubcategoryName"
+              className="form-control"
+              value={formData.subSubcategoryName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* ACTIVE */}
+          <div className="col-md-6">
+            <label className="form-label">Display on Homepage</label>
+            <div className="form-check">
+              <input
+                type="checkbox"
+                name="activeOnHome"
+                className="form-check-input"
+                checked={formData.activeOnHome}
+                onChange={handleChange}
+              />
+              <label className="form-check-label">
+                Active on Homepage
+              </label>
+            </div>
+          </div>
+
+          {/* IMAGE */}
+          <div className="col-md-6">
+            <label className="form-label">Sub-Subcategory Image</label>
+            <input
+              type="file"
+              className="form-control"
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* BUTTON */}
+          <div className="col-12 text-center">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`${isLoading ? "not-allowed" : "allowed"}`}
+            >
+              {isLoading ? "Please Wait..." : "Update Sub-Subcategory"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
+  );
+};
+
+export default EditSubSubCategory;
