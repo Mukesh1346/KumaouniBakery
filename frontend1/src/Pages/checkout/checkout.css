@@ -1,4 +1,7 @@
 /* ================= GLOBAL ================= */
+* {
+  box-sizing: border-box;
+}
 
 /* ================= LOGIN DETAILS (TOP) ================= */
 .login-box {
@@ -42,6 +45,7 @@
   color: #777;
   font-size: 14px;
   line-height: 1.3;
+  background: #f7f7f7;
 }
 
 .step.active {
@@ -122,15 +126,35 @@
   border-color: #1e88e5;
 }
 
+/* ================= SUMMARY ================= */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.summary-row.total {
+  font-size: 16px;
+  font-weight: 700;
+}
+
 /* ================= BUTTON ================= */
 .continue-btn {
   width: 100%;
   height: 52px;
-  background: #eeeeee;
+  background: #1e88e5;
+  color: #fff;
   border: none;
   border-radius: 10px;
   font-weight: 600;
   font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.continue-btn:hover {
+  background: #1565c0;
 }
 
 /* ===================================================
@@ -184,10 +208,6 @@
 @media (max-width: 576px) {
   .checkout-wrapper {
     padding: 15px 0 30px;
-  }
-
-  .login-box {
-    text-align: left;
   }
 
   .login-box .row > div {

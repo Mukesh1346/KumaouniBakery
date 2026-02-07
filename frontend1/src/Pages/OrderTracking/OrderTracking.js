@@ -1,10 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./orderTracking.css";
 import logo from "../../images/pic/logo.png";
-import cakeImg from "../../images/pic/Product1.avif";
+import pic1 from '../../images/pic/vanilla.jpg'
 
 const OrderTracking = () => {
+  const [cartItems, setCartItems] = useState([]);
+
+  /* ================= LOAD CART ================= */
+  useEffect(() => {
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    setCartItems(cart);
+  }, []);
+
+  /* ================= CALCULATIONS ================= */
+  const totalAmount = cartItems.reduce(
+    (sum, item) => sum + item.price * (item.quantity || 1),
+    0
+  );
+
+  const totalItems = cartItems.reduce(
+    (sum, item) => sum + (item.quantity || 1),
+    0
+  );
+
+  const deliveryDate =
+    cartItems.find(item => item.deliveryDate)?.deliveryDate || "Today";
+
   return (
     <>
       {/* ================= HEADER ================= */}
@@ -20,7 +42,7 @@ const OrderTracking = () => {
 
           <div className="header-right">
             <span>🔔</span>
-            <span>🛒 2 Items</span>
+            <span>🛒 {totalItems} Items</span>
             <span className="user">Mukesh</span>
           </div>
         </div>
@@ -35,7 +57,7 @@ const OrderTracking = () => {
         </div>
 
         <p className="text-muted idSec">
-          Order ID <b>#CK102398</b>
+          Order ID <b>#CK{Date.now().toString().slice(-6)}</b>
         </p>
 
         {/* ================= DELIVERY SUMMARY ================= */}
@@ -59,7 +81,7 @@ const OrderTracking = () => {
           <div className="col-lg-3 col-md-6">
             <div className="card-box center">
               <p>Estimated Delivery</p>
-              <b>Today, 7:30 PM</b>
+              <b>{deliveryDate}</b>
             </div>
           </div>
 
@@ -73,8 +95,7 @@ const OrderTracking = () => {
 
         {/* ================= TIMELINE & DELIVERY INFO ================= */}
         <div className="row g-4 mb-4">
-
-           <div className="col-lg-6">
+          <div className="col-lg-6">
             <div className="card-box">
               <h6>Delivery Information</h6>
 
@@ -94,24 +115,25 @@ const OrderTracking = () => {
               </div>
 
               <div className="ship-row">
-                <span>Order Number</span>
-                <b>CK102398</b>
+                <span>Total Items</span>
+                <b>{totalItems}</b>
               </div>
             </div>
           </div>
+
           <div className="col-lg-6">
             <div className="card-box">
               <h6>Order Timeline</h6>
 
               <div className="timeline active">
                 <p className="date">Today · 05:45 PM</p>
-                <p>Your cake is out for delivery</p>
+                <p>Your order is out for delivery</p>
                 <span>Nearest Delivery Hub</span>
               </div>
 
               <div className="timeline">
                 <p className="date">Today · 04:30 PM</p>
-                <p>Cake prepared & packed</p>
+                <p>Order prepared & packed</p>
                 <span>Cake Crazzy Bakery</span>
               </div>
 
@@ -122,58 +144,75 @@ const OrderTracking = () => {
               </div>
             </div>
           </div>
-
-         
         </div>
 
         {/* ================= ORDERED ITEMS ================= */}
         <div className="card-box mb-4">
-          <h6>Cake Items (2)</h6>
+          <h6>Ordered Items ({totalItems})</h6>
 
           <div className="row g-3">
-            {[
-              "Chocolate Truffle Cake",
-              "Red Velvet Cake"
-            ].map((cake, index) => (
+            {cartItems.map((item, index) => (
               <div className="col-md-6" key={index}>
                 <div className="item-card">
                   <div className="item-img">
-                    <img src={cakeImg} alt={cake} className="productImg" />
+                    <img
+                      src={pic1}
+                      alt={item.name}
+                      className="productImg"
+                    />
                   </div>
+
                   <div>
-                    <p className="fw-semibold title mb-1">{cake}</p>
-                    <p className="price">₹ 899</p>
-                    <small>Weight: 1 Kg</small>
+                    <p className="fw-semibold title mb-1">
+                      {item.name}
+                      {item.isAddon && " 🎁"}
+                    </p>
+
+                    <p className="price">
+                      ₹ {item.price * (item.quantity || 1)}
+                    </p>
+
+                    {item.weight && (
+                      <small>Weight: {item.weight}</small>
+                    )}
+                    <br />
+                    <small>Qty: {item.quantity || 1}</small>
                   </div>
                 </div>
               </div>
             ))}
+
+            {cartItems.length === 0 && (
+              <p className="text-muted text-center">
+                No products found for this order
+              </p>
+            )}
           </div>
         </div>
 
         {/* ================= ORDER SUMMARY ================= */}
-       <div className="w-50">
-         <div className="card-box  orderBox">
-          <div className="d-flex justify-content-between mb-3">
-            <h6>Order Summary</h6>
-            <span className="payment-success">Payment Successful</span>
-          </div>
+        <div className="w-50">
+          <div className="card-box orderBox">
+            <div className="d-flex justify-content-between mb-3">
+              <h6>Order Summary</h6>
+              <span className="payment-success">Payment Successful</span>
+            </div>
 
-          <div className="summary-row">
-            <span>Total Amount</span>
-            <b>₹ 1,798</b>
-          </div>
+            <div className="summary-row">
+              <span>Total Amount</span>
+              <b>₹ {totalAmount}</b>
+            </div>
 
-          <div className="text-end mt-4">
-            <button className="btn btn-outline-secondary me-2">
-              Contact Support
-            </button>
-            <button className="btn btn-dark">
-              Download Invoice
-            </button>
+            <div className="text-end mt-4">
+              <button className="btn btn-outline-secondary me-2">
+                Contact Support
+              </button>
+              <button className="btn btn-dark">
+                Download Invoice
+              </button>
+            </div>
           </div>
         </div>
-       </div>
       </div>
     </>
   );

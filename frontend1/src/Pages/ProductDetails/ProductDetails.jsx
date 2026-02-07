@@ -8,24 +8,20 @@ import Swal from "sweetalert2";
 import Pic1 from "../../images/pic/redVelvet.jpg"
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import RecommendedPopup from "../../Components/RecommendedPopup/RecommendedPopup";
-import { SiPaytm } from "react-icons/si";
-import { FaGooglePay } from "react-icons/fa";
-import { FaCcMastercard } from "react-icons/fa";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-   import { TbTruckDelivery } from "react-icons/tb";
-                     import { TbMapPinCode } from "react-icons/tb";
+import { TbTruckDelivery } from "react-icons/tb";
+import { TbMapPinCode } from "react-icons/tb";
 
 const ProductDetails = () => {
   const { name } = useParams();
   const [data, setData] = useState({});
   const [activeWeight, setActiveWeight] = useState(null);
   const [price, setPrice] = useState(0);
-  const [deliveryDate, setDeliveryDate] = useState("");
   const [eggOption, setEggOption] = useState("");
-  const [message, setMessage] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
-  const [open, setOpen] = useState(true);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [deliveryDate, setDeliveryDate] = useState("");
+
 
  const handleWishlist = () => {
   let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -99,10 +95,12 @@ const ProductDetails = () => {
     }
   };
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    getApiData();
-  }, [name]);
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  getApiData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [name]);
+
 
   const handleWeightSelection = (weight) => {
     setActiveWeight(weight);
@@ -113,98 +111,50 @@ const ProductDetails = () => {
       setPrice(selectedVariant.finalPrice);
     }
   };
+const addToCart = () => {
+  // 1️⃣ Weight validation
+  const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
+  if (hasWeight && !activeWeight) {
+    Swal.fire("Select Weight", "Please select cake weight", "warning");
+    return;
+  }
 
-  const addToCart = () => {
+  // 2️⃣ Delivery date validation
+  if (!deliveryDate) {
+    Swal.fire("Select Delivery Date", "Please select delivery date", "warning");
+    return;
+  }
 
-    // Check if variants exist and contain weights
-    const hasWeightVariants = data.Variant?.some(
-      (variant) => variant?.weight?.sizeweight
-    );
-
-    // If weights exist but none are selected
-    if (hasWeightVariants && !activeWeight) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please select a weight before adding the product to the cart.",
-      });
-      return;
-    }
-
-    // Check if deliveryDate is provided
-    if (!deliveryDate) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please select a delivery date before adding the product to the cart.",
-      });
-
-      setOpenPopup(true);
-      return;
-    }
-
-    // Prepare the cart item
-    const cartItem = {
-      id: data._id,
-      name: data.productName || "Unknown Product",
-      weight: activeWeight || "N/A", // Default to "N/A" if no weight is required
-      price: price || 0,
-      deliveryDate,
-      eggOption,
-      description: data.productDescription || "",
-      message: message || "",
-      image: data.productImage?.[0] || "default-image.jpg", // Use default image if missing
-      quantity: 1, // Initial quantity
-    };
-
-    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-    // Check for existing item in the cart with the same product, weight, and egg option
-    const existingItemIndex = cart.findIndex(
-      (item) =>
-        item.id === cartItem.id &&
-        item.weight === cartItem.weight &&
-        item.eggOption === cartItem.eggOption
-    );
-
-    if (existingItemIndex !== -1) {
-      // Item already in the cart with the same weight and egg option
-      Swal.fire({
-        icon: "error",
-        title: "Product Already in Cart",
-        text: "This product is already in your cart.",
-      });
-      return;
-    }
-
-    // Check for the same product with a different weight or egg option
-    const differentWeightItemIndex = cart.findIndex(
-      (item) =>
-        item.id === cartItem.id &&
-        item.weight !== cartItem.weight &&
-        item.eggOption === cartItem.eggOption
-    );
-
-    if (differentWeightItemIndex !== -1) {
-      // Different weight, allow adding to cart
-      cart.push(cartItem);
-      sessionStorage.setItem("cart", JSON.stringify(cart));
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Product with the selected weight added to cart successfully!",
-      });
-    } else {
-      // No such product with a different weight, add it
-      cart.push(cartItem);
-      sessionStorage.setItem("cart", JSON.stringify(cart));
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Product added to cart successfully!",
-      });
-    }
+  // 3️⃣ Create cart item (MAIN PRODUCT)
+  const cartItem = {
+    id: data._id,
+    name: data.productName,
+    weight: activeWeight,
+    price: price,
+    quantity: 1,
+    image: data.productImage?.[0],
+    deliveryDate,
+    eggOption,
+    isAddon: false,
   };
+
+  // 4️⃣ Get existing cart
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+  // 5️⃣ Prevent duplicate same product + weight
+  const exists = cart.find(
+    item => item.id === cartItem.id && item.weight === cartItem.weight
+  );
+
+  if (!exists) {
+    cart.push(cartItem);
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+  }
+
+  // 6️⃣ OPEN RECOMMENDED POPUP
+  setOpenPopup(true);
+};
+
 
   const settings = {
     customPaging: function (i) {
@@ -411,58 +361,6 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-{/* 
-                <div className="offers-wrapper">
-                
-                  <div className="offers-header" onClick={() => setOpen(!open)}>
-                    <div className="offers-title">
-                      <span className="gear-icon">⚙</span>
-                      <h6>Offers Available</h6>
-                    </div>
-                    <span className={`arrow ${open ? "open" : ""}`}>⌃</span>
-                  </div>
-
-                  {open && (
-                    <div className="offers-body">
-                      <div className="offer-card">
-                        <div className="offer-left">
-                         <SiPaytm className="fs-2 text-primary" />
-                          <p>Assured cashback upto ₹300 using Paytm UPI</p>
-                        </div>
-                        <span className="tc">T&amp;C*</span>
-                      </div>
-
-                      <div className="offer-card">
-                        <div className="offer-left">
-                         <FaGooglePay  className="fs-2 text-success" />
-                          <p>Get upto Rs.100 Cashback on transaction via Google Pay wallet</p>
-                        </div>
-                        <span className="tc">T&amp;C*</span>
-                      </div>
-
-                      <div className="offer-card ">
-                        <div className="offer-left">
-                        <FaCcMastercard className="fs-2 text-secondary"  />
-                          <p>Get upto Rs.100 Cashback on transaction via FaCcMastercard </p>
-                        </div>
-                        <span className="tc">T&amp;C*</span>
-                      </div>
-
-                      <div className="offer-card">
-                        <div className="offer-left">
-                          <span className="discount-icon">✽</span>
-                          <p>
-                            Flat 15% off on orders above Rs.1499, for first time users;
-                            Code: <b>NEW15</b>
-                          </p>
-                        </div>
-                        <span className="tc">T&amp;C*</span>
-                      </div>
-                    </div>
-                  )}
-
-
-                </div> */}
 
                 {/* Description */}
                 <div className="description-box">
@@ -484,9 +382,27 @@ const ProductDetails = () => {
                 />
 
                 {/* CTA */}
+
+                {/* DELIVERY DATE */}
+<div className="pdx-block">
+  <label>
+    Delivery Date <span className="text-danger">*</span>
+  </label>
+
+  <input
+    type="date"
+    className="form-control w-75"
+    value={deliveryDate}
+    min={new Date().toISOString().split("T")[0]}
+    onChange={(e) => setDeliveryDate(e.target.value)}
+    required
+  />
+</div>
+
                 <div className="pdx-cta">  
-                  <button className="pdx-cart" onClick={() => addToCart(true)} >ADD TO CART</button>
-                  <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
+                <button className="pdx-cart" onClick={addToCart}>ADD TO CART</button>
+
+                   <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
                 </div>

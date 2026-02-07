@@ -5,6 +5,8 @@ import pic2 from "../../images/pic/Product2.avif"
 import pic3 from "../../images/pic/Product3.avif"
 import pic4 from "../../images/pic/Product4.avif"
 import pic5 from "../../images/pic/Product1.avif"
+import { useNavigate } from "react-router-dom";
+
 
 const dummyProducts = [
   { id: 1, name: "Birthday Card", price: 129, img: pic1, category: "Cards" },
@@ -20,7 +22,11 @@ const categories = ["Popular", "Cakes", "Flowers", "Cards", "Teddy", "Chocolates
 
 const RecommendedPopup = ({ open, onClose }) => {
   const [cart, setCart] = useState({});
+  const [addonCart, setAddonCart] = useState({});
+
   const [activeCategory, setActiveCategory] = useState("Popular");
+const navigate = useNavigate();
+
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
@@ -40,6 +46,30 @@ const RecommendedPopup = ({ open, onClose }) => {
       setCart({ ...cart, [id]: cart[id] - 1 });
     }
   };
+
+const handleContinue = () => {
+  const mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+  Object.values(addonCart).forEach((item) => {
+    mainCart.push({
+      id: `addon-${item.id}`,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      image: item.img,
+      isAddon: true,
+    });
+  });
+
+  sessionStorage.setItem("cart", JSON.stringify(mainCart));
+
+  onClose();
+  navigate("/checkout"); // 🔥 redirect
+};
+
+
+
+
 
   const filteredProducts =
     activeCategory === "Popular"
@@ -99,7 +129,10 @@ const RecommendedPopup = ({ open, onClose }) => {
         {/* FOOTER */}
         <div className="rp-footer">
           <button className="rp-skip" onClick={onClose}>Skip</button>
-          <button className="rp-continue">CONTINUE</button>
+<button className="rp-continue" onClick={handleContinue}>
+  CONTINUE
+</button>
+
         </div>
 
       </div>
