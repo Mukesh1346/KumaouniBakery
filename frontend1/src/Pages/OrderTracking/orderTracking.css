@@ -275,5 +275,17 @@ body {
 
   .card-box {
     padding: 16px;
+    
   }
+
+  .orderBox{
+    width: max-content;
+  }
+      .summary-box {
+        margin-top: 5px;
+    }
+
+    .shopping-bag-wrapper {
+    padding: 20px 40px;
+    }
 }

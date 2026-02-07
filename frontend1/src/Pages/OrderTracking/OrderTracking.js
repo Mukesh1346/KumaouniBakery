@@ -153,7 +153,7 @@ const OrderTracking = () => {
 
         {/* ================= ORDER SUMMARY ================= */}
        <div className="w-50">
-         <div className="card-box">
+         <div className="card-box  orderBox">
           <div className="d-flex justify-content-between mb-3">
             <h6>Order Summary</h6>
             <span className="payment-success">Payment Successful</span>
