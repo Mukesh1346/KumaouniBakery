@@ -415,6 +415,11 @@
   .category-main {
     padding: 1rem 0;
   }
+
+  .category-img {
+  width: 90px;
+  height: 90px;
+  }
   .category-container .slick-track {
     width: auto !important;
     gap: 10px;

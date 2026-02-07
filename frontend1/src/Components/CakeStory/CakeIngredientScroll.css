@@ -180,6 +180,9 @@
     gap: 40px;
   }
 
+  .cake-pro-section{
+    display: none;
+  }
   .cake-pro-left,
   .cake-pro-right {
     flex: none;

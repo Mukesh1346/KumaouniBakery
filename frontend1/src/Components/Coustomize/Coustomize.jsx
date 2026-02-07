@@ -63,10 +63,10 @@ const Coustomize = () => {
             then discover the perfect venue to make your event unforgettable.
           </p>
 
-          <div className="hero-buttons">
+          {/* <div className="hero-buttons">
             <button className="btn-primary">Start Customizing</button>
             <button className="btn-outline">View Gallery</button>
-          </div>
+          </div> */}
 
           <div className="hero-stats">
             <div>

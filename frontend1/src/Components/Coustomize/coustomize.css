@@ -114,10 +114,20 @@
     text-align: center;
   }
 
-  .hero-content h1 {
-    font-size: 42px;
+  .hero-section {
+    background: linear-gradient(90deg, #fbefff, #f4dfff);
+    padding: 19px 20px;
+    width: 100%;
+}
+
+ .hero-content p {
+    font-size: 12px;
   }
 
+  
+      .hero-content h1 {
+        font-size: 28px;
+    }
   .hero-buttons {
     justify-content: center;
   }
@@ -128,16 +138,12 @@
 }
 
 @media (max-width: 576px) {
-  .hero-content h1 {
-    font-size: 32px;
-  }
-
+ 
   .hero-content p {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .hero-stats {
-    flex-direction: column;
     gap: 20px;
   }
 

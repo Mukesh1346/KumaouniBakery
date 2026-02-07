@@ -7,7 +7,7 @@
   padding: 24px 0;
   overflow-x: auto;
   scrollbar-width: none;
-}
+}    
 .reel-section::-webkit-scrollbar {
   display: none;
 }
@@ -146,25 +146,39 @@
 /* 📱 MOBILE */
 /* ===================== */
 @media (max-width: 576px) {
+
   .reel-card {
-    min-width: 200px;
-    height: 360px;
+    min-width: 180px;
+    height: 320px;
   }
 
   .reel-modal {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
+    width: 300px;          /* 👈 keep it small */
+    height: 475px;         /* 👈 proportional */
+    border-radius: 18px;
+    margin-top: 0;
+  }
+
+  .reel-modal video {
+    height: 86%;
+    object-fit: cover;
+  }
+
+  .modal-product {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
   }
 
   .modal-product img {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
   }
 
-  .modal-product h4 {
-    font-size: 15px;
+  .reeltitle {
+    font-size: 12px;
   }
+
 }
 
 /* ===================== */

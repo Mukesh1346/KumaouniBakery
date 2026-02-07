@@ -36,8 +36,8 @@ const Footer = () => {
         <div className="row footer-top">
 
           {/* Policy Info */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
-            <h6>Policy Info</h6>
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
+            <h6 className="text-dark">Policy Info</h6>
             <ul className="text-light">
               <li className="text-light"><Link to="/terms-&-conditions">Terms & Conditions</Link></li>
               <li><Link to="/privacy-policy">Privacy Policy</Link></li>
@@ -47,8 +47,8 @@ const Footer = () => {
           </div>
 
           {/* About Company */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
-            <h6>About Company</h6>
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
+            <h6 className="text-dark">About Company</h6>
             <ul>
               <li><Link to="/about-us">About Us</Link></li>
               <li><Link to="/contact-us">Contact Us</Link></li>
@@ -58,8 +58,8 @@ const Footer = () => {
           </div>
 
           {/* API CATEGORY SECTION */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
-            <h6>Our Bakery</h6>
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
+            <h6 className="text-dark">Our Bakery</h6>
             <ul className="footer-scroll">
               {categories.map((cat) =>
                 cat.subcategories.map((sub, index) => (
@@ -74,8 +74,8 @@ const Footer = () => {
           </div>
 
           {/* Need Help */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
-            <h6>Need Help ?</h6>
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
+            <h6 className="text-dark">Need Help ?</h6>
             <ul>
               <li><Link to="/contact-us">Contact Us</Link></li>
               <li><Link to="/wishlist">Whislist</Link></li>
@@ -83,8 +83,8 @@ const Footer = () => {
           </div>
 
           {/* International */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6">
-            <h6>International Presence</h6>
+          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
+            <h6 className="text-dark pt-4">International Presence</h6>
             <ul>
               <li>Dubai</li>
               <li>Qatar</li>
@@ -94,8 +94,8 @@ const Footer = () => {
           </div>
 
           {/* Subscribe */}
-          <div className="col-lg-2 footer-column col-md-8">
-            <h6>Subscribe Now</h6>
+          <div className="col-lg-2 footer-column col-md-8 col-6">
+            <h6 className="text-dark">Subscribe Now</h6>
             <p className="subscribe-text">
               Get updates on promotions and offers coupons.
             </p>

@@ -336,39 +336,39 @@ const toggleDropdown = (key) => {
             <div className="top-icons">
               <Link to="/track-order" className="icon-box">
                 <i className="bi bi-truck"></i>
-                <span>Track Order</span>
+                <span className="navPageText">Track Order</span>
               </Link>
 
              
 
               <Link to="/cart" className="icon-box">
                 <i className="bi bi-bag"></i>
-                <span>Cart</span>
+                <span className="navPageText">Cart</span>
               </Link>
 
               {loginvalue ? (
                 <Link to="/profile" className="icon-box">
                   <i className="bi bi-person-fill"></i>
-                  <span>Account</span>
+                  <span className="navPageText">Account</span>
                 </Link>
               ) : (
                 <Link to="/login" className="icon-box">
                   <i className="bi bi-person-fill"></i>
-                  <span>Sign In</span>
+                  <span className="navPageText">Sign In</span>
                 </Link>
               )}
 
        
                
 
-               {/* MENU DROPDOWN */}
+              
 {/* MENU DROPDOWN */}
 <div
   className="hdr-menu-trigger"
   onClick={() => toggleDropdown("menu")}
 >
   <i className="bi bi-grid"></i>
-  <span>Menu</span>
+  <span className="navPageText">Menu</span>
 
   {openIndex === "menu" && (
     <div className="hdr-menu-dropdown">
