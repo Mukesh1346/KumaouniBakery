@@ -213,6 +213,7 @@
 .top-icons {
   display: flex;
   gap: 18px;
+  padding:0px 30px;
 }
 
 .icon-box {
@@ -424,7 +425,7 @@
 
   /* RIGHT ICONS */
   .top-icons {
-    padding: 0px 30px;
+    padding: 0px ;
    
   }
 
