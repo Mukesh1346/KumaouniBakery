@@ -1,368 +1,246 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import LocationPopup from "../LocationPopup/LocationPopup";
+import { megaCategories } from "../NavCatData";
+import { TbTruckDelivery } from "react-icons/tb";
+import { IoMdCart } from "react-icons/io";
+import { IoSearch } from "react-icons/io5";
+/* ICONS */
 import { IoIosArrowDown } from "react-icons/io";
+import { IoMenu, IoClose } from "react-icons/io5";
+
+/* COMPONENTS */
+import LocationPopup from "../LocationPopup/LocationPopup";
+
+/* ASSETS */
 import Banner from "../../images/pic/topBanner1.png";
-import logo from "../../images/pic/logo2.png"
-
-const megaCategories = [
-  {
-    name: "Cake",
-    subcategories: [
-      {
-        name: "CAKES",
-        children: [" Pineapple", "Butterscotch", "Fruit ", " Vannilla fruit","Blueberry ","red velvet","heart","truffle ","choco vannila","Black forest ","Chocolate german"]
-      },
-      {
-        name: "Tub cakes",
-        children: ["fruit", 
-"blueberry", 
- "pineapple", 
- "Red velvet", 
- "Black forest"
-
-]
-      },
-      {
-        name: "Premium Cakes",
-       children: [
-        "Hawai Pineapple",
-        "Rasmalai",
-        "Gulab Jamun",
-        "Pistachio",
-        "Strawberry Rose",
-      ]
-      },
-      {
-         name: "Pastry",
-      children: [
-        "Black Forest",
-        "Pineapple",
-        "Truffle",
-        "Red Velvet",
-        "Butterscotch",
-      ], },
-      {
-         name: "Jar Cakes",
-      children: [
-        "Chocolate",
-        "Red Velvet",
-        "Blueberry",
-        "Crunchy Chocolate",
-      ],
-      },
-       {
-      name: "Cheese Cakes",
-      children: [
-        "Blueberry",
-        "Biscoff",
-        "Mango",
-        "Strawberry",
-      ],
-    },
-     {
-      name: "Cheese Cake Slice",
-      children: [
-        "Biscoff",
-        "Nutella",
-        "Blueberry",
-      ],
-    },
-     {
-      name: "Cup Cakes",
-      children: [
-        "Blueberry",
-        "Red Velvet",
-        "Vanilla",
-        "Biscoff",
-        "Coffee",
-        "Chocolate",
-      ],
-    }
-    ]
-  },
-  {
-    name: "Flowers",
-    subcategories: [
-      {
-      name: "Flower Combos",
-      children: [
-        "Truffle Roses",
-        "Truffle ",
-      ],
-    },
-      {
-        name: "Lilies",
-        children: ["White Lilies", "Pink Lilies", "Oriental Lilies", "Mixed Lilies"]
-      },
-      {
-        name: "Occasion Flowers",
-        children: ["Birthday Flowers", "Anniversary Flowers", "Get Well Soon", "Congratulations"]
-      },
-      {
-        name: "Flower Arrangements",
-        children: ["Bouquets", "Basket Flowers", "Vase Arrangements", "Luxury Flowers"]
-      }
-    ]
-  },
-  {
-    name: "Anniversary",
-    subcategories: [
-      {
-        name: "Personalised Gifts",
-        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
-      },
-      {
-        name: "Soft Toys",
-        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
-      },
-      {
-        name: "Gift Hampers",
-        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
-      },
-      {
-        name: "Greeting Gifts",
-        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
-      }
-    ]
-  },
-   {
-    name: "Wedding",
-    subcategories: [
-      {
-        name: "Personalised Gifts",
-        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
-      },
-      {
-        name: "Soft Toys",
-        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
-      },
-      {
-        name: "Gift Hampers",
-        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
-      },
-      {
-        name: "Greeting Gifts",
-        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
-      }
-    ]
-  },
-  {
-   name: "Festivals",
-    subcategories: [
-      {
-        name: "Personalised Gifts",
-        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
-      },
-      {
-        name: "Soft Toys",
-        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
-      },
-      {
-        name: "Gift Hampers",
-        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
-      },
-      {
-        name: "Greeting Gifts",
-        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
-      }
-    ]
-  },
-
-   {
-   name: "Friendships",
-    subcategories: [
-      {
-        name: "Personalised Gifts",
-        children: ["Photo Frames", "Mugs", "Cushions", "Key Chains"]
-      },
-      {
-        name: "Soft Toys",
-        children: ["Teddy Bear", "Couple Toys", "Kids Toys", "Premium Toys"]
-      },
-      {
-        name: "Gift Hampers",
-        children: ["Chocolate Hampers", "Snack Hampers", "Festive Hampers", "Luxury Hampers"]
-      },
-      {
-        name: "Greeting Gifts",
-        children: ["Birthday Cards", "Anniversary Cards", "Love Notes", "Thank You Cards"]
-      }
-    ]
-  },
-
-
-];
+import logo from "../../images/pic/logo2.png";
 
 
 
 
 const Header = () => {
+  const navigate = useNavigate();
   const loginvalue = sessionStorage.getItem("login");
+
+
+
+  /* CATEGORY DATA (FROM API) */
   const [categories, setCategories] = useState([]);
-  const [ showLocationModal, setShowLocationModal] = useState(false);
-   const [openIndex, setOpenIndex] = useState(null);
-const [countries, setCountries] = useState([]);
-const [selectedCountry, setSelectedCountry] = useState(null);
-  
-const [mobileOpen, setMobileOpen] = useState(null);
 
-const toggleMobileCategory = (index) => {
-  setMobileOpen(mobileOpen === index ? null : index);
-};
+  /* LOCATION */
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
+  /* MOBILE MENU */
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState(null);
+
+  /* DESKTOP MENU */
+  const [desktopMenuOpen, setDesktopMenuOpen] = useState(null);
+
+  /* SEARCH */
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [openIndex, setOpenIndex] = useState(null);
 
 const toggleDropdown = (key) => {
   setOpenIndex(openIndex === key ? null : key);
 };
 
 
+  /* REFS */
+  const mobileMenuRef = useRef(null);
 
- 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
+        const res = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/get-category-with-subcategory`
         );
 
-        if (
-          response.data.message ===
-          "Categories with subcategories retrieved successfully"
-        ) {
-          setCategories(response.data.data);
+        if (res.data?.data) {
+          setCategories(res.data.data);
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Category fetch error:", error);
       }
     };
 
     fetchCategories();
   }, []);
 
-
+  /* =========================================================
+     FETCH COUNTRIES
+  ========================================================= */
 
   useEffect(() => {
-  const fetchCountries = async () => {
-    try {
-      const res = await axios.get(
-        "https://restcountries.com/v3.1/all?fields=name,flags,cca2"
-      );
+    const fetchCountries = async () => {
+      try {
+        const res = await axios.get(
+          "https://restcountries.com/v3.1/all?fields=name,flags,cca2"
+        );
 
-      const formatted = res.data.map((item) => ({
-        name: item.name.common,
-        flag: item.flags.png,
-        code: item.cca2,
-      }));
+        const formatted = res.data.map((item) => ({
+          name: item.name.common,
+          flag: item.flags.png,
+          code: item.cca2,
+        }));
 
-      setCountries(formatted);
+        setCountries(formatted);
 
-      // ✅ SET DEFAULT COUNTRY (INDIA)
-      const india = formatted.find((c) => c.code === "IN");
-      if (india) {
-        setSelectedCountry(india);
+        const india = formatted.find((c) => c.code === "IN");
+        if (india) setSelectedCountry(india);
+      } catch (err) {
+        console.error("Country fetch error:", err);
       }
-    } catch (error) {
-      console.error("Error fetching countries:", error);
+    };
+
+    fetchCountries();
+  }, []);
+
+  /* =========================================================
+     CLOSE MOBILE MENU ON OUTSIDE CLICK
+  ========================================================= */
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target)
+      ) {
+        setMobileNavOpen(false);
+        setMobileCategoryOpen(null);
+      }
+    };
+
+    if (mobileNavOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
     }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [mobileNavOpen]);
+
+  /* =========================================================
+     HANDLERS
+  ========================================================= */
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    navigate(`/search?q=${searchQuery}`);
+    setSearchQuery("");
   };
 
-  fetchCountries();
-}, []);
+  const handleMobileCategoryToggle = (index) => {
+    setMobileCategoryOpen((prev) => (prev === index ? null : index));
+  };
+
+  const handleDesktopMenuToggle = (index) => {
+    setDesktopMenuOpen((prev) => (prev === index ? null : index));
+  };
+
+  const closeAllMobileMenus = () => {
+    setMobileNavOpen(false);
+    setMobileCategoryOpen(null);
+  };
+
 
 
   return (
     <>
-      {/* ===== TOP HEADER ===== */}
-    <div className="">
-        <img src={Banner} alt="" className="header-topBanner" />
-    </div>
- <div className="HeaderContainer">
-    <header className="custom-navbar">
-        <div className="container-fluid">
-          <div className="top-header-wrapper">
-            {/* LOGO */}
+      {/* ================= TOP PROMO BANNER ================= */}
+      <img src={Banner} alt="banner" className="header-topBanner" />
 
-             <Link to="/" className="brand-title">
-                         <img src={logo} alt="" className="logoImage" />
-             </Link>
-            {/* <Link to="/" className="brand-title">
-              Cake Crazzy
-            </Link> */}
+      {/* ================= HEADER ================= */}
+      <div className="HeaderContainer">
+        <header className="custom-navbar">
+          <div className="container-fluid">
+            <div className="top-header-wrapper">
 
-            {/* DELIVERY LOCATION */}
-         <div
-  className="delivery-box"
-  onClick={() => setShowLocationModal(true)}
->
-  {selectedCountry && (
-    <img
-      src={selectedCountry.flag}
-      alt={selectedCountry.name}
-      className="delivery-flag"
-    />
-  )}
+              {/* ================= MOBILE MENU ICON ================= */}
+              <button
+                className="mobile-menu-btn d-lg-none"
+                onClick={() => {
+                  setMobileNavOpen((prev) => !prev);
+                  setMobileCategoryOpen(null);
+                }}
+              >
+                {mobileNavOpen ? <IoClose size={30} /> : <IoMenu size={30} />}
+              </button>
 
-  <div className="DeliverSection">
-    <small className="text-light">Deliver to</small>
-    <span className="delivery-country">
-      {selectedCountry?.name || "Select Country"}
-    </span>
-  </div>
-
-  <IoIosArrowDown className="delivery-arrow" />
-</div>
-
-         
-{/* SEARCH (ICON ONLY – SAME AS ORIGINAL) */}
-<div className="search-container">
-  <form>
-    <div className="search-wrapper">
-      <input
-        type="search"
-        className="form-control searchInput"
-        placeholder="Search"
-      />
-      <i className="bi bi-search search-icon"></i>
-    </div>
-  </form>
-</div>
-
-
-
-            {/* RIGHT ICONS */}
-            <div className="top-icons">
-              <Link to="/track-order" className="icon-box">
-                <i className="bi bi-truck"></i>
-                <span className="navPageText">Track Order</span>
+              {/* ================= LOGO ================= */}
+              <Link to="/" className="brand-title">
+                <img src={logo} alt="logo" className="logoImage" />
               </Link>
 
-             
+              {/* ================= DELIVERY ================= */}
+              <div className="delivery-wrapper">
+                <div
+                  className="delivery-box"
+                  onClick={() => setShowLocationModal(true)}
+                >
 
-              <Link to="/cart" className="icon-box">
-                <i className="bi bi-bag"></i>
-                <span className="navPageText">Cart</span>
-              </Link>
+                  {selectedCountry && (
+                    <img
+                      src={selectedCountry.flag}
+                      alt={selectedCountry.name}
+                      className="delivery-flag"
+                    />
+                  )}
+                  <div className="DeliverSection">
+                    <small>Deliver to</small>
+                    <span className="delivery-country">
+                      {selectedCountry?.name}
+                    </span>
+                  </div>
+                  <IoIosArrowDown />
+                </div>
+              </div>
+              {/* ================= SEARCH ================= */}
+              <form className="search-container" onSubmit={handleSearchSubmit}>
+                <div className="search-wrapper">
+                  <input
+                    type="search"
+                    className="form-control searchInput"
+                    placeholder="Search cakes, flowers..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <button type="submit" className="search-icon">
+                    <IoSearch className="iconFont  text-dark" />
+                  </button>
+                </div>
+              </form>
 
-              {loginvalue ? (
-                <Link to="/profile" className="icon-box">
-                  <i className="bi bi-person-fill"></i>
-                  <span className="navPageText">Account</span>
+              {/* ================= RIGHT ICONS ================= */}
+              <div className="top-icons">
+                <Link to="/track-order" className="icon-box">
+                  <TbTruckDelivery className="iconFont" />
+                  <span className="navPageText">Track</span>
                 </Link>
-              ) : (
-                <Link to="/login" className="icon-box">
-                  <i className="bi bi-person-fill"></i>
-                  <span className="navPageText">Sign In</span>
+
+                <Link to="/cart" className="icon-box">
+                  <IoMdCart className="iconFont" />
+                  <span className="navPageText">Cart</span>
                 </Link>
-              )}
 
-       
-               
-
-              
-{/* MENU DROPDOWN */}
+                {loginvalue ? (
+                  <Link to="/profile" className="icon-box">
+                    <i className="bi bi-person-fill"></i>
+                    <span className="navPageText">Account</span>
+                  </Link>
+                ) : (
+                  <Link to="/login" className="icon-box">
+                    <i className="bi bi-person-fill"></i>
+                    <span className="navPageText">Login</span>
+                  </Link>
+                )}
+              {/* MENU DROPDOWN */}
 <div
   className="hdr-menu-trigger"
   onClick={() => toggleDropdown("menu")}
@@ -372,22 +250,14 @@ const toggleDropdown = (key) => {
 
   {openIndex === "menu" && (
     <div className="hdr-menu-dropdown">
-      {/* <Link to="/corporate-gifts" className="hdr-menu-link">
-        Corporate Gifts
-      </Link> */}
 
       <Link to="/wishlist" className="hdr-menu-link">
         My Favourites
       </Link>
 
-     
       <Link to="/refer" className="hdr-menu-link">
         Refer and Earn <span className="hdr-badge-new">New</span>
       </Link>
-
-      {/* <Link to="/franchise" className="hdr-menu-link">
-        Franchise
-      </Link> */}
 
       <Link to="/faq" className="hdr-menu-link">
         FAQ
@@ -396,8 +266,6 @@ const toggleDropdown = (key) => {
       <Link to="/about-us" className="hdr-menu-link">
         About Us
       </Link>
-
-    
 
       <Link to="/contact-us" className="hdr-menu-link">
         Contact Us
@@ -415,163 +283,145 @@ const toggleDropdown = (key) => {
   )}
 </div>
 
+              </div>
 
 
-      
-    
-
-                 <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-              
             </div>
           </div>
-        </div>
-      </header>
 
-    {showLocationModal && (
-  <LocationPopup
-    onClose={() => setShowLocationModal(false)}
-    countries={countries}
-    selectedCountry={selectedCountry}
-    setSelectedCountry={setSelectedCountry}
-  />
-)}
-
-
-
- </div>
-      {/* ===== BOTTOM NAVBAR ===== */}
-      <nav className="navbar navbar-expand-lg bottom-navbar">
-        <div className="container navbarContainer">
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav mx-auto">
-  {megaCategories.map((cat, index) => (
-    <li className="nav-item mega-dropdown" key={index}>
-     <span
-  className="nav-link mega-toggle"
-  onClick={() => toggleMobileCategory(index)}
->
-  {cat.name}
-  <IoIosArrowDown
-    className={`arrow ${mobileOpen === index ? "rotate" : ""}`}
-  />
-</span>
-
-
-      {/* MEGA MENU */}
- <div
-  className={`mega-menu ${
-    mobileOpen === index ? "mobile-open" : ""
-  }`}
->
-
-
-  <div className="mega-menu-inner">
-    {cat.subcategories.map((sub, i) => (
-      
-      /* ONE COLUMN */
-      <div key={i}  className="column-mega" >
-        
-        {/* MAIN SUBCATEGORY – TOP OF COLUMN */}
-        <div
-          className="mega-item"
-          style={{ fontWeight: 600 }}
-        >
-          {sub.name} 
-        </div>
-
-        {/* CHILD SUBCATEGORIES */}
-        {sub.children.map((child, j) => (
-          <Link
-            key={j}
-            to={`/category/${child.replace(/\s+/g, "-").toLowerCase()}`}
-            className="mega-item mega-child"
-          >
-            {child}
-          </Link>
-        ))}
- 
-      </div>
-    ))}
+          {/* ================= DELIVERY ================= */}
+<div className="delivery-row d-lg-none">
+  <div
+    className="delivery-box"
+    onClick={() => setShowLocationModal(true)}
+  >
+    {selectedCountry && (
+      <img
+        src={selectedCountry.flag}
+        alt={selectedCountry.name}
+        className="delivery-flag"
+      />
+    )}
+    <div className="DeliverSection">
+      <small>Deliver to</small>
+      <span className="delivery-country">
+        {selectedCountry?.name}
+      </span>
+    </div>
+    <IoIosArrowDown />
   </div>
 </div>
 
+        </header>
 
-    </li>
-  ))}
-</ul>
+        {/* ================= MOBILE MENU ================= */}
+        {mobileNavOpen && (
+          <div className="mobile-menu-wrapper d-lg-none" ref={mobileMenuRef}>
+            {megaCategories.map((cat, index) => (
+              <div key={cat._id || index} className="mobile-cat">
 
+                {/* CATEGORY TITLE */}
+                <div
+                  className="mobile-cat-title"
+                  onClick={() => handleMobileCategoryToggle(index)}
+                >
+                  {cat.name}
+                  <IoIosArrowDown
+                    className={`arrow ${mobileCategoryOpen === index ? "rotate" : ""
+                      }`}
+                  />
+                </div>
 
-            {/* <ul className="navbar-nav mx-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Home
-                </Link>
-              </li>
+                {/* SUBCATEGORIES */}
+                {mobileCategoryOpen === index && (
+                  <div className="mobile-subcats">
+                    {cat.subcategories?.map((sub, i) => (
+                      <div key={sub._id || i} className="mobile-subcat">
+                        <strong>{sub.name}</strong>
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/about-us">
-                  About
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link className="nav-link" to="/all-products">
-                  All Products
-                </Link>
-              </li>
-
-              {categories.map((category) => (
-                <li key={category._id} className="nav-item dropdown">
-                  <Link
-                    className="nav-link dropdown-toggle"
-                    to="#"
-                    data-bs-toggle="dropdown"
-                  >
-                    {category.mainCategoryName}
-                  </Link>
-
-                  <ul className="dropdown-menu">
-                    {category.subcategories.map((subcategory, index) => (
-                      <li key={index}>
-                        <Link
-                          className="dropdown-item"
-                          to={`/product-related/${subcategory.subcategoryName}`}
-                        >
-                          {subcategory.subcategoryName}
-                        </Link>
-                      </li>
+                        {sub.children?.map((child, j) => (
+                          <Link
+                            key={j}
+                            to={`/category/${child
+                              .replace(/\s+/g, "-")
+                              .toLowerCase()}`}
+                            onClick={closeAllMobileMenus}
+                          >
+                            {child}
+                          </Link>
+                        ))}
+                      </div>
                     ))}
-                  </ul>
-                </li>
-              ))}
+                  </div>
+                )}
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/contact-us">
-                  Contact Us
-                </Link>
-              </li>
-            </ul> */}
+              </div>
+            ))}
           </div>
+        )}
+
+        {/* ================= LOCATION MODAL ================= */}
+        {showLocationModal && (
+          <LocationPopup
+            onClose={() => setShowLocationModal(false)}
+            countries={countries}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+          />
+        )}
+      </div>
+
+      {/* ================= DESKTOP MEGA NAV ================= */}
+      <nav className="navbar navbar-expand-lg bottom-navbar d-none d-lg-block">
+        <div className="container navbarContainer">
+          <ul className="navbar-nav mx-auto">
+
+            {megaCategories.map((cat, index) => (
+              <li
+                key={cat._id || index}
+                className="nav-item mega-dropdown"
+                onMouseEnter={() => setDesktopMenuOpen(index)}
+                onMouseLeave={() => setDesktopMenuOpen(null)}
+              >
+                <span className="nav-link mega-toggle">
+                  {cat.name}
+                  <IoIosArrowDown />
+                </span>
+
+                {desktopMenuOpen === index && (
+                  <div className="mega-menu">
+                    <div className="mega-menu-inner">
+
+                      {cat.subcategories?.map((sub, i) => (
+                        <div key={sub._id || i} className="column-mega">
+                          <div className="mega-item fw-bold">
+                            {sub.name}
+                          </div>
+
+                          {sub.children?.map((child, j) => (
+                            <Link
+                              key={j}
+                              to={`/category/${child
+                                .replace(/\s+/g, "-")
+                                .toLowerCase()}`}
+                              className="mega-item mega-child"
+                            >
+                              {child}
+                            </Link>
+                          ))}
+                        </div>
+                      ))}
+
+                    </div>
+                  </div>
+                )}
+
+              </li>
+            ))}
+   
+          </ul>
         </div>
       </nav>
-
     </>
   );
 };
