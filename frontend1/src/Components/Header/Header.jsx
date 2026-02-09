@@ -72,9 +72,7 @@ const toggleDropdown = (key) => {
     fetchCategories();
   }, []);
 
-  /* =========================================================
-     FETCH COUNTRIES
-  ========================================================= */
+
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -101,9 +99,7 @@ const toggleDropdown = (key) => {
     fetchCountries();
   }, []);
 
-  /* =========================================================
-     CLOSE MOBILE MENU ON OUTSIDE CLICK
-  ========================================================= */
+
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -125,9 +121,6 @@ const toggleDropdown = (key) => {
     };
   }, [mobileNavOpen]);
 
-  /* =========================================================
-     HANDLERS
-  ========================================================= */
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
