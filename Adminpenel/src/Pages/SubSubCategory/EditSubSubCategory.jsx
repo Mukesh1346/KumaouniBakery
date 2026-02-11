@@ -16,8 +16,8 @@ const EditSubSubCategory = () => {
   const [formData, setFormData] = useState({
     mainCategoryId: "",
     subCategoryId: "",
-    subSubcategoryName: "",
-    activeOnHome: false,
+    secondsubcategoryName: "",
+    ActiveonHome: false,
     image: null,
   });
 
@@ -35,22 +35,21 @@ const EditSubSubCategory = () => {
     };
     fetchMainCategories();
   }, []);
-
   /* ================= FETCH SUB-SUBCATEGORY ================= */
   useEffect(() => {
-    const fetchSubSubcategory = async () => {
+    const fetchSecondSubcategory = async () => {
       try {
-        const res = await axios.get(
-          `https://api.ssdipl.com/api/get-single-subsubcategory/${id}`
-        );
+        // alert("XXXXXXXX:=>")
+        const res = await axios.get(`https://api.ssdipl.com/api/second-sub-category/get-single-second-sub-category/${id}`);
 
+        console.log("XXXXXX:=>XXXXXX:=>", res.data.data)
         const data = res.data.data;
 
         setFormData({
           mainCategoryId: data.mainCategoryId?._id || "",
           subCategoryId: data.subCategoryId?._id || "",
-          subSubcategoryName: data.subSubcategoryName || "",
-          activeOnHome: data.activeOnHome || false,
+          secondsubcategoryName: data.secondsubcategoryName || "",
+          ActiveonHome: data.ActiveonHome || false,
           image: null,
         });
       } catch {
@@ -58,9 +57,9 @@ const EditSubSubCategory = () => {
       }
     };
 
-    fetchSubSubcategory();
+    fetchSecondSubcategory();
   }, [id]);
-
+  // console.log("XXXXXX:=>XXXXXX:=>", formData)
   /* ================= FETCH SUBCATEGORIES ================= */
   useEffect(() => {
     if (!formData.mainCategoryId) return;
@@ -68,7 +67,7 @@ const EditSubSubCategory = () => {
     const fetchSubCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-subcategory-by-category/${formData.mainCategoryId}`
+          `https://api.ssdipl.com/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
         );
         setSubCategories(res.data?.data || []);
       } catch {
@@ -99,7 +98,7 @@ const EditSubSubCategory = () => {
     if (
       !formData.mainCategoryId ||
       !formData.subCategoryId ||
-      !formData.subSubcategoryName
+      !formData.secondsubcategoryName
     ) {
       toast.error("All required fields must be filled");
       return;
@@ -111,15 +110,15 @@ const EditSubSubCategory = () => {
       const fd = new FormData();
       fd.append("mainCategoryId", formData.mainCategoryId);
       fd.append("subCategoryId", formData.subCategoryId);
-      fd.append("subSubcategoryName", formData.subSubcategoryName);
-      fd.append("activeOnHome", formData.activeOnHome);
+      fd.append("secondsubcategoryName", formData.secondsubcategoryName);
+      fd.append("ActiveonHome", formData.ActiveonHome);
 
       if (formData.image) {
         fd.append("image", formData.image);
       }
 
       const res = await axios.put(
-        `https://api.ssdipl.com/api/update-subsubcategory/${id}`,
+        `https://api.ssdipl.com/api/second-sub-category/update-second-sub-category/${id}`,
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -186,7 +185,7 @@ const EditSubSubCategory = () => {
               <option value="">Select sub category</option>
               {subCategories.map((sub) => (
                 <option key={sub._id} value={sub._id}>
-                  {sub.subCategoryName}
+                  {sub?.subcategoryName}
                 </option>
               ))}
             </select>
@@ -197,9 +196,9 @@ const EditSubSubCategory = () => {
             <label className="form-label">Sub-Subcategory Name</label>
             <input
               type="text"
-              name="subSubcategoryName"
+              name="secondsubcategoryName"
               className="form-control"
-              value={formData.subSubcategoryName}
+              value={formData.secondsubcategoryName}
               onChange={handleChange}
               required
             />
@@ -211,9 +210,9 @@ const EditSubSubCategory = () => {
             <div className="form-check">
               <input
                 type="checkbox"
-                name="activeOnHome"
+                name="ActiveonHome"
                 className="form-check-input"
-                checked={formData.activeOnHome}
+                checked={formData.ActiveonHome}
                 onChange={handleChange}
               />
               <label className="form-check-label">

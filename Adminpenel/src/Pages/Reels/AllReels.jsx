@@ -14,7 +14,7 @@ const AllReels = () => {
     const fetchReels = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/get-reels"
+          "https://api.ssdipl.com/api/reel/get-reels"
         );
         setReels(res.data?.data || []);
       } catch (error) {
@@ -44,7 +44,7 @@ const AllReels = () => {
 
     try {
       await axios.delete(
-        `https://api.ssdipl.com/api/delete-reel/${id}`
+        `https://api.ssdipl.com/api/reel/delete-reel/${id}`
       );
 
       setReels((prev) => prev.filter((item) => item._id !== id));
@@ -84,6 +84,7 @@ const AllReels = () => {
               <th>Sr.No.</th>
               <th>Preview</th>
               <th>Title</th>
+              <th>Product Name</th>
               <th>Price</th>
               <th>Status</th>
               <th>Edit</th>
@@ -100,15 +101,16 @@ const AllReels = () => {
                   {/* VIDEO PREVIEW */}
                   <td>
                     <video
-                      src={item.videoUrl}
+                      src={`https://api.ssdipl.com/${item?.video}`}
                       width="60"
                       height="80"
                       muted
                     />
                   </td>
 
-                  <td>{item.title}</td>
-                  <td>{item.price}</td>
+                  <td>{item?.title}</td>
+                  <td>{item?.productId?.productName}</td>
+                  <td>{item?.price}</td>
 
                   <td>
                     {item.activeOnHome ? (
@@ -120,7 +122,7 @@ const AllReels = () => {
 
                   <td>
                     <Link
-                      to={`/edit-reels/${item._id}`}
+                      to={`/edit-reels/${item?._id}`}
                       className="bt edit"
                     >
                       Edit <i className="fa-solid fa-pen-to-square"></i>
@@ -130,7 +132,7 @@ const AllReels = () => {
                   <td>
                     <button
                       className="bt delete"
-                      onClick={() => handleDelete(item._id)}
+                      onClick={() => handleDelete(item?._id)}
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>

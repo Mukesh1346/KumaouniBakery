@@ -93,8 +93,9 @@ const AllProduct = () => {
           <thead>
             <tr>
               <th>S no</th>
+              <th>Main Category</th>
               <th>Category</th>
-              <th>Subcategory</th>
+              <th>Sub category</th>
               <th>Product Name</th>
               <th>Images</th>
               <th>Actions</th>
@@ -119,6 +120,7 @@ const AllProduct = () => {
                   <td>{index + 1}</td>
                   <td>{product.categoryName?.mainCategoryName || "N/A"}</td>
                   <td>{product.subcategoryName?.subcategoryName || "N/A"}</td>
+                  <td>{product.secondsubcategoryName?.secondsubcategoryName || "N/A"}</td>
                   <td>{product.productName}</td>
                   <td>
                     {product.productImage.map((image, imgIndex) => (

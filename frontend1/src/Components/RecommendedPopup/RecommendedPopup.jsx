@@ -1,86 +1,175 @@
 import React, { useState, useEffect } from "react";
 import "./recommendedPopup.css";
-import pic1 from "../../images/pic/Product1.avif"
-import pic2 from "../../images/pic/Product2.avif"
-import pic3 from "../../images/pic/Product3.avif"
-import pic4 from "../../images/pic/Product4.avif"
-import pic5 from "../../images/pic/Product1.avif"
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-
-const dummyProducts = [
-  { id: 1, name: "Birthday Card", price: 129, img: pic1, category: "Cards" },
-  { id: 2, name: "Teddy With Chocolates", price: 550, img: pic2, category: "Teddy" },
-  { id: 3, name: "Cake Topper", price: 99, img: pic3, category: "Cakes" },
-  { id: 4, name: "Number Candle", price: 79, img: pic4, category: "Cakes" },
-  { id: 5, name: "Party Poppers", price: 249, img: pic5, category: "Popular" },
-  { id: 6, name: "Red Roses", price: 399, img: pic1, category: "Flowers" },
-  { id: 7, name: "Dark Chocolates", price: 299, img: pic2, category: "Chocolates" },
-];
-
-const categories = ["Popular", "Cakes", "Flowers", "Cards", "Teddy", "Chocolates"];
-
-const RecommendedPopup = ({ open, onClose }) => {
+const RecommendedPopup = ({ open, onClose, productId }) => {
+  const loginvalue = sessionStorage.getItem("login");
   const [cart, setCart] = useState({});
-  const [addonCart, setAddonCart] = useState({});
+  const [category, setCategory] = useState([]);
+  const [product, setProduct] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const navigate = useNavigate();
 
-  const [activeCategory, setActiveCategory] = useState("Popular");
-const navigate = useNavigate();
-
-
+  /* 🔒 Lock scroll */
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
+    return () => (document.body.style.overflow = "auto");
   }, [open]);
+
+  /* 📦 Load Categories */
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(
+          "https://api.ssdipl.com/api/recommended-category/get-recommended-category"
+        );
+        if (res.status === 200 && res.data.data.length) {
+          setCategory(res.data.data);
+          setActiveCategory(res.data.data[0]._id);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  /* 🛍 Load Products by Category */
+  useEffect(() => {
+    if (!activeCategory) return;
+
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.ssdipl.com/api/recommended-product/get-product-by-category/${activeCategory}`
+        );
+        if (res.status === 200) setProduct(res.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProducts();
+  }, [activeCategory]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    const mainProduct = mainCart.find(item => item.productId === productId);
+
+    if (mainProduct?.addonProducts?.length) {
+      const existingAddons = {};
+
+      mainProduct.addonProducts.forEach(addon => {
+        existingAddons[addon.productId] = addon.quantity;
+      });
+
+      setCart(existingAddons); // 🔥 THIS syncs quantities
+    } else {
+      setCart({});
+    }
+  }, [open, productId]);
 
   if (!open) return null;
 
-  const addItem = (id) => setCart({ ...cart, [id]: 1 });
-  const increment = (id) => setCart({ ...cart, [id]: cart[id] + 1 });
-
-  const decrement = (id) => {
-    if (cart[id] === 1) {
-      const updated = { ...cart };
-      delete updated[id];
-      setCart(updated);
-    } else {
-      setCart({ ...cart, [id]: cart[id] - 1 });
-    }
+  const getMainProductIndex = (cart) => {
+    return cart.findIndex(item => item.productId === productId);
   };
 
-const handleContinue = () => {
-  const mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-  Object.values(addonCart).forEach((item) => {
-    mainCart.push({
-      id: `addon-${item.id}`,
-      name: item.name,
-      price: item.price,
-      quantity: item.quantity,
-      image: item.img,
-      isAddon: true,
+  /* 🛒 CART LOGIC */
+  const addItem = (id) => setCart((p) => ({ ...p, [id]: 1 }));
+
+  const increment = (id) => setCart((p) => ({ ...p, [id]: p[id] + 1 }));
+
+  const decrement = (id) => {
+    setCart((p) => {
+      if (p[id] === 1) {
+        const copy = { ...p };
+        delete copy[id];
+        return copy;
+      }
+      return { ...p, [id]: p[id] - 1 };
     });
-  });
-
-  sessionStorage.setItem("cart", JSON.stringify(mainCart));
-
-  onClose();
-  navigate("/checkout"); // 🔥 redirect
-};
+  };
 
 
+  /* 🚀 Continue */
+  const handleContinue = () => {
+    let mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
+    let mainIndex = getMainProductIndex(mainCart);
 
+    // ❗ If main product not in cart, create it first
+    if (mainIndex === -1) {
+      mainCart.push({
+        productId,
+        name: "Main Product",
+        quantity: 1,
+        addonProducts: [],
+      });
+      mainIndex = mainCart.length - 1;
+    }
 
-  const filteredProducts =
-    activeCategory === "Popular"
-      ? dummyProducts
-      : dummyProducts.filter((p) => p.category === activeCategory);
+    const addonList = mainCart[mainIndex].addonProducts || [];
+
+    Object.entries(cart).forEach(([id, qty]) => {
+      const prod = product.find(p => p._id === id);
+      if (!prod) return;
+
+      const existingAddonIndex = addonList.findIndex(a => a.productId === id);
+
+      if (existingAddonIndex > -1) {
+        addonList[existingAddonIndex].quantity += qty;
+      } else {
+        addonList.push({
+          productId: id,
+          name: prod.productName,
+          price: prod.price,
+          image: prod.productImage[0],
+          quantity: qty,
+        });
+      }
+    });
+
+    mainCart[mainIndex].addonProducts = addonList;
+
+    sessionStorage.setItem("cart", JSON.stringify(mainCart));
+
+    onClose();
+    loginvalue ? navigate("/checkout") : navigate("/login");
+  };
+
+  // const handleContinue = () => {
+
+  //   const mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+  //   Object.entries(cart).forEach(([id, qty]) => {
+  //     const prod = product.find((p) => p._id === id);
+  //     if (!prod) return;
+
+  //     mainCart.push({
+  //       id: `addon-${id}`,
+  //       name: prod.productName,
+  //       price: prod.price,
+  //       quantity: qty,
+  //       image: prod.productImage[0],
+  //       isAddon: true,
+  //     });
+  //   });
+
+  //   sessionStorage.setItem("cart", JSON.stringify(mainCart));
+  //   onClose();
+  //   loginvalue ? navigate("/checkout") : navigate("/login");
+  // };
 
   return (
     <div className="rp-overlay">
       <div className="rp-container">
 
-        {/* HEADER */}
         <div className="rp-header">
           <h3>Add More Fun To Celebration</h3>
           <button onClick={onClose}>✕</button>
@@ -88,51 +177,47 @@ const handleContinue = () => {
 
         {/* CATEGORY BAR */}
         <div className="rp-categories">
-          {categories.map((cat) => (
+          {category.map((cat) => (
             <button
-              key={cat}
-              className={`rp-category ${activeCategory === cat ? "active" : ""}`}
-              onClick={() => setActiveCategory(cat)}
+              key={cat._id}
+              className={`rp-category ${activeCategory === cat._id ? "active" : ""}`}
+              onClick={() => setActiveCategory(cat._id)}
             >
-              {cat}
+              {cat.name}
             </button>
           ))}
         </div>
 
-        {/* PRODUCTS GRID */}
+        {/* PRODUCTS */}
         <div className="rp-grid">
-          {filteredProducts.map((p) => (
-            <div className="rp-card" key={p.id}>
-              <img src={p.img} alt={p.name} />
-              <h6>{p.name}</h6>
+          {product.map((p) => (
+            <div className="rp-card" key={p._id}>
+              <img src={`https://api.ssdipl.com/${p?.productImage[0]}`} alt={p?.productName} />
+              <h6>{p.productName}</h6>
               <p>₹ {p.price}</p>
 
-              {!cart[p.id] ? (
-                <button className="rp-add-btn" onClick={() => addItem(p.id)}>
+              {!cart[p._id] ? (
+                <button className="rp-add-btn" onClick={() => addItem(p._id)}>
                   Add
                 </button>
               ) : (
                 <div className="rp-qty">
-                  <button onClick={() => decrement(p.id)}>−</button>
-                  <span>{cart[p.id]}</span>
-                  <button onClick={() => increment(p.id)}>+</button>
+                  <button onClick={() => decrement(p._id)}>−</button>
+                  <span>{cart[p._id]}</span>
+                  <button onClick={() => increment(p._id)}>+</button>
                 </div>
               )}
             </div>
           ))}
 
-          {filteredProducts.length === 0 && (
-            <p className="rp-empty">No items available</p>
-          )}
+          {product.length === 0 && <p className="rp-empty">No items available</p>}
         </div>
 
-        {/* FOOTER */}
         <div className="rp-footer">
           <button className="rp-skip" onClick={onClose}>Skip</button>
-<button className="rp-continue" onClick={handleContinue}>
-  CONTINUE
-</button>
-
+          <button className="rp-continue" onClick={handleContinue}>
+            CONTINUE
+          </button>
         </div>
 
       </div>

@@ -13,6 +13,8 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { TbMapPinCode } from "react-icons/tb";
 
 const ProductDetails = () => {
+  const loginvalue = sessionStorage.getItem("login");
+
   const { name } = useParams();
   const [data, setData] = useState({});
   const [activeWeight, setActiveWeight] = useState(null);
@@ -21,31 +23,32 @@ const ProductDetails = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [deliveryDate, setDeliveryDate] = useState("");
+  const [imageIndex, setImageIndex] = useState(0)
 
 
- const handleWishlist = () => {
-  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const handleWishlist = () => {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-  if (wishlist.includes(data._id)) {
-    wishlist = wishlist.filter(id => id !== data._id);
-    setIsWishlisted(false);
-    Swal.fire("Removed", "Removed from wishlist", "info");
-  } else {
-    wishlist.push(data._id);
-    setIsWishlisted(true);
-    Swal.fire("Added", "Added to wishlist ❤️", "success");
-  }
+    if (wishlist.includes(data._id)) {
+      wishlist = wishlist.filter(id => id !== data._id);
+      setIsWishlisted(false);
+      Swal.fire("Removed", "Removed from wishlist", "info");
+    } else {
+      wishlist.push(data._id);
+      setIsWishlisted(true);
+      Swal.fire("Added", "Added to wishlist ❤️", "success");
+    }
 
-  localStorage.setItem("wishlist", JSON.stringify(wishlist));
-};
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  };
 
 
   useEffect(() => {
-  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-  if (data?._id) {
-    setIsWishlisted(wishlist.includes(data._id));
-  }
-}, [data]);
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    if (data?._id) {
+      setIsWishlisted(wishlist.includes(data._id));
+    }
+  }, [data]);
 
 
   const addonSliderSettings = {
@@ -82,7 +85,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/get-product-by-name/${name}`
+        `https://api.ssdipl.com/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -95,11 +98,11 @@ const ProductDetails = () => {
     }
   };
 
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  getApiData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [name]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    getApiData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name]);
 
 
   const handleWeightSelection = (weight) => {
@@ -111,65 +114,121 @@ useEffect(() => {
       setPrice(selectedVariant.finalPrice);
     }
   };
-const addToCart = () => {
-  // 1️⃣ Weight validation
-  const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
-  if (hasWeight && !activeWeight) {
-    Swal.fire("Select Weight", "Please select cake weight", "warning");
-    return;
-  }
 
-  // 2️⃣ Delivery date validation
-  if (!deliveryDate) {
-    Swal.fire("Select Delivery Date", "Please select delivery date", "warning");
-    return;
-  }
+  const getOrCreateMainCartItem = () => {
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-  // 3️⃣ Create cart item (MAIN PRODUCT)
-  const cartItem = {
-    id: data._id,
-    name: data.productName,
-    weight: activeWeight,
-    price: price,
-    quantity: 1,
-    image: data.productImage?.[0],
-    deliveryDate,
-    eggOption,
-    isAddon: false,
+    let index = cart.findIndex(
+      item => item.productId === data._id && item.weight === activeWeight
+    );
+
+    // If not exist → create
+    if (index === -1) {
+      const newItem = {
+        productId: data._id,
+        name: data.productName,
+        weight: activeWeight,
+        price: price,
+        quantity: 1,
+        image: data.productImage?.[0],
+        deliveryDate,
+        eggOption,
+        addonProducts: [],
+      };
+      cart.push(newItem);
+      index = cart.length - 1;
+    }
+
+    return { cart, index };
   };
 
-  // 4️⃣ Get existing cart
-  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  const addToCart = () => {
+    const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
 
-  // 5️⃣ Prevent duplicate same product + weight
-  const exists = cart.find(
-    item => item.id === cartItem.id && item.weight === cartItem.weight
-  );
+    if (hasWeight && !activeWeight) {
+      Swal.fire("Select Weight", "Please select cake weight", "warning");
+      return;
+    }
 
-  if (!exists) {
-    cart.push(cartItem);
+    if (!deliveryDate) {
+      Swal.fire("Select Delivery Date", "Please select delivery date", "warning");
+      return;
+    }
+
+    const { cart, index } = getOrCreateMainCartItem();
+
+    cart[index].quantity += 1;
+
     sessionStorage.setItem("cart", JSON.stringify(cart));
-  }
+    setOpenPopup(true);
+  };
 
-  // 6️⃣ OPEN RECOMMENDED POPUP
-  setOpenPopup(true);
-};
+  const addAddonToCart = (addon) => {
+    if (!activeWeight) {
+      Swal.fire("Select Weight", "Please select cake weight first", "warning");
+      return;
+    }
 
+    const { cart, index } = getOrCreateMainCartItem();
+
+    const addons = cart[index].addonProducts;
+
+    const addonIndex = addons.findIndex(a => a.productId === addon._id);
+
+    if (addonIndex > -1) {
+      addons[addonIndex].quantity += 1;
+    } else {
+      addons.push({
+        productId: addon._id,
+        name: addon.productName,
+        price: addon.price,
+        image: addon.productImage?.[0],
+        quantity: 1,
+      });
+    }
+
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+    Swal.fire("Added!", "Addon added successfully", "success");
+  };
+
+  const isAddonAdded = (addonId) => {
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    const main = cart.find(
+      item => item.productId === data._id && item.weight === activeWeight
+    );
+
+    return main?.addonProducts?.some(a => a.productId === addonId);
+  };
+
+  const isMainProductAdded = () => {
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    return cart.some(
+      item => item.productId === data._id && item.weight === activeWeight
+    );
+  };
+
+  const handleBuyNow = () => {
+    const { cart } = getOrCreateMainCartItem();
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+    setOpenPopup(true);
+  };
 
   const settings = {
     customPaging: function (i) {
       return (
-       <button
-  type="button"
-  className="p-0 border-0 bg-transparent"
->
-  <img
-    src={`${process.env.REACT_APP_API_URL}/${data.productImage?.[i]}`}
-    className="w-100"
-    style={{ borderRadius: "1rem" }}
-    alt={`Thumbnail ${i + 1}`}
-  />
-</button>
+        <button
+          type="button"
+          className="p-0 border-0 bg-transparent"
+        >
+          <img
+            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
+            className="w-100"
+            style={{ borderRadius: "1rem" }}
+            alt={`Thumbnail ${i + 1}`}
+          />
+        </button>
 
       );
     },
@@ -181,7 +240,7 @@ const addToCart = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
+  console.log("SSSSSS::=>", data?.recommendedProductId)
   return (
     <>
       {/* Breadcrumb Section */}
@@ -201,50 +260,55 @@ const addToCart = () => {
             {/* LEFT IMAGE SECTION */}
             <div className="col-lg-5">
               <div className="pdx-left-sticky">
-                <div className="d-flex pdxImg" >
+                <div className="d-flex pdxImg">
+
+                  {/* Thumbnails */}
                   <div className="pdx-thumb-column">
-                    {data.productImage?.map((img, i) => (
-                      <img
-                        key={i}
-                        src={`${process.env.REACT_APP_API_URL}/${img}`}
-                        alt="thumb"
-                        className="pdx-thumb"
-                      />
-                    ))}
+                    {data?.productImage?.map((img, i) => {
+                      const imagePath = img.replace(/\\/g, "/");
+
+                      return (
+                        <img
+                          key={i}
+                          src={`https://api.ssdipl.com/${imagePath}`}
+                          alt="thumb"
+                          className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
+                          onClick={() => setImageIndex(i)}
+                        />
+                      );
+                    })}
                   </div>
 
-                 <div className="pdx-main-image">
- 
-    {data.productImage?.map((img, i) => (
-      <img
-        key={i}
-        src={`${process.env.REACT_APP_API_URL}/${img}`}
-        alt="product"
-      />
-    ))}
-
-</div>
-
+                  {/* Main Image */}
+                  <div className="pdx-main-image">
+                    {data?.productImage?.length > 0 && (
+                      <img
+                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        alt="product"
+                      />
+                    )}
+                  </div>
 
                 </div>
+
                 <div className="pdx-features">
-                  <div className="text-center"> 
-                 
+                  <div className="text-center">
+
                     <TbTruckDelivery className="fs-2" />
                     <p>20+ Min  Delivered</p>
                   </div>
                   <div className="text-center">
-                   
-                    <TbMapPinCode className="fs-2"  />
+
+                    <TbMapPinCode className="fs-2" />
                     <p>
                       Pincodes
                     </p>
-                     </div>
+                  </div>
 
                   <div className="text-center">
-                     <TbTruckDelivery className="fs-2" />
+                    <TbTruckDelivery className="fs-2" />
                     <p>620+ Cities Same-day Delivery</p>
-                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -257,16 +321,16 @@ const addToCart = () => {
                   <span className="pdx-badge">EGGLESS</span>
                   <h1>{data.productName}</h1>
 
-<div
-  className={`wishlist-icon ${isWishlisted ? "active" : ""}`}
-  onClick={handleWishlist}
-  role="button"
-  aria-label="Add to wishlist"
->
-  {isWishlisted ? <FaHeart /> : <FaRegHeart />}
-</div>
+                  <div
+                    className={`wishlist-icon ${isWishlisted ? "active" : ""}`}
+                    onClick={handleWishlist}
+                    role="button"
+                    aria-label="Add to wishlist"
+                  >
+                    {isWishlisted ? <FaHeart /> : <FaRegHeart />}
+                  </div>
 
-                
+
                 </div>
 
                 <div className="pdx-price">₹ {Math.round(price)}</div>
@@ -322,13 +386,18 @@ const addToCart = () => {
 
                   <div className="pdx-addon-slider">
                     <Slider {...addonSliderSettings}>
-                      {[1, 2, 3, 4, 5, 6].map((item, index) => (
+                      {data?.recommendedProductId?.map((item, index) => (
                         <div key={index} className="pdx-addon-slide">
                           <div className="pdx-addon-card">
-                            <img src={Pic1} alt="addon" />
-                            <p className="pdx-addon-name ">Birthday Cap</p>
-                            <span className="pdx-addon-price">₹ 99</span>
-                            <button className="pdx-addon-btn">ADD</button>
+                            <img src={`https://api.ssdipl.com/${item?.productImage}`} alt="addon" />
+                            <p className="pdx-addon-name ">{item?.productName || 'Birthday Cap'}</p>
+                            <span className="pdx-addon-price">₹ {item?.price}</span>
+                            <button
+                              className={`pdx-addon-btn ${isAddonAdded(item._id) ? "added" : ""}`}
+                              onClick={() => addAddonToCart(item)}
+                            >
+                              {isAddonAdded(item._id) ? "✔ Added" : "ADD"}
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -345,11 +414,11 @@ const addToCart = () => {
                     <div className="locationIconSec">
                       <FaLocationCrosshairs />
                       <button
-  type="button"
-  className="btn btn-link p-0"
->
-  Use My Location
-</button>
+                        type="button"
+                        className="btn btn-link p-0"
+                      >
+                        Use My Location
+                      </button>
 
                     </div>
                   </div>
@@ -377,32 +446,41 @@ const addToCart = () => {
 
 
 
-                <RecommendedPopup open={openPopup}
+                <RecommendedPopup productId={data._id} open={openPopup}
                   onClose={() => setOpenPopup(false)}
                 />
 
                 {/* CTA */}
 
                 {/* DELIVERY DATE */}
-<div className="pdx-block">
-  <label>
-    Delivery Date <span className="text-danger">*</span>
-  </label>
+                <div className="pdx-block">
+                  <label>
+                    Delivery Date <span className="text-danger">*</span>
+                  </label>
 
-  <input
-    type="date"
-    className="form-control w-75"
-    value={deliveryDate}
-    min={new Date().toISOString().split("T")[0]}
-    onChange={(e) => setDeliveryDate(e.target.value)}
-    required
-  />
-</div>
+                  <input
+                    type="date"
+                    className="form-control w-75"
+                    value={deliveryDate}
+                    min={new Date().toISOString().split("T")[0]}
+                    onChange={(e) => setDeliveryDate(e.target.value)}
+                    required
+                  />
+                </div>
 
-                <div className="pdx-cta">  
-                <button className="pdx-cart" onClick={addToCart}>ADD TO CART</button>
+                <div className="pdx-cta">
+                  {/* <button className="pdx-cart" onClick={addToCart}>ADD TO CART</button> */}
+                  <button
+                    className={`pdx-cart ${isMainProductAdded() ? "added" : ""}`}
+                    onClick={addToCart}
+                  >
+                    {isMainProductAdded() ? "✔ Added To Cart" : "ADD TO CART"}
+                  </button>
+                  {/* <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
+                    BUY NOW | ₹ {Math.round(price)}
+                  </button> */}
 
-                   <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
+                  <button className="pdx-buy" onClick={handleBuyNow}>
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
                 </div>

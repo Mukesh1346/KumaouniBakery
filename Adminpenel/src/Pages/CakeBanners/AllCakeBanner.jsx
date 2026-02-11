@@ -15,7 +15,7 @@ const AllCakeBanners = () => {
   const fetchCakeBanners = async () => {
     try {
       const res = await axios.get(
-        "https://api.ssdipl.com/api/get-cake-banners"
+        "https://api.ssdipl.com/api/cake-banner/get-cake-banner"
       );
       setBanners(res.data?.data || []);
     } catch (error) {
@@ -41,7 +41,7 @@ const AllCakeBanners = () => {
 
     try {
       await axios.delete(
-        `https://api.ssdipl.com/api/delete-cake-banner/${id}`
+        `https://api.ssdipl.com/api/cake-banner/delete-cake-banner/${id}`
       );
 
       setBanners((prev) => prev.filter((b) => b._id !== id));
@@ -75,6 +75,7 @@ const AllCakeBanners = () => {
           <thead>
             <tr>
               <th>#</th>
+              <th>Title</th>
               <th>Banner Slot</th>
               <th>Preview</th>
               <th>Edit</th>
@@ -87,16 +88,18 @@ const AllCakeBanners = () => {
               banners.map((banner, index) => (
                 <tr key={banner._id}>
                   <td>{index + 1}</td>
-
+                  <td>{banner?.titel}</td>
                   <td className="text-capitalize">
-                    {banner.bannerKey === "cakeBanner1"
+                    {banner?.bannerKey === "cakeBanner1"
                       ? "Cake Banner 1"
-                      : "Cake Banner 2"}
+                      : banner?.bannerKey === "cakeBanner2" ? "Cake Banner 2" :
+                        banner?.bannerKey === "cakeBanner3" ? "Cake Banner 3" :
+                          "Cake Banner 4"}
                   </td>
 
                   <td>
                     <img
-                      src={`${process.env.REACT_APP_API_URL}/${banner.image}`}
+                      src={`https://api.ssdipl.com/${banner?.cakeBanner}`}
                       alt="Cake Banner"
                       style={{
                         width: "220px",
@@ -110,7 +113,7 @@ const AllCakeBanners = () => {
 
                   <td>
                     <Link
-                      to={`/edit-cake-banner/${banner._id}`}
+                      to={`/edit-cake-banner/${banner?._id}`}
                       className="bt edit"
                     >
                       Edit
@@ -120,7 +123,7 @@ const AllCakeBanners = () => {
                   <td>
                     <button
                       className="bt delete"
-                      onClick={() => handleDelete(banner._id)}
+                      onClick={() => handleDelete(banner?._id)}
                     >
                       Delete
                     </button>

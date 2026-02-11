@@ -15,6 +15,7 @@ const EditPromoBanners = () => {
     title: "",
     highlight: "",
     subtitle: "",
+    bannerKey: "",
     image: null,
     isActive: true,
   });
@@ -24,21 +25,22 @@ const EditPromoBanners = () => {
     const fetchBanner = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-single-promo-banner/${id}`
+          `https://api.ssdipl.com/api/promo-banner/get-single-promo-banner/${id}`
         );
 
         const banner = res.data.data;
 
         setFormData({
-          title: banner.title || "",
-          highlight: banner.highlight || "",
-          subtitle: banner.subtitle || "",
+          // title: banner.title || "",
+          // highlight: banner.highlight || "",
+          // subtitle: banner.subtitle || "",
+          bannerKey: banner.bannerKey || "",
           image: null,
-          isActive: banner.isActive ?? true,
+          isActive: banner.isActive || true,
         });
 
         setPreview(
-          `${process.env.REACT_APP_API_URL}/${banner.image}`
+          `https://api.ssdipl.com/${banner.image}`
         );
       } catch (err) {
         toast.error("Failed to load promo banner");
@@ -70,9 +72,9 @@ const EditPromoBanners = () => {
 
     try {
       const fd = new FormData();
-      fd.append("title", formData.title);
-      fd.append("highlight", formData.highlight);
-      fd.append("subtitle", formData.subtitle);
+      fd.append("bannerKey", formData.bannerKey);
+      // fd.append("highlight", formData.highlight);
+      // fd.append("subtitle", formData.subtitle);
       fd.append("isActive", formData.isActive);
 
       if (formData.image) {
@@ -80,7 +82,7 @@ const EditPromoBanners = () => {
       }
 
       await axios.put(
-        `https://api.ssdipl.com/api/update-promo-banner/${id}`,
+        `https://api.ssdipl.com/api/promo-banner/update-promo-banner/${id}`,
         fd,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -114,18 +116,23 @@ const EditPromoBanners = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* TITLE */}
           <div className="col-md-6">
-            <label className="form-label">Title</label>
-            <input
-              type="text"
-              name="title"
+            <label className="form-label">Select Banner Slot</label>
+            <select
+              name="bannerKey"
               className="form-control"
-              value={formData.title}
+              value={formData?.bannerKey}
               onChange={handleChange}
-            />
+              required
+            >
+              <option value="">-- Select Banner --</option>
+              <option value="banner1">Banner 1</option>
+              <option value="banner2">Banner 2</option>
+              <option value="banner3">Banner 3</option>
+            </select>
           </div>
 
           {/* HIGHLIGHT */}
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label className="form-label">Highlight Text</label>
             <input
               type="text"
@@ -134,10 +141,10 @@ const EditPromoBanners = () => {
               value={formData.highlight}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
 
           {/* SUBTITLE */}
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label className="form-label">Subtitle</label>
             <input
               type="text"
@@ -146,7 +153,7 @@ const EditPromoBanners = () => {
               value={formData.subtitle}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
 
           {/* IMAGE */}
           <div className="col-md-6">

@@ -8,6 +8,10 @@ const MainCategorySchema = new mongoose.Schema({
     subcategoryExit: {
         type: Boolean,
         default: false
+    },
+    ActiveonHome: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true })
 

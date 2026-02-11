@@ -8,6 +8,7 @@ const AddCategory = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     mainCategoryName: "",
+    ActiveonHome: false,
   });
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const AddCategory = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/create-main-category", 
+        "https://api.ssdipl.com/api/create-main-category",
         formData,
         {
           headers: {
@@ -72,6 +73,25 @@ const AddCategory = () => {
               placeholder="Category Name"
             />
           </div>
+
+          <div className="col-md-3 form-check">
+            <label htmlFor="ActiveonHome" className="form-label">
+              Display on Home
+            </label>
+            <div>
+              <input
+                type="checkbox"
+                name="ActiveonHome"
+                className="form-check-input me-2"
+                checked={formData.ActiveonHome}
+                onChange={(e) =>
+                  setFormData({ ...formData, ActiveonHome: e.target.checked })
+                }
+              />
+              <label className="form-check-label">Active on Home</label>
+            </div>
+          </div>
+
           <div className="col-12 text-center">
             <button
               type="submit"

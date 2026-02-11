@@ -19,14 +19,16 @@ const deleteImageFile = (relativeFilePath) => {
 
 const createProduct = async (req, res) => {
     console.log(req.body);
-    const { categoryName, subcategoryName, productName, productDescription, Variant ,ActiveonHome} = req.body;
+    const { categoryName, subcategoryName, secondsubcategoryName, productName, productDescription, productDetails, Variant, ActiveonHome, FeaturedProducts, BestSellingProduct, recommendedProductId } = req.body;
     const errorMessage = [];
 
     // Validation for required fields
     if (!categoryName) errorMessage.push("Category Name is required");
     if (!subcategoryName) errorMessage.push("Subcategory Name is required");
+    if (!secondsubcategoryName) errorMessage.push("Second Subcategory Name is required");
     if (!productName) errorMessage.push("Product Name is required");
     if (!productDescription) errorMessage.push("Product Description is required");
+    if (!productDetails) errorMessage.push("Product Details is required");
 
     // If there are any missing fields, return an error
     if (errorMessage.length > 0) {
@@ -63,14 +65,25 @@ const createProduct = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ message: "Invalid Variant data" });
     }
+    let parseRecommendedProductId = [];
+    try {
+        parseRecommendedProductId = Array.isArray(recommendedProductId) ? recommendedProductId : JSON.parse(recommendedProductId); // Parse if it's a string
+    } catch (error) {
+        return res.status(400).json({ message: "Invalid Variant data" });
+    }
 
     // Proceed with creating the product
     const productData = {
         categoryName,
         subcategoryName,
+        secondsubcategoryName,
         productName,
         productDescription,
+        productDetails,
         ActiveonHome,
+        FeaturedProducts,
+        BestSellingProduct,
+        recommendedProductId: parseRecommendedProductId,
         Variant: parsedVariant.map(variant => ({
             ...variant,
             weight: variant.weight ? new mongoose.Types.ObjectId(variant.weight) : null,  // Handle empty weight
@@ -90,11 +103,59 @@ const createProduct = async (req, res) => {
 };
 
 
-const getProductsActiveonHome = async(req,res)=>{
+const getProductsActiveonHome = async (req, res) => {
     try {
-        const products = await Product.find({ActiveonHome:1})
+        const products = await Product.find({ ActiveonHome: 1 })
+            .sort({ createdAt: -1 })
             .populate('categoryName')
             .populate('subcategoryName')
+            .populate('secondsubcategoryName')
+            .populate('recommendedProductId')
+            .populate({
+                path: 'Variant.weight',
+                model: 'Size',
+            })
+            .populate({
+                path: 'Variant.flover',
+                model: 'Flover',
+            });
+
+        res.status(200).json({ data: products });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+const getFeaturedProducts = async (req, res) => {
+    try {
+        const products = await Product.find({ ActiveonHome: 1, FeaturedProducts: 1 })
+            .sort({ createdAt: -1 })
+            .populate('categoryName')
+            .populate('subcategoryName')
+            .populate('secondsubcategoryName')
+            .populate('recommendedProductId')
+            .populate({
+                path: 'Variant.weight',
+                model: 'Size',
+            })
+            .populate({
+                path: 'Variant.flover',
+                model: 'Flover',
+            });
+
+        res.status(200).json({ data: products });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+const getBestSellingProducts = async (req, res) => {
+    try {
+        const products = await Product.find({ ActiveonHome: 1, BestSellingProduct: 1 })
+            .sort({ createdAt: -1 })
+            .populate('categoryName')
+            .populate('subcategoryName')
+            .populate('secondsubcategoryName')
+            .populate('recommendedProductId')
             .populate({
                 path: 'Variant.weight',
                 model: 'Size',
@@ -113,9 +174,11 @@ const getProductsActiveonHome = async(req,res)=>{
 // Read Products
 const getProducts = async (req, res) => {
     try {
-        const products = await Product.find()
+        const products = await Product.find().sort({ createdAt: -1 })
             .populate('categoryName')
             .populate('subcategoryName')
+            .populate('secondsubcategoryName')
+            .populate('recommendedProductId')
             .populate({
                 path: 'Variant.weight',
                 model: 'Size',
@@ -137,8 +200,11 @@ const getProduct = async (req, res) => {
     const { id } = req.params;
     try {
         const product = await Product.findById(id)
+            .sort({ createdAt: -1 })
             .populate('categoryName')
             .populate('subcategoryName')
+            .populate('secondsubcategoryName')
+            .populate('recommendedProductId')
             .populate('Variant.weight')
             .populate('Variant.flover');
 
@@ -159,7 +225,10 @@ const getProductByname = async (req, res) => {
     console.log(name)
     try {
         const product = await Product.findOne({ productName: name }).populate('categoryName')
+            .sort({ createdAt: -1 })
             .populate('subcategoryName')
+            .populate('secondsubcategoryName')
+            .populate('recommendedProductId')
             .populate('Variant.weight')
             .populate('Variant.flover');
         if (!product) {
@@ -179,8 +248,11 @@ const getProductsBySubcategory = async (req, res) => {
     console.log('Subcategory name:', subcategoryName);
     try {
         const products = await Product.find()
+            .sort({ createdAt: -1 })
             .populate('categoryName')
             .populate('subcategoryName')
+            .populate('secondsubcategoryName')
+            .populate('recommendedProductId')
 
         const filterProductData = products.filter((x) => x.subcategoryName.subcategoryName === subcategoryName)
         if (!filterProductData || filterProductData.length === 0) {
@@ -194,6 +266,29 @@ const getProductsBySubcategory = async (req, res) => {
     }
 };
 
+const getProductsBySubcategoryId = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const products = await Product.find({
+            $or: [
+                { categoryName: id },          // main category
+                { subcategoryName: id },       // subcategory
+                { secondsubcategoryName: id }, // second subcategory
+            ]
+        }).sort({ createdAt: -1 }).populate("categoryName").populate("subcategoryName").populate("secondsubcategoryName").populate("recommendedProductId");
+
+        console.log("Products:==>", products);
+
+        res.status(200).json({ data: products });
+
+    } catch (err) {
+        console.error("Error fetching products:", err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+
 const updateProduct = async (req, res) => {
     const { id } = req.params;
     console.log(req.body);
@@ -202,9 +297,14 @@ const updateProduct = async (req, res) => {
     const updatedData = {
         categoryName: req.body.categoryName,
         subcategoryName: req.body.subcategoryName,
+        secondsubcategoryName: req.body.secondsubcategoryName,
         productName: req.body.productName,
         productDescription: req.body.productDescription,
+        productDetails: req.body.productDetails,
         ActiveonHome: req.body.ActiveonHome || 0, // Default to 0 if not provided
+        FeaturedProducts: req.body.FeaturedProducts || 0,
+        BestSellingProduct: req.body.BestSellingProduct || 0,
+        recommendedProductId: req.body.recommendedProductId ? JSON.parse(req.body.recommendedProductId) : [],
         Variant: req.body.Variant ? JSON.parse(req.body.Variant) : [], // Parse Variant if provided, default to empty array
     };
 
@@ -288,10 +388,13 @@ const deleteProduct = async (req, res) => {
 module.exports = {
     createProduct,
     getProducts,
+    getProductsBySubcategoryId,
     getProduct,
     updateProduct,
     deleteProduct,
     getProductByname,
     getProductsBySubcategory,
-    getProductsActiveonHome
+    getProductsActiveonHome,
+    getFeaturedProducts,
+    getBestSellingProducts
 };

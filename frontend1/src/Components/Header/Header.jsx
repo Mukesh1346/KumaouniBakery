@@ -6,93 +6,48 @@ import LocationPopup from "../LocationPopup/LocationPopup";
 import { IoIosArrowDown } from "react-icons/io";
 import Banner from "../../images/pic/topBanner1.png";
 import logo from "../../images/pic/logo2.png"
+import { useNavigate } from "react-router-dom"
 
 const megaCategories = [
   {
     name: "Cake",
     subcategories: [
       {
-        name: "CAKES",
-        children: [" Pineapple", "Butterscotch", "Fruit ", " Vannilla fruit","Blueberry ","red velvet","heart","truffle ","choco vannila","Black forest ","Chocolate german"]
+        name: "CAKES", children: ["Pineapple", "Butterscotch", "Fruit ", " Vannilla fruit", "Blueberry ", "red velvet", "heart", "truffle ", "choco vannila", "Black forest ", "Chocolate german"]
       },
       {
-        name: "Tub cakes",
-        children: ["fruit", 
-"blueberry", 
- "pineapple", 
- "Red velvet", 
- "Black forest"
-
-]
+        name: "Tub cakes", children: ["fruit", "blueberry", "pineapple", "Red velvet", "Black forest"]
       },
       {
-        name: "Premium Cakes",
-       children: [
-        "Hawai Pineapple",
-        "Rasmalai",
-        "Gulab Jamun",
-        "Pistachio",
-        "Strawberry Rose",
-      ]
+        name: "Premium Cakes", children: ["Hawai Pineapple", "Rasmalai", "Gulab Jamun", "Pistachio", "Strawberry Rose",]
       },
       {
-         name: "Pastry",
-      children: [
-        "Black Forest",
-        "Pineapple",
-        "Truffle",
-        "Red Velvet",
-        "Butterscotch",
-      ], },
-      {
-         name: "Jar Cakes",
-      children: [
-        "Chocolate",
-        "Red Velvet",
-        "Blueberry",
-        "Crunchy Chocolate",
-      ],
+        name: "Pastry", children: ["Black Forest", "Pineapple", "Truffle", "Red Velvet", "Butterscotch",],
       },
-       {
-      name: "Cheese Cakes",
-      children: [
-        "Blueberry",
-        "Biscoff",
-        "Mango",
-        "Strawberry",
-      ],
-    },
-     {
-      name: "Cheese Cake Slice",
-      children: [
-        "Biscoff",
-        "Nutella",
-        "Blueberry",
-      ],
-    },
-     {
-      name: "Cup Cakes",
-      children: [
-        "Blueberry",
-        "Red Velvet",
-        "Vanilla",
-        "Biscoff",
-        "Coffee",
-        "Chocolate",
-      ],
-    }
+      {
+        name: "Jar Cakes", children: ["Chocolate", "Red Velvet", "Blueberry", "Crunchy Chocolate",],
+      },
+      {
+        name: "Cheese Cakes", children: ["Blueberry", "Biscoff", "Mango", "Strawberry",],
+      },
+      {
+        name: "Cheese Cake Slice", children: ["Biscoff", "Nutella", "Blueberry",],
+      },
+      {
+        name: "Cup Cakes", children: ["Blueberry", "Red Velvet", "Vanilla", "Biscoff", "Coffee", "Chocolate",],
+      }
     ]
   },
   {
     name: "Flowers",
     subcategories: [
       {
-      name: "Flower Combos",
-      children: [
-        "Truffle Roses",
-        "Truffle ",
-      ],
-    },
+        name: "Flower Combos",
+        children: [
+          "Truffle Roses",
+          "Truffle ",
+        ],
+      },
       {
         name: "Lilies",
         children: ["White Lilies", "Pink Lilies", "Oriental Lilies", "Mixed Lilies"]
@@ -128,7 +83,7 @@ const megaCategories = [
       }
     ]
   },
-   {
+  {
     name: "Wedding",
     subcategories: [
       {
@@ -150,7 +105,7 @@ const megaCategories = [
     ]
   },
   {
-   name: "Festivals",
+    name: "Festivals",
     subcategories: [
       {
         name: "Personalised Gifts",
@@ -170,9 +125,8 @@ const megaCategories = [
       }
     ]
   },
-
-   {
-   name: "Friendships",
+  {
+    name: "Friendships",
     subcategories: [
       {
         name: "Personalised Gifts",
@@ -192,45 +146,41 @@ const megaCategories = [
       }
     ]
   },
-
-
 ];
-
-
 
 
 const Header = () => {
   const loginvalue = sessionStorage.getItem("login");
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const [ showLocationModal, setShowLocationModal] = useState(false);
-   const [openIndex, setOpenIndex] = useState(null);
-const [countries, setCountries] = useState([]);
-const [selectedCountry, setSelectedCountry] = useState(null);
-  
-const [mobileOpen, setMobileOpen] = useState(null);
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [openIndex, setOpenIndex] = useState(null);
+  const [countries, setCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
-const toggleMobileCategory = (index) => {
-  setMobileOpen(mobileOpen === index ? null : index);
-};
+  const [mobileOpen, setMobileOpen] = useState(null);
 
-
-const toggleDropdown = (key) => {
-  setOpenIndex(openIndex === key ? null : key);
-};
+  const toggleMobileCategory = (index) => {
+    setMobileOpen(mobileOpen === index ? null : index);
+  };
 
 
+  const toggleDropdown = (key) => {
+    setOpenIndex(openIndex === key ? null : key);
+  };
 
- 
+
+
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/get-category-with-subcategory`
+          `https://api.ssdipl.com/api/get-category-with-subcategory`
         );
-
+        console.log("categories categories =>", response.data.data)
         if (
-          response.data.message ===
-          "Categories with subcategories retrieved successfully"
+          response.data.message === "Categories with subcategories retrieved successfully"
         ) {
           setCategories(response.data.data);
         }
@@ -245,208 +195,209 @@ const toggleDropdown = (key) => {
 
 
   useEffect(() => {
-  const fetchCountries = async () => {
-    try {
-      const res = await axios.get(
-        "https://restcountries.com/v3.1/all?fields=name,flags,cca2"
-      );
+    const fetchCountries = async () => {
+      try {
+        const res = await axios.get(
+          "https://restcountries.com/v3.1/all?fields=name,flags,cca2"
+        );
 
-      const formatted = res.data.map((item) => ({
-        name: item.name.common,
-        flag: item.flags.png,
-        code: item.cca2,
-      }));
+        const formatted = res.data.map((item) => ({
+          name: item.name.common,
+          flag: item.flags.png,
+          code: item.cca2,
+        }));
 
-      setCountries(formatted);
+        setCountries(formatted);
 
-      // ✅ SET DEFAULT COUNTRY (INDIA)
-      const india = formatted.find((c) => c.code === "IN");
-      if (india) {
-        setSelectedCountry(india);
+        // ✅ SET DEFAULT COUNTRY (INDIA)
+        const india = formatted.find((c) => c.code === "IN");
+        if (india) {
+          setSelectedCountry(india);
+        }
+      } catch (error) {
+        console.error("Error fetching countries:", error);
       }
-    } catch (error) {
-      console.error("Error fetching countries:", error);
-    }
-  };
+    };
 
-  fetchCountries();
-}, []);
+    fetchCountries();
+  }, []);
 
+  // console.log("categories categories =>", categories?.map((mcat) => mcat?.subcategories?.filter((subc) => subc?.ActiveonHeader === true)));
 
   return (
     <>
       {/* ===== TOP HEADER ===== */}
-    <div className="">
+      <div className="">
         <img src={Banner} alt="" className="header-topBanner" />
-    </div>
- <div className="HeaderContainer">
-    <header className="custom-navbar">
-        <div className="container-fluid">
-          <div className="top-header-wrapper">
-            {/* LOGO */}
+      </div>
+      <div className="HeaderContainer">
+        <header className="custom-navbar">
+          <div className="container-fluid">
+            <div className="top-header-wrapper">
+              {/* LOGO */}
 
-             <Link to="/" className="brand-title">
-                         <img src={logo} alt="" className="logoImage" />
-             </Link>
-            {/* <Link to="/" className="brand-title">
+              <Link to="/" className="brand-title">
+                <img src={logo} alt="" className="logoImage" />
+              </Link>
+              {/* <Link to="/" className="brand-title">
               Cake Crazzy
             </Link> */}
 
-            {/* DELIVERY LOCATION */}
-         <div
-  className="delivery-box"
-  onClick={() => setShowLocationModal(true)}
->
-  {selectedCountry && (
-    <img
-      src={selectedCountry.flag}
-      alt={selectedCountry.name}
-      className="delivery-flag"
-    />
-  )}
+              {/* DELIVERY LOCATION */}
+              <div
+                className="delivery-box"
+                onClick={() => setShowLocationModal(true)}
+              >
+                {selectedCountry && (
+                  <img
+                    src={selectedCountry.flag}
+                    alt={selectedCountry.name}
+                    className="delivery-flag"
+                  />
+                )}
 
-  <div className="DeliverSection">
-    <small className="text-light">Deliver to</small>
-    <span className="delivery-country">
-      {selectedCountry?.name || "Select Country"}
-    </span>
-  </div>
+                <div className="DeliverSection">
+                  <small className="text-light">Deliver to</small>
+                  <span className="delivery-country">
+                    {selectedCountry?.name || "Select Country"}
+                  </span>
+                </div>
 
-  <IoIosArrowDown className="delivery-arrow" />
-</div>
-
-         
-{/* SEARCH (ICON ONLY – SAME AS ORIGINAL) */}
-<div className="search-container">
-  <form>
-    <div className="search-wrapper">
-      <input
-        type="search"
-        className="form-control searchInput"
-        placeholder="Search"
-      />
-      <i className="bi bi-search search-icon"></i>
-    </div>
-  </form>
-</div>
+                <IoIosArrowDown className="delivery-arrow" />
+              </div>
 
 
+              {/* SEARCH (ICON ONLY – SAME AS ORIGINAL) */}
+              <div className="search-container">
+                <form>
+                  <div className="search-wrapper">
+                    <input
+                      type="search"
+                      className="form-control searchInput"
+                      placeholder="Search"
+                    />
+                    <i className="bi bi-search search-icon"></i>
+                  </div>
+                </form>
+              </div>
 
-            {/* RIGHT ICONS */}
-            <div className="top-icons">
-              <Link to="/track-order" className="icon-box">
-                <i className="bi bi-truck"></i>
-                <span className="navPageText">Track Order</span>
-              </Link>
 
-             
 
-              <Link to="/cart" className="icon-box">
-                <i className="bi bi-bag"></i>
-                <span className="navPageText">Cart</span>
-              </Link>
-
-              {loginvalue ? (
-                <Link to="/profile" className="icon-box">
-                  <i className="bi bi-person-fill"></i>
-                  <span className="navPageText">Account</span>
+              {/* RIGHT ICONS */}
+              <div className="top-icons">
+                <Link to="/track-order" className="icon-box">
+                  <i className="bi bi-truck"></i>
+                  <span className="navPageText">Track Order</span>
                 </Link>
-              ) : (
-                <Link to="/login" className="icon-box">
-                  <i className="bi bi-person-fill"></i>
-                  <span className="navPageText">Sign In</span>
+
+
+
+                <Link to="/cart" className="icon-box">
+                  <i className="bi bi-bag"></i>
+                  <span className="navPageText">Cart</span>
                 </Link>
-              )}
 
-       
-               
+                {loginvalue ? (
+                  <Link to="/profile" className="icon-box">
+                    <i className="bi bi-person-fill"></i>
+                    <span className="navPageText">Account</span>
+                  </Link>
+                ) : (
+                  <Link to="/login" className="icon-box">
+                    <i className="bi bi-person-fill"></i>
+                    <span className="navPageText">Sign In</span>
+                  </Link>
+                )}
 
-              
-{/* MENU DROPDOWN */}
-<div
-  className="hdr-menu-trigger"
-  onClick={() => toggleDropdown("menu")}
->
-  <i className="bi bi-grid"></i>
-  <span className="navPageText">Menu</span>
 
-  {openIndex === "menu" && (
-    <div className="hdr-menu-dropdown">
-      {/* <Link to="/corporate-gifts" className="hdr-menu-link">
+
+
+
+                {/* MENU DROPDOWN */}
+                <div
+                  className="hdr-menu-trigger"
+                  onClick={() => toggleDropdown("menu")}
+                >
+                  <i className="bi bi-grid"></i>
+                  <span className="navPageText">Menu</span>
+
+                  {openIndex === "menu" && (
+                    <div className="hdr-menu-dropdown">
+                      {/* <Link to="/corporate-gifts" className="hdr-menu-link">
         Corporate Gifts
       </Link> */}
 
-      <Link to="/wishlist" className="hdr-menu-link">
-        My Favourites
-      </Link>
+                      <Link to="/wishlist" className="hdr-menu-link">
+                        My Favourites
+                      </Link>
 
-     
-      <Link to="/refer" className="hdr-menu-link">
-        Refer and Earn <span className="hdr-badge-new">New</span>
-      </Link>
 
-      {/* <Link to="/franchise" className="hdr-menu-link">
+                      <Link to="/refer" className="hdr-menu-link">
+                        Refer and Earn <span className="hdr-badge-new">New</span>
+                      </Link>
+
+                      {/* <Link to="/franchise" className="hdr-menu-link">
         Franchise
       </Link> */}
 
-      <Link to="/faq" className="hdr-menu-link">
-        FAQ
-      </Link>
+                      <Link to="/faq" className="hdr-menu-link">
+                        FAQ
+                      </Link>
 
-      <Link to="/about-us" className="hdr-menu-link">
-        About Us
-      </Link>
-
-    
-
-      <Link to="/contact-us" className="hdr-menu-link">
-        Contact Us
-      </Link>
-
-      <a
-        href="https://wa.me/91XXXXXXXXXX"
-        target="_blank"
-        rel="noreferrer"
-        className="hdr-menu-link hdr-whatsapp"
-      >
-        WhatsApp
-      </a>
-    </div>
-  )}
-</div>
+                      <Link to="/about-us" className="hdr-menu-link">
+                        About Us
+                      </Link>
 
 
 
-      
-    
+                      <Link to="/contact-us" className="hdr-menu-link">
+                        Contact Us
+                      </Link>
 
-                 <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+                      <a
+                        href="https://wa.me/91XXXXXXXXXX"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hdr-menu-link hdr-whatsapp"
+                      >
+                        WhatsApp
+                      </a>
+                    </div>
+                  )}
+                </div>
 
-              
+
+
+
+
+
+                <button
+                  className="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarNav"
+                >
+                  <span className="navbar-toggler-icon"></span>
+                </button>
+
+
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-    {showLocationModal && (
-  <LocationPopup
-    onClose={() => setShowLocationModal(false)}
-    countries={countries}
-    selectedCountry={selectedCountry}
-    setSelectedCountry={setSelectedCountry}
-  />
-)}
-
+        {showLocationModal && (
+          <LocationPopup
+            onClose={() => setShowLocationModal(false)}
+            countries={countries}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+          />
+        )}
 
 
- </div>
+
+      </div>
       {/* ===== BOTTOM NAVBAR ===== */}
       <nav className="navbar navbar-expand-lg bottom-navbar">
         <div className="container navbarContainer">
@@ -460,62 +411,63 @@ const toggleDropdown = (key) => {
           </button>
 
           <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav mx-auto">
-  {megaCategories.map((cat, index) => (
-    <li className="nav-item mega-dropdown" key={index}>
-     <span
-  className="nav-link mega-toggle"
-  onClick={() => toggleMobileCategory(index)}
->
-  {cat.name}
-  <IoIosArrowDown
-    className={`arrow ${mobileOpen === index ? "rotate" : ""}`}
-  />
-</span>
+            <ul className="navbar-nav mx-auto">
+              {categories.map((cat, index) => (
+                <li className="nav-item mega-dropdown" key={index}>
+                  <span
+                    className="nav-link mega-toggle"
+                    onClick={() => toggleMobileCategory(index)}
+                  >
+                    {cat?.mainCategoryName || ''}
+                    <IoIosArrowDown
+                      className={`arrow ${mobileOpen === index ? "rotate" : ""}`}
+                    />
+                  </span>
 
 
-      {/* MEGA MENU */}
- <div
-  className={`mega-menu ${
-    mobileOpen === index ? "mobile-open" : ""
-  }`}
->
+                  {/* MEGA MENU */}
+                  <div
+                    className={`mega-menu ${mobileOpen === index ? "mobile-open" : ""
+                      }`}
+                  >
+
+                    <div className="mega-menu-inner">
+                      {cat?.subcategories?.filter((subcategories) => subcategories?.ActiveonHeader === true).map((sub, i) => (
+
+                        /* ONE COLUMN */
+                        <div key={i} className="column-mega" >
+
+                          {/* MAIN SUBCATEGORY – TOP OF COLUMN */}
+                          <div
+                            className="mega-item"
+                            style={{ fontWeight: 600 }}
+                          >
+                            {sub?.subcategoryName || ''}
+                          </div>
+
+                          {/* CHILD SUBCATEGORIES */}
+                          {sub?.secondSubcategories?.map((child, j) => (
+                            // <Link
+                            //   key={j}
+                            //   onClick={() => navigate(`/product-related/${child?.secondsubcategoryName?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: child?._id } })}
+                            //   to={`/product-related/${child?.secondsubcategoryName?.replace(/\s+/g, "-").toLowerCase()}`}
+                            //   className="mega-item mega-child"
+                            // >
+                            <div key={j} className="mega-item mega-child" onClick={() => navigate(`/product-related/${child?.secondsubcategoryName?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: child?._id, status: 'subCategory' } })}>
+                              {child?.secondsubcategoryName || ''}
+                            </div>
+                            // </Link>
+                          ))}
+
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
 
-  <div className="mega-menu-inner">
-    {cat.subcategories.map((sub, i) => (
-      
-      /* ONE COLUMN */
-      <div key={i}  className="column-mega" >
-        
-        {/* MAIN SUBCATEGORY – TOP OF COLUMN */}
-        <div
-          className="mega-item"
-          style={{ fontWeight: 600 }}
-        >
-          {sub.name} 
-        </div>
-
-        {/* CHILD SUBCATEGORIES */}
-        {sub.children.map((child, j) => (
-          <Link
-            key={j}
-            to={`/category/${child.replace(/\s+/g, "-").toLowerCase()}`}
-            className="mega-item mega-child"
-          >
-            {child}
-          </Link>
-        ))}
- 
-      </div>
-    ))}
-  </div>
-</div>
-
-
-    </li>
-  ))}
-</ul>
+                </li>
+              ))}
+            </ul>
 
 
             {/* <ul className="navbar-nav mx-auto">

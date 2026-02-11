@@ -14,7 +14,7 @@ const AllSubSubCategory = () => {
     const fetchSubSubcategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/get-subsubcategory"
+          "https://api.ssdipl.com/api/second-sub-category/get-second-sub-category"
         );
         setSubSubcategories(res.data?.data || []);
       } catch (error) {
@@ -44,7 +44,7 @@ const AllSubSubCategory = () => {
 
     try {
       await axios.delete(
-        `https://api.ssdipl.com/api/delete-subsubcategory/${id}`
+        `https://api.ssdipl.com/api/second-sub-category/delete-second-sub-category/${id}`
       );
 
       setSubSubcategories((prev) =>
@@ -83,8 +83,8 @@ const AllSubSubCategory = () => {
             <tr>
               <th>Sr.No.</th>
               <th>Main Category</th>
-              <th>Sub Category</th>
-              <th>Sub-Subcategory</th>
+              <th>Category</th>
+              <th>Sub-Category</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -98,9 +98,9 @@ const AllSubSubCategory = () => {
 
                   <td>{item?.mainCategoryId?.mainCategoryName || "—"}</td>
 
-                  <td>{item?.subCategoryId?.subCategoryName || "—"}</td>
+                  <td>{item?.subCategoryId?.subcategoryName || "—"}</td>
 
-                  <td>{item.subSubcategoryName}</td>
+                  <td>{item?.secondsubcategoryName}</td>
 
                   <td>
                     <Link

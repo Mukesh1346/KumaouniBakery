@@ -6,14 +6,21 @@ const SubCategorySchema = new mongoose.Schema({
         ref: "Main-Category",
         required: true
     },
-    image:{
-        type:String,
+    image: {
+        type: String,
+    },
+    banner: {
+        type: String
     },
     subcategoryName: {
         type: String,
         required: true
     },
-    ActiveonHome:{
+    ActiveonHome: {
+        type: Boolean,
+        default: false
+    },
+    ActiveonHeader: {
         type: Boolean,
         default: false
     },

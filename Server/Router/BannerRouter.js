@@ -9,5 +9,4 @@ BannerRouter.get("/get-banners", getAllBanners);
 BannerRouter.get("/get-single-banner/:id", getBannerById);
 BannerRouter.put("/update-banner/:id", upload.single("bannerImage"), updateBanner);
 BannerRouter.delete("/delete-banner/:id", deleteBanner);
-
 module.exports = BannerRouter;

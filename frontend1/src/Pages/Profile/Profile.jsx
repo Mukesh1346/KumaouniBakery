@@ -11,7 +11,7 @@ const Profile = () => {
 
   const getApiData = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/` + userid);
+      const res = await axios.get(`https://api.ssdipl.com/api/user/` + userid);
       if (res.status === 200) {
         setUser(res.data.data);
       }
@@ -23,7 +23,7 @@ const Profile = () => {
   const getOrderData = async () => {
     try {
       const res = await axios.get(
-        "${process.env.REACT_APP_API_URL}/api/checkout/user/" + userid
+        "https://api.ssdipl.com/api/checkout/user/" + userid
       );
       if (res.status === 200) {
         setOrders(res.data.data); // Store orders in state
@@ -123,7 +123,7 @@ useEffect(() => {
                         <tr key={item._id}>
                           <td>
                             <img
-                              src={`${process.env.REACT_APP_API_URL}/${item.image}`}
+                              src={`https://api.ssdipl.com/${item.image}`}
                               alt=""
                               style={{ height: 50 }}
                             />

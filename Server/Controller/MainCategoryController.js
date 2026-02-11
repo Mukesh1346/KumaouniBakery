@@ -1,10 +1,11 @@
 const MainCategory = require("../Model/MainCategoryModel");
-const Subcategory = require("../Model/SubcategoryModel");;
+const Subcategory = require("../Model/SubcategoryModel");
+const SecondSubCategory = require("../Model/SecondSubcategoryModel");
 
 const createMainCategory = async (req, res) => {
     try {
-        console.log("I am hit" , req.body)
-        const { mainCategoryName } = req.body;
+        console.log("I am hit", req.body)
+        const { mainCategoryName, ActiveonHome } = req.body;
 
         if (!mainCategoryName) {
             return res.status(400).json({ message: "Main category name are required." });
@@ -23,6 +24,7 @@ const createMainCategory = async (req, res) => {
 
         const newCategory = new MainCategory({
             mainCategoryName: normalizedCategoryName,
+            ActiveonHome: ActiveonHome || false
         });
 
         await newCategory.save();
@@ -38,7 +40,7 @@ const createMainCategory = async (req, res) => {
 const updateMainCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        const { mainCategoryName} = req.body;
+        const { mainCategoryName, ActiveonHome } = req.body;
 
         // Find the category to update
         const category = await MainCategory.findById(id);
@@ -60,6 +62,7 @@ const updateMainCategory = async (req, res) => {
 
             // Update the name with the normalized version
             category.mainCategoryName = normalizedCategoryName;
+            category.ActiveonHome = ActiveonHome || false;
         }
 
         await category.save();
@@ -146,47 +149,97 @@ const getSingleMainCategoryByName = async (req, res) => {
     }
 };
 
+// const getCategoriesWithSubcategories = async (req, res) => {
+//     try {
+//         // Fetch all main categories
+//         const categories = await MainCategory.find();
+//         // Initialize an array to hold categories with their subcategories
+//         const categoriesWithSubcategories = [];
+
+//         // Loop over each category
+//         for (const category of categories) {
+//             // Fetch subcategories related to the current category
+//             const subcategories = await Subcategory.find({ categoryName: category._id });
+
+//             for (const subcategory of subcategories) {
+//                 const categoryName = await SecondSubCategory.findById({ subCategoryId: subcategory?._id });
+//             }
+//             // Transform subcategories to only include subcategoryName and subcategoryImage
+//             const transformedSubcategories = subcategories.map(subcategory => ({
+//                 subcategoryName: subcategory.subcategoryName,
+//                 subcategoryImage: subcategory.image,
+//                 id: subcategory._id
+//             }));
+
+//             // Combine the category and its transformed subcategories into one object
+//             const categoryWithSubcategories = {
+//                 _id: category._id,  // Retain the category _id
+//                 mainCategoryName: category.mainCategoryName,  // Retain the category name
+//                 subcategories: transformedSubcategories,  // Add the transformed subcategories array
+//             };
+
+//             // Push the combined object into the result array
+//             categoriesWithSubcategories.push(categoryWithSubcategories);
+//         }
+//         // console.log("categoriesWithSubcategories==>", categoriesWithSubcategories);
+
+//         // Send the response with the combined data
+//         res.status(200).json({
+//             message: "Categories with subcategories retrieved successfully",
+//             data: categoriesWithSubcategories,
+//         });
+//     } catch (error) {
+//         console.error("Error retrieving categories with subcategories:", error);
+//         res.status(500).json({
+//             message: "Error retrieving categories with subcategories",
+//             error: error.message,
+//         });
+//     }
+// };
+
+
 const getCategoriesWithSubcategories = async (req, res) => {
     try {
-        // Fetch all main categories
-        const categories = await MainCategory.find();
+        const categories = await MainCategory.find().lean();
 
-        // Initialize an array to hold categories with their subcategories
-        const categoriesWithSubcategories = [];
+        const result = await Promise.all(
+            categories.map(async (category) => {
 
-        // Loop over each category
-        for (const category of categories) {
-            // Fetch subcategories related to the current category
-            const subcategories = await Subcategory.find({ categoryName: category._id });
+                const subcategories = await Subcategory.find({
+                    categoryName: category._id,
+                }).lean();
 
-            // Transform subcategories to only include subcategoryName and subcategoryImage
-            const transformedSubcategories = subcategories.map(subcategory => ({
-                subcategoryName: subcategory.subcategoryName,
-                subcategoryImage: subcategory.subcategoryImage,
-            }));
+                const subcategoriesWithSecond = await Promise.all(
+                    subcategories.map(async (sub) => {
 
-            // Combine the category and its transformed subcategories into one object
-            const categoryWithSubcategories = {
-                _id: category._id,  // Retain the category _id
-                mainCategoryName: category.mainCategoryName,  // Retain the category name
-                subcategories: transformedSubcategories,  // Add the transformed subcategories array
-            };
+                        const secondSubcategories = await SecondSubCategory.find({
+                            subCategoryId: sub._id,
+                        }).select("_id secondsubcategoryName").lean();
 
-            // Push the combined object into the result array
-            categoriesWithSubcategories.push(categoryWithSubcategories);
-        }
+                        return {
+                            _id: sub._id,
+                            subcategoryName: sub.subcategoryName,
+                            subcategoryImage: sub.image,
+                            ActiveonHome: sub.ActiveonHome,
+                            ActiveonHeader: sub.ActiveonHeader,
+                            secondSubcategories,
+                        };
+                    })
+                );
 
-        // Send the response with the combined data
-        res.status(200).json({
-            message: "Categories with subcategories retrieved successfully",
-            data: categoriesWithSubcategories,
-        });
+                return {
+                    _id: category._id,
+                    mainCategoryName: category.mainCategoryName,
+                    subcategories: subcategoriesWithSecond,
+                };
+            })
+        );
+
+        res.status(200).json({ success: true, message: "Categories with subcategories retrieved successfully", data: result, });
+
     } catch (error) {
-        console.error("Error retrieving categories with subcategories:", error);
-        res.status(500).json({
-            message: "Error retrieving categories with subcategories",
-            error: error.message,
-        });
+        console.error("Category fetch error:", error);
+        res.status(500).json({ success: false, message: "Server error", error: error.message, });
     }
 };
 

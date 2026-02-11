@@ -12,7 +12,7 @@ const AllPromoBanners = () => {
 
   const fetchBanners = async () => {
     const res = await axios.get(
-      "https://api.ssdipl.com/api/get-promo-banners"
+      "https://api.ssdipl.com/api/promo-banner/get-promo-banner"
     );
     setBanners(res.data.data || []);
   };
@@ -28,13 +28,13 @@ const AllPromoBanners = () => {
     if (!confirm.isConfirmed) return;
 
     await axios.delete(
-      `https://api.ssdipl.com/api/delete-promo-banner/${id}`
+      `https://api.ssdipl.com/api/promo-banner/delete-promo-banner/${id}`
     );
 
     setBanners((prev) => prev.filter((b) => b._id !== id));
     Swal.fire("Deleted!", "Banner removed", "success");
   };
-
+  console.log("banners:==>", banners);
   return (
     <>
       <div className="bread">
@@ -56,26 +56,35 @@ const AllPromoBanners = () => {
               <th>Image</th>
               <th>Title</th>
               <th>Status</th>
+              <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             {banners.map((b, i) => (
-              <tr key={b._id}>
+              <tr key={b?._id}>
                 <td>{i + 1}</td>
                 <td>
                   <img
-                    src={`${process.env.REACT_APP_API_URL}/${b.image}`}
+                    src={`https://api.ssdipl.com/${b?.image}`}
                     alt=""
                     style={{ width: 120, borderRadius: 8 }}
                   />
                 </td>
-                <td>{b.title || "—"}</td>
-                <td>{b.isActive ? "Active" : "Inactive"}</td>
+                <td>{b?.bannerKey || "—"}</td>
+                <td>{b?.isActive === 'true' ? "Active" : "Inactive"}</td>
+                <td>
+                  <Link
+                    to={`/edit-promo-banners/${b?._id}`}
+                    className="bt edit"
+                  >
+                    Edit
+                  </Link>
+                </td>
                 <td>
                   <button
                     className="bt delete"
-                    onClick={() => handleDelete(b._id)}
+                    onClick={() => handleDelete(b?._id)}
                   >
                     Delete
                   </button>

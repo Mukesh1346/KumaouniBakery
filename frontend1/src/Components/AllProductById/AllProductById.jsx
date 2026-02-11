@@ -1,0 +1,146 @@
+import React, { useEffect, useMemo, useState } from "react";
+import "./allproducts.css";
+import { Link } from "react-router-dom";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"
+
+const AllProductById = ({ cakesArr = [] }) => {
+    const [currentPage, setCurrentPage] = useState({});
+    const [wishlist, setWishlist] = useState([]);
+    const navigate = useNavigate();
+    const productsPerPage = 20;
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
+
+    /* ❤️ Wishlist */
+    const toggleWishlist = (id) => {
+        setWishlist((prev) =>
+            prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+        );
+    };
+
+    /* 🔥 GROUP PRODUCTS BY CATEGORY */
+    const groupedData = useMemo(() => {
+        const map = {};
+        cakesArr.forEach((product) => {
+            const catId = product?.categoryName?._id;
+            if (!catId) return;
+
+            if (!map[catId]) {
+                map[catId] = {
+                    category: product.categoryName,
+                    products: [],
+                };
+            }
+            map[catId].products.push(product);
+        });
+        return Object.values(map);
+    }, [cakesArr]);
+
+    return (
+        <div className="container my-5">
+            {groupedData.map(({ category, products }) => {
+                const page = currentPage[category._id] || 1;
+                const start = (page - 1) * productsPerPage;
+                const visible = products.slice(start, start + productsPerPage);
+
+                return (
+                    <div key={category._id} className="mb-5">
+
+                        {/* CATEGORY HEADER */}
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h4 className="fw-bold mb-1 text-uppercase">
+                                    {category.mainCategoryName}
+                                </h4>
+                                <p className="text-muted mb-0">
+                                    Best Gifts For Your Loved Ones
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* PRODUCTS GRID */}
+                        <div className="row g-4">
+                            {visible.map((product) => {
+                                const variant = product.Variant?.[0] || {};
+                                const image = product.productImage?.[0]?.replace(/\\/g, "/");
+
+                                return (
+                                    <div
+                                        key={product._id}
+                                        className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
+                                    >
+                                        <div className="product-card">
+                                            <div className="product-img">
+                                                <img
+                                                    src={`https://api.ssdipl.com/${image}`}
+                                                    alt={product.productName}
+                                                />
+
+                                                {/* ❤️ Wishlist */}
+                                                <span
+                                                    className="wishlist"
+                                                    onClick={() => toggleWishlist(product._id)}
+                                                >
+                                                    {wishlist.includes(product._id) ? (
+                                                        <FaHeart color="red" />
+                                                    ) : (
+                                                        <FaRegHeart />
+                                                    )}
+                                                </span>
+
+                                                {variant.discountPrice > 0 && (
+                                                    <span className="off-badge">
+                                                        {variant.discountPrice}% OFF
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <div className="product-body">
+                                                <p className="product-title">{product.productName}</p>
+
+                                                <div className="price-row">
+                                                    <span className="price">₹ {variant.finalPrice}</span>
+                                                    {variant.discountPrice > 0 && (
+                                                        <span className="old-price">₹ {variant.price}</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="rating">
+                                                    ⭐ 4.8 <span>(245 Reviews)</span>
+                                                </div>
+
+                                                <p className="delivery">
+                                                    Earliest Delivery : <span>In 3 hours</span>
+                                                </p>
+
+                                                {/* <Link
+                          to={`/product-details/${product._id}`}
+                          className="btn btn-dark w-100 mt-2"
+                        > */}
+                                                <div
+                                                    onClick={() =>
+                                                        navigate(`/product-details/${product?.productName}`,
+                                                            { state: { id: product?._id, status: 'product' } })
+                                                    }
+                                                    className="btn btn-dark w-100 mt-2"
+                                                >
+                                                    Buy Now
+                                                </div>
+                                                {/* </Link> */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+
+export default AllProductById;

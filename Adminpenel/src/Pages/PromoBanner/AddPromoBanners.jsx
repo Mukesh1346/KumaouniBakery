@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,21 +7,41 @@ import "react-toastify/dist/ReactToastify.css";
 const AddPromoBanners = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState(null);
 
   const [formData, setFormData] = useState({
     bannerKey: "",
     image: null,
+    isActive: true,
   });
+
+  /* 🔄 CLEANUP PREVIEW URL */
+  useEffect(() => {
+    return () => preview && URL.revokeObjectURL(preview);
+  }, [preview]);
 
   /* ================= HANDLE CHANGE ================= */
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files, type, checked } = e.target;
 
-    if (name === "image") {
+    if (type === "file") {
       const file = files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        toast.error("Only image files allowed");
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Image must be under 2MB");
+        return;
+      }
+
       setFormData((prev) => ({ ...prev, image: file }));
       setPreview(URL.createObjectURL(file));
+    } else if (type === "checkbox") {
+      setFormData((prev) => ({ ...prev, [name]: checked }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -31,15 +51,8 @@ const AddPromoBanners = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.bannerKey) {
-      toast.error("Please select a banner slot");
-      return;
-    }
-
-    if (!formData.image) {
-      toast.error("Please upload a banner image");
-      return;
-    }
+    if (!formData.bannerKey) return toast.error("Select banner slot");
+    if (!formData.image) return toast.error("Upload banner image");
 
     setLoading(true);
 
@@ -47,18 +60,20 @@ const AddPromoBanners = () => {
       const fd = new FormData();
       fd.append("bannerKey", formData.bannerKey);
       fd.append("image", formData.image);
+      fd.append("isActive", formData.isActive);
 
       await axios.post(
-        "https://api.ssdipl.com/api/upload-promo-banner",
+        "https://api.ssdipl.com/api/promo-banner/upload-promo-banner",
         fd,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      toast.success("Promo banner uploaded successfully");
+      toast.success("Promo banner uploaded");
+      setFormData({ bannerKey: "", image: null, isActive: true });
+      setPreview(null);
       navigate("/all-promo-banners");
     } catch (error) {
-      toast.error("Failed to upload banner");
-      console.error(error);
+      toast.error(error.response?.data?.message || "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -67,23 +82,21 @@ const AddPromoBanners = () => {
   return (
     <>
       <ToastContainer />
-
       <div className="bread">
         <div className="head">
           <h4>Add Promo Banner</h4>
         </div>
         <div className="links">
-          <Link to="/all-promo-banners" className="add-new">
-            Back
-          </Link>
+          <Link to="/all-promo-banners" className="add-new">Back</Link>
         </div>
       </div>
 
       <div className="d-form">
-        <form className="row g-3" onSubmit={handleSubmit}>
-          {/* BANNER SELECT */}
+        <form className="row g-4" onSubmit={handleSubmit}>
+
+          {/* SELECT SLOT */}
           <div className="col-md-6">
-            <label className="form-label">Select Banner Slot</label>
+            <label className="form-label">Banner Slot</label>
             <select
               name="bannerKey"
               className="form-control"
@@ -91,7 +104,7 @@ const AddPromoBanners = () => {
               onChange={handleChange}
               required
             >
-              <option value="">-- Select Banner --</option>
+              <option value="">-- Select Slot --</option>
               <option value="banner1">Banner 1</option>
               <option value="banner2">Banner 2</option>
               <option value="banner3">Banner 3</option>
@@ -112,43 +125,36 @@ const AddPromoBanners = () => {
           </div>
 
           {/* PREVIEW */}
-        {/* PREVIEW */}
-{preview && (
-  <div className="col-md-12">
-    <label className="form-label">Preview</label>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        gap: "12px",
-      }}
-    >
-      <img
-        src={preview}
-        alt="Banner Preview"
-        style={{
-          width: "220px",
-          height: "220px",
-          objectFit: "cover",
-          borderRadius: "6px",
-          border: "1px solid #ddd",
-          background: "#f8f9fa",
-        }}
-      />
-      <small className="text-muted">
-        Preview (scaled)
-      </small>
-    </div>
-  </div>
-)}
+          {preview && (
+            <div className="col-md-12">
+              <label className="form-label">Preview</label>
+              <div className="preview-box">
+                <img src={preview} alt="Preview" className="img-preview" />
+                <small className="text-muted">Preview (scaled)</small>
+              </div>
+            </div>
+          )}
+
+          {/* ACTIVE */}
+          <div className="col-md-6">
+            <div className="form-check mt-4">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                name="isActive"
+                checked={formData?.isActive}
+                onChange={handleChange}
+              />
+              <label className="form-check-label">Active</label>
+            </div>
+          </div>
 
           {/* BUTTON */}
           <div className="col-12 text-center">
             <button
               type="submit"
               disabled={loading}
-              className={`${loading ? "not-allowed" : "allowed"}`}
+              className={`btn btn-dark px-5 ${loading && "opacity-75"}`}
             >
               {loading ? "Uploading..." : "Save Banner"}
             </button>

@@ -15,7 +15,7 @@ const AddSubSubCategory = () => {
   const [formData, setFormData] = useState({
     mainCategoryId: "",
     subCategoryId: "",
-    subSubcategoryName: "",
+    secondSubCategoryName: "",
     activeOnHome: false,
     image: null,
   });
@@ -43,7 +43,7 @@ const AddSubSubCategory = () => {
     const fetchSubCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-subcategory-by-category/${formData.mainCategoryId}`
+          `https://api.ssdipl.com/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
         );
         setSubCategories(res.data?.data || []);
       } catch {
@@ -74,7 +74,7 @@ const AddSubSubCategory = () => {
     if (
       !formData.mainCategoryId ||
       !formData.subCategoryId ||
-      !formData.subSubcategoryName ||
+      !formData.secondSubCategoryName ||
       !formData.image
     ) {
       toast.error("All fields are required");
@@ -87,12 +87,12 @@ const AddSubSubCategory = () => {
       const fd = new FormData();
       fd.append("mainCategoryId", formData.mainCategoryId);
       fd.append("subCategoryId", formData.subCategoryId);
-      fd.append("subSubcategoryName", formData.subSubcategoryName);
-      fd.append("activeOnHome", formData.activeOnHome);
+      fd.append("secondSubcategoryName", formData.secondSubCategoryName);
+      fd.append("ActiveonHome", formData.activeOnHome);
       fd.append("image", formData.image);
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/create-subsubcategory",
+        "https://api.ssdipl.com/api/second-sub-category/create-second-sub-category",
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -159,8 +159,8 @@ const AddSubSubCategory = () => {
             >
               <option value="">Select sub category</option>
               {subCategories.map((sub) => (
-                <option key={sub._id} value={sub._id}>
-                  {sub.subCategoryName}
+                <option key={sub?._id} value={sub?._id}>
+                  {sub.subcategoryName}
                 </option>
               ))}
             </select>
@@ -171,9 +171,9 @@ const AddSubSubCategory = () => {
             <label className="form-label">Sub-Subcategory Name</label>
             <input
               type="text"
-              name="subSubcategoryName"
+              name="secondSubCategoryName"
               className="form-control"
-              value={formData.subSubcategoryName}
+              value={formData.secondSubCategoryName}
               onChange={handleChange}
               required
             />
@@ -187,7 +187,7 @@ const AddSubSubCategory = () => {
                 type="checkbox"
                 name="activeOnHome"
                 className="form-check-input"
-                checked={formData.activeOnHome}
+                checked={formData?.activeOnHome}
                 onChange={handleChange}
               />
               <label className="form-check-label">

@@ -32,13 +32,11 @@ const Login = () => {
     };
 
     try {
-      const response = await axios.post(
-        "${process.env.REACT_APP_API_URL}/api/user/login",
-        loginData
-      ); // Make API call to login route
+      const response = await axios.post("https://api.ssdipl.com/api/user/login", loginData); // Make API call to login route
+      console.log('XXXXXXXX::=>',response);
       if (response.status === 200) {
         sessionStorage.setItem("login", true);
-        sessionStorage.setItem("token", response.data.data.token);
+        sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("userId", response.data.data._id);
         Swal.fire({
           title: "Login Successful!",
@@ -76,7 +74,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "${process.env.REACT_APP_API_URL}/api/user",
+        "https://api.ssdipl.com/api/user",
         registerData
       );
       //console.log(response);
@@ -139,7 +137,7 @@ const Login = () => {
               Login
             </button>
             <p>or login with social platforms</p>
-          
+
           </form>
         </div>
 
@@ -180,7 +178,7 @@ const Login = () => {
             <button type="submit" className="btnLogin">
               Register
             </button>
-          
+
           </form>
         </div>
 

@@ -10,6 +10,7 @@ const AddSubCategory = () => {
     categoryName: "",
     subcategoryName: "",
     ActiveonHome: false, // Added ActiveonHome field
+    ActiveonHeader: false,
     image: null, // Added image field
   });
   const [mainCategories, setMainCategories] = useState([]);
@@ -71,7 +72,9 @@ const AddSubCategory = () => {
       formDataToSend.append("categoryName", formData.categoryName);
       formDataToSend.append("subcategoryName", formData.subcategoryName);
       formDataToSend.append("ActiveonHome", formData.ActiveonHome);
-      formDataToSend.append("image", formData.image); // Append the image file
+      formDataToSend.append("ActiveonHeader", formData.ActiveonHeader);
+      formDataToSend.append("image", formData.image);
+      formDataToSend.append("banner", formData.banner); // Append the image file
 
       // Send the request
       console.log(formDataToSend)
@@ -94,7 +97,7 @@ const AddSubCategory = () => {
       setIsLoading(false);
     }
   };
-
+  console.log("XXXXXXXXXXX:=>", formData)
   return (
     <>
       <ToastContainer />
@@ -147,6 +150,34 @@ const AddSubCategory = () => {
               required
             />
           </div>
+
+          <div className="col-md-6">
+            <label htmlFor="banner" className="form-label">
+              Subcategory Banner (1150x310)PX
+            </label>
+            <input
+              type="file"
+              name="banner"
+              className="form-control"
+              id="banner"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          
+          <div className="col-md-6">
+            <label htmlFor="image" className="form-label">
+              Subcategory Image (140x140)PX
+            </label>
+            <input
+              type="file"
+              name="image"
+              className="form-control"
+              id="image"
+              onChange={handleChange}
+              required
+            />
+          </div>
           <div className="col-md-6">
             <label htmlFor="ActiveonHome" className="form-label">
               Display on Homepage
@@ -164,19 +195,24 @@ const AddSubCategory = () => {
                 Active on Homepage
               </label>
             </div>
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="image" className="form-label">
-              Subcategory Image
-            </label>
-            <input
-              type="file"
-              name="image"
-              className="form-control"
-              id="image"
-              onChange={handleChange}
-              required
-            />
+
+            <div className="col-md-6">
+              <div className="form-check">
+                <input
+                  type="checkbox"
+                  name="ActiveonHeader"
+                  className="form-check-input"
+                  checked={formData.ActiveonHeader}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      ActiveonHeader: e.target.checked ? true : false,
+                    })
+                  }
+                />
+                <label className="form-label">Active on Header</label>
+              </div>
+            </div>
           </div>
           <div className="col-12 text-center">
             <button

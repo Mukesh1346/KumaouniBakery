@@ -6,8 +6,10 @@ import "slick-carousel/slick/slick-theme.css";
 import "./category.css";
 import axios from "axios";
 import cakeImage from "../../images/cake1.jpg"; // Default image if no image is provided
+import { useNavigate } from "react-router-dom"
 
 const Category = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]); // State to store fetched categories
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -17,7 +19,7 @@ const Category = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/get-subcategory-by-status`
+          `https://api.ssdipl.com/api/get-subcategory-by-status`
 
         );
         console.log(response.data.data);
@@ -70,20 +72,22 @@ const Category = () => {
       <section className="category-main">
         <div className="category-container">
           <Slider {...settings}>
-            {categories.map((item) => (
-              <div key={item._id} className="category-slide">
-                <Link
+            {categories?.filter((item) => item?.ActiveonHome === true).map((item) => (
+              <div key={item?._id} className="category-slide">
+                {/* <Link
                   to={`/product-related/${item.subcategoryName}`}
                   className="category-link"
-                >
+                > */}
+                <div className="category-link" onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?._id } })}>
                   {/* Use a default image if no image is provided */}
                   <img
-                    src={`${process.env.REACT_APP_API_URL}/${item.image}`}
-                    alt={item.subcategoryName}
+                    src={`https://api.ssdipl.com/${item?.image}`}
+                    alt={item?.subcategoryName}
                     className="category-img"
                   />
-                  <p className="category-name">{item.subcategoryName}</p>
-                </Link>
+                  <p className="category-name">{item?.subcategoryName}</p>
+                  {/* </Link> */}
+                </div>
               </div>
             ))}
           </Slider>
