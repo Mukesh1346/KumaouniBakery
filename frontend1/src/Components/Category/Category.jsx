@@ -40,22 +40,22 @@ const Category = () => {
   }, []);
 
   // Slider settings
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 8,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      { breakpoint: 1200, settings: { slidesToShow: 6 } },
-      { breakpoint: 992, settings: { slidesToShow: 4 } },
-      { breakpoint: 768, settings: { slidesToShow: 4 } },
-      { breakpoint: 480, settings: { slidesToShow: 3 } },
-    ],
-  };
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 8,
+  slidesToScroll: 1,
+  arrows: true,
+  autoplay: true,
+  autoplaySpeed: 3000,
+  responsive: [
+    { breakpoint: 1200, settings: { slidesToShow: 6 } },
+    { breakpoint: 992, settings: { slidesToShow: 4 } },
+    { breakpoint: 768, settings: { slidesToShow: 4 } },
+    { breakpoint: 480, settings: { slidesToShow: 2 } }, // ✅ FIX
+  ],
+};
 
   // Display loading message while fetching data
   if (isLoading) {
