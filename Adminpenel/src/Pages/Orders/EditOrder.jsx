@@ -9,6 +9,7 @@ const EditOrder = () => {
   const [orderData, setOrderData] = useState({});
   const [orderStatus, setOrderStatus] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
+  const [orderStatusMassage, setOrderStatusMassage] = useState("");
   const navigate = useNavigate();
 
   // Fetch API data
@@ -31,9 +32,11 @@ const EditOrder = () => {
   // Update Order Status and Payment Status
   const handleUpdate = async () => {
     try {
-      const updatedData = {
+       const updatedData = {
         orderStatus,
         paymentStatus,
+        date: new Date(),
+        orderStatusMassage
       };
       const res = await axios.put(
         `https://api.ssdipl.com/api/checkout/${id}`,
@@ -47,7 +50,6 @@ const EditOrder = () => {
       toast.error("Failed to update order.");
     }
   };
-
   // Determine if the "Order Status" dropdown should be disabled
   const isOrderStatusDisabled =
     orderStatus === "Delivered" || orderStatus === "Cancelled";
@@ -126,6 +128,27 @@ const EditOrder = () => {
                         </select>
                       </td>
                     </tr>
+
+                    <tr>
+                      <th scope="row">Order Status Massage</th>
+                      <td>
+                        {/* <select
+                          className="form-select"
+                          value={orderStatus}
+                          onChange={(e) => setOrderStatus(e.target.value)}
+                          disabled={isOrderStatusDisabled} // Disable the dropdown based on payment and status
+                        >
+                          <option value="Order Confirmed	">
+                            Order Confirmed{" "}
+                          </option>
+                          <option value="Processing">Processing</option>
+                          <option value="Shipped">Shipped</option>
+                          <option value="Delivered">Delivered</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </select> */}
+                        <textarea type="text" value={orderStatusMassage} onChange={(e) => setOrderStatusMassage(e.target.value)} fullWidth />
+                      </td>
+                    </tr>
                     <tr>
                       <th scope="row">Payment Mode</th>
                       <td>{orderData.paymentMode}</td>
@@ -167,7 +190,7 @@ const EditOrder = () => {
                         Delivery Date:{" "}
                         {new Date(item.deliveryDate).toLocaleString()}
                       </p>
-                      <p className="mb-0">Message: {item.message}</p>
+                      <p className="mb-0">Message: {item?.massage}</p>
                       <img
                         src={`https://api.ssdipl.com/${item.image}`}
                         alt={item.name}
@@ -185,6 +208,30 @@ const EditOrder = () => {
                 )}
               </div>
             </div>
+          </div>
+        </div>
+        <div className="card mt-4">
+          <div className="card-header">
+            <h5>Order Tracking Timeline</h5>
+          </div>
+          <div className="card-body">
+            {orderData?.trackingOrders?.length > 0 ? (
+              orderData?.trackingOrders
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((track, index) => (
+                  <div key={index} className="tracking-item mb-3 p-3 border rounded">
+                    <div className="d-flex justify-content-between">
+                      <strong>{track.status}</strong>
+                      <small className="text-muted">
+                        {new Date(track.date).toLocaleString()}
+                      </small>
+                    </div>
+                    <p className="mb-0 text-muted">{track.massage}</p>
+                  </div>
+                ))
+            ) : (
+              <p>No tracking updates available.</p>
+            )}
           </div>
         </div>
         <div className="row mt-3">

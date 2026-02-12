@@ -95,7 +95,7 @@ const createCheckout = async (req, res) => {
             price: item.price,
             // deliveryDate: item.deliveryDate || "",
             addonProducts: item.addonProducts || [],
-            message: item.message || ""
+            massage: item?.massage || ""
         }));
 
         const fullAddress = `${address.house}, ${address.area}, ${address.city}, ${address.pincode}`;
@@ -104,6 +104,12 @@ const createCheckout = async (req, res) => {
 
         /* ------------------ COD ORDER ------------------ */
         if (paymentMode?.toLowerCase() === "cod") {
+            const trackingOrders = [{
+                date: new Date().toDateString(),
+                status: "Order Confirmed",
+                massage: "Your order is out for delivery"
+            }];
+
             const newCheckout = new Checkout({
                 userId: user.userId,
                 name: address.receiverName,
@@ -113,6 +119,7 @@ const createCheckout = async (req, res) => {
                 state: address.state || "N/A",
                 city: address.city,
                 pin: address.pincode,
+                trackingOrders: trackingOrders,
                 delivery: { date: delivery.date, time: delivery.time },
                 cartItems: formattedCartItems,
                 totalPrice: formattedTotalPrice,
@@ -138,6 +145,12 @@ const createCheckout = async (req, res) => {
         if (!order) {
             return res.status(500).json({ message: "Razorpay order creation failed." });
         }
+        // console.log("ORDER =>", order)
+        const trackingOrders = [{
+            date: new Date().toDateString(),
+            status: "Order Confirmed",
+            massage: "Your order is out for delivery"
+        }];
 
         const newCheckout = new Checkout({
             userId: user.userId,
@@ -150,12 +163,13 @@ const createCheckout = async (req, res) => {
             pin: address.pincode,
             cartItems: formattedCartItems,
             totalPrice: formattedTotalPrice,
+            trackingOrders: trackingOrders,
             transactionId: order.id,
             orderStatus: "Order Created",
             paymentMode: "online",
             paymentStatus: "Pending",
         });
-
+        console.log("SSSSS::=>", newCheckout)
         const savedCheckout = await newCheckout.save();
 
         res.status(200).json({
@@ -246,10 +260,20 @@ const deleteCheckout = async (req, res) => {
 const updateCheckoutStatus = async (req, res) => {
     try {
         const { id } = req.params;
-        const { orderStatus, paymentStatus } = req.body;
+        const { orderStatus, paymentStatus, orderStatusMassage } = req.body;
         const updatedCheckout = await Checkout.findByIdAndUpdate(
             id,
-            { orderStatus, paymentStatus },  // Fields to update
+            {
+                orderStatus,
+                paymentStatus,
+                $push: {
+                    trackingOrders: {
+                        date: new Date(),
+                        status: orderStatus,
+                        massage: orderStatusMassage,
+                    },
+                },
+            },  // Fields to update
             { new: true, runValidators: true } // Return updated document and run validators
         );
         if (!updatedCheckout) {

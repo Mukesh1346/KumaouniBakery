@@ -20,6 +20,11 @@ const checkoutSchema = new mongoose.Schema({
     state: { type: String, required: true },
     city: { type: String, required: true },
     pin: { type: String, required: true },
+    trackingOrders: [{
+        date: { type: Date },
+        status: { type: String, },
+        massage: { type: String }
+    }],
     delivery: {
         date: { type: String },
         time: { type: String }
@@ -35,7 +40,7 @@ const checkoutSchema = new mongoose.Schema({
             // deliveryDate: { type: String, required: true },
             addonProducts: [addonProductSchema],
             // eggOption: { type: String, required: true },
-            message: { type: String, }
+            massage: { type: String, }
         }
     ],
     totalPrice: { type: Number, required: true },

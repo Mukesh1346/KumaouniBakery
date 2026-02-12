@@ -220,8 +220,8 @@ const Checkout = () => {
 
         if (res.status === 200) {
           toast.success("Order placed successfully 🎉");
-          sessionStorage.removeItem("cart");
-          window.location.href = "/";
+          // sessionStorage.removeItem("cart");
+          // window.location.href = "/";
         }
         return;
       }

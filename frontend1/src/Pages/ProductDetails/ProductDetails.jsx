@@ -24,7 +24,7 @@ const ProductDetails = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [deliveryDate, setDeliveryDate] = useState("");
   const [imageIndex, setImageIndex] = useState(0)
-
+  const [massage, setMassage] = useState("")
 
   const handleWishlist = () => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -125,12 +125,13 @@ const ProductDetails = () => {
     // If not exist → create
     if (index === -1) {
       const newItem = {
-        productId: data._id,
+        productId: data?._id,
         name: data.productName,
         weight: activeWeight,
         price: price,
+        massage: massage,
         quantity: 1,
-        image: data.productImage?.[0],
+        image: data?.productImage?.[0],
         deliveryDate,
         eggOption,
         addonProducts: [],
@@ -369,10 +370,12 @@ const ProductDetails = () => {
                 {/* NAME */}
                 <div className="pdx-block">
                   <label>
-                    Name on Cake <small>0 / 25</small>
+                    Name on Cake <small>{massage?.length} / 25</small>
                   </label>
                   <input
                     type="text"
+                    value={massage}
+                    onChange={(e) => setMassage(e.target.value)}
                     className="form-control formInput w-75"
                     placeholder="Write Name Here"
                     maxLength={25}
