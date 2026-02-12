@@ -68,6 +68,7 @@ const createCheckout = async (req, res) => {
             delivery,
             totalAmount,
             paymentMode,
+            specialNote,
         } = req.body;
 
         // ✅ Basic validation
@@ -127,6 +128,7 @@ const createCheckout = async (req, res) => {
                 orderStatus: "Order Confirmed",
                 paymentMode: "cod",
                 paymentStatus: "Pending",
+                specialNote,
             });
 
             const savedCheckout = await newCheckout.save();
@@ -168,6 +170,7 @@ const createCheckout = async (req, res) => {
             orderStatus: "Order Created",
             paymentMode: "online",
             paymentStatus: "Pending",
+            specialNote
         });
         console.log("SSSSS::=>", newCheckout)
         const savedCheckout = await newCheckout.save();

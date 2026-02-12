@@ -67,6 +67,9 @@ import EditRecommendedCategory from '../../Pages/RecommendedCategory/EditRecomme
 import AllRecommendedProduct from '../../Pages/RecommendedProducts/AllRecommendedProduct'
 import AddRecommendedProduct from '../../Pages/RecommendedProducts/AddRecommendedProduct'
 import EditRecommendedProduct from '../../Pages/RecommendedProducts/EditRecommendedProduct'
+import AllPincode from "../../Pages/State-Pincode/AllPincode"
+import AddPincode from "../../Pages/State-Pincode/AddPincode"
+import EditPincode from "../../Pages/State-Pincode/EditPincode"
 
 const Home = () => {
 
@@ -203,7 +206,11 @@ const Home = () => {
                 <Route path={"/add-reels"} element={<AddReel />} />
                 <Route path={"/edit-reels/:id"} element={<EditReel />} />
 
-                {/* all-shop */}
+                {/* all-PINCODE */}
+
+                <Route path={"/all-pincode"} element={<AllPincode />} />
+                <Route path={"/add-pincode"} element={<AddPincode />} />
+                <Route path={"/edit-pincode/:id"} element={<EditPincode />} />
 
               </Routes>
             </div>

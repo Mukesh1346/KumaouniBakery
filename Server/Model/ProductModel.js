@@ -82,6 +82,10 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: 0
     },
+    eggless: {
+        type: Boolean,
+        default: 0
+    },
 })
 
 

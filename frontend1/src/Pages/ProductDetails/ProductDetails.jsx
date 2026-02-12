@@ -319,7 +319,7 @@ const ProductDetails = () => {
               <div className="pdx-right-scroll">
 
                 <div className="pdx-title-row">
-                  <span className="pdx-badge">EGGLESS</span>
+                  {data.eggless ? <span className="pdx-badge"> 100% EGGLESS </span> : ''}
                   <h1>{data.productName}</h1>
 
                   <div

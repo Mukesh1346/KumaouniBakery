@@ -43,6 +43,12 @@ const checkoutSchema = new mongoose.Schema({
             massage: { type: String, }
         }
     ],
+    specialNote: {
+        occasion: { type: String },
+        relation: { type: String },
+        message: { type: String },
+        toName: { type: String },
+    },
     totalPrice: { type: Number, required: true },
     transactionId: { type: String },
     paymentStatus: { type: String, default: 'Pending' },

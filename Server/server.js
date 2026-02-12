@@ -25,6 +25,7 @@ const PromoBannerRouter = require("./Router/PromoBannerRouter")
 const SecondSubCategoryRouter = require("./Router/SecondSubCategoryRouter")
 const RecommendedCategoryRouter = require("./Router/RecommendedCategoryRouter")
 const RecommendedProductRoutes = require("./Router/RecommendedProductRoutes")
+const PinCodeRouter = require("./Router/PincodeRouter")
 
 
 const app = express()
@@ -84,6 +85,7 @@ app.use("/api/promo-banner", PromoBannerRouter)
 app.use("/api/second-sub-category", SecondSubCategoryRouter)
 app.use("/api/recommended-category", RecommendedCategoryRouter)
 app.use("/api/recommended-product", RecommendedProductRoutes)
+app.use("/api/pincode", PinCodeRouter)
 
 
 

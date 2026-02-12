@@ -32,7 +32,7 @@ const EditOrder = () => {
   // Update Order Status and Payment Status
   const handleUpdate = async () => {
     try {
-       const updatedData = {
+      const updatedData = {
         orderStatus,
         paymentStatus,
         date: new Date(),
@@ -50,11 +50,102 @@ const EditOrder = () => {
       toast.error("Failed to update order.");
     }
   };
+
+  const handlePrint = (note) => {
+  const printWindow = window.open("", "_blank");
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Special Greeting Card</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            text-align: center;
+            background: #f8f8f8;
+          }
+
+          .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: auto;
+            border: 2px solid #ffc107;
+          }
+
+          h2 {
+            margin-bottom: 20px;
+            color: #ff6a00;
+          }
+
+          .label {
+            font-size: 14px;
+            color: #777;
+          }
+
+          .value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+          }
+
+          .message {
+            margin-top: 20px;
+            font-style: italic;
+            font-size: 18px;
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            background: #fff8e1;
+          }
+
+          @media print {
+            body {
+              background: white;
+            }
+          }
+        </style>
+      </head>
+
+      <body>
+        <div class="card">
+          <h2>🎁 Special Greeting</h2>
+
+          <div class="label">Occasion</div>
+          <div class="value">${note.occasion || "-"}</div>
+
+          <div class="label">Relation</div>
+          <div class="value">${note.relation || "-"}</div>
+
+          <div class="label">From</div>
+          <div class="value">${note.toName || "-"}</div>
+
+          <div class="message">
+            "${note.message || ""}"
+          </div>
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+            window.close();
+          }
+        </script>
+      </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+};
+
+
   // Determine if the "Order Status" dropdown should be disabled
   const isOrderStatusDisabled =
     orderStatus === "Delivered" || orderStatus === "Cancelled";
   const isPaymentStatusDisabled = paymentStatus === "Success";
-
+  console.log("DDDDDDDD::=>", orderData.specialNote);
   return (
     <>
       <div className="bread">
@@ -171,6 +262,52 @@ const EditOrder = () => {
                 </table>
               </div>
             </div>
+            {orderData?.specialNote && (
+              <div className="card mt-4 border-0 shadow-sm" style={{ marginTop: '100' }}>
+                <div className="card-header bg-warning text-dark" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h5 className="mb-0">🎁 Special Note</h5>
+                  <button
+                    className="btn btn-light btn-sm print-btn"
+                    onClick={() => handlePrint(orderData.specialNote)}
+                  >
+                    🖨 Print Card
+                  </button>
+                </div>
+                <div className="card-body">
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <div className="p-2 bg-light rounded">
+                        <small className="text-muted">Occasion</small>
+                        <h6 className="mb-0">{orderData.specialNote.occasion}</h6>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="p-2 bg-light rounded">
+                        <small className="text-muted">Relation</small>
+                        <h6 className="mb-0">{orderData.specialNote.relation}</h6>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="p-2 bg-light rounded">
+                        <small className="text-muted">From</small>
+                        <h6 className="mb-0">{orderData.specialNote.toName || '-'}</h6>
+                      </div>
+                    </div>
+
+                    <div className="col-md-12">
+                      <div className="p-2 bg-white border rounded">
+                        <small className="text-muted">Message</small>
+                        <p className="mb-0 mt-1 fst-italic">
+                          "{orderData.specialNote.message}"
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="col-md-4">
             <div className="card">
@@ -234,6 +371,8 @@ const EditOrder = () => {
             )}
           </div>
         </div>
+
+
         <div className="row mt-3">
           <div className="col">
             <button className="btn btn-primary" onClick={handleUpdate}>

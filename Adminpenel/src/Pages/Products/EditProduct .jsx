@@ -19,6 +19,7 @@ const EditProduct = () => {
         productName: "",
         productDescription: "",
         BestSellingProduct: 0,
+        eggless: 0,
         Variant: [
             {
                 weight: "",
@@ -75,6 +76,7 @@ const EditProduct = () => {
                     ActiveonHome: productData?.ActiveonHome === true ? 1 : 0,
                     FeaturedProducts: productData?.FeaturedProducts === true ? 1 : 0 || 0,
                     BestSellingProduct: productData?.BestSellingProduct === true ? 1 : 0 || 0,
+                    eggless: productData?.eggless === true ? 1 : 0 || 0,
                     categoryName: productData.categoryName ? productData.categoryName?._id : "",
                     subcategoryName: productData.subcategoryName ? productData?.subcategoryName?._id : "",
                     secondsubcategoryName: productData?.secondsubcategoryName ? productData?.secondsubcategoryName?._id : "",
@@ -203,6 +205,7 @@ const EditProduct = () => {
         form.append("ActiveonHome", formData.ActiveonHome);
         form.append("FeaturedProducts", formData.FeaturedProducts);
         form.append("BestSellingProduct", formData?.BestSellingProduct);
+        form.append("eggless", formData?.eggless);
         form.append("recommendedProductId", JSON.stringify(formData.recommendedProductId));
         // Append variants
         form.append("Variant", JSON.stringify(formData.Variant));
@@ -519,7 +522,18 @@ const EditProduct = () => {
                                 />
                                 <label className="form-check-label">Featured Products</label>
                             </div>
-
+                            <div className="col-md-3 form-check">
+                                <input
+                                    type="checkbox"
+                                    name="eggless"
+                                    className="form-check-input me-2"
+                                    checked={formData.eggless === 1}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, eggless: e.target.checked ? 1 : 0 })
+                                    }
+                                />
+                                <label className="form-check-label">100% Eggless</label>
+                            </div>
                         </div>
                     </div>
 

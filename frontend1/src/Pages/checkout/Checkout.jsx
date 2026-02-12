@@ -24,6 +24,13 @@ const Checkout = () => {
     address: {},
     delivery: {},
     cart: [],
+
+    specialNote: {
+      occasion: "",
+      relation: "",
+      message: "",
+    },
+
   });
 
   /* ================= LOAD & NORMALIZE CART ================= */
@@ -98,7 +105,7 @@ const Checkout = () => {
       cart: cartItems,
     }));
 
-    setStep(4);
+    setStep(5);
   };
 
   const loadRazorpayScript = () => {
@@ -220,8 +227,8 @@ const Checkout = () => {
 
         if (res.status === 200) {
           toast.success("Order placed successfully 🎉");
-          // sessionStorage.removeItem("cart");
-          // window.location.href = "/";
+          sessionStorage.removeItem("cart");
+          window.location.href = "/";
         }
         return;
       }
@@ -337,17 +344,22 @@ const Checkout = () => {
             <div className="col-lg-3 mb-4">
               <div className="steps-box">
                 <div className={`step ${step >= 1 ? "active" : ""}`}>
-                  Login Details <span>Step 1/5</span>
+                  Login Details <span>Step 1/6</span>
                 </div>
                 <div className={`step ${step >= 2 ? "active" : ""}`}>
-                  Delivery Address <span>Step 2/5</span>
+                  Delivery Address <span>Step 2/6</span>
                 </div>
                 <div className={`step ${step >= 3 ? "active" : ""}`}>
-                  Delivery Date & Time <span>Step 3/5</span>
+                  Special Note <span>Step 3/6</span>
                 </div>
                 <div className={`step ${step >= 4 ? "active" : ""}`}>
-                  Payment & Summary <span>Step 4/5</span>
+                  Delivery Date & Time <span>Step 4/6</span>
                 </div>
+                <div className={`step ${step >= 5 ? "active" : ""}`}>
+                  Payment & Summary <span>Step 5/6</span>
+                </div>
+
+
               </div>
             </div>
 
@@ -381,17 +393,147 @@ const Checkout = () => {
                 </form>
               )}
 
-              {/* STEP 3 */}
-              {step === 3 && (
-                <form className="checkout-card" onSubmit={handleDeliverySubmit}>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}> <h4>Delivery Date & Time</h4>
+              {step === 3 && (
+                <div className="checkout-card" >
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <h4>Write your free card message</h4>
+
                     <button
                       onClick={() => setStep(2)}
                       className="back-btn"
                     >
                       <i className="fa fa-arrow-left"></i>
                       <span>back to Address</span>
+                    </button>
+                  </div>
+
+                  {/* ================= SELECT OCCASION ================= */}
+                  <h6 className="mt-3">Select Occasion</h6>
+
+                  <div className="d-flex flex-wrap gap-2 mb-3">
+                    {["I Am Sorry", "Valentines Day", "Birthday", "Anniversary", "Hug Day"].map((item, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`note-btn ${checkoutData.specialNote?.occasion === item ? "active" : ""
+                          }`}
+                        onClick={() =>
+                          setCheckoutData((prev) => ({
+                            ...prev,
+                            specialNote: {
+                              ...prev.specialNote,
+                              occasion: item,
+                            },
+                          }))
+                        }
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* ================= SELECT RELATION ================= */}
+                  <h6>Select Relation</h6>
+
+                  <div className="d-flex flex-wrap gap-2 mb-3">
+                    {["All", "Boyfriend", "Wife", "Girlfriend", "Husband"].map(
+                      (rel, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          className={`note-btn ${checkoutData.specialNote?.relation === rel ? "active" : ""
+                            }`}
+                          onClick={() =>
+                            setCheckoutData((prev) => ({
+                              ...prev,
+                              specialNote: {
+                                ...prev.specialNote,
+                                relation: rel,
+                              },
+                            }))
+                          }
+                        >
+                          {rel}
+                        </button>
+                      )
+                    )}
+                  </div>
+
+                  {/* ================= REMINDER ================= */}
+                  <div className="form-check mb-3">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="reminder"
+                    />
+                    <label className="form-check-label" htmlFor="reminder">
+                      Set reminder for this occasion
+                    </label>
+                  </div>
+
+                  {/* ================= MESSAGE ================= */}
+                  <label>Your Message</label>
+                  <textarea
+                    className="form-control mb-2"
+                    rows="5"
+                    cols="4"
+                    maxLength={250}
+                    value={checkoutData.specialNote?.message}
+                    onChange={(e) =>
+                      setCheckoutData((prev) => ({
+                        ...prev,
+                        specialNote: {
+                          ...prev.specialNote,
+                          message: e.target.value,
+                        },
+                      }))
+                    }
+                  />
+
+                  <small className="text-muted">
+                    {checkoutData.specialNote?.message?.length || 0} / 250
+                  </small>
+
+                  {/* ================= FROM ================= */}
+                  <label className="mt-3">From</label>
+                  <input
+                    type="text"
+                    className="form-control mb-4"
+                    placeholder="Your Name"
+                    value={checkoutData?.specialNote?.toName}
+                    onChange={(e) =>
+                      setCheckoutData((prev) => ({
+                        ...prev,
+                        specialNote: {
+                          ...prev.specialNote,
+                          toName: e.target.value,
+                        },
+                      }))
+                    }
+                  />
+
+                  <button
+                    className="continue-btn"
+                    onClick={() => setStep(4)}   // next step after special note
+                  >
+                    Continue
+                  </button>
+                </div>
+              )}
+
+
+              {/* STEP 3 */}
+              {step === 4 && (
+                <form className="checkout-card" onSubmit={handleDeliverySubmit}>
+
+                  <div className="pb-5" style={{ display: 'flex', justifyContent: 'space-between' }}> <h4>Delivery Date & Time</h4>
+                    <button
+                      onClick={() => setStep(3)}
+                      className="back-btn"
+                    >
+                      <i className="fa fa-arrow-left"></i>
+                      <span>Back</span>
                     </button>
                   </div>
 
@@ -409,11 +551,11 @@ const Checkout = () => {
               )}
 
               {/* STEP 4 */}
-              {step === 4 && (
-                <div className="checkout-card">
+              {step === 5 && (
+                <div className="checkout-card ">
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}><h4>Order Summary</h4>
                     <button
-                      onClick={() => setStep(3)}
+                      onClick={() => setStep(4)}
                       className="back-btn"
                     >
                       <i className="fa fa-arrow-left"></i>
@@ -444,7 +586,6 @@ const Checkout = () => {
                   </button>
                 </div>
               )}
-
             </div>
           </div>
         </div>
