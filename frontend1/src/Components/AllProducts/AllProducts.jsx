@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const AllProducts = () => {
+const AllProducts = ({ status='' }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [productData, setProductData] = useState({});
   const [currentPage, setCurrentPage] = useState({});
@@ -19,10 +19,10 @@ const AllProducts = () => {
 
   const getApiData = async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/get-main-category`
+      `https://api.ssdipl.com/api/get-main-category`
     );
     if (res.status === 200) {
-      setCategoryData(res.data.data);
+      setCategoryData(status === 'Home' ? res.data.data.filter((item) => item.ActiveonHome === true) : res.data.data);
       const pageState = {};
       res.data.data.forEach((c) => (pageState[c._id] = 1));
       setCurrentPage(pageState);
@@ -31,7 +31,7 @@ const AllProducts = () => {
 
   const getApiProductData = async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/all-product`
+      `https://api.ssdipl.com/api/all-product`
     );
 
     if (res.status === 200) {
@@ -56,9 +56,9 @@ const AllProducts = () => {
 
   return (
     <div className="container my-5">
-      {categoryData.map((category) => {
-        const products = productData[category._id] || [];
-        const start = (currentPage[category._id] - 1) * productsPerPage;
+      {categoryData?.map((category) => {
+        const products = productData[category?._id] || [];
+        const start = (currentPage[category?._id] - 1) * productsPerPage;
         const visible = products.slice(start, start + productsPerPage);
 
         return (
@@ -86,7 +86,7 @@ const AllProducts = () => {
                     {/* IMAGE */}
                     <div className="product-img">
                       <img
-                        src={`${process.env.REACT_APP_API_URL}/${product.productImage[0]}`}
+                        src={`https://api.ssdipl.com/${product.productImage[0]}`}
                         alt={product.productName}
                       />
 

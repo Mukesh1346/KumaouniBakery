@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,9 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 const AddReels = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [productList, setProductList] = useState([]);
   /* ================= STATE ================= */
   const [formData, setFormData] = useState({
+    productId: "",
     title: "",
     price: "",
     video: null,
@@ -38,7 +39,8 @@ const AddReels = () => {
       !formData.title ||
       !formData.price ||
       !formData.video ||
-      !formData.productImage
+      !formData.productImage ||
+      !formData.productId
     ) {
       toast.error("All fields are required");
       return;
@@ -48,6 +50,7 @@ const AddReels = () => {
 
     try {
       const fd = new FormData();
+      fd.append("productId", formData.productId);
       fd.append("title", formData.title);
       fd.append("price", formData.price);
       fd.append("video", formData.video);
@@ -55,7 +58,7 @@ const AddReels = () => {
       fd.append("activeOnHome", formData.activeOnHome);
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/create-reel",
+        "https://api.ssdipl.com/api/reel/create-reel",
         fd,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -70,6 +73,20 @@ const AddReels = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchAllProduct = async () => {
+      try {
+        const res = await axios.get("https://api.ssdipl.com/api/all-product");
+        setProductList(res.data?.data || []);
+      } catch (error) {
+        toast.error("Error fetching products");
+        console.error(error);
+      }
+    };
+
+    fetchAllProduct();
+  }, []);
 
   return (
     <>
@@ -90,9 +107,21 @@ const AddReels = () => {
       {/* ===== FORM ===== */}
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
-          
+
+          {/* PRODUCT */}
+          <div className="col-md-4">
+            <label className="form-label">Product</label>
+            <select name="productId" className="form-control" value={formData?.productId} onChange={handleChange} required            >
+              <option value="">Select Product</option>
+              {productList?.map((sub) => (
+                <option key={sub?._id} value={sub?._id}>{sub?.productName} (Rs{sub?.Variant[0]?.price})</option>
+              ))}
+            </select>
+          </div>
+
+
           {/* TITLE */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Reel Title</label>
             <input
               type="text"
@@ -105,7 +134,7 @@ const AddReels = () => {
           </div>
 
           {/* PRICE */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Price</label>
             <input
               type="text"

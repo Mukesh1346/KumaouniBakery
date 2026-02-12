@@ -4,8 +4,15 @@ const Subcategory = require("../Model/SubcategoryModel");
 
 // Create a new subcategory
 const createSubcategory = async (req, res) => {
-    const { categoryName, subcategoryName, ActiveonHome } = req.body;
+    const { categoryName, subcategoryName, ActiveonHeader, ActiveonHome } = req.body;
     console.log(req.body, req.file);
+
+    const image = req.files?.image?.[0]?.path;
+    const banner = req.files?.banner?.[0]?.path;
+
+    if (!image || !banner) {
+        return res.status(400).json({ message: "Both image and banner are required" });
+    }
 
     // Validate required fields
     if (!categoryName) {
@@ -13,9 +20,6 @@ const createSubcategory = async (req, res) => {
     }
     if (!subcategoryName) {
         return res.status(400).json({ success: false, message: "Sub Category Name is required" });
-    }
-    if (!req.file) {
-        return res.status(400).json({ success: false, message: "Image is required" });
     }
 
     // Validate ActiveonHome field (must be a boolean)
@@ -28,9 +32,13 @@ const createSubcategory = async (req, res) => {
         const validCategory = await MainCategory.findById(categoryName);
         if (!validCategory) {
             // Cleanup uploaded file if category ID is invalid
-            if (req.file) {
-                deleteImageFile(req.file.path); // Assuming you have a function to delete files
+            if (image) {
+                deleteImageFile(image); // Assuming you have a function to delete files
             }
+            if (banner) {
+                deleteImageFile(banner); // Assuming you have a function to delete files
+            }
+
             return res.status(404).json({ success: false, message: "Invalid Category Id" });
         }
 
@@ -45,8 +53,11 @@ const createSubcategory = async (req, res) => {
 
         if (existingSubcategory) {
             // Cleanup uploaded file if subcategory name already exists
-            if (req.file) {
-                deleteImageFile(req.file.path);
+            if (image) {
+                deleteImageFile(image);
+            }
+            if (banner) {
+                deleteImageFile(banner);
             }
             return res.status(400).json({
                 success: false,
@@ -58,7 +69,9 @@ const createSubcategory = async (req, res) => {
         const subcategory = new Subcategory({
             categoryName,
             subcategoryName: normalizedSubcategoryName,
-            image: req.file.path, // Save the path to the uploaded image
+            image: image, // Save the path to the uploaded image
+            banner: banner, // Save the path to the uploaded banner
+            ActiveonHeader: ActiveonHeader || false, // Default to false if not provided
             ActiveonHome: ActiveonHome || false, // Default to false if not provided
         });
 
@@ -117,35 +130,35 @@ const getAllSubcategoriesStatusTrue = async (req, res) => {
 
         // If no subcategories are found, return a 404 response
         if (!subcategories || subcategories.length === 0) {
-            return res.status(404).json({ 
-                success: false, 
-                message: "No active subcategories found" 
+            return res.status(404).json({
+                success: false,
+                message: "No active subcategories found"
             });
         }
 
         // Return the subcategories in the response
-        res.status(200).json({ 
-            success: true, 
-            message: "Active subcategories fetched successfully", 
-            data: subcategories 
+        res.status(200).json({
+            success: true,
+            message: "Active subcategories fetched successfully",
+            data: subcategories
         });
     } catch (error) {
         console.error("Error fetching subcategories:", error);
 
         // Handle specific errors
         if (error.name === 'CastError') {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Invalid query parameters", 
-                error: error.message 
+            return res.status(400).json({
+                success: false,
+                message: "Invalid query parameters",
+                error: error.message
             });
         }
 
         // Generic server error
-        res.status(500).json({ 
-            success: false, 
-            message: "Error fetching subcategories", 
-            error: error.message 
+        res.status(500).json({
+            success: false,
+            message: "Error fetching subcategories",
+            error: error.message
         });
     }
 };
@@ -179,8 +192,9 @@ const getSubcategoryByName = async (req, res) => {
 
 // Update a subcategory by ID and delete the old image if a new one is provided
 const updateSubcategory = async (req, res) => {
-    const { categoryName, subcategoryName, ActiveonHome } = req.body;
-
+    const { categoryName, subcategoryName, ActiveonHome, ActiveonHeader } = req.body;
+    const image = req.files?.image?.[0]?.path;
+    const banner = req.files?.banner?.[0]?.path;
     try {
         // Find the subcategory by ID
         const subcategory = await Subcategory.findById(req.params.id);
@@ -217,15 +231,25 @@ const updateSubcategory = async (req, res) => {
         if (categoryName) subcategory.categoryName = categoryName;
         if (subcategoryName) subcategory.subcategoryName = normalizedSubcategoryName;
         if (ActiveonHome !== undefined) subcategory.ActiveonHome = ActiveonHome;
+        if (ActiveonHeader !== undefined) subcategory.ActiveonHeader = ActiveonHeader;
 
         // Handle image update if a new file is uploaded
-        if (req.file) {
+        if (image) {
             // Delete the old image file (optional, based on your requirements)
             if (subcategory.image) {
                 deleteImageFile(subcategory.image); // Assuming you have a function to delete files
             }
             // Save the new image path
-            subcategory.image = req.file.path;
+            subcategory.image = image;
+        }
+
+        if (banner) {
+            // Delete the old image file (optional, based on your requirements)
+            if (subcategory.banner) {
+                deleteImageFile(subcategory.banner); // Assuming you have a function to delete files
+            }
+            // Save the new image path
+            subcategory.banner = banner;
         }
 
         await subcategory.save();
@@ -269,6 +293,12 @@ const deleteImageFile = (filePath) => {
 const deleteSubcategory = async (req, res) => {
     try {
         const subcategory = await Subcategory.findByIdAndDelete(req.params.id);
+        if (subcategory?.image) {
+            deleteImageFile(subcategory?.image);
+        }
+        if (subcategory?.banner) {
+            deleteImageFile(subcategory?.banner);
+        }
         if (!subcategory) {
             return res.status(404).json({ message: "Subcategory not found" });
         }
@@ -320,6 +350,27 @@ const getActiveSubcategories = async (req, res) => {
     }
 };
 
+const getSubcategoryByMaincategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const subcategories = await Subcategory.find({ categoryName: id })
+            .populate("categoryName")
+            .sort({ createdAt: -1 });
+
+        if (!subcategories.length) {
+            return res.status(404).json({ message: "No subcategories found" });
+        }
+
+        res.status(200).json({ success: true, data: subcategories });
+
+    } catch (error) {
+        console.error("Error fetching subcategories:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+
 // Export all controller functions
 module.exports = {
     createSubcategory,
@@ -327,5 +378,8 @@ module.exports = {
     getSubcategoryById,
     updateSubcategory,
     deleteSubcategory,
-    getAllSubcategoriesStatusTrue, getSubcategoryByName,getActiveSubcategories
+    getAllSubcategoriesStatusTrue,
+    getSubcategoryByName,
+    getActiveSubcategories,
+    getSubcategoryByMaincategory,
 };

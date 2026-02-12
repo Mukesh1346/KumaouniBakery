@@ -19,23 +19,25 @@ import CakeIngredientScroll from "../CakeStory/CakeIngredientScroll";
 const Home = () => {
   return (
     <>
-      <HomeBannerSlider />
-      <Category />
+      <HomeBannerSlider />  {/* DONE */}
+      <Category /> {/* DONE */}
       <WhatsAppChat />
-      <CakeBanners/>
-      <ReelSection/>
-      <AllProducts />
-      <Coustomize/>
-      <Hero />
-      <FeaturedProducts/>
-      <CakeIngredientScroll/>
-    
-      <PromoBanner/>
-      <Occasions/>
-      <BestSellingProduct/>
-      {/* <CategorySection/> */}
+      <CakeBanners /> {/* DONE */}
+      <ReelSection />  {/* DONE */}
+      <BestSellingProduct />
+      <AllProducts status={'Home'} />  {/* DONE p*/}
+      <FeaturedProducts />  {/* DONE P*/}
+      <Coustomize />  {/* DONE */}
+      <Hero />  {/* DONE */}
+
+      <CakeIngredientScroll />  {/* DONE */}
+
+      <PromoBanner />  {/* DONE */}
+      <Occasions />
+
+       {/* <CategorySection/> */}
       <Testimonial />
-      <Banner/>
+      <Banner />
     </>
   );
 };

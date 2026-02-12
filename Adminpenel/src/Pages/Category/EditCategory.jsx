@@ -9,6 +9,7 @@ const EditCategory = () => {
   const navigate = useNavigate();
   const [category, setCategory] = useState({
     mainCategoryName: "",
+    ActiveonHome: false,
   });
   const [btnLoading, setBtnLoading] = useState(false);
 
@@ -18,9 +19,10 @@ const EditCategory = () => {
         const response = await axios.get(
           `https://api.ssdipl.com/api/get-single-main-category/${id}`
         );
-        const { mainCategoryName, mainCategoryStatus } = response.data.data;
+        const { mainCategoryName, mainCategoryStatus, ActiveonHome } = response.data.data;
         setCategory({
           mainCategoryName,
+          ActiveonHome,
         });
       } catch (error) {
         toast.error("Error fetching category data");
@@ -89,6 +91,24 @@ const EditCategory = () => {
               required
             />
           </div>
+          <div className="col-md-3 form-check">
+            <label htmlFor="ActiveonHome" className="form-label">
+              Display on Home
+            </label>
+            <div>
+              <input
+                type="checkbox"
+                name="ActiveonHome"
+                className="form-check-input me-2"
+                checked={category.ActiveonHome}
+                onChange={(e) =>
+                  setCategory({ ...category, ActiveonHome: e.target.checked })
+                }
+              />
+              <label className="form-check-label">Active on Home</label>
+            </div>
+          </div>
+
           <div className="col-12 text-center">
             <button
               type="submit"

@@ -40,11 +40,25 @@ const productSchema = new mongoose.Schema({
         ref: "Subcategory",
         required: true
     },
+    secondsubcategoryName: {
+        type: mongoose.Schema.ObjectId,
+        ref: "SecondSubcategory",
+        required: true
+    },
+    recommendedProductId: [{
+        type: mongoose.Schema.ObjectId,
+        ref: "RecommendedProduct",
+        default: null
+    }],
     productName: {
         type: String,
         required: true,
     },
     productDescription: {
+        type: String,
+        required: true,
+    },
+    productDetails: {
         type: String,
         required: true,
     },
@@ -56,10 +70,18 @@ const productSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
-    ActiveonHome:{
-        type:Boolean,
-        default:0
-    }
+    ActiveonHome: {
+        type: Boolean,
+        default: 0
+    },
+    FeaturedProducts: {
+        type: Boolean,
+        default: 0
+    },
+    BestSellingProduct: {
+        type: Boolean,
+        default: 0
+    },
 })
 
 

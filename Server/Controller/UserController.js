@@ -128,6 +128,7 @@ const DeleteRecord = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ success: false, message: "Invalid username or password." });
@@ -137,10 +138,10 @@ const login = async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ success: false, message: "Invalid username or password." });
         }
-
+        // console.log("XXXXXXXX::=>", user, isMatch);
         const key = user.role === "Admin" ? process.env.JWT_SALT_KEY_ADMIN : process.env.JWT_SALT_KEY_BUYER;
-        const token = jwt.sign({ userId: user._id }, key, { expiresIn: '15d' });
-
+        const token = jwt.sign({ userId: user._id, role: user.role, name: user.name, email: user?.email, phone: user?.phone, address: user?.address, profilePic: user?.profilePic, cart: user?.cart, }, key, { expiresIn: '15d' });
+        // console.log("XXXXXXXX::=>", user, isMatch, key);
         res.status(200).json({
             success: true,
             data: user,

@@ -25,7 +25,7 @@ const ContactUs = () => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/send-query`,
+        `https://api.ssdipl.com/api/send-query`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

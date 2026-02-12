@@ -5,6 +5,7 @@ const express = require("express")
 const { connectDb } = require("./DB/ConntectDb")
 const cors = require("cors")
 const BannerRouter = require("./Router/BannerRouter")
+const cakeBannersRouter = require("./Router/cakeBannerRouter")
 const MainCategoryRouter = require("./Router/MainCategoryRouter")
 const SubcCategoryRouter = require("./Router/SubcategoryRouter")
 const ColorRouter = require("./Router/ColorRouter")
@@ -19,6 +20,11 @@ const ProductTagRouter = require("./Router/ProductTagRouter")
 const checkoutRouter = require("./Router/CheckoutRouter")
 const userRouter = require("./Router/UserRouter")
 const ContactRouter = require("./Router/contactRoutes")
+const ReelRouter = require("./Router/ReelRouter")
+const PromoBannerRouter = require("./Router/PromoBannerRouter")
+const SecondSubCategoryRouter = require("./Router/SecondSubCategoryRouter")
+const RecommendedCategoryRouter = require("./Router/RecommendedCategoryRouter")
+const RecommendedProductRoutes = require("./Router/RecommendedProductRoutes")
 
 
 const app = express()
@@ -29,23 +35,23 @@ const allowedOrigins = [
   'http://localhost:3001',
   'http://localhost:3000',
   'http://localhost:3002',
-  'https://admin.ssdipl.com', 
-  'https://www.ssdipl.com', 
-  'https://ssdipl.com', 
+  'https://admin.ssdipl.com',
+  'https://www.ssdipl.com',
+  'https://ssdipl.com',
 ];
 
 
-  app.use(cors({
-    origin: function(origin, callback) {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+app.use(cors({
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-  }));
+  }
+}));
 
-  
+
 app.use(express.json())
 app.set(express.static("./Public"))
 app.use("/Public", express.static("Public"))
@@ -53,11 +59,12 @@ app.use("/Public", express.static("Public"))
 connectDb()
 
 app.get("/", (req, res) => {
-    res.send("Server Is Running")
+  res.send("Server Is Running")
 })
 
 
 app.use("/api", BannerRouter)
+app.use("/api/cake-banner", cakeBannersRouter)
 app.use("/api", MainCategoryRouter)
 app.use("/api", SubcCategoryRouter)
 app.use("/api", ColorRouter)
@@ -72,6 +79,13 @@ app.use("/api", ProductTagRouter)
 app.use("/api", checkoutRouter)
 app.use("/api", userRouter)
 app.use("/api", ContactRouter)
+app.use("/api/reel", ReelRouter)
+app.use("/api/promo-banner", PromoBannerRouter)
+app.use("/api/second-sub-category", SecondSubCategoryRouter)
+app.use("/api/recommended-category", RecommendedCategoryRouter)
+app.use("/api/recommended-product", RecommendedProductRoutes)
+
+
 
 
 

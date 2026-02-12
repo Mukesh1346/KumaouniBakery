@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+ import React, { useEffect, useState, useRef } from "react";
 import "./header.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { megaCategories } from "../NavCatData";
 import { TbTruckDelivery } from "react-icons/tb";
 import { IoMdCart } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
@@ -27,12 +26,16 @@ const Header = () => {
 
 
   /* CATEGORY DATA (FROM API) */
-  const [categories, setCategories] = useState([]);
+const [megaCategories, setMegaCategories] = useState([]);
 
   /* LOCATION */
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  
+
+  const [productSuggestions, setProductSuggestions] = useState([]);
+const [loadingSuggestions, setLoadingSuggestions] = useState(false);
 
   /* MOBILE MENU */
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -46,6 +49,9 @@ const Header = () => {
 
   const [openIndex, setOpenIndex] = useState(null);
 
+  const [allProducts, setAllProducts] = useState([]);
+
+
 const toggleDropdown = (key) => {
   setOpenIndex(openIndex === key ? null : key);
 };
@@ -54,27 +60,120 @@ const toggleDropdown = (key) => {
   /* REFS */
   const mobileMenuRef = useRef(null);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/get-category-with-subcategory`
-        );
+ useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(
+        `https://api.ssdipl.com/api/get-category-with-subcategory`
+      );
+        
+      console.log(res.data.data)
+      if (res.data?.data) {
 
-        if (res.data?.data) {
-          setCategories(res.data.data);
-        }
-      } catch (error) {
-        console.error("Category fetch error:", error);
+    const formattedData = res.data.data.map((cat) => ({
+  _id: cat._id,
+  name: cat.mainCategoryName,
+  subcategories: (cat.subcategories || []).map((sub) => ({
+    _id: sub._id,
+    name: sub.subcategoryName,
+    children: (sub.secondSubcategories || []).map(
+      (child) => child.secondsubcategoryName
+    )
+  }))
+}));
+
+setMegaCategories(formattedData);
+
+
+        setMegaCategories(formattedData);
       }
-    };
 
-    fetchCategories();
-  }, []);
+    } catch (error) {
+      console.error("Category fetch error:", error);
+    }
+  };
+
+  fetchCategories();
+}, []);
+
+
+// useEffect(() => {
+//   if (!searchQuery.trim()) {
+//     setProductSuggestions([]);
+//     return;
+//   }
+
+//   const delayDebounce = setTimeout(async () => {
+//     try {
+//       setLoadingSuggestions(true);
+
+//       const res = await axios.get(
+//         // `https://api.ssdipl.com/api/search-products?query=${searchQuery}`
+//         ` https://api.ssdipl.com/api/get-best-selling-products?query=${searchQuery}`
+
+       
+//       );
+
+//       setProductSuggestions(res.data?.data || []);
+//     } catch (err) {
+//       console.error("Search error:", err);
+//     } finally {
+//       setLoadingSuggestions(false);
+//     }
+//   }, 400); // 400ms debounce
+
+//   return () => clearTimeout(delayDebounce);
+
+// }, [searchQuery]);
+
+
+useEffect(() => {
+  const fetchAllProducts = async () => {
+    try {
+      const res = await axios.get(
+        "https://api.ssdipl.com/api/all-product"
+      );
+      setAllProducts(res.data?.data || []);
+    } catch (err) {
+      console.error("All products fetch error:", err);
+    }
+  };
+
+  fetchAllProducts();
+}, []);
 
 
 
-  useEffect(() => {
+useEffect(() => {
+  if (!searchQuery.trim()) {
+    setProductSuggestions([]);
+    return;
+  }
+
+  const lowerQuery = searchQuery.toLowerCase();
+
+  const filtered = allProducts.filter((product) => {
+    const nameMatch =
+      product.productName?.toLowerCase().includes(lowerQuery);
+
+    const categoryMatch =
+      product.categoryName?.mainCategoryName
+        ?.toLowerCase()
+        .includes(lowerQuery);
+
+    const subcategoryMatch =
+      product.subcategoryName?.subcategoryName
+        ?.toLowerCase()
+        .includes(lowerQuery);
+
+    return nameMatch || categoryMatch || subcategoryMatch;
+  });
+
+  setProductSuggestions(filtered.slice(0, 6));
+}, [searchQuery, allProducts]);
+
+
+ useEffect(() => {
     const fetchCountries = async () => {
       try {
         const res = await axios.get(
@@ -98,6 +197,8 @@ const toggleDropdown = (key) => {
 
     fetchCountries();
   }, []);
+
+
 
 
 
@@ -195,20 +296,76 @@ const toggleDropdown = (key) => {
                 </div>
               </div>
               {/* ================= SEARCH ================= */}
-              <form className="search-container" onSubmit={handleSearchSubmit}>
-                <div className="search-wrapper">
-                  <input
-                    type="search"
-                    className="form-control searchInput"
-                    placeholder="Search cakes, flowers..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  <button type="submit" className="search-icon">
-                    <IoSearch className="iconFont  text-dark" />
-                  </button>
-                </div>
-              </form>
+             <form className="search-container" onSubmit={handleSearchSubmit}>
+  <div className="search-wrapper position-relative">
+
+    <input
+      type="search"
+      className="form-control searchInput"
+      placeholder="Search cakes, flowers..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+    />
+
+  <button
+  type={searchQuery ? "button" : "submit"}
+  className="search-icon"
+  onClick={() => {
+    if (searchQuery) {
+      setSearchQuery("");
+      setProductSuggestions([]);
+    }
+  }}
+>
+  {searchQuery ? (
+    // <IoClose className="iconFont text-dark" />
+    ""
+  ) : (
+    <IoSearch className="iconFont text-dark" />
+  )}
+</button>
+
+    {/* 🔥 Product Suggestion Dropdown */}
+   {searchQuery && (
+  <div className="search-suggestions">
+
+    {loadingSuggestions && (
+      <div className="suggestion-item">Searching...</div>
+    )}
+
+    {!loadingSuggestions && productSuggestions.length === 0 && (
+      <div className="suggestion-item">No products found</div>
+    )}
+
+    {productSuggestions.map((product) => (
+      <div
+        key={product._id}
+        className="suggestion-item product-suggestion"
+        onClick={() => {
+          navigate(`/product/${product._id}`);
+          setSearchQuery("");
+          setProductSuggestions([]);
+        }}
+      >
+        <img
+          src={`https://api.ssdipl.com/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
+          alt={product.productName}
+          className="suggestion-image"
+        />
+
+        <div className="suggestion-name">
+          {product.productName}
+        </div>
+      </div>
+    ))}
+
+  </div>
+)}
+
+
+  </div>
+</form>
+
 
               {/* ================= RIGHT ICONS ================= */}
               <div className="top-icons">
@@ -308,50 +465,48 @@ const toggleDropdown = (key) => {
         </header>
 
         {/* ================= MOBILE MENU ================= */}
-        {mobileNavOpen && (
-          <div className="mobile-menu-wrapper d-lg-none" ref={mobileMenuRef}>
-            {megaCategories.map((cat, index) => (
-              <div key={cat._id || index} className="mobile-cat">
+    {mobileNavOpen && (
+  <div className="mobile-menu-wrapper d-lg-none" ref={mobileMenuRef}>
+    {megaCategories.map((cat, index) => (
+      <div key={cat._id || index} className="mobile-cat">
 
-                {/* CATEGORY TITLE */}
-                <div
-                  className="mobile-cat-title"
-                  onClick={() => handleMobileCategoryToggle(index)}
-                >
-                  {cat.name}
-                  <IoIosArrowDown
-                    className={`arrow ${mobileCategoryOpen === index ? "rotate" : ""
-                      }`}
-                  />
-                </div>
+        <div
+          className="mobile-cat-title"
+          onClick={() => handleMobileCategoryToggle(index)}
+        >
+          {cat.name}
+          <IoIosArrowDown
+            className={`arrow ${
+              mobileCategoryOpen === index ? "rotate" : ""
+            }`}
+          />
+        </div>
 
-                {/* SUBCATEGORIES */}
-                {mobileCategoryOpen === index && (
-                  <div className="mobile-subcats">
-                    {cat.subcategories?.map((sub, i) => (
-                      <div key={sub._id || i} className="mobile-subcat">
-                        <strong>{sub.name}</strong>
+        {mobileCategoryOpen === index && (
+          <div className="mobile-subcats">
+            {cat.subcategories?.map((sub, i) => (
+              <div key={sub._id || i} className="mobile-subcat">
+                <strong>{sub.name}</strong>
 
-                        {sub.children?.map((child, j) => (
-                          <Link
-                            key={j}
-                            to={`/category/${child
-                              .replace(/\s+/g, "-")
-                              .toLowerCase()}`}
-                            onClick={closeAllMobileMenus}
-                          >
-                            {child}
-                          </Link>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
+                {sub.children?.map((child, j) => (
+                  <Link
+                    key={j}
+                    to={`/category/${child
+                      .replace(/\s+/g, "-")
+                      .toLowerCase()}`}
+                    onClick={closeAllMobileMenus}
+                  >
+                    {child}
+                  </Link>
+                ))}
               </div>
             ))}
           </div>
         )}
+      </div>
+    ))}
+  </div>
+)}
 
         {/* ================= LOCATION MODAL ================= */}
         {showLocationModal && (

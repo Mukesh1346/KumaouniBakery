@@ -9,8 +9,9 @@ const EditReels = () => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const [productList, setProductList] = useState([]);
   const [formData, setFormData] = useState({
+    productId: "",
     title: "",
     price: "",
     activeOnHome: false,
@@ -23,12 +24,13 @@ const EditReels = () => {
     const fetchReel = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-single-reel/${id}`
+          `https://api.ssdipl.com/api/reel/get-single-reel/${id}`
         );
 
         const data = res.data.data;
 
         setFormData({
+          productId: data.productId._id || "",
           title: data.title || "",
           price: data.price || "",
           activeOnHome: data.activeOnHome || false,
@@ -60,7 +62,7 @@ const EditReels = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.price) {
+    if (!formData.title || !formData.price || !formData?.productId) {
       toast.error("Title and Price are required");
       return;
     }
@@ -69,6 +71,7 @@ const EditReels = () => {
 
     try {
       const fd = new FormData();
+      fd.append("productId", formData.productId);
       fd.append("title", formData.title);
       fd.append("price", formData.price);
       fd.append("activeOnHome", formData.activeOnHome);
@@ -77,12 +80,12 @@ const EditReels = () => {
         fd.append("video", formData.video);
       }
 
-      if (formData.productImage) {
-        fd.append("productImage", formData.productImage);
+      if (formData?.productImage) {
+        fd.append("productImage", formData?.productImage);
       }
 
       const res = await axios.put(
-        `https://api.ssdipl.com/api/update-reel/${id}`,
+        `https://api.ssdipl.com/api/reel/update-reel/${id}`,
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -99,6 +102,20 @@ const EditReels = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchAllProduct = async () => {
+      try {
+        const res = await axios.get("https://api.ssdipl.com/api/all-product");
+        setProductList(res.data?.data || []);
+      } catch (error) {
+        toast.error("Error fetching products");
+        console.error(error);
+      }
+    };
+
+    fetchAllProduct();
+  }, []);
 
   return (
     <>
@@ -119,9 +136,20 @@ const EditReels = () => {
       {/* ===== FORM ===== */}
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
-          
+
+          {/* PRODUCT */}
+          <div className="col-md-4">
+            <label className="form-label">Product</label>
+            <select name="productId" className="form-control" value={formData?.productId} onChange={handleChange} required            >
+              <option value="">Select Product</option>
+              {productList?.map((sub) => (
+                <option key={sub?._id} value={sub?._id}>{sub?.productName} (Rs{sub?.Variant[0]?.price})</option>
+              ))}
+            </select>
+          </div>
+
           {/* TITLE */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Reel Title</label>
             <input
               type="text"
@@ -134,7 +162,7 @@ const EditReels = () => {
           </div>
 
           {/* PRICE */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Price</label>
             <input
               type="text"
@@ -144,23 +172,6 @@ const EditReels = () => {
               onChange={handleChange}
               required
             />
-          </div>
-
-          {/* ACTIVE */}
-          <div className="col-md-6">
-            <label className="form-label">Display on Homepage</label>
-            <div className="form-check">
-              <input
-                type="checkbox"
-                name="activeOnHome"
-                className="form-check-input"
-                checked={formData.activeOnHome}
-                onChange={handleChange}
-              />
-              <label className="form-check-label">
-                Active on Homepage
-              </label>
-            </div>
           </div>
 
           {/* VIDEO */}
@@ -185,6 +196,23 @@ const EditReels = () => {
               accept="image/*"
               onChange={handleChange}
             />
+          </div>
+
+          {/* ACTIVE */}
+          <div className="col-md-6">
+            <label className="form-label">Display on Homepage</label>
+            <div className="form-check">
+              <input
+                type="checkbox"
+                name="activeOnHome"
+                className="form-check-input"
+                checked={formData.activeOnHome}
+                onChange={handleChange}
+              />
+              <label className="form-check-label">
+                Active on Homepage
+              </label>
+            </div>
           </div>
 
           {/* BUTTON */}

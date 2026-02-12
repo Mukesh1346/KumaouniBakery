@@ -1,76 +1,63 @@
 import React, { useState, useEffect } from "react";
 import "./reel.css";
-import img1 from '../../images/pic/redVelvet.jpg'
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"
+const BASE_URL = "https://api.ssdipl.com/";
+
 export default function ReelSection() {
-
-  const reels = [
-    {
-      id: 1,
-      video: "/video1.mp4",
-      productImg: img1,
-      title: "EZ Masala J – 125 g",
-      price: "₹145",
-    },
-    {
-      id: 2,
-      video: "/video2.mp4",
-      productImg: img1,
-      title: "EZ Masala J – 250 g",
-      price: "₹295",
-    },
-    {
-      id: 3,
-      video: "/video3.mp4",
-      productImg: img1,
-      title: "EZ Masala M – 500 g",
-      price: "₹495",
-    },
-    {
-      id: 4,
-      video: "/video4.mp4",
-      productImg: img1,
-      title: "EZ Masala M – 500 g",
-      price: "₹495",
-    },
-
-  ];
-
-
-
-
+  const navigate = useNavigate();
   const [activeReel, setActiveReel] = useState(null);
+  const [reels, setReels] = useState([]);
 
-  // lock scroll when modal open
   useEffect(() => {
     document.body.style.overflow = activeReel ? "hidden" : "auto";
   }, [activeReel]);
 
+  const fetchReels = async () => {
+    try {
+      const response = await axios.get("https://api.ssdipl.com/api/reel/get-reels");
+      setReels(response?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching reels:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchReels();
+  }, []);
+
+  const getVideoUrl = (path) => {
+    if (!path) return "";
+    return path.startsWith("http") ? path : BASE_URL + path;
+  };
+  console.log("activeReel", activeReel)
   return (
     <>
-      {/* REEL LIST */}
       <div className="container">
         <section className="reel-section">
           {reels.map((reel) => (
             <div
-              key={reel.id}
+              key={reel._id}
               className="reel-card"
               onClick={() => setActiveReel(reel)}
             >
-              <video
-                src={reel.video}
-                muted
-                loop
-                preload="metadata"
-                onMouseEnter={(e) => e.target.play()}
-                onMouseLeave={(e) => {
-                  e.target.pause();
-                  e.target.currentTime = 0;
-                }}
-              />
+              {reel.video && (
+                <video
+                  src={getVideoUrl(reel.video)}
+                  muted
+                  loop
+                  preload="metadata"
+                  onMouseEnter={(e) => e.target.play().catch(() => { })}
+                  onMouseLeave={(e) => {
+                    e.target.pause();
+                    e.target.currentTime = 0;
+                  }}
+                />
+              )}
 
               <div className="reel-product">
-                <img src={reel.productImg} alt="" />
+                <img src={BASE_URL + reel.productImage} alt="" />
                 <div>
                   <p>{reel.title}</p>
                   <span>{reel.price}</span>
@@ -78,43 +65,38 @@ export default function ReelSection() {
               </div>
             </div>
           ))}
-
         </section>
       </div>
 
-      {/* MODAL */}
       {activeReel && (
         <div className="reel-overlay" onClick={() => setActiveReel(null)}>
-          <div
-            className="reel-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="reel-modal" onClick={(e) => e.stopPropagation()}>
             <video
-              src={activeReel.video}
+              src={getVideoUrl(activeReel.video)}
               autoPlay
               controls
             />
 
-
-              <div className="modal-product">
-                <img src={activeReel.productImg} alt="" />
-                <div >
-                  <h5 className="reeltitle">{activeReel.title}</h5>
-                 <div className="d-flex gap-3">
-                   <span>{activeReel.price}</span>
-            <Link to="/all-products">
-                  <button className="BuyBtn">Buy Now</button>
-              </Link>
-              </div>
-                 </div>
+            <div className="modal-product">
+              <img src={BASE_URL + activeReel?.productImage} alt="" />
+              <div>
+                <h5 className="reeltitle">{activeReel?.title}</h5>
+                <div className="d-flex gap-3">
+                  <span>{activeReel.price}</span>
+                  {/* <Link to="/all-products"> */}
+                  <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-details/${activeReel?.productId?.productName}`, { state: { id: activeReel?.productId?._id, status: "single-product" } })}>
+                    <button className="BuyBtn">Buy Now</button>
+                  </div>
+                  {/* </Link> */}
                 </div>
-               </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </>
   );
 }
-
 
 
 

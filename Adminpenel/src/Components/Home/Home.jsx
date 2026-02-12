@@ -61,6 +61,12 @@ import EditPromoBanners from '../../Pages/PromoBanner/EditPromoBanners'
 import AllCakeBanners from '../../Pages/CakeBanners/AllCakeBanner'
 import AddCakeBanner from '../../Pages/CakeBanners/AddCakeBanner'
 import EditCakeBanner from '../../Pages/CakeBanners/EditCakeBanner'
+import AllRecommendedCategory from '../../Pages/RecommendedCategory/AllRecommendedCategory'
+import AddRecommendedCategory from '../../Pages/RecommendedCategory/AddRecommendedCategory'
+import EditRecommendedCategory from '../../Pages/RecommendedCategory/EditRecommendedCategory'
+import AllRecommendedProduct from '../../Pages/RecommendedProducts/AllRecommendedProduct'
+import AddRecommendedProduct from '../../Pages/RecommendedProducts/AddRecommendedProduct'
+import EditRecommendedProduct from '../../Pages/RecommendedProducts/EditRecommendedProduct'
 
 const Home = () => {
 
@@ -82,6 +88,7 @@ const Home = () => {
                 <Route path={"/add-category"} element={<AddCategory />} />
                 <Route path={"/edit-category/:id"} element={<EditCategory />} />
 
+
                 {/* Subcategory */}
 
                 <Route path={"/all-subcategory"} element={<AllSubCategory />} />
@@ -89,23 +96,26 @@ const Home = () => {
                 <Route path={"/edit-subcategory/:id"} element={<EditSubCategory />} />
 
 
-                 {/* Sub-Subcategory */}
+                {/* Sub-Subcategory */}
 
                 <Route path={"/all-sub-subcategory"} element={<AllSubSubCategory />} />
                 <Route path={"/add-sub-subcategory"} element={<AddSubSubCategory />} />
                 <Route path={"/edit-sub-subcategory/:id"} element={<EditSubSubCategory />} />
 
+                {/* Recommended category */}
+
+                <Route path={"/all-recommended-category"} element={<AllRecommendedCategory />} />
+                <Route path={"/add-recommended-category"} element={<AddRecommendedCategory />} />
+                <Route path={"/edit-recommended-category/:id"} element={<EditRecommendedCategory />} />
 
 
-
-                      <Route path={"/all-promo-banners"} element={<AllPromoBanners/>} />
+                <Route path={"/all-promo-banners"} element={<AllPromoBanners />} />
                 <Route path={"/add-promo-banners"} element={<AddPromoBanners />} />
                 <Route path={"/edit-promo-banners/:id"} element={<EditPromoBanners />} />
 
 
 
-                   
-                      <Route path={"/all-cake-banner"} element={<AllCakeBanners/>} />
+                <Route path={"/all-cake-banner"} element={<AllCakeBanners />} />
                 <Route path={"/add-cake-banner"} element={<AddCakeBanner />} />
                 <Route path={"/edit-cake-banner/:id"} element={<EditCakeBanner />} />
 
@@ -136,6 +146,11 @@ const Home = () => {
                 <Route path={"/all-products"} element={<AllProduct />} />
                 <Route path={"/add-product"} element={<AddProduct />} />
                 <Route path={"/edit-product/:id"} element={<EditProduct />} />
+
+                {/* Recommended Product --  */}
+                <Route path={"/all-recommended-products"} element={<AllRecommendedProduct />} />
+                <Route path={"/add-recommended-product"} element={<AddRecommendedProduct />} />
+                <Route path={"/edit-recommended-product/:id"} element={<EditRecommendedProduct />} />
 
 
                 {/* --- Orders --- */}
@@ -183,7 +198,7 @@ const Home = () => {
                 <Route path={"/edit-product-tag/:id"} element={<EditProductTag />} />
 
 
-                    
+
                 <Route path={"/all-reels"} element={<AllReels />} />
                 <Route path={"/add-reels"} element={<AddReel />} />
                 <Route path={"/edit-reels/:id"} element={<EditReel />} />

@@ -5,12 +5,13 @@ import axios from "axios";
 // import AllProducts from "../AllProducts/AllProducts";
 import AllProducts from "../../Components/AllProducts/AllProducts";
 import "./allcakes.css";
-
+import { useLocation } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import Banner1 from "../../images/1583 by 426 banner/Banner1.jpg";
 import Banner2 from "../../images/1583 by 426 banner/Banner2.jpg";
+import AllProductById from "../../Components/AllProductById/AllProductById";
 
 const staticProducts = [
   {
@@ -29,29 +30,59 @@ const AllCakes = () => {
   const { subcatname } = useParams();
   const [cakesArr, setCakesArr] = useState([]);
   const [subcategoryInfo, setSubcategoryInfo] = useState(null);
+  const location = useLocation();
+  const subCategoryId = location.state.id
+  const status = location.state.status
+  console.log("XXXXXX==>", location.state.id)
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`
+        );
 
-
-
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/get-product-by-subcatname/${subcatname}`
-      );
-
-      if (res.data?.data?.length > 0) {
-        setCakesArr(res.data.data);
-        console.log(res.data?.data)
-        setSubcategoryInfo(res.data.data[0].subcategoryName);
+        if (res.data?.data?.length > 0) {
+          setCakesArr(res.data.data);
+          console.log(res.data?.data)
+          setSubcategoryInfo(res.data.data[0].subcategoryName);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  fetchProducts();
-}, [subcatname]);
+    };
+
+    const fetchProductById = async (subCategoryId) => {
+      try {
+        const res = await axios.get(
+          `https://api.ssdipl.com/api/get-product-by-subCategoryId/${subCategoryId}`
+        );
+        console.log("XXXXXXXSSSSS:=>>", res.data?.data)
+        if (res.data?.data?.length > 0) {
+          setCakesArr(res.data.data);
+          console.log("XXXXXXXSSSSS:=>>", res.data?.data[0]?.subcategoryName)
+          // setSubcategoryInfo(res.data.data[0].subcategoryName);
+          if (status === 'subCategory') {
+            setSubcategoryInfo(res.data?.data[0]?.secondsubcategoryName);
+          } else {
+            setSubcategoryInfo(res.data?.data[0]?.subcategoryName);
+          }
+        } else {
+          setCakesArr([])
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+    }
+
+    if (subCategoryId) {
+      fetchProductById(subCategoryId)
+    } else {
+      fetchProducts();
+    }
+  }, [subcatname, subCategoryId]);
 
   const bannerSettings = {
     dots: true,
@@ -62,54 +93,66 @@ useEffect(() => {
     autoplaySpeed: 3000,
   };
 
-const imageUrl =
-  subcategoryInfo?.image
-    ? subcategoryInfo.image.startsWith("http")
-      ? subcategoryInfo.image
-      : `${process.env.REACT_APP_API_URL}/${subcategoryInfo.image}`
-    : Banner1;
+  const imageUrl =
+    subcategoryInfo?.image
+      ? subcategoryInfo.image.startsWith("http")
+        ? subcategoryInfo.image
+        : `https://api.ssdipl.com/${subcategoryInfo.image}`
+      : Banner1;
 
 
   return (
     <>
       {/* TOP SUBCATEGORY */}
-    {subcategoryInfo && (
-  <section className="topCategorySection">
-    <div className="topCategoryCard active">
-       <Link
-                              to={`/sub-subcategory/anniversary%20flowers`}
-                              className="category-link"
-                            >
-     <img
-  src={imageUrl}
-  alt={subcategoryInfo?.subcategoryName || "subcategory"}
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = Banner1;
-  }}
-/>
+      {/* {subcategoryInfo && (
+        <section className="topCategorySection">
+          <div className="topCategoryCard active">
+            <Link
+              to={`/sub-subcategory/anniversary%20flowers`}
+              className="category-link"
+            >
+              <img
+                src={imageUrl}
+                alt={subcategoryInfo?.subcategoryName || "subcategory"}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = Banner1;
+                }}
+              />
 
-      <p>{subcategoryInfo.subcategoryName}</p>
-      </Link>
-    </div>
-  </section>
-)}
+              <p>{subcategoryInfo.subcategoryName}</p>
+            </Link>
+          </div>
+        </section>
+      )} */}
 
 
       {/* BANNER SLIDER */}
-     <section className="cakeBannerSlider">
-  <Slider {...bannerSettings}>
-    {[Banner1, Banner2].map((img, index) => (
-      <div key={index}>
-        <div className="bannerBox">
-          <img src={img} alt="Cake Banner" />
-        </div>
-      </div>
-    ))}
-  </Slider>
-</section>
+      {subcategoryInfo?.banner && <section className="cakeBannerSlider">
 
-      <AllProducts/>
+        <div >
+          <div className="bannerBox">
+            <img src={`https://api.ssdipl.com/${subcategoryInfo?.banner}`} alt="Cake Banner" />
+          </div>
+        </div>
+
+        {/* <Slider {...bannerSettings}>
+          {[Banner1, Banner2].map((img, index) => (
+            <div key={index}>
+              <div className="bannerBox">
+                <img src={img} alt="Cake Banner" />
+              </div>
+            </div>
+          ))}
+        </Slider> */}
+      </section>}
+
+      {subCategoryId && (
+        <AllProductById cakesArr={cakesArr} />
+      )}
+      {!subCategoryId && (
+        <AllProducts />
+      )}
     </>
   );
 };
@@ -135,7 +178,7 @@ export default AllCakes;
 //   // Function to fetch products based on selected price range
 //   const getProductrelatedSubcategory = async () => {
 //     try {
-//       let url = `${process.env.REACT_APP_API_URL}/api/get-product-by-subcatname/${subcatname}`;
+//       let url = `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`;
 
 //       // Add price filter if selected
 //       if (selectedPrice) {
@@ -215,7 +258,7 @@ export default AllCakes;
 //                       <Link to={`/product-details/${item.productName}`}>
 //                       {/* <Link to={`/sub-subcategory/${item.productName}`}> */}
 //                         <img
-//                           src={`${process.env.REACT_APP_API_URL}/${item.productImage[0]}`}
+//                           src={`https://api.ssdipl.com/${item.productImage[0]}`}
 //                           className="w-100"
 //                           alt="images"
 //                         />
