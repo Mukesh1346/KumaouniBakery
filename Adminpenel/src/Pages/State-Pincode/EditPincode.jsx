@@ -32,7 +32,7 @@ const EditPinCode = () => {
         const fetchPinCode = async () => {
             try {
                 const res = await axios.get(
-                    `https://api.ssdipl.com/api/pincode/get-all-pin-codes-by-id/${id}`
+                    `http://localhost:7000/api/pincode/get-all-pin-codes-by-id/${id}`
                 );
 
                 if (res?.data?.status) {
@@ -96,7 +96,7 @@ const EditPinCode = () => {
 
         try {
             const res = await axios.post(
-                `https://api.ssdipl.com/api/pincode/update-pincode/${id}`,
+                `http://localhost:7000/api/pincode/update-pincode/${id}`,
                 {
                     ...formData,
                     area: formData.area.trim(),

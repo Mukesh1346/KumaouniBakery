@@ -114,7 +114,7 @@ const BestSellingProduct = () => {
   const fetchBestSellingProducts = async () => {
     try {
       const response = await axios.get(
-        "https://api.ssdipl.com/api/get-best-selling-products"
+        "http://localhost:7000/api/get-best-selling-products"
       );
       setProducts(response?.data?.data || []);
     } catch (error) {
@@ -168,7 +168,7 @@ const BestSellingProduct = () => {
                 {/* Image */}
                 <div className="product-img">
                   <img
-                    src={`https://api.ssdipl.com/${image}`}
+                    src={`http://localhost:7000/${image}`}
                     alt={item.productName}
                   />
 

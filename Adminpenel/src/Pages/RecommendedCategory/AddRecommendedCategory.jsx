@@ -50,7 +50,7 @@ const AddSubSubCategory = () => {
       fd.append("image", formData?.image);
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/recommended-category/create-recommended-category",
+        "http://localhost:7000/api/recommended-category/create-recommended-category",
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },

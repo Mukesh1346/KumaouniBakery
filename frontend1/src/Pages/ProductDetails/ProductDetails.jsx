@@ -85,7 +85,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://api.ssdipl.com/api/get-product-by-name/${name}`
+        `http://localhost:7000/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -224,7 +224,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
+            src={`http://localhost:7000/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -271,7 +271,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`https://api.ssdipl.com/${imagePath}`}
+                          src={`http://localhost:7000/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -284,7 +284,7 @@ const ProductDetails = () => {
                   <div className="pdx-main-image">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`http://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
@@ -392,7 +392,7 @@ const ProductDetails = () => {
                       {data?.recommendedProductId?.map((item, index) => (
                         <div key={index} className="pdx-addon-slide">
                           <div className="pdx-addon-card">
-                            <img src={`https://api.ssdipl.com/${item?.productImage}`} alt="addon" />
+                            <img src={`http://localhost:7000/${item?.productImage}`} alt="addon" />
                             <p className="pdx-addon-name ">{item?.productName || 'Birthday Cap'}</p>
                             <span className="pdx-addon-price">₹ {item?.price}</span>
                             <button

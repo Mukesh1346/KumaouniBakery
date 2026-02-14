@@ -14,7 +14,7 @@ const AllReels = () => {
     const fetchReels = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/reel/get-reels"
+          "http://localhost:7000/api/reel/get-reels"
         );
         setReels(res.data?.data || []);
       } catch (error) {
@@ -44,7 +44,7 @@ const AllReels = () => {
 
     try {
       await axios.delete(
-        `https://api.ssdipl.com/api/reel/delete-reel/${id}`
+        `http://localhost:7000/api/reel/delete-reel/${id}`
       );
 
       setReels((prev) => prev.filter((item) => item._id !== id));
@@ -101,7 +101,7 @@ const AllReels = () => {
                   {/* VIDEO PREVIEW */}
                   <td>
                     <video
-                      src={`https://api.ssdipl.com/${item?.video}`}
+                      src={`http://localhost:7000/${item?.video}`}
                       width="60"
                       height="80"
                       muted

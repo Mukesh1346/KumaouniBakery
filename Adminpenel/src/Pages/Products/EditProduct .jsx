@@ -49,16 +49,16 @@ const EditProduct = () => {
             try {
                 // Fetch dynamic data
                 const categoryResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-main-category"
+                    "http://localhost:7000/api/get-main-category"
                 );
                 const subcategoryResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-subcategory"
+                    "http://localhost:7000/api/get-subcategory"
                 );
                 const weightResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-size"
+                    "http://localhost:7000/api/get-size"
                 );
                 const RecommendedProductResponse = await axios.get(
-                    "https://api.ssdipl.com/api/recommended-product/all-product"
+                    "http://localhost:7000/api/recommended-product/all-product"
                 );
 
                 setCategories(categoryResponse.data.data);
@@ -67,7 +67,7 @@ const EditProduct = () => {
                 setRecommendedProducts(RecommendedProductResponse.data.data);
                 // Fetch product details
                 const productResponse = await axios.get(
-                    `https://api.ssdipl.com/api/get-single-product/${id}`
+                    `http://localhost:7000/api/get-single-product/${id}`
                 );
                 const productData = productResponse.data.data;
                 // console.log("XXXXX::=>", productData);
@@ -216,7 +216,7 @@ const EditProduct = () => {
         }
 
         try {
-            await axios.put(`https://api.ssdipl.com/api/update-product/${id}`, form, {
+            await axios.put(`http://localhost:7000/api/update-product/${id}`, form, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -235,7 +235,7 @@ const EditProduct = () => {
         const fetchSecondSubcategories = async () => {
             try {
                 const response = await axios.get(
-                    `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+                    `http://localhost:7000/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
                 );
                 setSecondSubcategories(response?.data?.data);
             } catch (error) {

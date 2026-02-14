@@ -15,7 +15,7 @@ const EditOrder = () => {
   // Fetch API data
   const getApiData = async () => {
     try {
-      const res = await axios.get(`https://api.ssdipl.com/api/checkout/${id}`);
+      const res = await axios.get(`http://localhost:7000/api/checkout/${id}`);
       setOrderData(res.data);
       setOrderStatus(res.data.orderStatus);
       setPaymentStatus(res.data.paymentStatus);
@@ -39,7 +39,7 @@ const EditOrder = () => {
         orderStatusMassage
       };
       const res = await axios.put(
-        `https://api.ssdipl.com/api/checkout/${id}`,
+        `http://localhost:7000/api/checkout/${id}`,
         updatedData
       );
       toast.success("Order updated successfully!");
@@ -329,7 +329,7 @@ const EditOrder = () => {
                       </p>
                       <p className="mb-0">Message: {item?.massage}</p>
                       <img
-                        src={`https://api.ssdipl.com/${item.image}`}
+                        src={`http://localhost:7000/${item.image}`}
                         alt={item.name}
                         style={{
                           width: "100px",

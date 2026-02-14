@@ -24,7 +24,7 @@ const EditCakeBanner = () => {
     const fetchBanner = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/cake-banner/get-single-cake-banner/${id}`
+          `http://localhost:7000/api/cake-banner/get-single-cake-banner/${id}`
         );
 
         const banner = res.data.data;
@@ -38,7 +38,7 @@ const EditCakeBanner = () => {
         });
 
         setPreview(
-          `https://api.ssdipl.com/${banner?.cakeBanner}`
+          `http://localhost:7000/${banner?.cakeBanner}`
         );
       } catch (error) {
         toast.error("Failed to load cake banner");
@@ -96,7 +96,7 @@ const EditCakeBanner = () => {
       fd.append("bannerStatus", formData?.bannerStatus || false);
 
       await axios.put(
-        `https://api.ssdipl.com/api/cake-banner/update-cake-banner/${id}`,
+        `http://localhost:7000/api/cake-banner/update-cake-banner/${id}`,
         fd,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -115,7 +115,7 @@ const EditCakeBanner = () => {
     const fetchSubSubcategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/second-sub-category/get-second-sub-category"
+          "http://localhost:7000/api/second-sub-category/get-second-sub-category"
         );
         setSecondSubcategories(res.data?.data || []);
       } catch (error) {

@@ -23,7 +23,7 @@ const AddProduct = () => {
     const fetchData = async () => {
       try {
         const categoryResponse = await axios.get(
-          "https://api.ssdipl.com/api/recommended-category/get-recommended-category"
+          "http://localhost:7000/api/recommended-category/get-recommended-category"
         );
 
         setCategories(categoryResponse.data.data);
@@ -67,7 +67,7 @@ const AddProduct = () => {
     }
 
     try {
-      await axios.post("https://api.ssdipl.com/api/recommended-product/create-product", form, {
+      await axios.post("http://localhost:7000/api/recommended-product/create-product", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -3,7 +3,7 @@ import "./reel.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
-const BASE_URL = "https://api.ssdipl.com/";
+const BASE_URL = "http://localhost:7000/";
 
 export default function ReelSection() {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function ReelSection() {
 
   const fetchReels = async () => {
     try {
-      const response = await axios.get("https://api.ssdipl.com/api/reel/get-reels");
+      const response = await axios.get("http://localhost:7000/api/reel/get-reels");
       setReels(response?.data?.data || []);
     } catch (error) {
       console.error("Error fetching reels:", error);
@@ -57,10 +57,10 @@ export default function ReelSection() {
               )}
 
               <div className="reel-product">
-                <img src={BASE_URL + reel.productImage} alt="" />
+                <img src={BASE_URL + reel?.productId?.productImage[0]} alt="" />
                 <div>
-                  <p>{reel.title}</p>
-                  <span>{reel.price}</span>
+                  <p>{reel?.productId?.productName}</p>
+                  <span>{reel?.productId?.Variant[0]?.finalPrice}</span>
                 </div>
               </div>
             </div>
@@ -72,17 +72,17 @@ export default function ReelSection() {
         <div className="reel-overlay" onClick={() => setActiveReel(null)}>
           <div className="reel-modal" onClick={(e) => e.stopPropagation()}>
             <video
-              src={getVideoUrl(activeReel.video)}
+              src={getVideoUrl(activeReel?.video)}
               autoPlay
               controls
             />
 
             <div className="modal-product">
-              <img src={BASE_URL + activeReel?.productImage} alt="" />
+              <img src={BASE_URL + activeReel?.productId?.productImage[0]} alt="" />
               <div>
-                <h5 className="reeltitle">{activeReel?.title}</h5>
+                <h5 className="reeltitle">{activeReel?.productId?.productName}</h5>
                 <div className="d-flex gap-3">
-                  <span>{activeReel.price}</span>
+                  <span>{activeReel?.productId?.Variant[0]?.finalPrice}</span>
                   {/* <Link to="/all-products"> */}
                   <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-details/${activeReel?.productId?.productName}`, { state: { id: activeReel?.productId?._id, status: "single-product" } })}>
                     <button className="BuyBtn">Buy Now</button>

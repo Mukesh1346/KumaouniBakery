@@ -12,7 +12,7 @@ const Footer = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-category-with-subcategory`
+          `http://localhost:7000/api/get-category-with-subcategory`
         );
 
         if (

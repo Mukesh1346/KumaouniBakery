@@ -20,7 +20,7 @@ const AddSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const response = await axios.get(
-          "https://api.ssdipl.com/api/get-main-category"
+          "http://localhost:7000/api/get-main-category"
         );
         setMainCategories(response.data.data);
       } catch (error) {
@@ -79,7 +79,7 @@ const AddSubCategory = () => {
       // Send the request
       console.log(formDataToSend)
       const response = await axios.post(
-        "https://api.ssdipl.com/api/create-subcategory",
+        "http://localhost:7000/api/create-subcategory",
         formDataToSend,
         {
           headers: {

@@ -25,7 +25,7 @@ const AddSubSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/get-main-category"
+          "http://localhost:7000/api/get-main-category"
         );
         setMainCategories(res.data?.data || []);
       } catch {
@@ -43,7 +43,7 @@ const AddSubSubCategory = () => {
     const fetchSubCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
+          `http://localhost:7000/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
         );
         setSubCategories(res.data?.data || []);
       } catch {
@@ -92,7 +92,7 @@ const AddSubSubCategory = () => {
       fd.append("image", formData.image);
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/second-sub-category/create-second-sub-category",
+        "http://localhost:7000/api/second-sub-category/create-second-sub-category",
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },
