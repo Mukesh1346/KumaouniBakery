@@ -88,7 +88,7 @@ const Cart = () => {
               className="bag-item"
               key={getUniqueId(item.id, item.weight)}
             >
-              <img src={`https://api.ssdipl.com/${item?.image}`} alt={item?.name} className="bag-img" />
+              <img src={`http://localhost:7000/${item?.image}`} alt={item?.name} className="bag-img" />
 
               <div className="bag-info">
                 <h6>

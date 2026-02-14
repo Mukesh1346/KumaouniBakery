@@ -22,7 +22,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/recommended-category/get-recommended-category"
+          "http://localhost:7000/api/recommended-category/get-recommended-category"
         );
         if (res.status === 200 && res.data.data.length) {
           setCategory(res.data.data);
@@ -42,7 +42,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/recommended-product/get-product-by-category/${activeCategory}`
+          `http://localhost:7000/api/recommended-product/get-product-by-category/${activeCategory}`
         );
         if (res.status === 200) setProduct(res.data.data);
       } catch (err) {
@@ -143,28 +143,8 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     loginvalue ? navigate("/checkout") : navigate("/login");
   };
 
-  // const handleContinue = () => {
 
-  //   const mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-  //   Object.entries(cart).forEach(([id, qty]) => {
-  //     const prod = product.find((p) => p._id === id);
-  //     if (!prod) return;
-
-  //     mainCart.push({
-  //       id: `addon-${id}`,
-  //       name: prod.productName,
-  //       price: prod.price,
-  //       quantity: qty,
-  //       image: prod.productImage[0],
-  //       isAddon: true,
-  //     });
-  //   });
-
-  //   sessionStorage.setItem("cart", JSON.stringify(mainCart));
-  //   onClose();
-  //   loginvalue ? navigate("/checkout") : navigate("/login");
-  // };
 
   return (
     <div className="rp-overlay">
@@ -192,7 +172,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
         <div className="rp-grid">
           {product.map((p) => (
             <div className="rp-card" key={p._id}>
-              <img src={`https://api.ssdipl.com/${p?.productImage[0]}`} alt={p?.productName} />
+              <img src={`http://localhost:7000/${p?.productImage[0]}`} alt={p?.productName} />
               <h6>{p.productName}</h6>
               <p>₹ {p.price}</p>
 

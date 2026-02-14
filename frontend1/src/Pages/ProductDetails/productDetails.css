@@ -44,6 +44,104 @@
   font-size: 13px;
 }
 
+
+/* ADD BUTTON */
+.pdx-addon-btn {
+  margin-top: 10px;
+  width: 100%;
+  background: #0e4d65;
+  color: #fff;
+  border: none;
+  padding: 8px 0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.pdx-addon-btn:hover {
+  background: #083847;
+}
+
+/* QTY CONTAINER */
+.pdx-addon-qty {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f2f5f7;
+  border-radius: 8px;
+  padding: 6px 10px;
+  border: 1px solid #dfe5e8;
+  transition: 0.3s ease;
+}
+
+/* QTY BUTTON */
+.pdx-addon-qty button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #0e4d65;
+  background: #fff;
+  color: #0e4d65;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.pdx-addon-qty button:hover {
+  background: #0e4d65;
+  color: #fff;
+}
+
+/* QTY NUMBER */
+.pdx-addon-qty span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* CARD IMPROVEMENT */
+.pdx-addon-card {
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  transition: 0.3s ease;
+  background: #fff;
+}
+
+.pdx-addon-card:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* IMAGE */
+.pdx-addon-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+}
+
+/* NAME */
+.pdx-addon-name {
+  margin: 8px 0 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* PRICE */
+.pdx-addon-price {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+
+
 /* RIGHT SECTION */
 /* .pdx-right-scroll {
   height: calc(100vh - 120px);

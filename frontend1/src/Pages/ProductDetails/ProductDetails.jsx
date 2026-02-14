@@ -26,6 +26,9 @@ const ProductDetails = () => {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [imageIndex, setImageIndex] = useState(0)
   const [massage, setMassage] = useState("")
+const [addonCart, setAddonCart] = useState({});
+
+
 
   const handleWishlist = () => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -50,6 +53,42 @@ const ProductDetails = () => {
       setIsWishlisted(wishlist.includes(data._id));
     }
   }, [data]);
+
+
+const addAddon = (addon) => {
+  if (!activeWeight) {
+    Swal.fire("Select Weight", "Please select cake weight first", "warning");
+    return;
+  }
+
+  const { cart, index } = getOrCreateMainCartItem();
+
+  const addons = cart[index].addonProducts;
+
+  const existingIndex = addons.findIndex(a => a.productId === addon._id);
+
+  if (existingIndex > -1) {
+    addons[existingIndex].quantity += 1;
+  } else {
+    addons.push({
+      productId: addon._id,
+      name: addon.productName,
+      price: addon.price,
+      image: addon.productImage?.[0],
+      quantity: 1,
+    });
+  }
+
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+
+  setAddonCart(prev => ({
+    ...prev,
+    [addon._id]: (prev[addon._id] || 0) + 1
+  }));
+};
+
+
+
 
 
   const addonSliderSettings = {
@@ -82,11 +121,73 @@ const ProductDetails = () => {
   };
 
 
+const incrementAddon = (id) => {
+  const { cart, index } = getOrCreateMainCartItem();
+
+  const addons = cart[index].addonProducts;
+
+  const addonIndex = addons.findIndex(a => a.productId === id);
+
+  if (addonIndex > -1) {
+    addons[addonIndex].quantity += 1;
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Quantity increased",
+      showConfirmButton: false,
+      timer: 1000
+    });
+  }
+
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+
+  setAddonCart(prev => ({
+    ...prev,
+    [id]: prev[id] + 1
+  }));
+};
+
+
+const decrementAddon = (id) => {
+  const { cart, index } = getOrCreateMainCartItem();
+  
+  let addons = cart[index].addonProducts;  
+
+  const addonIndex = addons.findIndex(a => a.productId === id);
+
+  if (addonIndex > -1) {
+    addons[addonIndex].quantity -= 1;
+
+    if (addons[addonIndex].quantity <= 0) {
+      addons.splice(addonIndex, 1);
+    }
+  }
+
+  cart[index].addonProducts = addons;
+
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+
+  setAddonCart(prev => {
+    const updated = prev[id] - 1;
+
+    if (updated <= 0) {
+      const copy = { ...prev };
+      delete copy[id];
+      return copy;
+    }
+
+    return { ...prev, [id]: updated };
+  });
+};
+
+
   // Fetch product data by name
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://api.ssdipl.com/api/get-product-by-name/${name}`
+        `http://localhost:7000/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -144,26 +245,55 @@ const ProductDetails = () => {
     return { cart, index };
   };
 
-  const addToCart = () => {
-    const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
+const addToCart = () => {
 
-    if (hasWeight && !activeWeight) {
-      Swal.fire("Select Weight", "Please select cake weight", "warning");
-      return;
-    }
+  const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
 
-    if (!deliveryDate) {
-      Swal.fire("Select Delivery Date", "Please select delivery date", "warning");
-      return;
-    }
+  if (hasWeight && !activeWeight) {
+    Swal.fire("Select Weight", "Please select cake weight", "warning");
+    return;
+  }
 
-    const { cart, index } = getOrCreateMainCartItem();
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-    cart[index].quantity += 1;
+  const productIndex = cart.findIndex(
+    item => item.productId === data._id && item.weight === activeWeight
+  );
+
+  // 🔴 REMOVE
+  if (productIndex > -1) {
+    cart.splice(productIndex, 1);
 
     sessionStorage.setItem("cart", JSON.stringify(cart));
-    setOpenPopup(true);
-  };
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "info",
+      title: "Product removed from cart ❌",
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+    return;
+  }
+
+  // 🟢 ADD
+  const { cart: updatedCart, index } = getOrCreateMainCartItem();
+
+  updatedCart[index].quantity += 1;
+
+  sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: "success",
+    title: "Product added to cart 🛒",
+    showConfirmButton: false,
+    timer: 1500
+  });
+};
 
   const addAddonToCart = (addon) => {
     if (!activeWeight) {
@@ -190,7 +320,7 @@ const ProductDetails = () => {
     }
 
     sessionStorage.setItem("cart", JSON.stringify(cart));
-    Swal.fire("Added!", "Addon added successfully", "success");
+    Swal.fire("Added!", "Addon added successfully", "success"); 
   };
 
   const isAddonAdded = (addonId) => {
@@ -215,7 +345,35 @@ const ProductDetails = () => {
     const { cart } = getOrCreateMainCartItem();
     sessionStorage.setItem("cart", JSON.stringify(cart));
     setOpenPopup(true);
+
   };
+
+
+useEffect(() => {
+  if (!activeWeight) return;
+
+  const mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+  const mainProduct = mainCart.find(
+    item => item.productId === data._id && item.weight === activeWeight
+  );
+
+  if (mainProduct?.addonProducts?.length) {
+    const existingAddons = {};
+
+    mainProduct.addonProducts.forEach(addon => {
+      existingAddons[addon.productId] = addon.quantity;
+    });
+
+    setAddonCart(existingAddons);
+  } else {
+    setAddonCart({});
+  }
+
+}, [data, activeWeight]);
+
+
+
 
   const settings = {
     customPaging: function (i) {
@@ -225,7 +383,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
+            src={`http://localhost:7000/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -272,7 +430,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`https://api.ssdipl.com/${imagePath}`}
+                          src={`http://localhost:7000/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -285,7 +443,7 @@ const ProductDetails = () => {
                   <div className="pdx-main-image">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`http://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
@@ -336,7 +494,7 @@ const ProductDetails = () => {
                 <div className="pdx-block">
                   <div className="pdx-block-head">
                     <span>Weight</span>
-                    <small>Serving Info ⓘ</small>
+                    {/* <small>Serving Info ⓘ</small> */}
                   </div>
 
                   <div className="pdx-weight-group">
@@ -382,23 +540,36 @@ const ProductDetails = () => {
                   <h6 className="pdx-addon-title">Recommended Addon Products</h6>
 
                   <div className="pdx-addon-slider">
-                    <Slider {...addonSliderSettings}>
-                      {data?.recommendedProductId?.map((item, index) => (
-                        <div key={index} className="pdx-addon-slide">
-                          <div className="pdx-addon-card">
-                            <img src={`https://api.ssdipl.com/${item?.productImage}`} alt="addon" />
-                            <p className="pdx-addon-name ">{item?.productName || 'Birthday Cap'}</p>
-                            <span className="pdx-addon-price">₹ {item?.price}</span>
-                            <button
-                              className={`pdx-addon-btn ${isAddonAdded(item._id) ? "added" : ""}`}
-                              onClick={() => addAddonToCart(item)}
-                            >
-                              {isAddonAdded(item._id) ? "✔ Added" : "ADD"}
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </Slider>
+                   <Slider {...addonSliderSettings}>
+  {data?.recommendedProductId?.map((item, index) => (
+    <div key={index}>
+      <div className="rp-card">
+        <img
+          src={`http://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+          alt={item?.productName}
+        />
+        <h6>{item?.productName}</h6>
+        <p>₹ {item?.price}</p>
+
+        {!addonCart[item._id] ? (
+          <button
+            className="rp-add-btn"
+            onClick={() => addAddon(item)}
+          >
+            Add
+          </button>
+        ) : (
+          <div className="rp-qty">
+            <button onClick={() => decrementAddon(item._id)}>−</button>
+            <span>{addonCart[item._id]}</span>
+            <button onClick={() => incrementAddon(item._id)}>+</button>
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</Slider>
+
                   </div>
                 </div>
 
@@ -451,16 +622,17 @@ const ProductDetails = () => {
                     value={deliveryDate}
                     min={new Date().toISOString().split("T")[0]}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    required
+                
                   />
                 </div>
                 <div className="pdx-cta">
-                  <button
-                    className={`pdx-cart ${isMainProductAdded() ? "added" : ""}`}
-                    onClick={addToCart}
-                  >
-                    {isMainProductAdded() ? "✔ Added To Cart" : "ADD TO CART"}
-                  </button>
+                 <button
+  className={`pdx-cart ${isMainProductAdded() ? "remove" : ""}`}
+  onClick={addToCart}
+>
+  {isMainProductAdded() ? "REMOVE FROM CART" : "ADD TO CART"}
+</button>
+
                   <button className="pdx-buy" onClick={handleBuyNow}>
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
