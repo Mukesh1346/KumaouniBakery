@@ -22,7 +22,7 @@ import logo from "../../images/pic/logo2.png";
 const Header = () => {
   const navigate = useNavigate();
   const loginvalue = sessionStorage.getItem("login");
-
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || []
 
 
   /* CATEGORY DATA (FROM API) */
@@ -247,7 +247,7 @@ const Header = () => {
   };
 
 
-  console.log("megaCategories==>", megaCategories)
+  console.log("megaCategories==>", megaCategories, cart?.length)
   return (
     <>
       {/* ================= TOP PROMO BANNER ================= */}
@@ -373,14 +373,21 @@ const Header = () => {
 
               {/* ================= RIGHT ICONS ================= */}
               <div className="top-icons">
-                <Link to="/track-order" className="icon-box">
+                {loginvalue && <Link to="/track-order" className="icon-box">
                   <TbTruckDelivery className="iconFont" />
                   <span className="navPageText">Track</span>
-                </Link>
+                </Link>}
 
-                <Link to="/cart" className="icon-box">
+                <Link to="/cart" className="icon-box position-relative">
                   <IoMdCart className="iconFont" />
+
                   <span className="navPageText">Cart</span>
+
+                  {cart?.length > 0 && (
+                    <span className="cart-count-badge">
+                      {cart.length}
+                    </span>
+                  )}
                 </Link>
 
                 {loginvalue ? (

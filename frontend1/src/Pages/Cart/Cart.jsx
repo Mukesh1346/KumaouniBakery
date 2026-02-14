@@ -35,7 +35,7 @@ const Cart = () => {
   const handleDecrement = (id, weight) => {
     const updated = cartItems.map(item =>
       getUniqueId(item.id, item.weight) === getUniqueId(id, weight) &&
-      item.quantity > 1
+        item.quantity > 1
         ? { ...item, quantity: item.quantity - 1 }
         : item
     );
@@ -88,14 +88,14 @@ const Cart = () => {
               className="bag-item"
               key={getUniqueId(item.id, item.weight)}
             >
-              <img src={pic1} alt={item.name} className="bag-img" />
+              <img src={`http://localhost:7000/${item?.image}`} alt={item?.name} className="bag-img" />
 
               <div className="bag-info">
                 <h6>
-                  {item.name} {item.isAddon && <span className="addon-badge">🎁 Addon</span>}
+                  {item?.name} {item?.isAddon && <span className="addon-badge">🎁 Addon</span>}
                 </h6>
 
-                {!item.isAddon && item.weight && (
+                {!item?.isAddon && item.weight && (
                   <p className="text-muted">Weight: {item.weight}</p>
                 )}
 

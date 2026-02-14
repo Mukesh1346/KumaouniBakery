@@ -1,211 +1,549 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import JoditEditor from 'jodit-react';
 
-const AddPinCode = () => {
-  const navigate = useNavigate();
-
-  const [stateList, setStateList] = useState([]);
+const AddProduct = () => {
+  const navigate = useNavigate()
+  const editor = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const [formData, setFormData] = useState({
-    stateName: "",
-    area: "",
-    pinCode: "",
-    isActive: true,
+    recommendedProductId: [],
+    categoryName: "",
+    subcategoryName: "",
+    secondsubcategoryName: "",
+    productName: "",
+    productDescription: "",
+    BestSellingProduct: 0,
+    eggless: 0,
+    Variant: [
+      {
+        weight: "",
+        price: "",
+        discountPrice: "",
+        finalPrice: "",
+        stock: "",
+      },
+    ],
+    productImage: [],
   });
 
-  /* ================= FETCH STATES ================= */
+  // State to store dynamic data
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [secondSubcategories, setSecondSubcategories] = useState([]);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [weights, setWeights] = useState([]);
+  // State to store filtered subcategories
+  const [filteredSubcategories, setFilteredSubcategories] = useState([]);
+
+
+
+  // Fetch product details and dynamic data
   useEffect(() => {
-    const fetchStates = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          "https://api.biziffy.com/api/state/get-all-states"
+        // Fetch dynamic data
+        const categoryResponse = await axios.get(
+          "http://localhost:7000/api/get-main-category"
+        );
+        const subcategoryResponse = await axios.get(
+          "http://localhost:7000/api/get-subcategory"
+        );
+        const weightResponse = await axios.get(
+          "http://localhost:7000/api/get-size"
+        );
+        const RecommendedProductResponse = await axios.get(
+          "http://localhost:7000/api/recommended-product/all-product"
         );
 
-        if (res?.data?.status) {
-          setStateList(res?.data?.data || []);
-        }
+        setCategories(categoryResponse.data.data);
+        setSubcategories(subcategoryResponse.data.data);
+        setWeights(weightResponse.data.data);
+        setRecommendedProducts(RecommendedProductResponse.data.data);
+        // Fetch product details
+        // const productResponse = await axios.get(
+        //     `http://localhost:7000/api/get-single-product/${id}`
+        // );
+        // const productData = productResponse.data.data;
+        // // console.log("XXXXX::=>", productData);
+        // setFormData({
+        //     ...productData,
+        //     ActiveonHome: productData?.ActiveonHome === true ? 1 : 0,
+        //     FeaturedProducts: productData?.FeaturedProducts === true ? 1 : 0 || 0,
+        //     BestSellingProduct: productData?.BestSellingProduct === true ? 1 : 0 || 0,
+        //     eggless: productData?.eggless === true ? 1 : 0 || 0,
+        //     categoryName: productData.categoryName ? productData.categoryName?._id : "",
+        //     subcategoryName: productData.subcategoryName ? productData?.subcategoryName?._id : "",
+        //     secondsubcategoryName: productData?.secondsubcategoryName ? productData?.secondsubcategoryName?._id : "",
+        //     Variant: productData.Variant || [],
+        //     recommendedProductId: productData.recommendedProductId.map((item) => item._id) || [],
+
+        //     productImage: [], // Reset images for new uploads
+        // });
+
       } catch (error) {
-        console.error("Failed to fetch states:", error);
-        toast.error("Failed to load states!");
+        console.error("Error fetching data", error);
+        toast.error("Error loading data!");
       }
     };
 
-    fetchStates();
+    fetchData();
   }, []);
 
-  /* ================= HANDLE INPUT ================= */
+  // Handle input change
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
+    if (name === "recommendedproduct") {
+      // prevent duplicates
+      if (!formData?.recommendedProductId?.includes(value)) {
+        setFormData((prev) => ({
+          ...prev,
+          recommendedProductId: [...prev.recommendedProductId, value],
+        }));
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    // If categoryName changes, filter subcategories
+    if (name === 'categoryName') {
+      const filteredSubcategories = subcategories.filter(
+        (subcategory) => subcategory.categoryName._id === value
+      );
+      setFilteredSubcategories(filteredSubcategories);
+    }
   };
 
-  /* ================= VALIDATION ================= */
-  const validateForm = () => {
-    if (!formData.stateName) {
-      toast.error("Please select a state");
-      return false;
-    }
 
-    if (!formData.area.trim()) {
-      toast.error("Area is required");
-      return false;
-    }
-
-    if (!/^\d{6}$/.test(formData.pinCode)) {
-      toast.error("PinCode must be exactly 6 digits");
-      return false;
-    }
-
-    return true;
+  // Handle file change for images
+  const handleFileChange = (e) => {
+    setFormData({
+      ...formData,
+      productImage: e.target.files,
+    });
   };
 
-  /* ================= SUBMIT ================= */
+  // Update formData when editor content changes
+  const handleEditorChange = (newContent) => {
+    setFormData({ ...formData, productDescription: newContent });
+  };
+
+  const handleEditorChange2 = (newContent) => {
+    setFormData({ ...formData, productDetails: newContent });
+  };
+
+
+  // Handle variant change
+  const handleVariantChange = (index, e) => {
+    const { name, value } = e.target; // Get the field name and value
+    const updatedVariants = [...formData.Variant]; // Clone the variants array
+
+    // Update the specific field of the variant
+    updatedVariants[index][name] = value;
+
+    // Automatically calculate finalPrice when price or discountPrice changes
+    if (name === 'price' || name === 'discountPrice') {
+      const price = parseFloat(updatedVariants[index].price) || 0;
+      const discount = parseFloat(updatedVariants[index].discountPrice) || 0;
+
+      updatedVariants[index].finalPrice = price - (price * (discount / 100));
+    }
+
+    setFormData({
+      ...formData,
+      Variant: updatedVariants, // Update the state
+    });
+  };
+
+  // Add new variant
+  const handleAddVariant = () => {
+    setFormData({
+      ...formData,
+      Variant: [
+        ...formData.Variant,
+        {
+          weight: "",
+          flover: "",
+          price: "",
+          discountPrice: "",
+          finalPrice: "",
+          stock: "",
+          eggLess: false,
+        },
+      ],
+    });
+  };
+
+  // Remove variant
+  const handleRemoveVariant = (index) => {
+    const updatedVariants = formData.Variant.filter((_, i) => i !== index);
+    setFormData({
+      ...formData,
+      Variant: updatedVariants,
+    });
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) return;
-
     setIsLoading(true);
+    const form = new FormData();
+    form.append("categoryName", formData.categoryName);
+    form.append("subcategoryName", formData.subcategoryName);
+    form.append("secondsubcategoryName", formData.secondsubcategoryName);
+    form.append("productName", formData.productName);
+    form.append("productDescription", formData.productDescription);
+    form.append("productDetails", formData.productDetails);
+    form.append("ActiveonHome", formData.ActiveonHome);
+    form.append("FeaturedProducts", formData.FeaturedProducts);
+    form.append("BestSellingProduct", formData?.BestSellingProduct);
+    form.append("eggless", formData?.eggless);
+    form.append("recommendedProductId", JSON.stringify(formData.recommendedProductId));
+    // Append variants
+    form.append("Variant", JSON.stringify(formData.Variant));
+
+    // Append new images
+    for (let i = 0; i < formData.productImage.length; i++) {
+      form.append("productImage", formData.productImage[i]);
+    }
 
     try {
-      const res = await axios.post(
-        "https://api.biziffy.com/api/pincode/create-pincode",
-        {
-          ...formData,
-          area: formData.area.trim(),
-          pinCode: formData.pinCode.trim(),
-        }
-      );
-
-      if (res?.data?.status) {
-        toast.success("PinCode added successfully!");
-        navigate("/admin/pincode");
-      } else {
-        toast.error("Failed to add PinCode");
-      }
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast.error(
-        error?.response?.data?.message || "Could not add PinCode."
-      );
+      await axios.post(`http://localhost:7000/api/create-product`, form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Product Added successfully!");
+      navigate("/all-products")
+    } catch (err) {
+      console.log(err)
+      // toast.error(err.response.data.message);
     } finally {
       setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    const fetchSecondSubcategories = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:7000/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+        );
+        setSecondSubcategories(response?.data?.data);
+      } catch (error) {
+        console.error("Error fetching second subcategories:", error);
+      }
+    }
+    fetchSecondSubcategories();
+  }, [formData?.subcategoryName])
+
+  useEffect(() => {
+    if (formData?.categoryName) {
+      const filteredSubcategories = subcategories.filter(
+        (subcategory) => subcategory.categoryName._id === formData.categoryName
+      );
+      setFilteredSubcategories(filteredSubcategories);
+    }
+  }, [formData?.categoryName])
+
+  const handleRemoveProduct = (id) => {
+    setFormData((prev) => ({
+      ...prev,
+      recommendedProductId: prev.recommendedProductId.filter(
+        (item) => item !== id
+      ),
+    }));
+  };
+  console.log("formData::=>", formData)
   return (
     <>
       <ToastContainer />
-
-      {/* ================= HEADER ================= */}
       <div className="bread">
         <div className="head">
-          <h4>Add PinCode</h4>
+          <h4>Edit Product</h4>
         </div>
         <div className="links">
-          <Link to="/admin/pincode" className="add-new">
+          <Link to="/all-products" className="add-new">
             Back <i className="fa-regular fa-circle-left"></i>
           </Link>
         </div>
       </div>
 
-      {/* ================= FORM ================= */}
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
-
-          {/* STATE */}
-          <div className="col-md-6">
-            <label className="form-label">
-              State <sup className="text-danger">*</sup>
-            </label>
-            <select
-              name="stateName"
-              className="form-select"
-              value={formData.stateName}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select State</option>
-              {stateList.map((state) => (
-                <option key={state._id} value={state.name}>
-                  {state.name}
+          <div className="col-md-4">
+            <label htmlFor="categoryName" className="form-label">Mani Category Name<sup className="text-danger">*</sup></label>
+            <select name="categoryName" className="form-select" id="categoryName" value={formData.categoryName} onChange={handleChange}>
+              <option value="" disabled>Select MAin Category</option>
+              {categories.map((item, index) => (
+                <option key={index} value={item._id}>
+                  {item.mainCategoryName}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* AREA */}
-          <div className="col-md-6">
-            <label className="form-label">
-              Area <sup className="text-danger">*</sup>
-            </label>
-            <input
-              type="text"
-              name="area"
-              className="form-control"
-              placeholder="Enter area name"
-              value={formData.area}
+          <div className="col-md-4">
+            <label htmlFor="subcategoryName" className="form-label">Category Name<sup className="text-danger">*</sup></label>
+            <select
+              name="subcategoryName"
+              className="form-select"
+              id="subcategoryName"
+              value={formData.subcategoryName}
               onChange={handleChange}
-              required
-            />
+            // required
+            >
+              <option value="" selected disabled>Select Category</option>
+              {filteredSubcategories.map((item, index) => (
+                <option key={index} value={item._id}>{item.subcategoryName}</option>
+              ))}
+            </select>
           </div>
 
-          {/* PINCODE */}
-          <div className="col-md-6">
-            <label className="form-label">
-              PinCode <sup className="text-danger">*</sup>
+          <div className="col-md-4">
+            <label htmlFor="secondsubcategoryName" className="form-label">
+              Sub Category Name<sup className="text-danger">*</sup>
             </label>
-            <input
-              type="text"
-              name="pinCode"
-              className="form-control"
-              placeholder="Enter 6 digit pin code"
-              maxLength="6"
-              value={formData.pinCode}
+            <select
+              name="secondsubcategoryName"
+              className="form-select"
+              id="secondsubcategoryName"
+              value={formData?.secondsubcategoryName}
               onChange={handleChange}
+              disabled={!formData?.subcategoryName}
               required
-            />
+            >
+              <option value="" disabled>
+                Select Sub Category
+              </option>
+              {secondSubcategories.map((item, index) => (
+                <option key={index} value={item?._id}>
+                  {item?.secondsubcategoryName}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* STATUS */}
-          <div className="col-md-6 d-flex align-items-center mt-4">
-            <div className="form-check">
-              <input
-                type="checkbox"
-                name="isActive"
-                className="form-check-input"
-                checked={formData.isActive}
-                onChange={handleChange}
-              />
-              <label className="form-check-label ms-2">
-                Active
-              </label>
+          <div className="col-md-6">
+            <label htmlFor="productName" className="form-label">Product Name<sup className="text-danger">*</sup></label>
+            <input type="text" name='productName' className="form-control" id="productName" value={formData.productName} onChange={handleChange} required />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">
+              Recommended Product Name <sup className="text-danger">*</sup>
+            </label>
+
+            <select
+              name="recommendedproduct"
+              className="form-select"
+              onChange={handleChange}
+            >
+              <option value="">Select Recommended Product</option>
+              {recommendedProducts?.map((item) => (
+                <option key={item?._id} value={item?._id}>
+                  {item?.name || item?.productName}
+                </option>
+              ))}
+            </select>
+
+            {/* Selected Products */}
+            <div className="mt-2 row g-2">
+              {formData?.recommendedProductId?.map((id) => {
+                const product = recommendedProducts?.find(p => p?._id === id);
+                if (!product) return null;
+
+                return (
+                  <div key={id} className="col-md-4">
+                    <div className="d-flex justify-content-between align-items-center bg-light px-2 py-1 rounded">
+                      <span className="text-truncate">
+                        {product?.name || product?.productName}
+                      </span>
+
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-danger ms-2"
+                        onClick={() => handleRemoveProduct(id)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* BUTTON */}
           <div className="col-md-12">
-            <button
-              type="submit"
-              className="btn btn-success"
-              disabled={isLoading}
-            >
-              {isLoading ? "Saving..." : "Add PinCode"}
-            </button>
+            <label htmlFor="productDescription" className="form-label">Product Description<sup className="text-danger">*</sup></label>
+            {/* <textarea name='productDescription' rows={6} className="form-control" id="productDescription" value={formData.productDescription} onChange={handleChange} required /> */}
+            <JoditEditor
+              ref={editor}
+              value={formData.productDescription}
+              onChange={handleEditorChange}
+              placeholder="Enter Product Description here..."
+            />
           </div>
 
+          <div className="col-md-12">
+            <label htmlFor="productDetails" className="form-label">Product Details<sup className="text-danger">*</sup></label>
+            {/* <textarea name='productDescription' rows={6} className="form-control" id="productDescription" value={formData.productDescription} onChange={handleChange} required /> */}
+            <JoditEditor
+              ref={editor}
+              value={formData.productDetails}
+              onChange={handleEditorChange2}
+              placeholder="Enter Product Details here..."
+            />
+          </div>
+          <div className="col-md-8">
+            <label htmlFor="productImage" className="form-label">Product Images<sup className="text-danger">*</sup></label>
+            <input type="file" className="form-control" id="productImage" name="productImage" multiple onChange={handleFileChange} />
+          </div>
+
+          {/* Variant Fields */}
+          <div className="col-md-12">
+            {/* <label className="form-label">Product Variants<sup className="text-danger">*</sup></label> */}
+            {formData.Variant.map((variant, index) => (
+              <div key={index} className="variant-container">
+                <div className="row">
+                  <div className="col-md-3 mb-1">
+                    <label htmlFor={`weight-${index}`} className="form-label">Weight/Sizes<sup className="text-danger">*</sup></label>
+                    <select
+                      name="weight"
+                      className="form-select"
+                      id={`weight-${index}`}
+                      value={variant.weight} // Link to the specific variant's weight
+                      onChange={(e) => handleVariantChange(index, e)}
+                    >
+                      <option value="" disabled>Select Weight</option>
+                      {weights.map((item) => (
+                        <option key={item._id} value={item._id}>
+                          {item.sizeweight}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* <div className="col-md-3 mb-1">
+                                        <label htmlFor={`stock-${index}`} className="form-label">Stock<sup className="text-danger">*</sup></label>
+                                        <input
+                                            type="number"
+                                            name="stock"
+                                            className="form-control"
+                                            value={variant.stock}
+                                            onChange={(e) => handleVariantChange(index, e)}
+                                        />
+                                    </div> */}
+
+                  <div className="col-md-3">
+                    <label htmlFor={`price-${index}`} className="form-label">Price<sup className="text-danger">*</sup></label>
+                    <input
+                      type="number"
+                      name="price"
+                      className="form-control"
+                      value={variant.price}
+                      onChange={(e) => handleVariantChange(index, e)}
+                    />
+                  </div>
+
+                  <div className="col-md-3">
+                    <label htmlFor={`discountPrice-${index}`} className="form-label">Discount Price<sup className="text-danger">*</sup></label>
+                    <input
+                      type="number"
+                      name="discountPrice"
+                      className="form-control"
+                      value={variant.discountPrice}
+                      onChange={(e) => handleVariantChange(index, e)}
+                    />
+                  </div>
+                  <div className="col-md-3">
+                    <label htmlFor={`finalPrice-${index}`} className="form-label">Final Price<sup className='text-danger'>*</sup></label>
+                    <input
+                      type="number"
+                      name="finalPrice"
+                      className="form-control"
+                      value={variant.finalPrice}
+                      readOnly // Make the field read-only
+                    />
+                  </div>
+                </div>
+
+                <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveVariant(index)}>Remove Variant</button>
+              </div>
+            ))}
+            <button type="button" className="btn btn-primary mt-2" onClick={handleAddVariant}>Add Variant</button>
+          </div>
+
+          <div className="col-md-12">
+            <div className="row align-items-center">
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="ActiveonHome"
+                  className="form-check-input me-2"
+                  checked={formData.ActiveonHome === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, ActiveonHome: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">Active on Home</label>
+              </div>
+
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="BestSellingProduct"
+                  className="form-check-input me-2"
+                  checked={formData.BestSellingProduct === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, BestSellingProduct: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">Best Selling Product</label>
+              </div>
+
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="FeaturedProducts"
+                  className="form-check-input me-2"
+                  checked={formData.FeaturedProducts === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, FeaturedProducts: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">Featured Products</label>
+              </div>
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="eggless"
+                  className="form-check-input me-2"
+                  checked={formData.eggless === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, eggless: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">100% Eggless</label>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-12 text-center">
+            <button type="submit" className="btn btn-success" disabled={isLoading}>
+              {isLoading ? 'Adding...' : 'Add Product'}
+            </button>
+          </div>
         </form>
       </div>
     </>
   );
 };
 
-export default AddPinCode;
+export default AddProduct;

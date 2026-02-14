@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./allproducts.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import Swal from "sweetalert2";
 
-const AllProducts = ({ status='' }) => {
+const AllProducts = ({ status = '' }) => {
+  const navigate = useNavigate();
+  const user = sessionStorage.getItem("userId");
   const [categoryData, setCategoryData] = useState([]);
   const [productData, setProductData] = useState({});
   const [currentPage, setCurrentPage] = useState({});
-  const [wishlist, setWishlist] = useState([]); // ✅ added
+  const [wishlist, setWishlist] = useState([{ user: '', productId: '' }]); // ✅ added
   const productsPerPage = 20;
 
   useEffect(() => {
@@ -45,15 +48,69 @@ const AllProducts = ({ status='' }) => {
     }
   };
 
-  // ✅ wishlist toggle (added)
-  const toggleWishlist = (id) => {
-    setWishlist((prev) =>
-      prev.includes(id)
-        ? prev.filter((pid) => pid !== id)
-        : [...prev, id]
-    );
+  useEffect(() => {
+    const stored = sessionStorage.getItem("wishlist");
+    if (stored) {
+      setWishlist(JSON.parse(stored));
+    }
+  }, []);
+
+  // get existing wishlist from session
+  const toggleWishlist = async (productId) => {
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        text: "Please login to use wishlist",
+      });
+      navigate("/login");
+      return;
+    }
+
+    setWishlist((prev) => {
+      const isExist = prev.includes(productId);
+
+      const updated = isExist
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId];
+
+      // ✅ update session
+      sessionStorage.setItem("wishlist", JSON.stringify(updated));
+
+      // ✅ call API (fire and forget)
+      handleWishlistApi(productId, isExist);
+
+      return updated;
+    });
   };
 
+
+  const handleWishlistApi = async (productId, isRemoving) => {
+    console.log("isRemoving==>", isRemoving);
+    try {
+      if (isRemoving) {
+        // ✅ REMOVE from wishlist
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
+          data: {
+            user: user,
+            productId: productId,
+          },
+        });
+      } else {
+        // ✅ ADD to wishlist
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
+          user: user,
+          productId: productId,
+        });
+      }
+    } catch (error) {
+      console.error("Wishlist API error:", error);
+    }
+  };
+
+
+  console.log("DDD:=>", wishlist);
+  
   return (
     <div className="container my-5">
       {categoryData?.map((category) => {
@@ -93,9 +150,9 @@ const AllProducts = ({ status='' }) => {
                       {/* ❤️ Wishlist (added only this part) */}
                       <span
                         className="wishlist"
-                        onClick={() => toggleWishlist(product._id)}
+                        onClick={() => toggleWishlist(product?._id)}
                       >
-                        {wishlist.includes(product._id) ? (
+                        {wishlist?.includes(product?._id) ? (
                           <FaHeart color="red" />
                         ) : (
                           <FaRegHeart />

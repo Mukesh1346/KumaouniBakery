@@ -12,10 +12,12 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Link ,useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 
 const BestSellingProduct = () => {
   // ✅ Wishlist state
+   const user = sessionStorage.getItem("userId");
   const navigate = useNavigate()
   const [wishlist, setWishlist] = useState([]);
   const [products, setProducts] = useState([])
@@ -127,13 +129,67 @@ const BestSellingProduct = () => {
   }, []);
 
   // ✅ Toggle wishlist
-  const toggleWishlist = (id) => {
-    setWishlist((prev) =>
-      prev.includes(id)
-        ? prev.filter((pid) => pid !== id)
-        : [...prev, id]
-    );
+  useEffect(() => {
+    const stored = sessionStorage.getItem("wishlist");
+    if (stored) {
+      setWishlist(JSON.parse(stored));
+    }
+  }, []);
+
+  // get existing wishlist from session
+  const toggleWishlist = async (productId) => {
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        text: "Please login to use wishlist",
+      });
+      navigate("/login");
+      return;
+    }
+
+    setWishlist((prev) => {
+      const isExist = prev.includes(productId);
+
+      const updated = isExist
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId];
+
+      // ✅ update session
+      sessionStorage.setItem("wishlist", JSON.stringify(updated));
+
+      // ✅ call API (fire and forget)
+      handleWishlistApi(productId, isExist);
+
+      return updated;
+    });
   };
+
+
+  const handleWishlistApi = async (productId, isRemoving) => {
+    console.log("isRemoving==>", isRemoving);
+    try {
+      if (isRemoving) {
+        // ✅ REMOVE from wishlist
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
+          data: {
+            user: user,
+            productId: productId,
+          },
+        });
+      } else {
+        // ✅ ADD to wishlist
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
+          user: user,
+          productId: productId,
+        });
+      }
+    } catch (error) {
+      console.error("Wishlist API error:", error);
+    }
+  };
+
+
   console.log("XXXZZZZXXXX==>", products)
   return (
     <div className="container my-5">
@@ -207,7 +263,7 @@ const BestSellingProduct = () => {
                   </p>
 
                   <Link
-                    to={`/product-details/${item._id}`}
+                    to={`/product-details/${item?.productName}`}
                     className="btn btn-dark w-100 mt-2"
                   >
                     Buy Now
