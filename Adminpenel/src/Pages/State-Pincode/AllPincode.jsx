@@ -173,7 +173,18 @@ const AllPinCode = () => {
             setExcelLoading(false);
         }
     };
-
+    const handleStatusChange = async (productId, status) => {
+        try {
+            const data = {
+                productId,
+                status
+            }
+            const response = await axios.post(`http://localhost:7000/api/pincode/change-status`, data);
+            fetchPinCodes(searchTerm, currentPage);
+        } catch (error) {
+            toast.error("Failed to fetch pin codes!");
+        }
+    }
     return (
         <>
             <ToastContainer />
@@ -277,7 +288,8 @@ const AllPinCode = () => {
                         <th>State</th>
                         <th>Area</th>
                         <th>Pin Code</th>
-                        <th>Status</th>
+                        <th>Deleverd</th>
+                        {/* <th>Status</th> */}
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -301,14 +313,21 @@ const AllPinCode = () => {
                                 <td>{item.stateName}</td>
                                 <td>{item.area}</td>
                                 <td>{item.pinCode}</td>
-                                <td>
+                                <td><input
+                                    type="checkbox"
+                                    name="FeaturedProducts"
+                                    className="form-check-input me-2"
+                                    checked={item?.deleveryStatus}
+                                    onChange={(e) => handleStatusChange(item?._id, e.target.checked)} />
+                                </td>
+                                {/* <td>
                                     <span
                                         className={`badge ${item.isActive ? "bg-success" : "bg-danger"
                                             }`}
                                     >
                                         {item.isActive ? "Active" : "Inactive"}
                                     </span>
-                                </td>
+                                </td> */}
                                 <td>
                                     <Link
                                         to={`/edit-pincode/${item._id}`}

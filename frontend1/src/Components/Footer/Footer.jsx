@@ -4,8 +4,10 @@ import "./Footer.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaCcAmazonPay } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -64,9 +66,17 @@ const Footer = () => {
               {categories.map((cat) =>
                 cat.subcategories.map((sub, index) => (
                   <li key={index}>
-                    <Link to={`/product-related/${sub.subcategoryName}`}>
-                      {sub.subcategoryName}
-                    </Link>
+                    {/* <Link to={`/product-related/${sub.subcategoryName}`}> */}
+                    <div onClick={() => {
+                      navigate(`/product-related/${sub.subcategoryName}`,
+                        { state: { id: sub?._id, status: 'subCategory' } });
+                    }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {sub?.subcategoryName}
+                    </div>
+
+                    {/* </Link> */}
                   </li>
                 ))
               )}

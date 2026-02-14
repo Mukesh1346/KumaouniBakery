@@ -84,16 +84,15 @@ const createPincodeByExcel = async (req, res) => {
 };
 
 
-// export const getAllPinCodes = async (req, res) => {
-//     try {
-
-//         const pinCodes = await PinCode.find({}).sort({ createdAt: -1 });
-//         return res.status(200).json({ status: true, message: "Pin codes fetched successfully", pinCodes, });
-//     } catch (err) {
-//         console.error("Error fetching pin codes:", err);
-//         return res.status(500).json({ status: false, message: "Server error while fetching pin codes", });
-//     }
-// };
+const getAllPinCodes = async (req, res) => {
+    try {
+        const pinCodes = await PinCode.find({}).sort({ createdAt: -1 });
+        return res.status(200).json({ status: true, message: "Pin codes fetched successfully", pinCodes, });
+    } catch (err) {
+        console.error("Error fetching pin codes:", err);
+        return res.status(500).json({ status: false, message: "Server error while fetching pin codes", });
+    }
+};
 
 
 const getAllPinCodesWithPagination = async (req, res) => {
@@ -187,7 +186,7 @@ const deletePincode = async (req, res) => {
     }
 }
 
- const getAreapincodeByState = async (req, res) => {
+const getAreapincodeByState = async (req, res) => {
     try {
         const { state } = req?.body;
 
@@ -205,6 +204,16 @@ const deletePincode = async (req, res) => {
     }
 }
 
+const changeStatus = async (req, res) => {
+    try {
+        const { productId, status } = req.body;
+        const updatedStatus = await PinCode.findByIdAndUpdate(productId, { deleveryStatus: status }, { new: true });
+        return res.status(200).json({ status: true, message: "Pin code status updated successfully", data: updatedStatus, });
+    } catch (err) {
+        console.error("Error updating pin code status:", err);
+        return res.status(500).json({ status: false, message: "Server error while updating pin code status", });
+    }
+}
 module.exports = {
-    createPincode, getAllPinCodesWithPagination, createPincodeByExcel, getAllPinCodesById, deletePincode, updatePincode,getAreapincodeByState
+    createPincode, changeStatus, getAllPinCodes, getAllPinCodesWithPagination, createPincodeByExcel, getAllPinCodesById, deletePincode, updatePincode, getAreapincodeByState
 };

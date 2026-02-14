@@ -110,7 +110,7 @@ const AllProducts = ({ status = '' }) => {
 
 
   console.log("DDD:=>", wishlist);
-  
+
   return (
     <div className="container my-5">
       {categoryData?.map((category) => {

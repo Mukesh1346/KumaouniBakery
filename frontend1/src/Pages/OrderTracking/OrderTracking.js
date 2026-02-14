@@ -313,7 +313,7 @@ const OrderTracking = () => {
                   <h6>Your cake is on the way 🍰</h6>
 
                   <div className="route">
-                    <span>Cake Crazzy Bakery To</span>
+                    <span>Cake Npetals Bakery To</span>
                     <span className="dots">{order.address}</span>
                   </div>
 
