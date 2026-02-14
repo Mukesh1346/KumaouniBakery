@@ -2,62 +2,130 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Cart.css";
-import pic1 from '../../images/pic/vanilla.jpg'
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const [mainItems, setMainItems] = useState([]);
   const navigate = useNavigate();
   const loginvalue = sessionStorage.getItem("login");
 
   /* ================= LOAD CART ================= */
   useEffect(() => {
     const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    const normalizedCart = storedCart.map(item => ({
+    
+    // Process cart to separate main items and their addons
+    const processedItems = storedCart.map(item => ({
       ...item,
-      quantity: item.quantity ? item.quantity : 1,
+      quantity: item.quantity || 1,
+      addonProducts: item.addonProducts || []
     }));
-    setCartItems(normalizedCart);
+    
+    setMainItems(processedItems);
   }, []);
 
-  const getUniqueId = (id, weight) => `${id}-${weight || "addon"}`;
-
-  /* ================= QUANTITY ================= */
-  const handleIncrement = (id, weight) => {
-    const updated = cartItems.map(item =>
-      getUniqueId(item.id, item.weight) === getUniqueId(id, weight)
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
-    setCartItems(updated);
-    sessionStorage.setItem("cart", JSON.stringify(updated));
+  /* ================= UPDATE CART IN STORAGE ================= */
+  const updateCartInStorage = (updatedItems) => {
+    sessionStorage.setItem("cart", JSON.stringify(updatedItems));
+    setMainItems(updatedItems);
   };
 
-  const handleDecrement = (id, weight) => {
-    const updated = cartItems.map(item =>
-      getUniqueId(item.id, item.weight) === getUniqueId(id, weight) &&
-        item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    );
-    setCartItems(updated);
-    sessionStorage.setItem("cart", JSON.stringify(updated));
+  /* ================= MAIN PRODUCT QUANTITY ================= */
+  const handleIncrement = (productId, weight) => {
+    const updated = mainItems.map(item => {
+      if (item.productId === productId && item.weight === weight) {
+        return { ...item, quantity: item.quantity + 1 };
+      }
+      return item;
+    });
+    updateCartInStorage(updated);
   };
 
-  const handleRemove = (id, weight) => {
-    const updated = cartItems.filter(
-      item => getUniqueId(item.id, item.weight) !== getUniqueId(id, weight)
+  const handleDecrement = (productId, weight) => {
+    const updated = mainItems.map(item => {
+      if (item.productId === productId && item.weight === weight && item.quantity > 1) {
+        return { ...item, quantity: item.quantity - 1 };
+      }
+      return item;
+    });
+    updateCartInStorage(updated);
+  };
+
+  /* ================= ADDON QUANTITY ================= */
+  const handleAddonIncrement = (mainProductId, mainWeight, addonId) => {
+    const updated = mainItems.map(item => {
+      if (item.productId === mainProductId && item.weight === mainWeight) {
+        const updatedAddons = item.addonProducts.map(addon => {
+          if (addon.productId === addonId) {
+            return { ...addon, quantity: addon.quantity + 1 };
+          }
+          return addon;
+        });
+        return { ...item, addonProducts: updatedAddons };
+      }
+      return item;
+    });
+    updateCartInStorage(updated);
+  };
+
+  const handleAddonDecrement = (mainProductId, mainWeight, addonId) => {
+    const updated = mainItems.map(item => {
+      if (item.productId === mainProductId && item.weight === mainWeight) {
+        let updatedAddons = item.addonProducts.map(addon => {
+          if (addon.productId === addonId) {
+            return { ...addon, quantity: addon.quantity - 1 };
+          }
+          return addon;
+        });
+        
+        // Remove addon if quantity becomes 0
+        updatedAddons = updatedAddons.filter(addon => addon.quantity > 0);
+        
+        return { ...item, addonProducts: updatedAddons };
+      }
+      return item;
+    });
+    updateCartInStorage(updated);
+  };
+
+  /* ================= REMOVE ITEMS ================= */
+  const handleRemoveMain = (productId, weight) => {
+    const updated = mainItems.filter(
+      item => !(item.productId === productId && item.weight === weight)
     );
-    setCartItems(updated);
-    sessionStorage.setItem("cart", JSON.stringify(updated));
+    updateCartInStorage(updated);
+  };
+
+  const handleRemoveAddon = (mainProductId, mainWeight, addonId) => {
+    const updated = mainItems.map(item => {
+      if (item.productId === mainProductId && item.weight === mainWeight) {
+        const updatedAddons = item.addonProducts.filter(
+          addon => addon.productId !== addonId
+        );
+        return { ...item, addonProducts: updatedAddons };
+      }
+      return item;
+    });
+    updateCartInStorage(updated);
   };
 
   /* ================= CALCULATIONS ================= */
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const calculateSubtotal = () => {
+    let total = 0;
+    
+    mainItems.forEach(mainItem => {
+      // Add main product price
+      total += mainItem.price * mainItem.quantity;
+      
+      // Add addon products price
+      mainItem.addonProducts?.forEach(addon => {
+        total += addon.price * addon.quantity;
+      });
+    });
+    
+    return total;
+  };
 
-  const deliveryCharge = subtotal > 0 ? 0 : 0; // can change later
+  const subtotal = calculateSubtotal();
+  const deliveryCharge = subtotal > 0 ? 0 : 0;
   const grandTotal = subtotal + deliveryCharge;
 
   /* ================= NAVIGATION ================= */
@@ -77,51 +145,124 @@ const Cart = () => {
         <div className="col-lg-8">
           <h4 className="bag-title">MY SHOPPING BAG</h4>
 
-          {cartItems.length === 0 && (
+          {mainItems.length === 0 && (
             <div className="empty-cart">
               <p>Your cart is empty 🛒</p>
             </div>
           )}
 
-          {cartItems.map(item => (
-            <div
-              className="bag-item"
-              key={getUniqueId(item.id, item.weight)}
-            >
-              <img src={`http://localhost:7000/${item?.image}`} alt={item?.name} className="bag-img" />
+          {mainItems.map(mainItem => (
+            <div key={`${mainItem.productId}-${mainItem.weight}`}>
+              {/* MAIN PRODUCT */}
+              <div className="bag-item main-product">
+                <img 
+                  src={`http://localhost:7000/${mainItem?.image}`} 
+                  alt={mainItem?.name} 
+                  className="bag-img" 
+                />
 
-              <div className="bag-info">
-                <h6>
-                  {item?.name} {item?.isAddon && <span className="addon-badge">🎁 Addon</span>}
-                </h6>
+                <div className="bag-info">
+                  <h6>{mainItem?.name}</h6>
 
-                {!item?.isAddon && item.weight && (
-                  <p className="text-muted">Weight: {item.weight}</p>
-                )}
+                  {mainItem.weight && (
+                    <p className="text-muted">Weight: {mainItem.weight}</p>
+                  )}
 
-                {item.deliveryDate && (
-                  <p className="text-muted">
-                    Delivery: {item.deliveryDate}
-                  </p>
-                )}
+                  {mainItem.deliveryDate && (
+                    <p className="text-muted">
+                      Delivery: {mainItem.deliveryDate}
+                    </p>
+                  )}
 
-                <div className="qty-box">
-                  <button onClick={() => handleDecrement(item.id, item.weight)} className="cartDecBtn">−</button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => handleIncrement(item.id, item.weight)} className="cartIncBtn">+</button>
+                  {mainItem.massage && (
+                    <p className="text-muted">
+                      Message: "{mainItem.massage}"
+                    </p>
+                  )}
+
+                  <div className="qty-box">
+                    <button 
+                      onClick={() => handleDecrement(mainItem.productId, mainItem.weight)} 
+                      className="cartDecBtn"
+                    >−</button>
+                    <span>{mainItem.quantity}</span>
+                    <button 
+                      onClick={() => handleIncrement(mainItem.productId, mainItem.weight)} 
+                      className="cartIncBtn"
+                    >+</button>
+                  </div>
+
+                  <span
+                    className="remove-btn"
+                    onClick={() => handleRemoveMain(mainItem.productId, mainItem.weight)}
+                  >
+                    REMOVE
+                  </span>
                 </div>
 
-                <span
-                  className="remove-btn"
-                  onClick={() => handleRemove(item.id, item.weight)}
-                >
-                  REMOVE
-                </span>
+                <div className="bag-price">
+                  ₹ {mainItem.price * mainItem.quantity}
+                </div>
               </div>
 
-              <div className="bag-price">
-                ₹ {item.price * item.quantity}
-              </div>
+              {/* ADDON PRODUCTS (RECOMMENDED ITEMS) */}
+              {mainItem.addonProducts?.length > 0 && (
+                <div className="addons-section">
+                  <p className="addons-title">Recommended Add-ons:</p>
+                  
+                  {mainItem.addonProducts.map(addon => (
+                    <div key={`${mainItem.productId}-${addon.productId}`} className="bag-item addon-item">
+                      <img 
+                        src={`http://localhost:7000/${addon?.image}`} 
+                        alt={addon?.name} 
+                        className="bag-img addon-img" 
+                      />
+
+                      <div className="bag-info">
+                        <h6>
+                          {addon?.name} 
+                          <span className="addon-badge">🎁 Addon</span>
+                        </h6>
+
+                        <div className="qty-box small">
+                          <button 
+                            onClick={() => handleAddonDecrement(
+                              mainItem.productId, 
+                              mainItem.weight, 
+                              addon.productId
+                            )} 
+                            className="cartDecBtn"
+                          >−</button>
+                          <span>{addon.quantity}</span>
+                          <button 
+                            onClick={() => handleAddonIncrement(
+                              mainItem.productId, 
+                              mainItem.weight, 
+                              addon.productId
+                            )} 
+                            className="cartIncBtn"
+                          >+</button>
+                        </div>
+
+                        <span
+                          className="remove-btn small"
+                          onClick={() => handleRemoveAddon(
+                            mainItem.productId, 
+                            mainItem.weight, 
+                            addon.productId
+                          )}
+                        >
+                          REMOVE
+                        </span>
+                      </div>
+
+                      <div className="bag-price">
+                        ₹ {addon.price * addon.quantity}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -150,7 +291,7 @@ const Cart = () => {
 
             <button
               className="checkout-btn"
-              disabled={cartItems.length === 0}
+              disabled={mainItems.length === 0}
               onClick={handleCheckout}
             >
               PROCEED TO CHECKOUT

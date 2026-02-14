@@ -130,7 +130,7 @@ const EditPinCode = () => {
                     <h4>Edit PinCode</h4>
                 </div>
                 <div className="links">
-                    <Link to="/admin/pincode" className="add-new">
+                    <Link to="/all-pincode" className="add-new">
                         Back <i className="fa-regular fa-circle-left"></i>
                     </Link>
                 </div>

@@ -9,7 +9,7 @@ const LocationOption = () => {
   const [predictions, setPredictions] = useState([]);
   const serviceRef = useRef(null);
   const debounceRef = useRef(null);
-  const [show ,setShow] = useState(true)
+  const [show ,setShow] = useState(false)
 
   // Debounce Logic
   useEffect(() => {

@@ -18,7 +18,11 @@ const pinCodeSchema = new mongoose.Schema(
         },
         isActive: {
             type: Boolean,
-            default: true,
+            default: false,
+        },
+        deleveryStatus: {
+            type: Boolean,
+            default: false,
         },
     },
     { timestamps: true }

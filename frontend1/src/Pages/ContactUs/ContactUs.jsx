@@ -110,7 +110,7 @@ const ContactUs = () => {
             <div className="col-md-3">
               <div className="contactSectionBox">
                 <p className="text-light">Call Us</p>
-                <a href="tel:+919508080807" className="text-light">+91 95080 80807</a>
+                <a href="tel:+919953553051" className="text-light">+91 99535-53051</a>
               </div>
             </div>
 

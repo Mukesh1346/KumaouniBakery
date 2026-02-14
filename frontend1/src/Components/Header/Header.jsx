@@ -432,14 +432,15 @@ const Header = () => {
                         Contact Us
                       </Link>
 
-                      <a
-                        href="https://wa.me/91XXXXXXXXXX"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="hdr-menu-link hdr-whatsapp"
-                      >
-                        WhatsApp
-                      </a>
+                     <a
+  href="https://wa.me/919953553051"
+  target="_blank"
+  rel="noreferrer"
+  className="hdr-menu-link hdr-whatsapp"
+>
+  WhatsApp
+</a>
+
                     </div>
                   )}
                 </div>

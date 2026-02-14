@@ -73,7 +73,7 @@ export default function CakeIngredientScroll() {
                     className={`cake-pro-card cake-orbit-pos-${i} ${active === i ? "active" : ""}`}
                   >
                     <img src={item.img} alt="" />
-                    <div>
+                    <div className="w-75">
                       <h4>{item.title}</h4>
                       <p>{item.subtitle}</p>
                     </div>

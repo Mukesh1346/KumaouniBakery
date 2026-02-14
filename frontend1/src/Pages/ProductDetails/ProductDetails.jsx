@@ -26,9 +26,8 @@ const ProductDetails = () => {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [imageIndex, setImageIndex] = useState(0)
   const [massage, setMassage] = useState("")
-const [addonCart, setAddonCart] = useState({});
-
-
+  const [cartItems, setCartItems] = useState([]);
+  const [isAdded, setIsAdded] = useState(false);
 
   const handleWishlist = () => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -46,7 +45,6 @@ const [addonCart, setAddonCart] = useState({});
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
   };
 
-
   useEffect(() => {
     const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     if (data?._id) {
@@ -54,7 +52,145 @@ const [addonCart, setAddonCart] = useState({});
     }
   }, [data]);
 
+  // Fetch product data by name
+  const getApiData = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:7000/api/get-product-by-name/${name}`
+      );
+      const productData = res.data.data;
+      setData(productData);
 
+      if (productData?.Variant?.length > 0) {
+        setPrice(productData.Variant[0].finalPrice);
+      }
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    getApiData();
+  }, [name]);
+
+  // Load cart from session storage
+  useEffect(() => {
+    const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    setCartItems(storedCart);
+  }, []);
+
+  // Check if product is in cart whenever activeWeight or cartItems change
+  useEffect(() => {
+    if (activeWeight && data._id) {
+      const productInCart = cartItems.some(
+        item => item.productId === data._id && item.weight === activeWeight
+      );
+      setIsAdded(productInCart);
+    } else {
+      setIsAdded(false);
+    }
+  }, [activeWeight, cartItems, data._id]);
+
+  const handleWeightSelection = (weight) => {
+    setActiveWeight(weight);
+    const selectedVariant = data.Variant?.find(
+      (variant) => variant?.weight?.sizeweight === weight
+    );
+    if (selectedVariant) {
+      setPrice(selectedVariant.finalPrice);
+    }
+  };
+
+  const getOrCreateMainCartItem = () => {
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    let index = cart.findIndex(
+      item => item.productId === data._id && item.weight === activeWeight
+    );
+
+    if (index === -1) {
+      const newItem = {
+        productId: data?._id,
+        name: data.productName,
+        weight: activeWeight,
+        price: price,
+        massage: massage,
+        quantity: 1,
+        image: data?.productImage?.[0],
+        deliveryDate,
+        eggOption,
+        addonProducts: [],
+      };
+      cart.push(newItem);
+      index = cart.length - 1;
+    }
+
+    return { cart, index };
+  };
+
+  const addToCart = () => {
+    const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
+
+    if (hasWeight && !activeWeight) {
+      Swal.fire("Select Weight", "Please select cake weight first", "warning");
+      return;
+    }
+
+    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    if (isAdded) {
+      // REMOVE
+      cart = cart.filter(
+        item => !(item.productId === data._id && item.weight === activeWeight)
+      );
+
+      sessionStorage.setItem("cart", JSON.stringify(cart));
+      setCartItems(cart);
+      setIsAdded(false);
+
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "info",
+        title: "Product removed from cart",
+        showConfirmButton: false,
+        timer: 1200
+      });
+
+    } else {
+      // ADD
+      const newItem = {
+        productId: data._id,
+        name: data.productName,
+        weight: activeWeight,
+        price: price,
+        massage: massage,
+        quantity: 1,
+        image: data?.productImage?.[0],
+        deliveryDate,
+        eggOption,
+        addonProducts: [],
+      };
+
+      cart.push(newItem);
+
+      sessionStorage.setItem("cart", JSON.stringify(cart));
+      setCartItems(cart);
+      setIsAdded(true);
+
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Product added to cart",
+        showConfirmButton: false,
+        timer: 1200
+      });
+    }
+  };
+
+// In your addAddon function, change it to:
 const addAddon = (addon) => {
   if (!activeWeight) {
     Swal.fire("Select Weight", "Please select cake weight first", "warning");
@@ -80,16 +216,78 @@ const addAddon = (addon) => {
   }
 
   sessionStorage.setItem("cart", JSON.stringify(cart));
-
-  setAddonCart(prev => ({
-    ...prev,
-    [addon._id]: (prev[addon._id] || 0) + 1
-  }));
+  setCartItems(cart); // Update state
+  
+  // Show success message
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: "success",
+    title: `${addon.productName} added to cart`,
+    showConfirmButton: false,
+    timer: 1000
+  });
 };
+  const incrementAddon = (id) => {
+    const { cart, index } = getOrCreateMainCartItem();
 
+    const addons = cart[index].addonProducts;
 
+    const addonIndex = addons.findIndex(a => a.productId === id);
 
+    if (addonIndex > -1) {
+      addons[addonIndex].quantity += 1;
 
+      sessionStorage.setItem("cart", JSON.stringify(cart));
+      setCartItems(cart); // Update state to reflect changes
+
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Quantity increased",
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }
+  };
+
+  const decrementAddon = (id) => {
+    const { cart, index } = getOrCreateMainCartItem();
+
+    let addons = cart[index].addonProducts;
+
+    const addonIndex = addons.findIndex(a => a.productId === id);
+
+    if (addonIndex > -1) {
+      addons[addonIndex].quantity -= 1;
+
+      if (addons[addonIndex].quantity <= 0) {
+        addons.splice(addonIndex, 1);
+      }
+    }
+
+    cart[index].addonProducts = addons;
+
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+    setCartItems(cart); // Update state to reflect changes
+  };
+
+  const getAddonQuantity = (addonId) => {
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    const mainProduct = cart.find(
+      item =>
+        item.productId === data._id &&
+        item.weight === activeWeight
+    );
+
+    const addon = mainProduct?.addonProducts?.find(
+      a => a.productId === addonId
+    );
+
+    return addon?.quantity || 0;
+  };
 
   const addonSliderSettings = {
     dots: false,
@@ -120,260 +318,12 @@ const addAddon = (addon) => {
     ],
   };
 
-
-const incrementAddon = (id) => {
-  const { cart, index } = getOrCreateMainCartItem();
-
-  const addons = cart[index].addonProducts;
-
-  const addonIndex = addons.findIndex(a => a.productId === id);
-
-  if (addonIndex > -1) {
-    addons[addonIndex].quantity += 1;
-
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      icon: "success",
-      title: "Quantity increased",
-      showConfirmButton: false,
-      timer: 1000
-    });
-  }
-
-  sessionStorage.setItem("cart", JSON.stringify(cart));
-
-  setAddonCart(prev => ({
-    ...prev,
-    [id]: prev[id] + 1
-  }));
-};
-
-
-const decrementAddon = (id) => {
-  const { cart, index } = getOrCreateMainCartItem();
-  
-  let addons = cart[index].addonProducts;  
-
-  const addonIndex = addons.findIndex(a => a.productId === id);
-
-  if (addonIndex > -1) {
-    addons[addonIndex].quantity -= 1;
-
-    if (addons[addonIndex].quantity <= 0) {
-      addons.splice(addonIndex, 1);
-    }
-  }
-
-  cart[index].addonProducts = addons;
-
-  sessionStorage.setItem("cart", JSON.stringify(cart));
-
-  setAddonCart(prev => {
-    const updated = prev[id] - 1;
-
-    if (updated <= 0) {
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    }
-
-    return { ...prev, [id]: updated };
-  });
-};
-
-
-  // Fetch product data by name
-  const getApiData = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:7000/api/get-product-by-name/${name}`
-      );
-      const productData = res.data.data;
-      setData(productData);
-
-      if (productData?.Variant?.length > 0) {
-        setPrice(productData.Variant[0].finalPrice); // Default price for the first variant
-      }
-    } catch (error) {
-      console.error("Error fetching product data:", error);
-    }
-  };
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    getApiData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
-
-
-  const handleWeightSelection = (weight) => {
-    setActiveWeight(weight);
-    const selectedVariant = data.Variant?.find(
-      (variant) => variant?.weight?.sizeweight === weight
-    );
-    if (selectedVariant) {
-      setPrice(selectedVariant.finalPrice);
-    }
-  };
-
-  const getOrCreateMainCartItem = () => {
-    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-    let index = cart.findIndex(
-      item => item.productId === data._id && item.weight === activeWeight
-    );
-
-    // If not exist → create
-    if (index === -1) {
-      const newItem = {
-        productId: data?._id,
-        name: data.productName,
-        weight: activeWeight,
-        price: price,
-        massage: massage,
-        quantity: 1,
-        image: data?.productImage?.[0],
-        deliveryDate,
-        eggOption,
-        addonProducts: [],
-      };
-      cart.push(newItem);
-      index = cart.length - 1;
-    }
-
-    return { cart, index };
-  };
-
-const addToCart = () => {
-
-  const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
-
-  if (hasWeight && !activeWeight) {
-    Swal.fire("Select Weight", "Please select cake weight", "warning");
-    return;
-  }
-
-  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-  const productIndex = cart.findIndex(
-    item => item.productId === data._id && item.weight === activeWeight
-  );
-
-  // 🔴 REMOVE
-  if (productIndex > -1) {
-    cart.splice(productIndex, 1);
-
-    sessionStorage.setItem("cart", JSON.stringify(cart));
-
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      icon: "info",
-      title: "Product removed from cart ❌",
-      showConfirmButton: false,
-      timer: 1500
-    });
-
-    return;
-  }
-
-  // 🟢 ADD
-  const { cart: updatedCart, index } = getOrCreateMainCartItem();
-
-  updatedCart[index].quantity += 1;
-
-  sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-
-  Swal.fire({
-    toast: true,
-    position: "top-end",
-    icon: "success",
-    title: "Product added to cart 🛒",
-    showConfirmButton: false,
-    timer: 1500
-  });
-};
-
-  const addAddonToCart = (addon) => {
-    if (!activeWeight) {
-      Swal.fire("Select Weight", "Please select cake weight first", "warning");
-      return;
-    }
-
-    const { cart, index } = getOrCreateMainCartItem();
-
-    const addons = cart[index].addonProducts;
-
-    const addonIndex = addons.findIndex(a => a.productId === addon._id);
-
-    if (addonIndex > -1) {
-      addons[addonIndex].quantity += 1;
-    } else {
-      addons.push({
-        productId: addon._id,
-        name: addon.productName,
-        price: addon.price,
-        image: addon.productImage?.[0],
-        quantity: 1,
-      });
-    }
-
-    sessionStorage.setItem("cart", JSON.stringify(cart));
-    Swal.fire("Added!", "Addon added successfully", "success"); 
-  };
-
-  const isAddonAdded = (addonId) => {
-    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-    const main = cart.find(
-      item => item.productId === data._id && item.weight === activeWeight
-    );
-
-    return main?.addonProducts?.some(a => a.productId === addonId);
-  };
-
-  const isMainProductAdded = () => {
-    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-    return cart.some(
-      item => item.productId === data._id && item.weight === activeWeight
-    );
-  };
-
   const handleBuyNow = () => {
     const { cart } = getOrCreateMainCartItem();
     sessionStorage.setItem("cart", JSON.stringify(cart));
+    setCartItems(cart);
     setOpenPopup(true);
-
   };
-
-
-useEffect(() => {
-  if (!activeWeight) return;
-
-  const mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-  const mainProduct = mainCart.find(
-    item => item.productId === data._id && item.weight === activeWeight
-  );
-
-  if (mainProduct?.addonProducts?.length) {
-    const existingAddons = {};
-
-    mainProduct.addonProducts.forEach(addon => {
-      existingAddons[addon.productId] = addon.quantity;
-    });
-
-    setAddonCart(existingAddons);
-  } else {
-    setAddonCart({});
-  }
-
-}, [data, activeWeight]);
-
-
-
 
   const settings = {
     customPaging: function (i) {
@@ -389,7 +339,6 @@ useEffect(() => {
             alt={`Thumbnail ${i + 1}`}
           />
         </button>
-
       );
     },
     dots: true,
@@ -400,7 +349,7 @@ useEffect(() => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  console.log("SSSSSS::=>", data?.recommendedProductId)
+
   return (
     <>
       {/* Breadcrumb Section */}
@@ -448,22 +397,17 @@ useEffect(() => {
                       />
                     )}
                   </div>
-              </div>
+                </div>
 
                 <div className="pdx-features">
                   <div className="text-center">
-
                     <TbTruckDelivery className="fs-2" />
-                    <p>20+ Min  Delivered</p>
+                    <p>20+ Min Delivered</p>
                   </div>
                   <div className="text-center">
-
                     <TbMapPinCode className="fs-2" />
-                    <p>
-                      Pincodes
-                    </p>
+                    <p>Pincodes</p>
                   </div>
-
                   <div className="text-center">
                     <TbTruckDelivery className="fs-2" />
                     <p>620+ Cities Same-day Delivery</p>
@@ -471,7 +415,8 @@ useEffect(() => {
                 </div>
               </div>
             </div>
- {/* RIGHT DETAILS SECTION */}
+
+            {/* RIGHT DETAILS SECTION */}
             <div className="col-lg-7">
               <div className="pdx-right-scroll">
 
@@ -490,11 +435,11 @@ useEffect(() => {
                 </div>
 
                 <div className="pdx-price">₹ {Math.round(price)}</div>
+
                 {/* WEIGHT */}
                 <div className="pdx-block">
                   <div className="pdx-block-head">
                     <span>Weight</span>
-                    {/* <small>Serving Info ⓘ</small> */}
                   </div>
 
                   <div className="pdx-weight-group">
@@ -535,81 +480,6 @@ useEffect(() => {
                     maxLength={25}
                   />
                 </div>
-                {/* RECOMMENDED ADDONS */}
-                <div className="pdx-block">
-                  <h6 className="pdx-addon-title">Recommended Addon Products</h6>
-
-                  <div className="pdx-addon-slider">
-                   <Slider {...addonSliderSettings}>
-  {data?.recommendedProductId?.map((item, index) => (
-    <div key={index}>
-      <div className="rp-card">
-        <img
-          src={`http://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
-          alt={item?.productName}
-        />
-        <h6>{item?.productName}</h6>
-        <p>₹ {item?.price}</p>
-
-        {!addonCart[item._id] ? (
-          <button
-            className="rp-add-btn"
-            onClick={() => addAddon(item)}
-          >
-            Add
-          </button>
-        ) : (
-          <div className="rp-qty">
-            <button onClick={() => decrementAddon(item._id)}>−</button>
-            <span>{addonCart[item._id]}</span>
-            <button onClick={() => incrementAddon(item._id)}>+</button>
-          </div>
-        )}
-      </div>
-    </div>
-  ))}
-</Slider>
-
-                  </div>
-                </div>
-
-                {/* <div>
-                  <div className="locationHead">
-                    <div>
-                      <b>Select Area / Location</b>
-                    </div>
-                    <div className="locationIconSec">
-                      <FaLocationCrosshairs />
-                      <button
-                        type="button"
-                        className="btn btn-link p-0"
-                      >
-                        Use My Location
-                      </button>
-
-                    </div>
-                  </div>
-                  <div>
-                  </div>
-                </div> */}
-
-                <LocationOption/>
-                {/* Description */}
-                <div className="description-box">
-                  <h6>Description</h6>
-                  <p>
-                    Turn your little one s special day into a joyful celebration with this
-                    Bluey-themed cake. Inspired by the much-loved cartoon, it features
-                    adorable edible toppers of Bluey and friends, making it a treat that s
-                    as fun to look at as it is to eat. The soft sponge layers are filled
-                    with rich flavour, beautifully frosted, and decorated with colourful
-                    details that capture the playful spirit of the show.
-                  </p>
-                </div>
-
-                <RecommendedPopup productId={data._id} open={openPopup}
-                  onClose={() => setOpenPopup(false)}
-                />
 
                 {/* DELIVERY DATE */}
                 <div className="pdx-block">
@@ -622,25 +492,76 @@ useEffect(() => {
                     value={deliveryDate}
                     min={new Date().toISOString().split("T")[0]}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                
                   />
                 </div>
+
+                {/* RECOMMENDED ADDONS */}
+                {data?.recommendedProductId?.length > 0 && (
+                  <div className="pdx-block">
+                    <h6 className="pdx-addon-title">Recommended Addon Products</h6>
+
+                    <div className="pdx-addon-slider">
+                      <Slider {...addonSliderSettings}>
+                        {data?.recommendedProductId?.map((item, index) => (
+                          <div key={index}>
+                            <div className="rp-card">
+                              <img
+                                src={`http://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                                alt={item?.productName}
+                              />
+                              <h6>{item?.productName}</h6>
+                              <p>₹ {item?.price}</p>
+
+                              {getAddonQuantity(item._id) === 0 ? (
+                                <button
+                                  className="rp-add-btn"
+                                  onClick={() => addAddon(item)}
+                                >
+                                  Add
+                                </button>
+                              ) : (
+                                <div className="rp-qty">
+                                  <button onClick={() => decrementAddon(item._id)}>−</button>
+                                  <span>{getAddonQuantity(item._id)}</span>
+                                  <button onClick={() => incrementAddon(item._id)}>+</button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </Slider>
+                    </div>
+                  </div>
+                )}
+
+                <LocationOption />
+
+                {/* Description */}
+                <div className="description-box">
+                  <h6>Description</h6>
+                  <p>{data.productDescription}</p>
+                </div>
+
+                <RecommendedPopup 
+                  productId={data._id} 
+                  open={openPopup}
+                  onClose={() => setOpenPopup(false)}
+                />
+
                 <div className="pdx-cta">
-                 <button
-  className={`pdx-cart ${isMainProductAdded() ? "remove" : ""}`}
-  onClick={addToCart}
->
-  {isMainProductAdded() ? "REMOVE FROM CART" : "ADD TO CART"}
-</button>
+                  <button
+                    className={`pdx-cart ${isAdded ? "remove" : ""}`}
+                    onClick={addToCart}
+                  >
+                    {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
+                  </button>
 
                   <button className="pdx-buy" onClick={handleBuyNow}>
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
                 </div>
-
               </div>
             </div>
-
           </div>
         </div>
       </section>

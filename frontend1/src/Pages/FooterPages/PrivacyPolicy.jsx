@@ -54,7 +54,7 @@ const PrivacyPolicy = () => {
     },
     {
       heading: "Contact Us",
-      text: "If you have any questions or concerns regarding this Privacy Policy or your personal data, please contact us at privacy@cakenpetals.com.",
+      text: "If you have any questions or concerns regarding this Privacy Policy or your personal data, please contact us at 99535 53051,  privacy@cakenpetals.com.",
     },
   ];
 
