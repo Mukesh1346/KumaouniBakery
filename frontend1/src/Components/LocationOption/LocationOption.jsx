@@ -13,7 +13,7 @@ const LocationOption = ({ onServiceChange }) => {
 
   const ServiceLocation = async () => {
     try {
-      const res = await axios.get('https://www.ssdipl.com/api/pincode/get-all-pin-codes');
+      const res = await axios.get('https://api.ssdipl.com/api/pincode/get-all-pin-codes');
       console.log("API Data:", res.data);
       setAvailableService(res.data.pinCodes || []);
       setLoading(false);

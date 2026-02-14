@@ -112,7 +112,7 @@
 //   };
 //   const fetchFeaturedProducts = async () => {
 //     try {
-//       const response = await axios.get("https://www.ssdipl.com/api/get-featuredProducts");
+//       const response = await axios.get("https://api.ssdipl.com/api/get-featuredProducts");
 //       setFeaturedProductsData(response?.data?.data)
 //       // const data = await response.json();
 //       console.log("SSSSS::=>", response.data.data);
@@ -147,7 +147,7 @@
 //             <div className="product-card">
 //               {/* Image */}
 //               <div className="product-img">
-//                 <img src={`https://www.ssdipl.com/${item?.productImage[0] || item?.productImage}`} alt={item?.name} />
+//                 <img src={`https://api.ssdipl.com/${item?.productImage[0] || item?.productImage}`} alt={item?.name} />
 
 //                 {/* ❤️ Wishlist */}
 //                 <span
@@ -216,7 +216,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const BASE_URL = "https://www.ssdipl.com/";
+const BASE_URL = "https://api.ssdipl.com/";
 
 const FeaturedProducts = () => {
   const navigate = useNavigate();
@@ -266,7 +266,7 @@ const FeaturedProducts = () => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("https://www.ssdipl.com/api/wishlist/remove-wishlist", {
+        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -274,7 +274,7 @@ const FeaturedProducts = () => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("https://www.ssdipl.com/api/wishlist/add-wishlist", {
+        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -289,7 +289,7 @@ const FeaturedProducts = () => {
   const fetchFeaturedProducts = async () => {
     try {
       const response = await axios.get(
-        "https://www.ssdipl.com/api/get-featuredProducts"
+        "https://api.ssdipl.com/api/get-featuredProducts"
       );
       setProducts(response?.data?.data || []);
     } catch (error) {

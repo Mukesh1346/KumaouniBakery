@@ -116,7 +116,7 @@ const BestSellingProduct = () => {
   const fetchBestSellingProducts = async () => {
     try {
       const response = await axios.get(
-        "https://www.ssdipl.com/api/get-best-selling-products"
+        "https://api.ssdipl.com/api/get-best-selling-products"
       );
       setProducts(response?.data?.data || []);
     } catch (error) {
@@ -171,7 +171,7 @@ const BestSellingProduct = () => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("https://www.ssdipl.com/api/wishlist/remove-wishlist", {
+        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -179,7 +179,7 @@ const BestSellingProduct = () => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("https://www.ssdipl.com/api/wishlist/add-wishlist", {
+        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -224,7 +224,7 @@ const BestSellingProduct = () => {
                 {/* Image */}
                 <div className="product-img">
                   <img
-                    src={`https://www.ssdipl.com/${image}`}
+                    src={`https://api.ssdipl.com/${image}`}
                     alt={item.productName}
                   />
 

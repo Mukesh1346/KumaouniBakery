@@ -62,7 +62,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://www.ssdipl.com/api/get-product-by-name/${name}`
+        `https://api.ssdipl.com/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -378,7 +378,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`https://www.ssdipl.com/${data.productImage?.[i]}`}
+            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -424,7 +424,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`https://www.ssdipl.com/${imagePath}`}
+                          src={`https://api.ssdipl.com/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -437,7 +437,7 @@ const ProductDetails = () => {
                   <div className="pdx-main-image">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`https://www.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
@@ -554,7 +554,7 @@ const ProductDetails = () => {
                             <div key={index}>
                               <div className="rp-card">
                                 <img
-                                  src={`https://www.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                                  src={`https://api.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
                                 />
                                 <h6>{item?.productName}</h6>

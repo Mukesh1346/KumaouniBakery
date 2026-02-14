@@ -19,7 +19,7 @@ const Category = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          `https://www.ssdipl.com/api/get-subcategory-by-status`
+          `https://api.ssdipl.com/api/get-subcategory-by-status`
 
         );
         console.log(response.data.data);
@@ -81,7 +81,7 @@ const settings = {
                 <div className="category-link" onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?._id } })}>
                   {/* Use a default image if no image is provided */}
                   <img
-                    src={`https://www.ssdipl.com/${item?.image}`}
+                    src={`https://api.ssdipl.com/${item?.image}`}
                     alt={item?.subcategoryName}
                     className="category-img"
                   />

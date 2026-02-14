@@ -36,8 +36,8 @@ const PromoBanner = () => {
   // ✅ API call
   const fetchBannerData = async () => {
     try {
-      // const res = await axios.get("https://www.ssdipl.com/api/promo-banner/get-promo-banner");
-      const res = await axios.get("https://www.ssdipl.com/api/cake-banner/get-cake-banner"
+      // const res = await axios.get("https://api.ssdipl.com/api/promo-banner/get-promo-banner");
+      const res = await axios.get("https://api.ssdipl.com/api/cake-banner/get-cake-banner"
       );
       console.log("SSSSS::=>", res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner2'))
       // console.log("SSSSS::=>XXXXXX", res?.data?.data)
@@ -62,7 +62,7 @@ const PromoBanner = () => {
         <div className="cake-banner-container">
           {cakeBannerData?.map((item) => (
             <div className="cake-banner-card" style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} key={item?._id}>
-              <img src={`https://www.ssdipl.com/${item?.image || item?.cakeBanner}`} alt="cake banner" />
+              <img src={`https://api.ssdipl.com/${item?.image || item?.cakeBanner}`} alt="cake banner" />
               {/* <div className="cake-overlay">
             <h4>{item.title}</h4>
             <h2>{item.highlight}</h2>

@@ -37,7 +37,7 @@ useEffect(() => {
   const fetchProducts = async () => {
     try {
       const res = await axios.get(
-        `https://www.ssdipl.com/api/get-product-by-subcatname/${subcatname}`
+        `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`
       );
 
       if (res.data?.data?.length > 0) {
@@ -66,7 +66,7 @@ const imageUrl =
   subcategoryInfo?.image
     ? subcategoryInfo.image.startsWith("http")
       ? subcategoryInfo.image
-      : `https://www.ssdipl.com/${subcategoryInfo.image}`
+      : `https://api.ssdipl.com/${subcategoryInfo.image}`
     : Banner1;
 
 

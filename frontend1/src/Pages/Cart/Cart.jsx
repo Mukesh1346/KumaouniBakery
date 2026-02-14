@@ -156,7 +156,7 @@ const Cart = () => {
               {/* MAIN PRODUCT */}
               <div className="bag-item main-product">
                 <img 
-                  src={`https://www.ssdipl.com/${mainItem?.image}`} 
+                  src={`https://api.ssdipl.com/${mainItem?.image}`} 
                   alt={mainItem?.name} 
                   className="bag-img" 
                 />
@@ -213,7 +213,7 @@ const Cart = () => {
                   {mainItem.addonProducts.map(addon => (
                     <div key={`${mainItem.productId}-${addon.productId}`} className="bag-item addon-item">
                       <img 
-                        src={`https://www.ssdipl.com/${addon?.image}`} 
+                        src={`https://api.ssdipl.com/${addon?.image}`} 
                         alt={addon?.name} 
                         className="bag-img addon-img" 
                       />

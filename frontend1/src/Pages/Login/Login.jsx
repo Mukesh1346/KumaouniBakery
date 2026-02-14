@@ -32,7 +32,7 @@ const Login = () => {
     };
 
     try {
-      const response = await axios.post("https://www.ssdipl.com/api/user/login", loginData); // Make API call to login route
+      const response = await axios.post("https://api.ssdipl.com/api/user/login", loginData); // Make API call to login route
       console.log('XXXXXXXX::=>',response);
       if (response.status === 200) {
         sessionStorage.setItem("login", true);
@@ -74,7 +74,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "https://www.ssdipl.com/api/user",
+        "https://api.ssdipl.com/api/user",
         registerData
       );
       //console.log(response);
