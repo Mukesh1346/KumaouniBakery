@@ -94,8 +94,15 @@
     flex: 1;
   }
 
+  .cakeImgBanner{
+    height:150px !important;
+  }
   .cake-banner-card {
-    height: 240px;
+    height: 200px; 
+    
+  }
+  .cake-banner{
+    height:200px;
   }
 }
 

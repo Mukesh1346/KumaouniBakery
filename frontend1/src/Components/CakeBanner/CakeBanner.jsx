@@ -48,13 +48,7 @@ const CakeBanners = () => {
         <div className="cake-banner-container two-banner">
           {cakeBannerData?.map((item) => (
             <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} className="cake-banner-card" key={item?._id}>
-              <img src={`https://api.ssdipl.com/${item?.cakeBanner}`} alt="cake banner" />
-              {/* <div className="cake-overlay">
-            <h4>{item.title}</h4>
-            <h2>{item.highlight}</h2>
-            <p>{item.subtitle}</p>
-            <button className="cake-btn">Order Now 🍰</button>
-          </div> */}
+              <img src={`https://api.ssdipl.com/${item?.cakeBanner}`} className="cakeImgBanner" alt="cake banner" />
             </div>
           ))}
         </div>
