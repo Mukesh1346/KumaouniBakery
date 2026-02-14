@@ -19,7 +19,7 @@ const deleteImageFile = (relativeFilePath) => {
 
 const createProduct = async (req, res) => {
     console.log(req.body);
-    const { categoryName, subcategoryName, secondsubcategoryName, productName, productDescription, productDetails, Variant, ActiveonHome, FeaturedProducts, BestSellingProduct, recommendedProductId } = req.body;
+    const { categoryName, subcategoryName, secondsubcategoryName, productName, productDescription, productDetails, Variant, ActiveonHome, FeaturedProducts, BestSellingProduct, eggless, recommendedProductId } = req.body;
     const errorMessage = [];
 
     // Validation for required fields
@@ -82,6 +82,7 @@ const createProduct = async (req, res) => {
         productDetails,
         ActiveonHome,
         FeaturedProducts,
+        eggless,
         BestSellingProduct,
         recommendedProductId: parseRecommendedProductId,
         Variant: parsedVariant.map(variant => ({
@@ -303,6 +304,7 @@ const updateProduct = async (req, res) => {
         productDetails: req.body.productDetails,
         ActiveonHome: req.body.ActiveonHome || 0, // Default to 0 if not provided
         FeaturedProducts: req.body.FeaturedProducts || 0,
+        eggless: req.body.eggless || 0,
         BestSellingProduct: req.body.BestSellingProduct || 0,
         recommendedProductId: req.body.recommendedProductId ? JSON.parse(req.body.recommendedProductId) : [],
         Variant: req.body.Variant ? JSON.parse(req.body.Variant) : [], // Parse Variant if provided, default to empty array

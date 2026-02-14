@@ -19,6 +19,7 @@ const EditProduct = () => {
         productName: "",
         productDescription: "",
         BestSellingProduct: 0,
+        eggless: 0,
         Variant: [
             {
                 weight: "",
@@ -48,16 +49,16 @@ const EditProduct = () => {
             try {
                 // Fetch dynamic data
                 const categoryResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-main-category"
+                    "http://localhost:7000/api/get-main-category"
                 );
                 const subcategoryResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-subcategory"
+                    "http://localhost:7000/api/get-subcategory"
                 );
                 const weightResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-size"
+                    "http://localhost:7000/api/get-size"
                 );
                 const RecommendedProductResponse = await axios.get(
-                    "https://api.ssdipl.com/api/recommended-product/all-product"
+                    "http://localhost:7000/api/recommended-product/all-product"
                 );
 
                 setCategories(categoryResponse.data.data);
@@ -66,7 +67,7 @@ const EditProduct = () => {
                 setRecommendedProducts(RecommendedProductResponse.data.data);
                 // Fetch product details
                 const productResponse = await axios.get(
-                    `https://api.ssdipl.com/api/get-single-product/${id}`
+                    `http://localhost:7000/api/get-single-product/${id}`
                 );
                 const productData = productResponse.data.data;
                 // console.log("XXXXX::=>", productData);
@@ -75,6 +76,7 @@ const EditProduct = () => {
                     ActiveonHome: productData?.ActiveonHome === true ? 1 : 0,
                     FeaturedProducts: productData?.FeaturedProducts === true ? 1 : 0 || 0,
                     BestSellingProduct: productData?.BestSellingProduct === true ? 1 : 0 || 0,
+                    eggless: productData?.eggless === true ? 1 : 0 || 0,
                     categoryName: productData.categoryName ? productData.categoryName?._id : "",
                     subcategoryName: productData.subcategoryName ? productData?.subcategoryName?._id : "",
                     secondsubcategoryName: productData?.secondsubcategoryName ? productData?.secondsubcategoryName?._id : "",
@@ -203,6 +205,7 @@ const EditProduct = () => {
         form.append("ActiveonHome", formData.ActiveonHome);
         form.append("FeaturedProducts", formData.FeaturedProducts);
         form.append("BestSellingProduct", formData?.BestSellingProduct);
+        form.append("eggless", formData?.eggless);
         form.append("recommendedProductId", JSON.stringify(formData.recommendedProductId));
         // Append variants
         form.append("Variant", JSON.stringify(formData.Variant));
@@ -213,7 +216,7 @@ const EditProduct = () => {
         }
 
         try {
-            await axios.put(`https://api.ssdipl.com/api/update-product/${id}`, form, {
+            await axios.put(`http://localhost:7000/api/update-product/${id}`, form, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -232,7 +235,7 @@ const EditProduct = () => {
         const fetchSecondSubcategories = async () => {
             try {
                 const response = await axios.get(
-                    `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+                    `http://localhost:7000/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
                 );
                 setSecondSubcategories(response?.data?.data);
             } catch (error) {
@@ -519,7 +522,18 @@ const EditProduct = () => {
                                 />
                                 <label className="form-check-label">Featured Products</label>
                             </div>
-
+                            <div className="col-md-3 form-check">
+                                <input
+                                    type="checkbox"
+                                    name="eggless"
+                                    className="form-check-input me-2"
+                                    checked={formData.eggless === 1}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, eggless: e.target.checked ? 1 : 0 })
+                                    }
+                                />
+                                <label className="form-check-label">100% Eggless</label>
+                            </div>
                         </div>
                     </div>
 

@@ -19,7 +19,7 @@ const AllProducts = ({ status='' }) => {
 
   const getApiData = async () => {
     const res = await axios.get(
-      `https://api.ssdipl.com/api/get-main-category`
+      `http://localhost:7000/api/get-main-category`
     );
     if (res.status === 200) {
       setCategoryData(status === 'Home' ? res.data.data.filter((item) => item.ActiveonHome === true) : res.data.data);
@@ -31,7 +31,7 @@ const AllProducts = ({ status='' }) => {
 
   const getApiProductData = async () => {
     const res = await axios.get(
-      `https://api.ssdipl.com/api/all-product`
+      `http://localhost:7000/api/all-product`
     );
 
     if (res.status === 200) {
@@ -86,7 +86,7 @@ const AllProducts = ({ status='' }) => {
                     {/* IMAGE */}
                     <div className="product-img">
                       <img
-                        src={`https://api.ssdipl.com/${product.productImage[0]}`}
+                        src={`http://localhost:7000/${product.productImage[0]}`}
                         alt={product.productName}
                       />
 

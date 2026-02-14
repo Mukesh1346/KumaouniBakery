@@ -1,4 +1,4 @@
- import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./header.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -26,16 +26,16 @@ const Header = () => {
 
 
   /* CATEGORY DATA (FROM API) */
-const [megaCategories, setMegaCategories] = useState([]);
+  const [megaCategories, setMegaCategories] = useState([]);
 
   /* LOCATION */
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  
+
 
   const [productSuggestions, setProductSuggestions] = useState([]);
-const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
 
   /* MOBILE MENU */
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -52,128 +52,131 @@ const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
 
 
-const toggleDropdown = (key) => {
-  setOpenIndex(openIndex === key ? null : key);
-};
+  const toggleDropdown = (key) => {
+    setOpenIndex(openIndex === key ? null : key);
+  };
 
 
   /* REFS */
   const mobileMenuRef = useRef(null);
 
- useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const res = await axios.get(
-        `https://api.ssdipl.com/api/get-category-with-subcategory`
-      );
-        
-      console.log(res.data.data)
-      if (res.data?.data) {
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:7000/api/get-category-with-subcategory`
+        );
 
-    const formattedData = res.data.data.map((cat) => ({
-  _id: cat._id,
-  name: cat.mainCategoryName,
-  subcategories: (cat.subcategories || []).map((sub) => ({
-    _id: sub._id,
-    name: sub.subcategoryName,
-    children: (sub.secondSubcategories || []).map(
-      (child) => child.secondsubcategoryName
-    )
-  }))
-}));
+        console.log(res.data.data)
+        if (res.data?.data) {
 
-setMegaCategories(formattedData);
+          const formattedData = res.data.data.map((cat) => ({
+            _id: cat._id,
+            name: cat.mainCategoryName,
+            subcategories: (cat.subcategories || []).map((sub) => ({
+              _id: sub._id,
+              name: sub.subcategoryName,
+              children: (sub.secondSubcategories || []).map(
+                (child) => ({
+                  name: child.secondsubcategoryName,
+                  id: child._id,
+                })
+              )
+            }))
+          }));
+
+          setMegaCategories(formattedData);
 
 
-        setMegaCategories(formattedData);
+          setMegaCategories(formattedData);
+        }
+
+      } catch (error) {
+        console.error("Category fetch error:", error);
       }
+    };
 
-    } catch (error) {
-      console.error("Category fetch error:", error);
+    fetchCategories();
+  }, []);
+
+
+  // useEffect(() => {
+  //   if (!searchQuery.trim()) {
+  //     setProductSuggestions([]);
+  //     return;
+  //   }
+
+  //   const delayDebounce = setTimeout(async () => {
+  //     try {
+  //       setLoadingSuggestions(true);
+
+  //       const res = await axios.get(
+  //         // `http://localhost:7000/api/search-products?query=${searchQuery}`
+  //         ` http://localhost:7000/api/get-best-selling-products?query=${searchQuery}`
+
+
+  //       );
+
+  //       setProductSuggestions(res.data?.data || []);
+  //     } catch (err) {
+  //       console.error("Search error:", err);
+  //     } finally {
+  //       setLoadingSuggestions(false);
+  //     }
+  //   }, 400); // 400ms debounce
+
+  //   return () => clearTimeout(delayDebounce);
+
+  // }, [searchQuery]);
+
+
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:7000/api/all-product"
+        );
+        setAllProducts(res.data?.data || []);
+      } catch (err) {
+        console.error("All products fetch error:", err);
+      }
+    };
+
+    fetchAllProducts();
+  }, []);
+
+
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setProductSuggestions([]);
+      return;
     }
-  };
 
-  fetchCategories();
-}, []);
+    const lowerQuery = searchQuery.toLowerCase();
 
+    const filtered = allProducts.filter((product) => {
+      const nameMatch =
+        product.productName?.toLowerCase().includes(lowerQuery);
 
-// useEffect(() => {
-//   if (!searchQuery.trim()) {
-//     setProductSuggestions([]);
-//     return;
-//   }
+      const categoryMatch =
+        product.categoryName?.mainCategoryName
+          ?.toLowerCase()
+          .includes(lowerQuery);
 
-//   const delayDebounce = setTimeout(async () => {
-//     try {
-//       setLoadingSuggestions(true);
+      const subcategoryMatch =
+        product.subcategoryName?.subcategoryName
+          ?.toLowerCase()
+          .includes(lowerQuery);
 
-//       const res = await axios.get(
-//         // `https://api.ssdipl.com/api/search-products?query=${searchQuery}`
-//         ` https://api.ssdipl.com/api/get-best-selling-products?query=${searchQuery}`
+      return nameMatch || categoryMatch || subcategoryMatch;
+    });
 
-       
-//       );
-
-//       setProductSuggestions(res.data?.data || []);
-//     } catch (err) {
-//       console.error("Search error:", err);
-//     } finally {
-//       setLoadingSuggestions(false);
-//     }
-//   }, 400); // 400ms debounce
-
-//   return () => clearTimeout(delayDebounce);
-
-// }, [searchQuery]);
+    setProductSuggestions(filtered.slice(0, 6));
+  }, [searchQuery, allProducts]);
 
 
-useEffect(() => {
-  const fetchAllProducts = async () => {
-    try {
-      const res = await axios.get(
-        "https://api.ssdipl.com/api/all-product"
-      );
-      setAllProducts(res.data?.data || []);
-    } catch (err) {
-      console.error("All products fetch error:", err);
-    }
-  };
-
-  fetchAllProducts();
-}, []);
-
-
-
-useEffect(() => {
-  if (!searchQuery.trim()) {
-    setProductSuggestions([]);
-    return;
-  }
-
-  const lowerQuery = searchQuery.toLowerCase();
-
-  const filtered = allProducts.filter((product) => {
-    const nameMatch =
-      product.productName?.toLowerCase().includes(lowerQuery);
-
-    const categoryMatch =
-      product.categoryName?.mainCategoryName
-        ?.toLowerCase()
-        .includes(lowerQuery);
-
-    const subcategoryMatch =
-      product.subcategoryName?.subcategoryName
-        ?.toLowerCase()
-        .includes(lowerQuery);
-
-    return nameMatch || categoryMatch || subcategoryMatch;
-  });
-
-  setProductSuggestions(filtered.slice(0, 6));
-}, [searchQuery, allProducts]);
-
-
- useEffect(() => {
+  useEffect(() => {
     const fetchCountries = async () => {
       try {
         const res = await axios.get(
@@ -244,7 +247,7 @@ useEffect(() => {
   };
 
 
-
+  console.log("megaCategories==>", megaCategories)
   return (
     <>
       {/* ================= TOP PROMO BANNER ================= */}
@@ -296,75 +299,76 @@ useEffect(() => {
                 </div>
               </div>
               {/* ================= SEARCH ================= */}
-             <form className="search-container" onSubmit={handleSearchSubmit}>
-  <div className="search-wrapper position-relative">
+              <form className="search-container" onSubmit={handleSearchSubmit}>
+                <div className="search-wrapper position-relative">
 
-    <input
-      type="search"
-      className="form-control searchInput"
-      placeholder="Search cakes, flowers..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-    />
+                  <input
+                    type="search"
+                    className="form-control searchInput"
+                    placeholder="Search cakes, flowers..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
 
-  <button
-  type={searchQuery ? "button" : "submit"}
-  className="search-icon"
-  onClick={() => {
-    if (searchQuery) {
-      setSearchQuery("");
-      setProductSuggestions([]);
-    }
-  }}
->
-  {searchQuery ? (
-    // <IoClose className="iconFont text-dark" />
-    ""
-  ) : (
-    <IoSearch className="iconFont text-dark" />
-  )}
-</button>
+                  <button
+                    type={searchQuery ? "button" : "submit"}
+                    className="search-icon"
+                    onClick={() => {
+                      if (searchQuery) {
+                        setSearchQuery("");
+                        setProductSuggestions([]);
+                      }
+                    }}
+                  >
+                    {searchQuery ? (
+                      // <IoClose className="iconFont text-dark" />
+                      ""
+                    ) : (
+                      <IoSearch className="iconFont text-dark" />
+                    )}
+                  </button>
 
-    {/* 🔥 Product Suggestion Dropdown */}
-   {searchQuery && (
-  <div className="search-suggestions">
+                  {/* 🔥 Product Suggestion Dropdown */}
+                  {searchQuery && (
+                    <div className="search-suggestions">
 
-    {loadingSuggestions && (
-      <div className="suggestion-item">Searching...</div>
-    )}
+                      {loadingSuggestions && (
+                        <div className="suggestion-item">Searching...</div>
+                      )}
 
-    {!loadingSuggestions && productSuggestions.length === 0 && (
-      <div className="suggestion-item">No products found</div>
-    )}
+                      {!loadingSuggestions && productSuggestions.length === 0 && (
+                        <div className="suggestion-item">No products found</div>
+                      )}
 
-    {productSuggestions.map((product) => (
-      <div
-        key={product._id}
-        className="suggestion-item product-suggestion"
-        onClick={() => {
-          navigate(`/product/${product._id}`);
-          setSearchQuery("");
-          setProductSuggestions([]);
-        }}
-      >
-        <img
-          src={`https://api.ssdipl.com/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
-          alt={product.productName}
-          className="suggestion-image"
-        />
+                      {productSuggestions.map((product) => (
+                        <div
+                          key={product._id}
+                          className="suggestion-item product-suggestion"
+                          onClick={() => {
+                            navigate(`/product-details/${product?.productName}`,
+                              { state: { id: product?._id, status: 'product' } });
+                            setSearchQuery("");
+                            setProductSuggestions([]);
+                          }}
+                        >
+                          <img
+                            src={`http://localhost:7000/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
+                            alt={product.productName}
+                            className="suggestion-image"
+                          />
 
-        <div className="suggestion-name">
-          {product.productName}
-        </div>
-      </div>
-    ))}
+                          <div className="suggestion-name">
+                            {product.productName}
+                          </div>
+                        </div>
+                      ))}
 
-  </div>
-)}
+                    </div>
+                  )}
 
 
-  </div>
-</form>
+                </div>
+              </form>
 
 
               {/* ================= RIGHT ICONS ================= */}
@@ -390,48 +394,48 @@ useEffect(() => {
                     <span className="navPageText">Login</span>
                   </Link>
                 )}
-              {/* MENU DROPDOWN */}
-<div
-  className="hdr-menu-trigger"
-  onClick={() => toggleDropdown("menu")}
->
-  <i className="bi bi-grid"></i>
-  <span className="navPageText">Menu</span>
+                {/* MENU DROPDOWN */}
+                <div
+                  className="hdr-menu-trigger"
+                  onClick={() => toggleDropdown("menu")}
+                >
+                  <i className="bi bi-grid"></i>
+                  <span className="navPageText">Menu</span>
 
-  {openIndex === "menu" && (
-    <div className="hdr-menu-dropdown">
+                  {openIndex === "menu" && (
+                    <div className="hdr-menu-dropdown">
 
-      <Link to="/wishlist" className="hdr-menu-link">
-        My Favourites
-      </Link>
+                      <Link to="/wishlist" className="hdr-menu-link">
+                        My Favourites
+                      </Link>
 
-      <Link to="/refer" className="hdr-menu-link">
-        Refer and Earn <span className="hdr-badge-new">New</span>
-      </Link>
+                      <Link to="/refer" className="hdr-menu-link">
+                        Refer and Earn <span className="hdr-badge-new">New</span>
+                      </Link>
 
-      <Link to="/faq" className="hdr-menu-link">
-        FAQ
-      </Link>
+                      <Link to="/faq" className="hdr-menu-link">
+                        FAQ
+                      </Link>
 
-      <Link to="/about-us" className="hdr-menu-link">
-        About Us
-      </Link>
+                      <Link to="/about-us" className="hdr-menu-link">
+                        About Us
+                      </Link>
 
-      <Link to="/contact-us" className="hdr-menu-link">
-        Contact Us
-      </Link>
+                      <Link to="/contact-us" className="hdr-menu-link">
+                        Contact Us
+                      </Link>
 
-      <a
-        href="https://wa.me/91XXXXXXXXXX"
-        target="_blank"
-        rel="noreferrer"
-        className="hdr-menu-link hdr-whatsapp"
-      >
-        WhatsApp
-      </a>
-    </div>
-  )}
-</div>
+                      <a
+                        href="https://wa.me/91XXXXXXXXXX"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hdr-menu-link hdr-whatsapp"
+                      >
+                        WhatsApp
+                      </a>
+                    </div>
+                  )}
+                </div>
 
               </div>
 
@@ -440,73 +444,72 @@ useEffect(() => {
           </div>
 
           {/* ================= DELIVERY ================= */}
-<div className="delivery-row d-lg-none">
-  <div
-    className="delivery-box"
-    onClick={() => setShowLocationModal(true)}
-  >
-    {selectedCountry && (
-      <img
-        src={selectedCountry.flag}
-        alt={selectedCountry.name}
-        className="delivery-flag"
-      />
-    )}
-    <div className="DeliverSection">
-      <small>Deliver to</small>
-      <span className="delivery-country">
-        {selectedCountry?.name}
-      </span>
-    </div>
-    <IoIosArrowDown />
-  </div>
-</div>
+          <div className="delivery-row d-lg-none">
+            <div
+              className="delivery-box"
+              onClick={() => setShowLocationModal(true)}
+            >
+              {selectedCountry && (
+                <img
+                  src={selectedCountry.flag}
+                  alt={selectedCountry.name}
+                  className="delivery-flag"
+                />
+              )}
+              <div className="DeliverSection">
+                <small>Deliver to</small>
+                <span className="delivery-country">
+                  {selectedCountry?.name}
+                </span>
+              </div>
+              <IoIosArrowDown />
+            </div>
+          </div>
 
         </header>
 
         {/* ================= MOBILE MENU ================= */}
-    {mobileNavOpen && (
-  <div className="mobile-menu-wrapper d-lg-none" ref={mobileMenuRef}>
-    {megaCategories.map((cat, index) => (
-      <div key={cat._id || index} className="mobile-cat">
+        {mobileNavOpen && (
+          <div className="mobile-menu-wrapper d-lg-none" ref={mobileMenuRef}>
+            {megaCategories.map((cat, index) => (
+              <div key={cat._id || index} className="mobile-cat">
 
-        <div
-          className="mobile-cat-title"
-          onClick={() => handleMobileCategoryToggle(index)}
-        >
-          {cat.name}
-          <IoIosArrowDown
-            className={`arrow ${
-              mobileCategoryOpen === index ? "rotate" : ""
-            }`}
-          />
-        </div>
+                <div
+                  className="mobile-cat-title"
+                  onClick={() => handleMobileCategoryToggle(index)}
+                >
+                  {cat.name}
+                  <IoIosArrowDown
+                    className={`arrow ${mobileCategoryOpen === index ? "rotate" : ""
+                      }`}
+                  />
+                </div>
 
-        {mobileCategoryOpen === index && (
-          <div className="mobile-subcats">
-            {cat.subcategories?.map((sub, i) => (
-              <div key={sub._id || i} className="mobile-subcat">
-                <strong>{sub.name}</strong>
+                {mobileCategoryOpen === index && (
+                  <div className="mobile-subcats">
+                    {cat.subcategories?.map((sub, i) => (
+                      <div key={sub._id || i} className="mobile-subcat">
+                        <strong>{sub.name}</strong>
 
-                {sub.children?.map((child, j) => (
-                  <Link
-                    key={j}
-                    to={`/category/${child
-                      .replace(/\s+/g, "-")
-                      .toLowerCase()}`}
-                    onClick={closeAllMobileMenus}
-                  >
-                    {child}
-                  </Link>
-                ))}
+                        {sub.children?.map((child, j) => (
+                          <Link
+                            key={j}
+                            to={`/category/${child
+                              .replace(/\s+/g, "-")
+                              .toLowerCase()}`}
+                            onClick={closeAllMobileMenus}
+                          >
+                            {child}
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
-      </div>
-    ))}
-  </div>
-)}
 
         {/* ================= LOCATION MODAL ================= */}
         {showLocationModal && (
@@ -547,15 +550,24 @@ useEffect(() => {
                           </div>
 
                           {sub.children?.map((child, j) => (
-                            <Link
-                              key={j}
-                              to={`/category/${child
-                                .replace(/\s+/g, "-")
-                                .toLowerCase()}`}
+                            // <Link
+                            //   key={j}
+                            //   to={`/category/${child
+                            //     .replace(/\s+/g, "-")
+                            //     .toLowerCase()}`}
+                            //   className="mega-item mega-child"
+                            // >
+                            <div
+                              onClick={() => {
+                                navigate(`/product-related/${child?.name}`,
+                                  { state: { id: child?.id, status: 'subCategory' } });
+                              }}
                               className="mega-item mega-child"
                             >
-                              {child}
-                            </Link>
+                              {child?.name}
+                            </div>
+
+                            // </Link>
                           ))}
                         </div>
                       ))}
@@ -566,7 +578,7 @@ useEffect(() => {
 
               </li>
             ))}
-   
+
           </ul>
         </div>
       </nav>

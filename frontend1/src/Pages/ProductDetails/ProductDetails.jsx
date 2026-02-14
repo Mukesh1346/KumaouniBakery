@@ -11,6 +11,7 @@ import RecommendedPopup from "../../Components/RecommendedPopup/RecommendedPopup
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { TbMapPinCode } from "react-icons/tb";
+import LocationOption from "../../Components/LocationOption/LocationOption";
 
 const ProductDetails = () => {
   const loginvalue = sessionStorage.getItem("login");
@@ -24,7 +25,7 @@ const ProductDetails = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [deliveryDate, setDeliveryDate] = useState("");
   const [imageIndex, setImageIndex] = useState(0)
-
+  const [massage, setMassage] = useState("")
 
   const handleWishlist = () => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -85,7 +86,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://api.ssdipl.com/api/get-product-by-name/${name}`
+        `http://localhost:7000/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -125,12 +126,13 @@ const ProductDetails = () => {
     // If not exist → create
     if (index === -1) {
       const newItem = {
-        productId: data._id,
+        productId: data?._id,
         name: data.productName,
         weight: activeWeight,
         price: price,
+        massage: massage,
         quantity: 1,
-        image: data.productImage?.[0],
+        image: data?.productImage?.[0],
         deliveryDate,
         eggOption,
         addonProducts: [],
@@ -223,7 +225,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
+            src={`http://localhost:7000/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -270,7 +272,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`https://api.ssdipl.com/${imagePath}`}
+                          src={`http://localhost:7000/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -283,13 +285,12 @@ const ProductDetails = () => {
                   <div className="pdx-main-image">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`http://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
                   </div>
-
-                </div>
+              </div>
 
                 <div className="pdx-features">
                   <div className="text-center">
@@ -312,13 +313,12 @@ const ProductDetails = () => {
                 </div>
               </div>
             </div>
-
-            {/* RIGHT DETAILS SECTION */}
+ {/* RIGHT DETAILS SECTION */}
             <div className="col-lg-7">
               <div className="pdx-right-scroll">
 
                 <div className="pdx-title-row">
-                  <span className="pdx-badge">EGGLESS</span>
+                  {data.eggless ? <span className="pdx-badge"> 100% EGGLESS </span> : ''}
                   <h1>{data.productName}</h1>
 
                   <div
@@ -329,12 +329,9 @@ const ProductDetails = () => {
                   >
                     {isWishlisted ? <FaHeart /> : <FaRegHeart />}
                   </div>
-
-
                 </div>
 
                 <div className="pdx-price">₹ {Math.round(price)}</div>
-
                 {/* WEIGHT */}
                 <div className="pdx-block">
                   <div className="pdx-block-head">
@@ -369,17 +366,17 @@ const ProductDetails = () => {
                 {/* NAME */}
                 <div className="pdx-block">
                   <label>
-                    Name on Cake <small>0 / 25</small>
+                    Name on Cake <small>{massage?.length} / 25</small>
                   </label>
                   <input
                     type="text"
+                    value={massage}
+                    onChange={(e) => setMassage(e.target.value)}
                     className="form-control formInput w-75"
                     placeholder="Write Name Here"
                     maxLength={25}
                   />
                 </div>
-
-                {/* ADDONS */}
                 {/* RECOMMENDED ADDONS */}
                 <div className="pdx-block">
                   <h6 className="pdx-addon-title">Recommended Addon Products</h6>
@@ -389,7 +386,7 @@ const ProductDetails = () => {
                       {data?.recommendedProductId?.map((item, index) => (
                         <div key={index} className="pdx-addon-slide">
                           <div className="pdx-addon-card">
-                            <img src={`https://api.ssdipl.com/${item?.productImage}`} alt="addon" />
+                            <img src={`http://localhost:7000/${item?.productImage}`} alt="addon" />
                             <p className="pdx-addon-name ">{item?.productName || 'Birthday Cap'}</p>
                             <span className="pdx-addon-price">₹ {item?.price}</span>
                             <button
@@ -405,8 +402,7 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-
-                <div>
+                {/* <div>
                   <div className="locationHead">
                     <div>
                       <b>Select Area / Location</b>
@@ -422,15 +418,11 @@ const ProductDetails = () => {
 
                     </div>
                   </div>
-
-
                   <div>
-
-
                   </div>
-                </div>
+                </div> */}
 
-
+                <LocationOption/>
                 {/* Description */}
                 <div className="description-box">
                   <h6>Description</h6>
@@ -444,20 +436,15 @@ const ProductDetails = () => {
                   </p>
                 </div>
 
-
-
                 <RecommendedPopup productId={data._id} open={openPopup}
                   onClose={() => setOpenPopup(false)}
                 />
-
-                {/* CTA */}
 
                 {/* DELIVERY DATE */}
                 <div className="pdx-block">
                   <label>
                     Delivery Date <span className="text-danger">*</span>
                   </label>
-
                   <input
                     type="date"
                     className="form-control w-75"
@@ -467,19 +454,13 @@ const ProductDetails = () => {
                     required
                   />
                 </div>
-
                 <div className="pdx-cta">
-                  {/* <button className="pdx-cart" onClick={addToCart}>ADD TO CART</button> */}
                   <button
                     className={`pdx-cart ${isMainProductAdded() ? "added" : ""}`}
                     onClick={addToCart}
                   >
                     {isMainProductAdded() ? "✔ Added To Cart" : "ADD TO CART"}
                   </button>
-                  {/* <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
-                    BUY NOW | ₹ {Math.round(price)}
-                  </button> */}
-
                   <button className="pdx-buy" onClick={handleBuyNow}>
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
@@ -491,9 +472,6 @@ const ProductDetails = () => {
           </div>
         </div>
       </section>
-
-
-
 
       {/* Related Products Section */}
       <section className="relatedProducts">

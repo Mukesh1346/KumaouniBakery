@@ -26,10 +26,10 @@ const Checkout = () => {
     cart: [],
 
     specialNote: {
-  occasion: "",
-  relation: "",
-  message: "",
-},
+      occasion: "",
+      relation: "",
+      message: "",
+    },
 
   });
 
@@ -105,7 +105,7 @@ const Checkout = () => {
       cart: cartItems,
     }));
 
-    setStep(4);
+    setStep(5);
   };
 
   const loadRazorpayScript = () => {
@@ -134,7 +134,7 @@ const Checkout = () => {
   //   if (finalPayload.paymentMode === "cod") {
   //     try {
   //       const res = await axios.post(
-  //         'https://api.ssdipl.com/api/checkout', finalPayload
+  //         'http://localhost:7000/api/checkout', finalPayload
   //       )
   //       console.log("resres==>", res.data.data);
   //       if (res.status === 200) {
@@ -150,7 +150,7 @@ const Checkout = () => {
   //       return;
   //     }
 
-  //     const res = await axios.post('https://api.ssdipl.com/api/checkout', finalPayload)
+  //     const res = await axios.post('http://localhost:7000/api/checkout', finalPayload)
   //     console.log("data==>", res?.data ,res?.data);
   //     const data = res?.data;
 
@@ -167,7 +167,7 @@ const Checkout = () => {
   //         try {
   //           console.log("XXXXXX::=>" , response)
   //           const verifyData = await axios.post(
-  //             "https://api.ssdipl.com/api/verify-payment",
+  //             "http://localhost:7000/api/verify-payment",
   //             {
   //               razorpay_order_id: response?.razorpay_order_id,
   //               razorpay_payment_id: response?.razorpay_payment_id,
@@ -221,7 +221,7 @@ const Checkout = () => {
       /* ================= COD ================= */
       if (finalPayload.paymentMode === "cod") {
         const res = await axios.post(
-          "https://api.ssdipl.com/api/checkout",
+          "http://localhost:7000/api/checkout",
           finalPayload
         );
 
@@ -241,7 +241,7 @@ const Checkout = () => {
       }
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/checkout",
+        "http://localhost:7000/api/checkout",
         finalPayload
       );
       const { razorpayOrderId, amount, currency } = res.data;
@@ -265,7 +265,7 @@ const Checkout = () => {
           console.log("XXXXXXX::=>", response)
           try {
             const verifyRes = await axios.post(
-              "https://api.ssdipl.com/api/verify-payment",
+              "http://localhost:7000/api/verify-payment",
               response
             );
             console.log("XXXXXXX::=>", verifyRes)
@@ -349,7 +349,7 @@ const Checkout = () => {
                 <div className={`step ${step >= 2 ? "active" : ""}`}>
                   Delivery Address <span>Step 2/6</span>
                 </div>
-                 <div className={`step ${step >= 3 ? "active" : ""}`}>
+                <div className={`step ${step >= 3 ? "active" : ""}`}>
                   Special Note <span>Step 3/6</span>
                 </div>
                 <div className={`step ${step >= 4 ? "active" : ""}`}>
@@ -359,7 +359,7 @@ const Checkout = () => {
                   Payment & Summary <span>Step 5/6</span>
                 </div>
 
-                
+
               </div>
             </div>
 
@@ -393,126 +393,134 @@ const Checkout = () => {
                 </form>
               )}
 
-              
-              {step === 3 && (
-  <div className="checkout-card" >
-   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-     <h4>Write your free card message</h4>
 
-    <button
+              {step === 3 && (
+                <div className="checkout-card" >
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <h4>Write your free card message</h4>
+
+                    <button
                       onClick={() => setStep(2)}
                       className="back-btn"
                     >
                       <i className="fa fa-arrow-left"></i>
                       <span>back to Address</span>
                     </button>
-   </div>
+                  </div>
 
-    {/* ================= SELECT OCCASION ================= */}
-    <h6 className="mt-3">Select Occasion</h6>
+                  {/* ================= SELECT OCCASION ================= */}
+                  <h6 className="mt-3">Select Occasion</h6>
 
-    <div className="d-flex flex-wrap gap-2 mb-3">
-      {["I Am Sorry", "Valentines Day", "Birthday", "Anniversary", "Hug Day"].map((item, index) => (
-        <button
-          key={index}
-          type="button"
-          className={`note-btn ${
-            checkoutData.specialNote?.occasion === item ? "active" : ""
-          }`}
-          onClick={() =>
-            setCheckoutData((prev) => ({
-              ...prev,
-              specialNote: {
-                ...prev.specialNote,
-                occasion: item,
-              },
-            }))
-          }
-        >
-          {item}
-        </button>
-      ))}
-    </div>
+                  <div className="d-flex flex-wrap gap-2 mb-3">
+                    {["I Am Sorry", "Valentines Day", "Birthday", "Anniversary", "Hug Day"].map((item, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`note-btn ${checkoutData.specialNote?.occasion === item ? "active" : ""
+                          }`}
+                        onClick={() =>
+                          setCheckoutData((prev) => ({
+                            ...prev,
+                            specialNote: {
+                              ...prev.specialNote,
+                              occasion: item,
+                            },
+                          }))
+                        }
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
 
-    {/* ================= SELECT RELATION ================= */}
-    <h6>Select Relation</h6>
+                  {/* ================= SELECT RELATION ================= */}
+                  <h6>Select Relation</h6>
 
-    <div className="d-flex flex-wrap gap-2 mb-3">
-      {["All", "Boyfriend", "Wife", "Girlfriend", "Husband"].map(
-        (rel, index) => (
-          <button
-            key={index}
-            type="button"
-            className={`note-btn ${
-              checkoutData.specialNote?.relation === rel ? "active" : ""
-            }`}
-            onClick={() =>
-              setCheckoutData((prev) => ({
-                ...prev,
-                specialNote: {
-                  ...prev.specialNote,
-                  relation: rel,
-                },
-              }))
-            }
-          >
-            {rel}
-          </button>
-        )
-      )}
-    </div>
+                  <div className="d-flex flex-wrap gap-2 mb-3">
+                    {["All", "Boyfriend", "Wife", "Girlfriend", "Husband"].map(
+                      (rel, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          className={`note-btn ${checkoutData.specialNote?.relation === rel ? "active" : ""
+                            }`}
+                          onClick={() =>
+                            setCheckoutData((prev) => ({
+                              ...prev,
+                              specialNote: {
+                                ...prev.specialNote,
+                                relation: rel,
+                              },
+                            }))
+                          }
+                        >
+                          {rel}
+                        </button>
+                      )
+                    )}
+                  </div>
 
-    {/* ================= REMINDER ================= */}
-    <div className="form-check mb-3">
-      <input
-        className="form-check-input"
-        type="checkbox"
-        id="reminder"
-      />
-      <label className="form-check-label" htmlFor="reminder">
-        Set reminder for this occasion
-      </label>
-    </div>
+                  {/* ================= REMINDER ================= */}
+                  <div className="form-check mb-3">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="reminder"
+                    />
+                    <label className="form-check-label" htmlFor="reminder">
+                      Set reminder for this occasion
+                    </label>
+                  </div>
 
-    {/* ================= MESSAGE ================= */}
-    <label>Your Message</label>
-    <textarea
-      className="form-control mb-2"
-      rows="5"
-      cols="4"
-      maxLength={250}
-      value={checkoutData.specialNote?.message}
-      onChange={(e) =>
-        setCheckoutData((prev) => ({
-          ...prev,
-          specialNote: {
-            ...prev.specialNote,
-            message: e.target.value,
-          },
-        }))
-      }
-    />
+                  {/* ================= MESSAGE ================= */}
+                  <label>Your Message</label>
+                  <textarea
+                    className="form-control mb-2"
+                    rows="5"
+                    cols="4"
+                    maxLength={250}
+                    value={checkoutData.specialNote?.message}
+                    onChange={(e) =>
+                      setCheckoutData((prev) => ({
+                        ...prev,
+                        specialNote: {
+                          ...prev.specialNote,
+                          message: e.target.value,
+                        },
+                      }))
+                    }
+                  />
 
-    <small className="text-muted">
-      {checkoutData.specialNote?.message?.length || 0} / 250
-    </small>
+                  <small className="text-muted">
+                    {checkoutData.specialNote?.message?.length || 0} / 250
+                  </small>
 
-    {/* ================= FROM ================= */}
-    <label className="mt-3">From</label>
-    <input
-      type="text"
-      className="form-control mb-4"
-      placeholder="Your Name"
-    />
+                  {/* ================= FROM ================= */}
+                  <label className="mt-3">From</label>
+                  <input
+                    type="text"
+                    className="form-control mb-4"
+                    placeholder="Your Name"
+                    value={checkoutData?.specialNote?.toName}
+                    onChange={(e) =>
+                      setCheckoutData((prev) => ({
+                        ...prev,
+                        specialNote: {
+                          ...prev.specialNote,
+                          toName: e.target.value,
+                        },
+                      }))
+                    }
+                  />
 
-    <button
-      className="continue-btn"
-      onClick={() => setStep(4)}   // next step after special note
-    >
-      Continue
-    </button>
-  </div>
-)}
+                  <button
+                    className="continue-btn"
+                    onClick={() => setStep(4)}   // next step after special note
+                  >
+                    Continue
+                  </button>
+                </div>
+              )}
 
 
               {/* STEP 3 */}
@@ -545,7 +553,7 @@ const Checkout = () => {
               {/* STEP 4 */}
               {step === 5 && (
                 <div className="checkout-card ">
-                  <div  style={{ display: 'flex', justifyContent: 'space-between' }}><h4>Order Summary</h4>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}><h4>Order Summary</h4>
                     <button
                       onClick={() => setStep(4)}
                       className="back-btn"
@@ -578,10 +586,6 @@ const Checkout = () => {
                   </button>
                 </div>
               )}
-
-
-
-
             </div>
           </div>
         </div>

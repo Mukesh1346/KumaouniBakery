@@ -23,7 +23,7 @@ const AddCategory = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/create-main-category",
+        "http://localhost:7000/api/create-main-category",
         formData,
         {
           headers: {

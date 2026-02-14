@@ -69,13 +69,13 @@ const AllProductById = ({ cakesArr = [] }) => {
 
                                 return (
                                     <div
-                                        key={product._id}
+                                        key={product?._id}
                                         className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
                                     >
                                         <div className="product-card">
                                             <div className="product-img">
                                                 <img
-                                                    src={`https://api.ssdipl.com/${image}`}
+                                                    src={`http://localhost:7000/${image}`}
                                                     alt={product.productName}
                                                 />
 

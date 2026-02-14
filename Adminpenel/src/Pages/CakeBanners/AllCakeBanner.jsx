@@ -15,7 +15,7 @@ const AllCakeBanners = () => {
   const fetchCakeBanners = async () => {
     try {
       const res = await axios.get(
-        "https://api.ssdipl.com/api/cake-banner/get-cake-banner"
+        "http://localhost:7000/api/cake-banner/get-cake-banner"
       );
       setBanners(res.data?.data || []);
     } catch (error) {
@@ -41,7 +41,7 @@ const AllCakeBanners = () => {
 
     try {
       await axios.delete(
-        `https://api.ssdipl.com/api/cake-banner/delete-cake-banner/${id}`
+        `http://localhost:7000/api/cake-banner/delete-cake-banner/${id}`
       );
 
       setBanners((prev) => prev.filter((b) => b._id !== id));
@@ -99,7 +99,7 @@ const AllCakeBanners = () => {
 
                   <td>
                     <img
-                      src={`https://api.ssdipl.com/${banner?.cakeBanner}`}
+                      src={`http://localhost:7000/${banner?.cakeBanner}`}
                       alt="Cake Banner"
                       style={{
                         width: "220px",

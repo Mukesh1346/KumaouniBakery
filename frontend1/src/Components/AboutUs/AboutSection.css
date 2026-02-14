@@ -3,8 +3,8 @@
 .premium-about-section {
   display: flex;
   min-height: 100vh;
-  background: radial-gradient(circle at left, #2b1a14, #120d1f 65%);
-  color: #d6cdee;
+  background: linear-gradient(180deg, #fff6f1, #ffe0e9);
+    
   font-family: "Poppins", sans-serif;
 }
 
@@ -37,13 +37,14 @@
   font-size: 34px;
   font-weight: 500;
   margin-bottom: 18px;
-  color: #ece6ff;
+    color: #df4444;
 }
 
 .content-block p {
   font-size: 16px;
   line-height: 1.85;
   opacity: 0.9;
+
   max-width: 520px;
 }
 

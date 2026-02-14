@@ -112,7 +112,7 @@
 //   };
 //   const fetchFeaturedProducts = async () => {
 //     try {
-//       const response = await axios.get("https://api.ssdipl.com/api/get-featuredProducts");
+//       const response = await axios.get("http://localhost:7000/api/get-featuredProducts");
 //       setFeaturedProductsData(response?.data?.data)
 //       // const data = await response.json();
 //       console.log("SSSSS::=>", response.data.data);
@@ -147,7 +147,7 @@
 //             <div className="product-card">
 //               {/* Image */}
 //               <div className="product-img">
-//                 <img src={`https://api.ssdipl.com/${item?.productImage[0] || item?.productImage}`} alt={item?.name} />
+//                 <img src={`http://localhost:7000/${item?.productImage[0] || item?.productImage}`} alt={item?.name} />
 
 //                 {/* ❤️ Wishlist */}
 //                 <span
@@ -214,7 +214,7 @@ import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import axios from "axios";
 
-const BASE_URL = "https://api.ssdipl.com/";
+const BASE_URL = "http://localhost:7000/";
 
 const FeaturedProducts = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -231,7 +231,7 @@ const FeaturedProducts = () => {
   const fetchFeaturedProducts = async () => {
     try {
       const response = await axios.get(
-        "https://api.ssdipl.com/api/get-featuredProducts"
+        "http://localhost:7000/api/get-featuredProducts"
       );
       setProducts(response?.data?.data || []);
     } catch (error) {
