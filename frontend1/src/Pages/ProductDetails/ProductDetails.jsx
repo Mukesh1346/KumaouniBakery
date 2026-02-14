@@ -11,6 +11,7 @@ import RecommendedPopup from "../../Components/RecommendedPopup/RecommendedPopup
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { TbMapPinCode } from "react-icons/tb";
+import LocationOption from "../../Components/LocationOption/LocationOption";
 
 const ProductDetails = () => {
   const loginvalue = sessionStorage.getItem("login");
@@ -289,8 +290,7 @@ const ProductDetails = () => {
                       />
                     )}
                   </div>
-
-                </div>
+              </div>
 
                 <div className="pdx-features">
                   <div className="text-center">
@@ -313,8 +313,7 @@ const ProductDetails = () => {
                 </div>
               </div>
             </div>
-
-            {/* RIGHT DETAILS SECTION */}
+ {/* RIGHT DETAILS SECTION */}
             <div className="col-lg-7">
               <div className="pdx-right-scroll">
 
@@ -330,12 +329,9 @@ const ProductDetails = () => {
                   >
                     {isWishlisted ? <FaHeart /> : <FaRegHeart />}
                   </div>
-
-
                 </div>
 
                 <div className="pdx-price">₹ {Math.round(price)}</div>
-
                 {/* WEIGHT */}
                 <div className="pdx-block">
                   <div className="pdx-block-head">
@@ -381,8 +377,6 @@ const ProductDetails = () => {
                     maxLength={25}
                   />
                 </div>
-
-                {/* ADDONS */}
                 {/* RECOMMENDED ADDONS */}
                 <div className="pdx-block">
                   <h6 className="pdx-addon-title">Recommended Addon Products</h6>
@@ -408,8 +402,7 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-
-                <div>
+                {/* <div>
                   <div className="locationHead">
                     <div>
                       <b>Select Area / Location</b>
@@ -425,15 +418,11 @@ const ProductDetails = () => {
 
                     </div>
                   </div>
-
-
                   <div>
-
-
                   </div>
-                </div>
+                </div> */}
 
-
+                <LocationOption/>
                 {/* Description */}
                 <div className="description-box">
                   <h6>Description</h6>
@@ -447,20 +436,15 @@ const ProductDetails = () => {
                   </p>
                 </div>
 
-
-
                 <RecommendedPopup productId={data._id} open={openPopup}
                   onClose={() => setOpenPopup(false)}
                 />
-
-                {/* CTA */}
 
                 {/* DELIVERY DATE */}
                 <div className="pdx-block">
                   <label>
                     Delivery Date <span className="text-danger">*</span>
                   </label>
-
                   <input
                     type="date"
                     className="form-control w-75"
@@ -470,19 +454,13 @@ const ProductDetails = () => {
                     required
                   />
                 </div>
-
                 <div className="pdx-cta">
-                  {/* <button className="pdx-cart" onClick={addToCart}>ADD TO CART</button> */}
                   <button
                     className={`pdx-cart ${isMainProductAdded() ? "added" : ""}`}
                     onClick={addToCart}
                   >
                     {isMainProductAdded() ? "✔ Added To Cart" : "ADD TO CART"}
                   </button>
-                  {/* <button className="pdx-buy" onClick={() => setOpenPopup(true)}>
-                    BUY NOW | ₹ {Math.round(price)}
-                  </button> */}
-
                   <button className="pdx-buy" onClick={handleBuyNow}>
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
@@ -494,9 +472,6 @@ const ProductDetails = () => {
           </div>
         </div>
       </section>
-
-
-
 
       {/* Related Products Section */}
       <section className="relatedProducts">
