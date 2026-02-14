@@ -627,15 +627,15 @@ const ProductDetails = () => {
                   <h6>Description</h6>
                   <p>{data.productDescription}</p>
                 </div>
-
+                      
                 <RecommendedPopup 
                   productId={data._id} 
                   open={openPopup}
                   onClose={() => setOpenPopup(false)}
-                />
-
+                />   
+                
                 <div className="pdx-cta">
-                  <button
+                  <button  
                     className={`pdx-cart ${isAdded ? "remove" : ""}`}
                     onClick={addToCart}
                     disabled={!isServiceAvailable}
@@ -646,9 +646,8 @@ const ProductDetails = () => {
                   >
                     {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
                   </button>
-
                   <button 
-                    className="pdx-buy" 
+                    className="pdx-buy"  
                     onClick={handleBuyNow}
                     disabled={!isServiceAvailable}
                     style={{ 
