@@ -5,7 +5,7 @@ const express = require("express")
 const { connectDb } = require("./DB/ConntectDb")
 const cors = require("cors")
 const BannerRouter = require("./Router/BannerRouter")
-const cakeBannersRouter = require("./Router/cakeBannerRouter")
+const CakeBannersRouter = require("./Router/cakeBannerRouter")
 const MainCategoryRouter = require("./Router/MainCategoryRouter")
 const SubcCategoryRouter = require("./Router/SubcategoryRouter")
 const ColorRouter = require("./Router/ColorRouter")
@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/api", BannerRouter)
-app.use("/api/cake-banner", cakeBannersRouter)
+app.use("/api/cake-banner", CakeBannersRouter)
 app.use("/api", MainCategoryRouter)
 app.use("/api", SubcCategoryRouter)
 app.use("/api", ColorRouter)
