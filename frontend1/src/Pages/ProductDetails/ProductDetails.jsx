@@ -28,7 +28,13 @@ const ProductDetails = () => {
   const [massage, setMassage] = useState("")
   const [cartItems, setCartItems] = useState([]);
   const [isAdded, setIsAdded] = useState(false);
+  const [isServiceAvailable, setIsServiceAvailable] = useState(false);
 
+  const updateServiceStatus = (status) => {
+    setIsServiceAvailable(status); // This changes parent state
+    console.log("Service status updated:", status);
+  };
+  
   const handleWishlist = () => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
@@ -56,7 +62,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:7000/api/get-product-by-name/${name}`
+        `https://www.ssdipl.com/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -130,6 +136,17 @@ const ProductDetails = () => {
   };
 
   const addToCart = () => {
+    // Check if service is available first
+    if (!isServiceAvailable) {
+      Swal.fire({
+        icon: "warning",
+        title: "Service Area Required",
+        text: "Please check if we deliver to your location first",
+        timer: 2000
+      });
+      return;
+    }
+
     const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
 
     if (hasWeight && !activeWeight) {
@@ -190,44 +207,55 @@ const ProductDetails = () => {
     }
   };
 
-// In your addAddon function, change it to:
-const addAddon = (addon) => {
-  if (!activeWeight) {
-    Swal.fire("Select Weight", "Please select cake weight first", "warning");
-    return;
-  }
+  const addAddon = (addon) => {
+    // Check if service is available first
+    if (!isServiceAvailable) {
+      Swal.fire({
+        icon: "warning",
+        title: "Service Area Required",
+        text: "Please check if we deliver to your location first",
+        timer: 2000
+      });
+      return;
+    }
 
-  const { cart, index } = getOrCreateMainCartItem();
+    if (!activeWeight) {
+      Swal.fire("Select Weight", "Please select cake weight first", "warning");
+      return;
+    }
 
-  const addons = cart[index].addonProducts;
+    const { cart, index } = getOrCreateMainCartItem();
 
-  const existingIndex = addons.findIndex(a => a.productId === addon._id);
+    const addons = cart[index].addonProducts;
 
-  if (existingIndex > -1) {
-    addons[existingIndex].quantity += 1;
-  } else {
-    addons.push({
-      productId: addon._id,
-      name: addon.productName,
-      price: addon.price,
-      image: addon.productImage?.[0],
-      quantity: 1,
+    const existingIndex = addons.findIndex(a => a.productId === addon._id);
+
+    if (existingIndex > -1) {
+      addons[existingIndex].quantity += 1;
+    } else {
+      addons.push({
+        productId: addon._id,
+        name: addon.productName,
+        price: addon.price,
+        image: addon.productImage?.[0],
+        quantity: 1,
+      });
+    }
+
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+    setCartItems(cart); // Update state
+    
+    // Show success message
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: `${addon.productName} added to cart`,
+      showConfirmButton: false,
+      timer: 1000
     });
-  }
-
-  sessionStorage.setItem("cart", JSON.stringify(cart));
-  setCartItems(cart); // Update state
+  };
   
-  // Show success message
-  Swal.fire({
-    toast: true,
-    position: "top-end",
-    icon: "success",
-    title: `${addon.productName} added to cart`,
-    showConfirmButton: false,
-    timer: 1000
-  });
-};
   const incrementAddon = (id) => {
     const { cart, index } = getOrCreateMainCartItem();
 
@@ -319,6 +347,23 @@ const addAddon = (addon) => {
   };
 
   const handleBuyNow = () => {
+    // Check if service is available first
+    if (!isServiceAvailable) {
+      Swal.fire({
+        icon: "warning",
+        title: "Service Area Required",
+        text: "Please check if we deliver to your location first",
+        timer: 2000
+      });
+      return;
+    }
+
+    const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
+    if (hasWeight && !activeWeight) {
+      Swal.fire("Select Weight", "Please select cake weight first", "warning");
+      return;
+    }
+
     const { cart } = getOrCreateMainCartItem();
     sessionStorage.setItem("cart", JSON.stringify(cart));
     setCartItems(cart);
@@ -333,7 +378,7 @@ const addAddon = (addon) => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`http://localhost:7000/${data.productImage?.[i]}`}
+            src={`https://www.ssdipl.com/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -379,7 +424,7 @@ const addAddon = (addon) => {
                       return (
                         <img
                           key={i}
-                          src={`http://localhost:7000/${imagePath}`}
+                          src={`https://www.ssdipl.com/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -392,7 +437,7 @@ const addAddon = (addon) => {
                   <div className="pdx-main-image">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`http://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`https://www.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
@@ -502,39 +547,80 @@ const addAddon = (addon) => {
 
                     <div className="pdx-addon-slider">
                       <Slider {...addonSliderSettings}>
-                        {data?.recommendedProductId?.map((item, index) => (
-                          <div key={index}>
-                            <div className="rp-card">
-                              <img
-                                src={`http://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
-                                alt={item?.productName}
-                              />
-                              <h6>{item?.productName}</h6>
-                              <p>₹ {item?.price}</p>
+                        {data?.recommendedProductId?.map((item, index) => {
+                          const addonQuantity = getAddonQuantity(item._id);
+                          
+                          return (
+                            <div key={index}>
+                              <div className="rp-card">
+                                <img
+                                  src={`https://www.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                                  alt={item?.productName}
+                                />
+                                <h6>{item?.productName}</h6>
+                                <p>₹ {item?.price}</p>
 
-                              {getAddonQuantity(item._id) === 0 ? (
-                                <button
-                                  className="rp-add-btn"
-                                  onClick={() => addAddon(item)}
-                                >
-                                  Add
-                                </button>
-                              ) : (
-                                <div className="rp-qty">
-                                  <button onClick={() => decrementAddon(item._id)}>−</button>
-                                  <span>{getAddonQuantity(item._id)}</span>
-                                  <button onClick={() => incrementAddon(item._id)}>+</button>
-                                </div>
-                              )}
+                                {addonQuantity === 0 ? (
+                                  <button
+                                    className="rp-add-btn"
+                                    onClick={() => addAddon(item)}
+                                    disabled={!isServiceAvailable || !activeWeight}
+                                    style={{ 
+                                      opacity: (!isServiceAvailable || !activeWeight) ? 0.5 : 1,
+                                      cursor: (!isServiceAvailable || !activeWeight) ? 'not-allowed' : 'pointer'
+                                    }}
+                                  >
+                                    Add
+                                  </button>
+                                ) : (
+                                  <div className="rp-qty">
+                                    <button 
+                                      onClick={() => decrementAddon(item._id)}
+                                      disabled={!isServiceAvailable}
+                                      style={{ 
+                                        opacity: !isServiceAvailable ? 0.5 : 1,
+                                        cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                                      }}
+                                    >
+                                      −
+                                    </button>
+                                    <span>{addonQuantity}</span>
+                                    <button 
+                                      onClick={() => incrementAddon(item._id)}
+                                      disabled={!isServiceAvailable}
+                                      style={{ 
+                                        opacity: !isServiceAvailable ? 0.5 : 1,
+                                        cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                                      }}
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </Slider>
                     </div>
+                    
+                    {/* Show message if weight not selected */}
+                    {!activeWeight && isServiceAvailable && (
+                      <div className="weight-warning-message">
+                        ⚠️ Please select cake weight to add addons
+                      </div>
+                    )}
                   </div>
                 )}
 
-                <LocationOption />
+                <LocationOption onServiceChange={updateServiceStatus} />
+
+                {/* Service Availability Warning */}
+                {!isServiceAvailable && (
+                  <div className="service-warning-message">
+                    ⚠️ Please check service availability before adding to cart
+                  </div>
+                )}
 
                 {/* Description */}
                 <div className="description-box">
@@ -552,11 +638,24 @@ const addAddon = (addon) => {
                   <button
                     className={`pdx-cart ${isAdded ? "remove" : ""}`}
                     onClick={addToCart}
+                    disabled={!isServiceAvailable}
+                    style={{ 
+                      opacity: !isServiceAvailable ? 0.6 : 1,
+                      cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                    }}
                   >
                     {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
                   </button>
 
-                  <button className="pdx-buy" onClick={handleBuyNow}>
+                  <button 
+                    className="pdx-buy" 
+                    onClick={handleBuyNow}
+                    disabled={!isServiceAvailable}
+                    style={{ 
+                      opacity: !isServiceAvailable ? 0.6 : 1,
+                      cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                    }}
+                  >
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
                 </div>

@@ -25,7 +25,7 @@ const ContactUs = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:7000/api/send-query`,
+        `https://www.ssdipl.com/api/send-query`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
