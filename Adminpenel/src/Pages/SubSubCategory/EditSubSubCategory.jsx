@@ -26,7 +26,7 @@ const EditSubSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:7000/api/get-main-category"
+          "https://api.ssdipl.com/api/get-main-category"
         );
         setMainCategories(res.data?.data || []);
       } catch {
@@ -40,7 +40,7 @@ const EditSubSubCategory = () => {
     const fetchSecondSubcategory = async () => {
       try {
         // alert("XXXXXXXX:=>")
-        const res = await axios.get(`http://localhost:7000/api/second-sub-category/get-single-second-sub-category/${id}`);
+        const res = await axios.get(`https://api.ssdipl.com/api/second-sub-category/get-single-second-sub-category/${id}`);
 
         console.log("XXXXXX:=>XXXXXX:=>", res.data.data)
         const data = res.data.data;
@@ -67,7 +67,7 @@ const EditSubSubCategory = () => {
     const fetchSubCategories = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:7000/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
+          `https://api.ssdipl.com/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
         );
         setSubCategories(res.data?.data || []);
       } catch {
@@ -118,7 +118,7 @@ const EditSubSubCategory = () => {
       }
 
       const res = await axios.put(
-        `http://localhost:7000/api/second-sub-category/update-second-sub-category/${id}`,
+        `https://api.ssdipl.com/api/second-sub-category/update-second-sub-category/${id}`,
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },

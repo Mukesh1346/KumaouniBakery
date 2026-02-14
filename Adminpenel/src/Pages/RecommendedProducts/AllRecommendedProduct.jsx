@@ -16,7 +16,7 @@ const AllRecommendedProduct = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:7000/api/recommended-product/all-product"
+          "https://api.ssdipl.com/api/recommended-product/all-product"
         );
         //console.log(response);
         setProducts(response.data.data || []);
@@ -45,7 +45,7 @@ const AllRecommendedProduct = () => {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:7000/api/delete-product/${productId}`
+          `https://api.ssdipl.com/api/delete-product/${productId}`
         );
         setProducts(products.filter((product) => product._id !== productId));
         toast.success("Product deleted successfully!");
@@ -122,7 +122,7 @@ const AllRecommendedProduct = () => {
                     {product.productImage.map((image, imgIndex) => (
                       <img
                         key={imgIndex}
-                        src={`http://localhost:7000/${image}`}
+                        src={`https://api.ssdipl.com/${image}`}
                         alt="Product"
                         style={{ width: "50px", marginRight: "5px" }}
                       />

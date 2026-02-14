@@ -15,7 +15,7 @@ const AllRecommendedCategory = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:7000/api/recommended-category/get-recommended-category"
+        "https://api.ssdipl.com/api/recommended-category/get-recommended-category"
       );
       setCategories(res.data?.data || []);
     } catch {
@@ -36,7 +36,7 @@ const AllRecommendedCategory = () => {
     if (!confirm.isConfirmed) return;
 
     await axios.delete(
-      `http://localhost:7000/api/recommended-category/delete-recommended-category/${id}`
+      `https://api.ssdipl.com/api/recommended-category/delete-recommended-category/${id}`
     );
 
     setCategories((prev) => prev.filter((c) => c._id !== id));
@@ -76,7 +76,7 @@ const AllRecommendedCategory = () => {
                   <td>{i + 1}</td>
                   <td>
                     <img
-                      src={`http://localhost:7000/${item.image}`}
+                      src={`https://api.ssdipl.com/${item.image}`}
                       width="50"
                       alt=""
                     />

@@ -75,7 +75,7 @@ const AllProductById = ({ cakesArr = [] }) => {
                                         <div className="product-card">
                                             <div className="product-img">
                                                 <img
-                                                    src={`http://localhost:7000/${image}`}
+                                                    src={`https://api.ssdipl.com/${image}`}
                                                     alt={product.productName}
                                                 />
 

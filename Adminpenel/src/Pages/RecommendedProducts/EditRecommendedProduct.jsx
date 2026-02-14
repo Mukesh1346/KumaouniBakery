@@ -45,14 +45,14 @@ const EditProduct = () => {
             try {
                 // Fetch dynamic data
                 const categoryResponse = await axios.get(
-                    "http://localhost:7000/api/recommended-category/get-recommended-category"
+                    "https://api.ssdipl.com/api/recommended-category/get-recommended-category"
                 );
 
                 setCategories(categoryResponse.data.data);
 
                 // Fetch product details
                 const productResponse = await axios.get(
-                    `http://localhost:7000/api/recommended-product/get-product/${id}`
+                    `https://api.ssdipl.com/api/recommended-product/get-product/${id}`
                 );
                 const productData = productResponse.data.data;
                 console.log("XXXXX::=>", productData);
@@ -100,7 +100,7 @@ const EditProduct = () => {
         }
 
         try {
-            await axios.put(`http://localhost:7000/api/recommended-product/update-product/${id}`, form, {
+            await axios.put(`https://api.ssdipl.com/api/recommended-product/update-product/${id}`, form, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

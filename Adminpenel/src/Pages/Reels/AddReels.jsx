@@ -58,7 +58,7 @@ const AddReels = () => {
       fd.append("activeOnHome", formData.activeOnHome);
 
       const res = await axios.post(
-        "http://localhost:7000/api/reel/create-reel",
+        "https://api.ssdipl.com/api/reel/create-reel",
         fd,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -77,7 +77,7 @@ const AddReels = () => {
   useEffect(() => {
     const fetchAllProduct = async () => {
       try {
-        const res = await axios.get("http://localhost:7000/api/all-product");
+        const res = await axios.get("https://api.ssdipl.com/api/all-product");
         setProductList(res.data?.data || []);
       } catch (error) {
         toast.error("Error fetching products");

@@ -25,7 +25,7 @@ const EditSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:7000/api/get-main-category"
+          "https://api.ssdipl.com/api/get-main-category"
         ); // Adjust the URL to your API endpoint
         setMainCategories(response.data.data); // Assuming the response structure
       } catch (error) {
@@ -37,7 +37,7 @@ const EditSubCategory = () => {
     const fetchSubCategory = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7000/api/get-single-subcategory/${id}`
+          `https://api.ssdipl.com/api/get-single-subcategory/${id}`
         );
         const { categoryName, subcategoryName, ActiveonHome, image, banner, ActiveonHeader } = response.data.data;
         console.log("XXXXXXXXXXX:=>", response.data.data)
@@ -104,7 +104,7 @@ const EditSubCategory = () => {
 
       // Send the request
       const response = await axios.put(
-        `http://localhost:7000/api/update-subcategory/${id}`,
+        `https://api.ssdipl.com/api/update-subcategory/${id}`,
         formDataToSend,
         {
           headers: {
@@ -192,7 +192,7 @@ const EditSubCategory = () => {
 
             {formData?.privewBanner && (
               <img
-                src={`http://localhost:7000/${formData?.privewBanner}`}
+                src={`https://api.ssdipl.com/${formData?.privewBanner}`}
                 alt="banner"
                 className="mt-2 rounded shadow"
                 style={{ width: "200px" }}
@@ -213,7 +213,7 @@ const EditSubCategory = () => {
             />
             {formData?.privewImage && (
               <img
-                src={`http://localhost:7000/${formData?.privewImage}`}
+                src={`https://api.ssdipl.com/${formData?.privewImage}`}
                 alt="image"
                 className="mt-2 rounded shadow"
                 style={{ width: "120px" }}

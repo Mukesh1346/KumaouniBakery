@@ -24,7 +24,7 @@ const AllPinCode = () => {
         setIsLoading(true);
         try {
             const response = await axios.get(
-                `http://localhost:7000/api/pincode/get-All-PinCodesWith-Pagination?page=${currentPage}&limit=${itemsPerPage}`
+                `https://api.ssdipl.com/api/pincode/get-All-PinCodesWith-Pagination?page=${currentPage}&limit=${itemsPerPage}`
             );
             setPinCodes(response?.data?.pinCodes || []);
             setTotalPages(response?.data?.pagination?.totalPages || 1);
@@ -50,7 +50,7 @@ const AllPinCode = () => {
         if (confirm.isConfirmed) {
             try {
                 await axios.delete(
-                    `http://localhost:7000/api/pincode/delete-Pincode/${id}`
+                    `https://api.ssdipl.com/api/pincode/delete-Pincode/${id}`
                 );
                 setPinCodes((prev) => prev.filter((item) => item._id !== id));
                 toast.success("PinCode deleted successfully!");
@@ -132,7 +132,7 @@ const AllPinCode = () => {
 
         setExcelLoading(true);
         try {
-            const response = await axios.post("http://localhost:7000/api/pincode/create-pincode-by-excel", excelData);
+            const response = await axios.post("https://api.ssdipl.com/api/pincode/create-pincode-by-excel", excelData);
             console.log("response:==>", response)
             const { status, createdCount, duplicateCount, invalidCount, invalid = [] } = response || {};
 

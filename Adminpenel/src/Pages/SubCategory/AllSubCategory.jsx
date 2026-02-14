@@ -13,7 +13,7 @@ const AllSubCategory = () => {
     const fetchSubcategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:7000/api/get-subcategory"
+          "https://api.ssdipl.com/api/get-subcategory"
         );
         setSubcategories(response.data.data); // assuming the data is in response.data.data
       } catch (error) {
@@ -41,7 +41,7 @@ const AllSubCategory = () => {
     if (confirmDelete.isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:7000/api/delete-subcategory/${id}`
+          `https://api.ssdipl.com/api/delete-subcategory/${id}`
         );
         setSubcategories(
           subcategories.filter((subcategory) => subcategory._id !== id)
@@ -94,8 +94,8 @@ const AllSubCategory = () => {
               subcategories.map((subcategory, index) => (
                 <tr key={subcategory._id}>
                   <th scope="row">{index + 1}</th>
-                  <th><img src={`http://localhost:7000/${subcategory?.image}`} alt={subcategory?.subcategoryName} /></th>
-                  <th><img src={`http://localhost:7000/${subcategory?.banner}`} alt={subcategory.subcategoryName} /></th>
+                  <th><img src={`https://api.ssdipl.com/${subcategory?.image}`} alt={subcategory?.subcategoryName} /></th>
+                  <th><img src={`https://api.ssdipl.com/${subcategory?.banner}`} alt={subcategory.subcategoryName} /></th>
                   <td>{subcategory?.categoryName?.mainCategoryName}</td>
                   <td>{subcategory.subcategoryName}</td>
                   <td>

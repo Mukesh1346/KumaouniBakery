@@ -14,7 +14,7 @@ const AllSubSubCategory = () => {
     const fetchSubSubcategories = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:7000/api/second-sub-category/get-second-sub-category"
+          "https://api.ssdipl.com/api/second-sub-category/get-second-sub-category"
         );
         setSubSubcategories(res.data?.data || []);
       } catch (error) {
@@ -44,7 +44,7 @@ const AllSubSubCategory = () => {
 
     try {
       await axios.delete(
-        `http://localhost:7000/api/second-sub-category/delete-second-sub-category/${id}`
+        `https://api.ssdipl.com/api/second-sub-category/delete-second-sub-category/${id}`
       );
 
       setSubSubcategories((prev) =>

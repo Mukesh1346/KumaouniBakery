@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const serverURL = "http://localhost:7000";
+const serverURL = "https://api.ssdipl.com";
 
 // Axios instance
 const api = axios.create({

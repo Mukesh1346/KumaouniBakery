@@ -65,7 +65,7 @@ const AddCakeBanner = () => {
       fd.append("titel", formData.titel);
 
       await axios.post(
-        "http://localhost:7000/api/cake-banner/upload-cake-banner",
+        "https://api.ssdipl.com/api/cake-banner/upload-cake-banner",
         fd,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -84,7 +84,7 @@ const AddCakeBanner = () => {
     const fetchSubSubcategories = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:7000/api/second-sub-category/get-second-sub-category"
+          "https://api.ssdipl.com/api/second-sub-category/get-second-sub-category"
         );
         setSecondSubcategories(res.data?.data || []);
       } catch (error) {

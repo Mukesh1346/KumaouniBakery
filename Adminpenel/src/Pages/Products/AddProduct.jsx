@@ -47,16 +47,16 @@ const AddProduct = () => {
       try {
         // Fetch dynamic data
         const categoryResponse = await axios.get(
-          "http://localhost:7000/api/get-main-category"
+          "https://api.ssdipl.com/api/get-main-category"
         );
         const subcategoryResponse = await axios.get(
-          "http://localhost:7000/api/get-subcategory"
+          "https://api.ssdipl.com/api/get-subcategory"
         );
         const weightResponse = await axios.get(
-          "http://localhost:7000/api/get-size"
+          "https://api.ssdipl.com/api/get-size"
         );
         const RecommendedProductResponse = await axios.get(
-          "http://localhost:7000/api/recommended-product/all-product"
+          "https://api.ssdipl.com/api/recommended-product/all-product"
         );
 
         setCategories(categoryResponse.data.data);
@@ -65,7 +65,7 @@ const AddProduct = () => {
         setRecommendedProducts(RecommendedProductResponse.data.data);
         // Fetch product details
         // const productResponse = await axios.get(
-        //     `http://localhost:7000/api/get-single-product/${id}`
+        //     `https://api.ssdipl.com/api/get-single-product/${id}`
         // );
         // const productData = productResponse.data.data;
         // // console.log("XXXXX::=>", productData);
@@ -214,7 +214,7 @@ const AddProduct = () => {
     }
 
     try {
-      await axios.post(`http://localhost:7000/api/create-product`, form, {
+      await axios.post(`https://api.ssdipl.com/api/create-product`, form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -233,7 +233,7 @@ const AddProduct = () => {
     const fetchSecondSubcategories = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7000/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+          `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
         );
         setSecondSubcategories(response?.data?.data);
       } catch (error) {
