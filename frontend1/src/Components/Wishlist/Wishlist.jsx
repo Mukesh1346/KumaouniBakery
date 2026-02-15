@@ -273,9 +273,17 @@ const Wishlist = () => {
       );
 
       // ✅ update UI instantly
-      setWishlist((prev) =>
-        prev.filter((item) => item.productId._id !== productId)
-      );
+
+      setWishlist((prev) => {
+        const updated = prev.filter(
+          (item) => item.productId._id !== productId
+        );
+
+        // ✅ ALSO update sessionStorage
+        sessionStorage.setItem("wishlist", JSON.stringify(updated));
+
+        return updated;
+      });
 
       Swal.fire({
         icon: "success",

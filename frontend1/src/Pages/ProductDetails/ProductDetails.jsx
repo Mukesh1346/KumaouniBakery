@@ -12,17 +12,20 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { TbMapPinCode } from "react-icons/tb";
 import LocationOption from "../../Components/LocationOption/LocationOption";
+import { useNavigate } from "react-router-dom";
+
 
 const ProductDetails = () => {
   const loginvalue = sessionStorage.getItem("login");
-
+  const user = sessionStorage.getItem("userId");
+  const navigate = useNavigate()
   const { name } = useParams();
   const [data, setData] = useState({});
   const [activeWeight, setActiveWeight] = useState(null);
   const [price, setPrice] = useState(0);
   const [eggOption, setEggOption] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState("");
   const [imageIndex, setImageIndex] = useState(0)
   const [massage, setMassage] = useState("")
@@ -34,29 +37,67 @@ const ProductDetails = () => {
     setIsServiceAvailable(status); // This changes parent state
     console.log("Service status updated:", status);
   };
-  
-  const handleWishlist = () => {
-    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-
-    if (wishlist.includes(data._id)) {
-      wishlist = wishlist.filter(id => id !== data._id);
-      setIsWishlisted(false);
-      Swal.fire("Removed", "Removed from wishlist", "info");
-    } else {
-      wishlist.push(data._id);
-      setIsWishlisted(true);
-      Swal.fire("Added", "Added to wishlist ❤️", "success");
-    }
-
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  };
 
   useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    if (data?._id) {
-      setIsWishlisted(wishlist.includes(data._id));
+    const stored = sessionStorage.getItem("wishlist");
+    if (stored) {
+      setWishlist(JSON.parse(stored));
     }
-  }, [data]);
+  }, []);
+
+  // get existing wishlist from session
+  const toggleWishlist = async (productId) => {
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        text: "Please login to use wishlist",
+      });
+      navigate("/login");
+      return;
+    }
+
+    setWishlist((prev) => {
+      const isExist = prev.includes(productId);
+
+      const updated = isExist
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId];
+
+      // ✅ update session
+      sessionStorage.setItem("wishlist", JSON.stringify(updated));
+
+      // ✅ call API (fire and forget)
+      handleWishlistApi(productId, isExist);
+
+      return updated;
+    });
+  };
+
+
+  const handleWishlistApi = async (productId, isRemoving) => {
+    console.log("isRemoving==>", isRemoving);
+    try {
+      if (isRemoving) {
+        // ✅ REMOVE from wishlist
+        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+          data: {
+            user: user,
+            productId: productId,
+          },
+        });
+      } else {
+        // ✅ ADD to wishlist
+        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+          user: user,
+          productId: productId,
+        });
+      }
+    } catch (error) {
+      console.error("Wishlist API error:", error);
+    }
+  };
+
 
   // Fetch product data by name
   const getApiData = async () => {
@@ -244,7 +285,7 @@ const ProductDetails = () => {
 
     sessionStorage.setItem("cart", JSON.stringify(cart));
     setCartItems(cart); // Update state
-    
+
     // Show success message
     Swal.fire({
       toast: true,
@@ -255,7 +296,7 @@ const ProductDetails = () => {
       timer: 1000
     });
   };
-  
+
   const incrementAddon = (id) => {
     const { cart, index } = getOrCreateMainCartItem();
 
@@ -470,16 +511,20 @@ const ProductDetails = () => {
                   <h1>{data.productName}</h1>
 
                   <div
-                    className={`wishlist-icon ${isWishlisted ? "active" : ""}`}
-                    onClick={handleWishlist}
+                    className={`wishlist-icon ${wishlist?.includes(data?._id) ? "active" : ""}`}
+                    onClick={() => toggleWishlist(data?._id)}
                     role="button"
                     aria-label="Add to wishlist"
-                  >
-                    {isWishlisted ? <FaHeart /> : <FaRegHeart />}
+                  >{wishlist?.includes(data?._id) ? (
+                    <FaHeart />
+                  ) : (
+                    <FaRegHeart />
+                  )}
+                    {/* {isWishlisted ? <FaHeart /> : <FaRegHeart />} */}
                   </div>
                 </div>
 
-                <div className="pdx-price">₹ {Math.round(price)}</div>
+                <div className="pdx-price">₹ {Math?.round(price)}</div>
 
                 {/* WEIGHT */}
                 <div className="pdx-block">
@@ -549,7 +594,7 @@ const ProductDetails = () => {
                       <Slider {...addonSliderSettings}>
                         {data?.recommendedProductId?.map((item, index) => {
                           const addonQuantity = getAddonQuantity(item._id);
-                          
+
                           return (
                             <div key={index}>
                               <div className="rp-card">
@@ -565,7 +610,7 @@ const ProductDetails = () => {
                                     className="rp-add-btn"
                                     onClick={() => addAddon(item)}
                                     disabled={!isServiceAvailable || !activeWeight}
-                                    style={{ 
+                                    style={{
                                       opacity: (!isServiceAvailable || !activeWeight) ? 0.5 : 1,
                                       cursor: (!isServiceAvailable || !activeWeight) ? 'not-allowed' : 'pointer'
                                     }}
@@ -574,10 +619,10 @@ const ProductDetails = () => {
                                   </button>
                                 ) : (
                                   <div className="rp-qty">
-                                    <button 
+                                    <button
                                       onClick={() => decrementAddon(item._id)}
                                       disabled={!isServiceAvailable}
-                                      style={{ 
+                                      style={{
                                         opacity: !isServiceAvailable ? 0.5 : 1,
                                         cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
                                       }}
@@ -585,10 +630,10 @@ const ProductDetails = () => {
                                       −
                                     </button>
                                     <span>{addonQuantity}</span>
-                                    <button 
+                                    <button
                                       onClick={() => incrementAddon(item._id)}
                                       disabled={!isServiceAvailable}
-                                      style={{ 
+                                      style={{
                                         opacity: !isServiceAvailable ? 0.5 : 1,
                                         cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
                                       }}
@@ -603,7 +648,7 @@ const ProductDetails = () => {
                         })}
                       </Slider>
                     </div>
-                    
+
                     {/* Show message if weight not selected */}
                     {!activeWeight && isServiceAvailable && (
                       <div className="weight-warning-message">
@@ -616,41 +661,41 @@ const ProductDetails = () => {
                 <LocationOption onServiceChange={updateServiceStatus} />
 
                 {/* Service Availability Warning */}
-                {!isServiceAvailable && (
+                {/* {!isServiceAvailable && (
                   <div className="service-warning-message">
                     ⚠️ Please check service availability before adding to cart
                   </div>
-                )}
+                )} */}
 
                 {/* Description */}
                 <div className="description-box">
                   <h6>Description</h6>
                   <p>{data.productDescription}</p>
                 </div>
-                      
-                <RecommendedPopup 
-                  productId={data._id} 
+
+                <RecommendedPopup
+                  productId={data._id}
                   open={openPopup}
                   onClose={() => setOpenPopup(false)}
-                />   
-                
+                />
+
                 <div className="pdx-cta">
-                  <button  
+                  <button
                     className={`pdx-cart ${isAdded ? "remove" : ""}`}
                     onClick={addToCart}
                     disabled={!isServiceAvailable}
-                    style={{ 
+                    style={{
                       opacity: !isServiceAvailable ? 0.6 : 1,
                       cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
                     }}
                   >
                     {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
                   </button>
-                  <button 
-                    className="pdx-buy"  
+                  <button
+                    className="pdx-buy"
                     onClick={handleBuyNow}
                     disabled={!isServiceAvailable}
-                    style={{ 
+                    style={{
                       opacity: !isServiceAvailable ? 0.6 : 1,
                       cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
                     }}

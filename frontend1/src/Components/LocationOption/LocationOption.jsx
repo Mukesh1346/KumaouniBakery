@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./location.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const LocationOption = ({ onServiceChange }) => {
   const [input, setInput] = useState("");
@@ -40,20 +41,20 @@ const LocationOption = ({ onServiceChange }) => {
     }
 
     const searchLower = searchText.toLowerCase();
-    
+
     // Check if any location matches ALL conditions:
-    const isAvailable = availableService.some(item => 
-      item.deleveryStatus === true && 
-      item.isActive === true && 
+    const isAvailable = availableService.some(item =>
+      item.deleveryStatus === true &&
+      item.isActive === true &&
       (
         item.pinCode?.toString().toLowerCase() === searchLower ||
-        item.area?.toLowerCase().includes(searchLower) ||
-        item.stateName?.toLowerCase().includes(searchLower)
+        item.area?.toLowerCase().includes(searchLower)
+        // || item.stateName?.toLowerCase().includes(searchLower)
       )
     );
 
     setServiceAvailable(isAvailable);
-    
+
     if (isAvailable) {
       setSearchMessage("✓ Services Available in Your Area");
     } else if (searchText.length > 2) {
@@ -61,7 +62,7 @@ const LocationOption = ({ onServiceChange }) => {
     } else {
       setSearchMessage("");
     }
-    
+
     // Send the availability status to parent component
     if (onServiceChange) {
       onServiceChange(isAvailable);
@@ -99,11 +100,21 @@ const LocationOption = ({ onServiceChange }) => {
         </span>
       </div>
 
+      <div className="note-box">
+        Note:⚠️ {searchMessage ? searchMessage : 'Please check service availability before adding to cart.'}
+        {/* // (
+        //   <div className={`service-message ${serviceAvailable ? 'available' : 'unavailable'}`}>
+        //     {searchMessage}
+        //   </div>
+        // ) : 'Please check service availability before adding to cart.'} */}
+
+      </div>
+
       {show && (
         <div>
-          <div className="note-box">
+          {/* <div className="note-box">
             Note: You have blocked tracking location.
-          </div>
+          </div> */}
 
           <div className="search-box">
             <input
@@ -116,15 +127,49 @@ const LocationOption = ({ onServiceChange }) => {
           </div>
 
           {/* Service Availability Message */}
-          {searchMessage && (
+          {/* {searchMessage && (
             <div className={`service-message ${serviceAvailable ? 'available' : 'unavailable'}`}>
               {searchMessage}
             </div>
-          )}
+          )} */}
 
-          <div className="saved-address">
-            Saved Addresses ⌄
-          </div>
+          <button
+            disabled={!serviceAvailable || !input.trim()}
+            onClick={() => {
+              if (!input.trim()) return;
+
+              sessionStorage.setItem("Address", input.trim());
+
+              Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: "success",
+                title: "Address saved",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+            }}
+            style={{
+              width: "100%",
+              padding: "10px 14px",
+              marginTop: "12px",
+              borderRadius: "8px",
+              border: "none",
+              fontWeight: 600,
+              transition: "all 0.25s ease",
+              background:
+                serviceAvailable && input.trim() ? "#ff4d6d" : "#ddd",
+              color:
+                serviceAvailable && input.trim() ? "#fff" : "#888",
+              cursor:
+                serviceAvailable && input.trim()
+                  ? "pointer"
+                  : "not-allowed",
+              opacity: serviceAvailable && input.trim() ? 1 : 0.7,
+            }}
+          >
+            💾 Save Address
+          </button>
         </div>
       )}
     </div>

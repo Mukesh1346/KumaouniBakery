@@ -179,7 +179,7 @@ const AllPinCode = () => {
                 productId,
                 status
             }
-            const response = await axios.post(`http://localhost:7000/api/pincode/change-status`, data);
+            const response = await axios.post(`https://api.ssdipl.com/api/pincode/change-status`, data);
             fetchPinCodes(searchTerm, currentPage);
         } catch (error) {
             toast.error("Failed to fetch pin codes!");

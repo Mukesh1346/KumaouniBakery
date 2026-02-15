@@ -3,8 +3,11 @@ import "./allproducts.css";
 import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const AllProductById = ({ cakesArr = [] }) => {
+    const user = sessionStorage.getItem("userId");
     const [currentPage, setCurrentPage] = useState({});
     const [wishlist, setWishlist] = useState([]);
     const navigate = useNavigate();
@@ -15,11 +18,67 @@ const AllProductById = ({ cakesArr = [] }) => {
     }, []);
 
     /* ❤️ Wishlist */
-    const toggleWishlist = (id) => {
-        setWishlist((prev) =>
-            prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
-        );
+
+    useEffect(() => {
+        const stored = sessionStorage.getItem("wishlist");
+        if (stored) {
+            setWishlist(JSON.parse(stored));
+        }
+    }, []);
+
+    // get existing wishlist from session
+    const toggleWishlist = async (productId) => {
+        if (!user) {
+            Swal.fire({
+                icon: "warning",
+                title: "Login Required",
+                text: "Please login to use wishlist",
+            });
+            navigate("/login");
+            return;
+        }
+
+        setWishlist((prev) => {
+            const isExist = prev.includes(productId);
+
+            const updated = isExist
+                ? prev.filter((id) => id !== productId)
+                : [...prev, productId];
+
+            // ✅ update session
+            sessionStorage.setItem("wishlist", JSON.stringify(updated));
+
+            // ✅ call API (fire and forget)
+            handleWishlistApi(productId, isExist);
+
+            return updated;
+        });
     };
+
+
+    const handleWishlistApi = async (productId, isRemoving) => {
+        console.log("isRemoving==>", isRemoving);
+        try {
+            if (isRemoving) {
+                // ✅ REMOVE from wishlist
+                await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+                    data: {
+                        user: user,
+                        productId: productId,
+                    },
+                });
+            } else {
+                // ✅ ADD to wishlist
+                await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+                    user: user,
+                    productId: productId,
+                });
+            }
+        } catch (error) {
+            console.error("Wishlist API error:", error);
+        }
+    };
+
 
     /* 🔥 GROUP PRODUCTS BY CATEGORY */
     const groupedData = useMemo(() => {
@@ -39,6 +98,7 @@ const AllProductById = ({ cakesArr = [] }) => {
         return Object.values(map);
     }, [cakesArr]);
 
+    console.log("groupedData==>", groupedData)
     return (
         <div className="container my-5">
             {groupedData.map(({ category, products }) => {
@@ -84,7 +144,7 @@ const AllProductById = ({ cakesArr = [] }) => {
                                                     className="wishlist"
                                                     onClick={() => toggleWishlist(product._id)}
                                                 >
-                                                    {wishlist.includes(product._id) ? (
+                                                    {wishlist.includes(product?._id) ? (
                                                         <FaHeart color="red" />
                                                     ) : (
                                                         <FaRegHeart />
