@@ -196,7 +196,7 @@ const ProductDetails = () => {
 
   const addToCart = () => {
     // Check if service is available first
-    if (!isServiceAvailable) {
+    if (!isServiceAvailable && !isAdded) {
       Swal.fire({
         icon: "warning",
         title: "Service Area Required",
@@ -407,7 +407,7 @@ const ProductDetails = () => {
 
   const handleBuyNow = () => {
     // Check if service is available first
-    if (!isServiceAvailable) {
+    if (!isServiceAvailable && !isAdded) {
       Swal.fire({
         icon: "warning",
         title: "Service Area Required",
@@ -686,7 +686,7 @@ const ProductDetails = () => {
                 )} */}
 
                 {data?.productDetails &&
-                  <div className="description-box" style={{ marginBottom: '12px',borderRadius:'13px 13px 0px 0px' }}>
+                  <div className="description-box" style={{ marginBottom: '12px', borderRadius: '13px 13px 0px 0px' }}>
                     <h6>Product Contains</h6>
                     <p>
                       {new DOMParser()
@@ -697,7 +697,7 @@ const ProductDetails = () => {
                 }
 
                 {/* Description */}
-                {data?.productDescription && <div className="description-box" style={{ marginBottom: '12px', borderRadius:'13px 13px 0px 0px' }}>
+                {data?.productDescription && <div className="description-box" style={{ marginBottom: '12px', borderRadius: '13px 13px 0px 0px' }}>
                   <h6>Description</h6>
                   <p>
                     {new DOMParser()
