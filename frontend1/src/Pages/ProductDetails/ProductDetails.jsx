@@ -80,7 +80,7 @@ const ProductDetails = () => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
+        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -88,7 +88,7 @@ const ProductDetails = () => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
+        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -103,7 +103,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:7000/api/get-product-by-name/${name}`
+        `https://api.ssdipl.com/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -437,7 +437,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`http://localhost:7000/${data.productImage?.[i]}`}
+            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -483,7 +483,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`http://localhost:7000/${imagePath}`}
+                          src={`https://api.ssdipl.com/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -496,7 +496,7 @@ const ProductDetails = () => {
                   <div className="pdx-main-images">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`http://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
@@ -617,7 +617,7 @@ const ProductDetails = () => {
                             <div key={index}>
                               <div className="rp-card">
                                 <img
-                                  src={`http://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                                  src={`https://api.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
                                 />
                                 <h6>{item?.productName}</h6>
