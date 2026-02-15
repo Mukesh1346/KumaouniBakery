@@ -217,7 +217,7 @@ const moreRelations = [
   //       order_id: data?.razorpayOrderId || "E77EE&7E",
 
   //       handler: async function (response) {
-  //         try {
+  //         try {    
   //           console.log("XXXXXX::=>" , response)
   //           const verifyData = await axios.post(
   //             "https://api.ssdipl.com/api/verify-payment",
