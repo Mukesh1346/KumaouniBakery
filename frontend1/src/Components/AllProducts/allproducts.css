@@ -141,6 +141,18 @@
   .product-img {
     height: 185px;
   }
+
+  .pdx-price{
+    margin:0px !important;
+  }
+.pdx-block{
+   margin-bottom: 20px;
+}
+.textArea{
+  width: 100% !important;
+    text-align: center !important;
+}
+
 }
 
 @media (max-width: 480px) {

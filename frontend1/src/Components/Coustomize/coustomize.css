@@ -115,7 +115,7 @@
   }
 
   .hero-section {
-    background: linear-gradient(90deg, #fbefff, #f4dfff);
+    /* background: linear-gradient(90deg, #fbefff, #f4dfff); */
     padding: 19px 20px;
     width: 100%;
 }

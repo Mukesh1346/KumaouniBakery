@@ -80,7 +80,7 @@ const ProductDetails = () => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -88,7 +88,7 @@ const ProductDetails = () => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -103,7 +103,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://api.ssdipl.com/api/get-product-by-name/${name}`
+        `http://localhost:7000/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -320,7 +320,7 @@ const ProductDetails = () => {
       });
     }
   };
-
+    
   const decrementAddon = (id) => {
     const { cart, index } = getOrCreateMainCartItem();
 
@@ -381,7 +381,7 @@ const ProductDetails = () => {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
         },
       },
     ],
@@ -419,7 +419,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
+            src={`http://localhost:7000/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -465,7 +465,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`https://api.ssdipl.com/${imagePath}`}
+                          src={`http://localhost:7000/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -475,10 +475,10 @@ const ProductDetails = () => {
                   </div>
 
                   {/* Main Image */}
-                  <div className="pdx-main-image">
+                  <div className="pdx-main-images">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`http://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
@@ -549,7 +549,7 @@ const ProductDetails = () => {
                 {/* FLAVOUR */}
                 <div className="pdx-block formInput">
                   <label>Select Flavour</label>
-                  <select className="form-select w-75">
+                  <select className="form-select  inputfield">
                     <option>Butterscotch</option>
                     <option>Chocolate</option>
                     <option>Vanilla</option>
@@ -565,7 +565,7 @@ const ProductDetails = () => {
                     type="text"
                     value={massage}
                     onChange={(e) => setMassage(e.target.value)}
-                    className="form-control formInput w-75"
+                    className="form-control formInput  inputfield"
                     placeholder="Write Name Here"
                     maxLength={25}
                   />
@@ -578,7 +578,7 @@ const ProductDetails = () => {
                   </label>
                   <input
                     type="date"
-                    className="form-control w-75"
+                    className="form-control  inputfield"
                     value={deliveryDate}
                     min={new Date().toISOString().split("T")[0]}
                     onChange={(e) => setDeliveryDate(e.target.value)}
@@ -599,7 +599,7 @@ const ProductDetails = () => {
                             <div key={index}>
                               <div className="rp-card">
                                 <img
-                                  src={`https://api.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                                  src={`http://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
                                 />
                                 <h6>{item?.productName}</h6>
@@ -713,7 +713,7 @@ const ProductDetails = () => {
       <section className="relatedProducts">
         <hr style={{ marginTop: "5px", marginBottom: "5px" }} />
         <div className="container">
-          <h2 className="mb-0">Related Products</h2>
+          <h2 className="mb-0 MainTitle">Related Products</h2>
         </div>
         <AllProducts />
       </section>
