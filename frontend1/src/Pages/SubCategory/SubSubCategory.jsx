@@ -12,7 +12,7 @@
 //   // Function to fetch products based on selected price range
 //   const getProductrelatedSubcategory = async () => {
 //     try {
-//       let url = `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`;
+//       let url = `htttp://localhost:7000/api/get-product-by-subcatname/${subcatname}`;
 
 //       // Add price filter if selected
 //       if (selectedPrice) {
@@ -91,7 +91,7 @@
 //                     <div className="card">
 //                       <Link to={`/product-details/${item.productName}`}>
 //                         <img
-//                           src={`https://api.ssdipl.com/${item.productImage[0]}`}
+//                           src={`htttp://localhost:7000/${item.productImage[0]}`}
 //                           className="w-100"
 //                           alt="images"
 //                         />

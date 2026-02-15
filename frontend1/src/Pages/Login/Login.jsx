@@ -27,7 +27,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/user/login",
+        "htttp://localhost:7000/api/user/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -63,7 +63,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      await axios.post("https://api.ssdipl.com/api/user", {
+      await axios.post("htttp://localhost:7000/api/user", {
         name: registerName,
         email: registerEmail,
         password: registerPassword,

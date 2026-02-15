@@ -39,7 +39,7 @@ const AllCakes = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`
+          `htttp://localhost:7000/api/get-product-by-subcatname/${subcatname}`
         );
 
         if (res.data?.data?.length > 0) {
@@ -56,7 +56,7 @@ const AllCakes = () => {
     const fetchProductById = async (subCategoryId) => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-product-by-subCategoryId/${subCategoryId}`
+          `htttp://localhost:7000/api/get-product-by-subCategoryId/${subCategoryId}`
         );
         console.log("XXXXXXXSSSSS:=>>", res.data?.data)
         if (res.data?.data?.length > 0) {
@@ -97,7 +97,7 @@ const AllCakes = () => {
     subcategoryInfo?.image
       ? subcategoryInfo.image.startsWith("http")
         ? subcategoryInfo.image
-        : `https://api.ssdipl.com/${subcategoryInfo.image}`
+        : `htttp://localhost:7000/${subcategoryInfo.image}`
       : Banner1;
 
 
@@ -132,7 +132,7 @@ const AllCakes = () => {
 
         <div >
           <div className="bannerBox">
-            <img src={`https://api.ssdipl.com/${subcategoryInfo?.banner}`} alt="Cake Banner" />
+            <img src={`htttp://localhost:7000/${subcategoryInfo?.banner}`} alt="Cake Banner" />
           </div>
         </div>
 
@@ -178,7 +178,7 @@ export default AllCakes;
 //   // Function to fetch products based on selected price range
 //   const getProductrelatedSubcategory = async () => {
 //     try {
-//       let url = `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`;
+//       let url = `htttp://localhost:7000/api/get-product-by-subcatname/${subcatname}`;
 
 //       // Add price filter if selected
 //       if (selectedPrice) {
@@ -258,7 +258,7 @@ export default AllCakes;
 //                       <Link to={`/product-details/${item.productName}`}>
 //                       {/* <Link to={`/sub-subcategory/${item.productName}`}> */}
 //                         <img
-//                           src={`https://api.ssdipl.com/${item.productImage[0]}`}
+//                           src={`htttp://localhost:7000/${item.productImage[0]}`}
 //                           className="w-100"
 //                           alt="images"
 //                         />

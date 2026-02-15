@@ -16,8 +16,8 @@
 /* REEL CARD */
 /* ===================== */
 .reel-card {
-  min-width: 240px;
-  height: 420px;
+  min-width: 200px;
+  height: 350px;
   background: #000;
   border-radius: 18px;
   position: relative;

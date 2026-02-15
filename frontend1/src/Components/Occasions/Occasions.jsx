@@ -13,8 +13,8 @@ export default function Occasions() {
   // ✅ API call
   const fetchBannerData = async () => {
     try {
-      // const res = await axios.get("https://api.ssdipl.com/api/promo-banner/get-promo-banner");
-      const res = await axios.get("https://api.ssdipl.com/api/cake-banner/get-cake-banner"
+      // const res = await axios.get("htttp://localhost:7000/api/promo-banner/get-promo-banner");
+      const res = await axios.get("htttp://localhost:7000/api/cake-banner/get-cake-banner"
       );
       console.log("SSSSS::=>", res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner3'))
       // console.log("SSSSS::=>XXXXXX", res?.data?.data)
@@ -53,7 +53,7 @@ export default function Occasions() {
             {
               data.map((item, index) => (
                 <div onClick={() => navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} key={item?._id} className='OccasionCard'>
-                  <img src={`https://api.ssdipl.com/${item?.image || item?.cakeBanner}`} alt="" className='occasionalPic' />
+                  <img src={`htttp://localhost:7000/${item?.image || item?.cakeBanner}`} alt="" className='occasionalPic' />
                   <h3>{item.titel}</h3>
                 </div>
               ))

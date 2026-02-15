@@ -3,7 +3,7 @@ import "./reel.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
-const BASE_URL = "https://api.ssdipl.com/";
+const BASE_URL = "htttp://localhost:7000/";
 
 export default function ReelSection() {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function ReelSection() {
 
   const fetchReels = async () => {
     try {
-      const response = await axios.get("https://api.ssdipl.com/api/reel/get-reels");
+      const response = await axios.get("htttp://localhost:7000/api/reel/get-reels");
       setReels(response?.data?.data || []);
     } catch (error) {
       console.error("Error fetching reels:", error);

@@ -64,7 +64,7 @@ const Header = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-category-with-subcategory`
+          `htttp://localhost:7000/api/get-category-with-subcategory`
         );
 
         console.log(res.data.data)
@@ -111,8 +111,8 @@ const Header = () => {
   //       setLoadingSuggestions(true);
 
   //       const res = await axios.get(
-  //         // `https://api.ssdipl.com/api/search-products?query=${searchQuery}`
-  //         ` https://api.ssdipl.com/api/get-best-selling-products?query=${searchQuery}`
+  //         // `htttp://localhost:7000/api/search-products?query=${searchQuery}`
+  //         ` htttp://localhost:7000/api/get-best-selling-products?query=${searchQuery}`
 
 
   //       );
@@ -134,7 +134,7 @@ const Header = () => {
     const fetchAllProducts = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/all-product"
+          "htttp://localhost:7000/api/all-product"
         );
         setAllProducts(res.data?.data || []);
       } catch (err) {
@@ -352,7 +352,7 @@ const Header = () => {
                           }}
                         >
                           <img
-                            src={`https://api.ssdipl.com/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
+                            src={`htttp://localhost:7000/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
                             alt={product.productName}
                             className="suggestion-image"
                           />
