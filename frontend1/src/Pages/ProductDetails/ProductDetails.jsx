@@ -99,6 +99,7 @@ const ProductDetails = () => {
   };
 
 
+
   // Fetch product data by name
   const getApiData = async () => {
     try {
@@ -268,7 +269,7 @@ const ProductDetails = () => {
 
   const addAddon = (addon) => {
     // Check if service is available first
-    if (!isServiceAvailable) {
+    if (!isServiceAvailable && !isAdded) {
       Swal.fire({
         icon: "warning",
         title: "Service Area Required",
@@ -338,7 +339,7 @@ const ProductDetails = () => {
       });
     }
   };
-    
+
   const decrementAddon = (id) => {
     const { cart, index } = getOrCreateMainCartItem();
 
@@ -462,7 +463,7 @@ const ProductDetails = () => {
           <h1>Product Details</h1>
           <Link to="/">Home /</Link>{" "}
           <Link to="">{data?.categoryName?.mainCategoryName} /</Link>{" "}
-          <Link to="">{data.productName}</Link>
+          <Link to="">{data?.productName}</Link>
         </div>
       </section>
 
@@ -627,11 +628,11 @@ const ProductDetails = () => {
                                   <button
                                     className="rp-add-btn"
                                     onClick={() => addAddon(item)}
-                                    disabled={!isServiceAvailable || !activeWeight}
-                                    style={{
-                                      opacity: (!isServiceAvailable || !activeWeight) ? 0.5 : 1,
-                                      cursor: (!isServiceAvailable || !activeWeight) ? 'not-allowed' : 'pointer'
-                                    }}
+                                  // disabled={!isServiceAvailable || !activeWeight}
+                                  // style={{
+                                  //   opacity: (!isServiceAvailable || !activeWeight) ? 0.5 : 1,
+                                  //   cursor: (!isServiceAvailable || !activeWeight) ? 'not-allowed' : 'pointer'
+                                  // }}
                                   >
                                     Add
                                   </button>
