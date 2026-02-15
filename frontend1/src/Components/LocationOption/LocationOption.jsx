@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 const LocationOption = ({ onServiceChange }) => {
   const [input, setInput] = useState("");
   const debounceRef = useRef(null);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [loading, setLoading] = useState(true);
   const [availableService, setAvailableService] = useState([]);
   const [serviceAvailable, setServiceAvailable] = useState(false);
@@ -56,9 +56,9 @@ const LocationOption = ({ onServiceChange }) => {
     setServiceAvailable(isAvailable);
 
     if (isAvailable) {
-      setSearchMessage("✓ Services Available in Your Area");
+      setSearchMessage("Services Available in Your Area");
     } else if (searchText.length > 2) {
-      setSearchMessage("✗ Services Not Available in Your Area");
+      setSearchMessage("Services Not Available in Your Area");
     } else {
       setSearchMessage("");
     }
@@ -95,20 +95,16 @@ const LocationOption = ({ onServiceChange }) => {
     <div className="location-wrapper">
       <div className="location-header">
         <span>Select Area / Location</span>
-        <span className="use-location" onClick={() => setShow(!show)}>
+        <span className="use-location"
+        //  onClick={() => setShow(!show)}
+        >
           Use My Location
         </span>
       </div>
 
-      <div className="note-box">
-        Note:⚠️ {searchMessage ? searchMessage : 'Please check service availability before adding to cart.'}
-        {/* // (
-        //   <div className={`service-message ${serviceAvailable ? 'available' : 'unavailable'}`}>
-        //     {searchMessage}
-        //   </div>
-        // ) : 'Please check service availability before adding to cart.'} */}
-
-      </div>
+      {searchMessage && <div className="note-box">
+        {searchMessage ? `Note: ${searchMessage}` : ''}
+      </div>}
 
       {show && (
         <div>
@@ -133,7 +129,7 @@ const LocationOption = ({ onServiceChange }) => {
             </div>
           )} */}
 
-          <button
+          {/* <button
             disabled={!serviceAvailable || !input.trim()}
             onClick={() => {
               if (!input.trim()) return;
@@ -169,9 +165,10 @@ const LocationOption = ({ onServiceChange }) => {
             }}
           >
             💾 Save Address
-          </button>
+          </button> */}
         </div>
       )}
+
     </div>
   );
 };
