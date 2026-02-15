@@ -22,7 +22,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          "htttp://localhost:7000/api/recommended-category/get-recommended-category"
+          "http://localhost:7000/api/recommended-category/get-recommended-category"
         );
         if (res.status === 200 && res.data.data.length) {
           setCategory(res.data.data);
@@ -42,7 +42,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `htttp://localhost:7000/api/recommended-product/get-product-by-category/${activeCategory}`
+          `http://localhost:7000/api/recommended-product/get-product-by-category/${activeCategory}`
         );
         if (res.status === 200) setProduct(res.data.data);
       } catch (err) {
@@ -172,7 +172,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
         <div className="rp-grid">
           {product.map((p) => (
             <div className="rp-card" key={p._id}>
-              <img src={`htttp://localhost:7000/${p?.productImage[0]}`} alt={p?.productName} />
+              <img src={`http://localhost:7000/${p?.productImage[0]}`} alt={p?.productName} />
               <h6>{p.productName}</h6>
               <p>₹ {p.price}</p>
 

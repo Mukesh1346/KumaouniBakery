@@ -57,7 +57,7 @@
 
 //   const fetchWishlist = async () => {
 //     try {
-//       const res = await axios.get(`htttp://localhost:7000/api/wishlist/get-wishlist/${user}`);
+//       const res = await axios.get(`http://localhost:7000/api/wishlist/get-wishlist/${user}`);
 //       if (res.status === 200) {
 //         setWishlist(res.data.data);
 //       }
@@ -109,7 +109,7 @@
 //     try {
 //       if (isRemoving) {
 //         // ✅ REMOVE from wishlist
-//         await axios.delete("htttp://localhost:7000/api/wishlist/remove-wishlist", {
+//         await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
 //           data: {
 //             user: user,
 //             productId: productId,
@@ -117,7 +117,7 @@
 //         });
 //       } else {
 //         // ✅ ADD to wishlist
-//         await axios.post("htttp://localhost:7000/api/wishlist/add-wishlist", {
+//         await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
 //           user: user,
 //           productId: productId,
 //         });
@@ -190,7 +190,7 @@
 //               </div>
 
 //               <div className="product-info">
-//                 <img src={`htttp://localhost:7000/${item?.productId?.productImage[0] || item?.productId?.productImage}`} alt={item?.name} />
+//                 <img src={`http://localhost:7000/${item?.productId?.productImage[0] || item?.productId?.productImage}`} alt={item?.name} />
 //                 <span className="text-success">{item?.productId?.productName}</span>
 //               </div>
 
@@ -244,7 +244,7 @@ const Wishlist = () => {
   const fetchWishlist = async () => {
     try {
       const res = await axios.get(
-        `htttp://localhost:7000/api/wishlist/get-wishlist/${user}`
+        `http://localhost:7000/api/wishlist/get-wishlist/${user}`
       );
       if (res.status === 200) {
         setWishlist(res.data.data);
@@ -266,7 +266,7 @@ const Wishlist = () => {
   const handleRemove = async (productId) => {
     try {
       await axios.delete(
-        "htttp://localhost:7000/api/wishlist/remove-wishlist",
+        "http://localhost:7000/api/wishlist/remove-wishlist",
         {
           data: { user, productId },
         }
@@ -391,7 +391,7 @@ const Wishlist = () => {
                 {/* product */}
                 <div className="product-info">
                   <img
-                    src={`htttp://localhost:7000/${product?.productImage?.[0]}`}
+                    src={`http://localhost:7000/${product?.productImage?.[0]}`}
                     alt={product?.productName}
                   />
                   <span className="text-success">

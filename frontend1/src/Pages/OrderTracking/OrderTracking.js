@@ -12,7 +12,7 @@
 
 //   const fetchOrderByUser = async () => {
 //     try {
-//       const res = await axios.get(`htttp://localhost:7000/api/checkout/user/${user}`)
+//       const res = await axios.get(`http://localhost:7000/api/checkout/user/${user}`)
 //       setOrderData(res.data.data)
 //     } catch (e) {
 //       console.log(e)
@@ -255,7 +255,7 @@ const OrderTracking = () => {
     const fetchOrderByUser = async () => {
       try {
         const res = await axios.get(
-          `htttp://localhost:7000/api/checkout/user/${user}`
+          `http://localhost:7000/api/checkout/user/${user}`
         );
         setOrderData(res.data.data || []);
       } catch (e) {
@@ -411,7 +411,7 @@ const OrderTracking = () => {
                     <div className="item-card">
                       <div className="item-img">
                         <img
-                          src={`htttp://localhost:7000/${item.image.replace(
+                          src={`http://localhost:7000/${item.image.replace(
                             /\\/g,
                             "/"
                           )}`}

@@ -80,7 +80,7 @@ const ProductDetails = () => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("htttp://localhost:7000/api/wishlist/remove-wishlist", {
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -88,7 +88,7 @@ const ProductDetails = () => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("htttp://localhost:7000/api/wishlist/add-wishlist", {
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -104,7 +104,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `htttp://localhost:7000/api/get-product-by-name/${name}`
+        `http://localhost:7000/api/get-product-by-name/${name}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -438,7 +438,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`htttp://localhost:7000/${data.productImage?.[i]}`}
+            src={`http://localhost:7000/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -460,9 +460,9 @@ const ProductDetails = () => {
       {/* Breadcrumb Section */}
       <section className="breadCrumb">
         <div className="breadCrumbContent">
-          <h1>Product Details</h1>
-          <Link to="/">Home /</Link>{" "}
-          <Link to="">{data?.categoryName?.mainCategoryName} /</Link>{" "}
+          {/* <h1>Product Details</h1> */}
+          <Link to="/" style={{color:"#df4444"}}>Home /</Link>{" "}
+          <Link to="" style={{color:"#df4444"}}>{data?.categoryName?.mainCategoryName} /</Link>{" "}
           <Link to="">{data?.productName}</Link>
         </div>
       </section>
@@ -484,7 +484,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`htttp://localhost:7000/${imagePath}`}
+                          src={`http://localhost:7000/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -497,7 +497,7 @@ const ProductDetails = () => {
                   <div className="pdx-main-images">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`htttp://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`http://localhost:7000/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
@@ -618,7 +618,7 @@ const ProductDetails = () => {
                             <div key={index}>
                               <div className="rp-card">
                                 <img
-                                  src={`htttp://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                                  src={`http://localhost:7000/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
                                 />
                                 <h6>{item?.productName}</h6>

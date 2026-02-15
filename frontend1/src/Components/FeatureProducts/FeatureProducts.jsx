@@ -112,7 +112,7 @@
 //   };
 //   const fetchFeaturedProducts = async () => {
 //     try {
-//       const response = await axios.get("htttp://localhost:7000/api/get-featuredProducts");
+//       const response = await axios.get("http://localhost:7000/api/get-featuredProducts");
 //       setFeaturedProductsData(response?.data?.data)
 //       // const data = await response.json();
 //       console.log("SSSSS::=>", response.data.data);
@@ -147,7 +147,7 @@
 //             <div className="product-card">
 //               {/* Image */}
 //               <div className="product-img">
-//                 <img src={`htttp://localhost:7000/${item?.productImage[0] || item?.productImage}`} alt={item?.name} />
+//                 <img src={`http://localhost:7000/${item?.productImage[0] || item?.productImage}`} alt={item?.name} />
 
 //                 {/* ❤️ Wishlist */}
 //                 <span
@@ -216,7 +216,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const BASE_URL = "htttp://localhost:7000/";
+const BASE_URL = "http://localhost:7000/";
 
 const FeaturedProducts = () => {
   const navigate = useNavigate();
@@ -266,7 +266,7 @@ const FeaturedProducts = () => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("htttp://localhost:7000/api/wishlist/remove-wishlist", {
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -274,7 +274,7 @@ const FeaturedProducts = () => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("htttp://localhost:7000/api/wishlist/add-wishlist", {
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -289,7 +289,7 @@ const FeaturedProducts = () => {
   const fetchFeaturedProducts = async () => {
     try {
       const response = await axios.get(
-        "htttp://localhost:7000/api/get-featuredProducts"
+        "http://localhost:7000/api/get-featuredProducts"
       );
       setProducts(response?.data?.data || []);
     } catch (error) {

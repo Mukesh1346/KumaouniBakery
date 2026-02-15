@@ -25,7 +25,7 @@ const ContactUs = () => {
 
     try {
       const response = await fetch(
-        `htttp://localhost:7000/api/send-query`,
+        `http://localhost:7000/api/send-query`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

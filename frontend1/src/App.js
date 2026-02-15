@@ -32,6 +32,7 @@ import QA from "./Pages/Faq/Faq"
 import ReferAndEarn from "./Pages/ReferEarn/ReferEarn";
 import SubSubcategory from "./Pages/SubSubCategories/SubSubCategories"
 import Wishlist from './Components/Wishlist/Wishlist'
+import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 
 
 
@@ -39,6 +40,7 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
+      <ScrollToTop/>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />

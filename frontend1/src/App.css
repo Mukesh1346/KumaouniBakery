@@ -27,16 +27,17 @@
 }
 
 .breadCrumb {
-  background-image: url("./images/breadCrumb.jpg");
+  /* background-image: url("./images/breadCrumb.jpg"); */
   width: 100%;
+ 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .breadCrumb .breadCrumbContent {
-  padding: 4rem 8rem;
-  background-color: #ec008e33;
+  padding: 1rem 10rem;
+ background-color: #f4f7f8;
 }
 
 .breadCrumbContent h1 {
@@ -45,7 +46,7 @@
 }
 
 .breadCrumb .breadCrumbContent a {
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./allproducts.css";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Swal from "sweetalert2";
 
@@ -11,7 +11,7 @@ const AllProducts = ({ status = '' }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [productData, setProductData] = useState({});
   const [currentPage, setCurrentPage] = useState({});
-  const [wishlist, setWishlist] = useState([{ user: '', productId: '' }]); // ✅ added
+  const [wishlist, setWishlist] = useState([]); // ✅ fixed initial state
   const productsPerPage = 20;
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiData = async () => {
     const res = await axios.get(
-      `htttp://localhost:7000/api/get-main-category`
+      `http://localhost:7000/api/get-main-category`
     );
     if (res.status === 200) {
       setCategoryData(status === 'Home' ? res.data.data.filter((item) => item.ActiveonHome === true) : res.data.data);
@@ -34,7 +34,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiProductData = async () => {
     const res = await axios.get(
-      `htttp://localhost:7000/api/all-product`
+      `http://localhost:7000/api/all-product`
     );
 
     if (res.status === 200) {
@@ -55,8 +55,15 @@ const AllProducts = ({ status = '' }) => {
     }
   }, []);
 
-  // get existing wishlist from session
-  const toggleWishlist = async (productId) => {
+  // Handle product card click navigation
+  const handleProductClick = (productName) => {
+    navigate(`/product-details/${productName}`);
+  };
+
+  // Handle wishlist toggle (prevents event bubbling)
+  const handleWishlistClick = (e, productId) => {
+    e.stopPropagation(); // Prevents the card click event
+    
     if (!user) {
       Swal.fire({
         icon: "warning",
@@ -69,7 +76,6 @@ const AllProducts = ({ status = '' }) => {
 
     setWishlist((prev) => {
       const isExist = prev.includes(productId);
-
       const updated = isExist
         ? prev.filter((id) => id !== productId)
         : [...prev, productId];
@@ -84,13 +90,12 @@ const AllProducts = ({ status = '' }) => {
     });
   };
 
-
   const handleWishlistApi = async (productId, isRemoving) => {
     console.log("isRemoving==>", isRemoving);
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("htttp://localhost:7000/api/wishlist/remove-wishlist", {
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -98,7 +103,7 @@ const AllProducts = ({ status = '' }) => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("htttp://localhost:7000/api/wishlist/add-wishlist", {
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -108,8 +113,11 @@ const AllProducts = ({ status = '' }) => {
     }
   };
 
-
-  console.log("DDD:=>", wishlist);
+  // Handle Buy Now button click (prevents event bubbling)
+  const handleBuyNowClick = (e, productName) => {
+    e.stopPropagation(); // Prevents the card click event
+    navigate(`/product-details/${productName}`);
+  };
 
   return (
     <div className="container my-5">
@@ -124,7 +132,7 @@ const AllProducts = ({ status = '' }) => {
             {/* CATEGORY HEADER */}
             <div className="d-flex justify-content-between align-items-center mb-4">
               <div className="textArea">
-                <h4 className="fw-bold mb-1  text-uppercase">
+                <h4 className="fw-bold mb-1 text-uppercase">
                   {category.mainCategoryName}      
                 </h4>
                 <p className="text-muted mb-0">Best Gifts For Your Loved Ones</p>
@@ -138,19 +146,23 @@ const AllProducts = ({ status = '' }) => {
                   key={product._id}
                   className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
                 >
-                  <div className="product-card">
+                  <div 
+                    className="product-card"
+                    onClick={() => handleProductClick(product?.productName)}
+                    style={{ cursor: "pointer" }}
+                  >
 
                     {/* IMAGE */}
                     <div className="product-img">
                       <img
-                        src={`htttp://localhost:7000/${product.productImage[0]}`}
+                        src={`http://localhost:7000/${product.productImage[0]}`}
                         alt={product.productName}
                       />
 
-                      {/* ❤️ Wishlist (added only this part) */}
+                      {/* ❤️ Wishlist (with stopPropagation) */}
                       <span
                         className="wishlist"
-                        onClick={() => toggleWishlist(product?._id)}
+                        onClick={(e) => handleWishlistClick(e, product?._id)}
                       >
                         {wishlist?.includes(product?._id) ? (
                           <FaHeart color="red" />
@@ -182,12 +194,12 @@ const AllProducts = ({ status = '' }) => {
                         Earliest Delivery : <span>In 3 hours</span>
                       </p>
 
-                      <Link
-                        to={`/product-details/${product.productName}`}
+                      <button
                         className="btn btn-dark w-100 mt-2"
+                        onClick={(e) => handleBuyNowClick(e, product?.productName)}
                       >
                         Buy Now
-                      </Link>
+                      </button>
                     </div>
 
                   </div>

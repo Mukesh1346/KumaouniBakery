@@ -9,114 +9,22 @@ import pic6 from "../../images/pic/Product4.avif";
 import pic7 from "../../images/pic/Product4.avif";
 import pic8 from "../../images/pic/Product4.avif";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { Link ,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-
 const BestSellingProduct = () => {
   // ✅ Wishlist state
-   const user = sessionStorage.getItem("userId");
-  const navigate = useNavigate()
+  const user = sessionStorage.getItem("userId");
+  const navigate = useNavigate();
   const [wishlist, setWishlist] = useState([]);
-  const [products, setProducts] = useState([])
-  // ✅ Static Data
-  // const products = [
-  //   {
-  //     id: 1,
-  //     name: "10 Red Roses Bouquet",
-  //     image: pic1,
-  //     price: 695,
-  //     oldPrice: 845,
-  //     off: "18% OFF",
-  //     rating: 4.9,
-  //     reviews: 1645,
-  //     delivery: "In 3 hours",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Blush Heart Chocolate Cake",
-  //     image: pic2,
-  //     price: 775,
-  //     oldPrice: 995,
-  //     off: "23% OFF",
-  //     rating: 4.8,
-  //     reviews: 1022,
-  //     delivery: "In 3 hours",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Aromatic Choco Hamper",
-  //     image: pic3,
-  //     price: 1165,
-  //     oldPrice: 1445,
-  //     off: "20% OFF",
-  //     rating: 4.7,
-  //     reviews: 812,
-  //     delivery: "In 3 hours",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Twin Hearts Floral Balloon Bouquet",
-  //     image: pic4,
-  //     price: 1095,
-  //     oldPrice: 1445,
-  //     off: "25% OFF",
-  //     rating: 4.8,
-  //     reviews: 945,
-  //     delivery: "In 3 hours",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Money Plant In Black Mandala Pot",
-  //     image: pic5,
-  //     price: 595,
-  //     oldPrice: 699,
-  //     off: "15% OFF",
-  //     rating: 4.6,
-  //     reviews: 3,
-  //     delivery: "Tomorrow",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Purple Orchids n Floral Cake Combo",
-  //     image: pic6,
-  //     price: 1545,
-  //     oldPrice: 1695,
-  //     off: "9% OFF",
-  //     rating: 4.9,
-  //     reviews: 1190,
-  //     delivery: "In 3 hours",
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Blue Orchid Jute Bouquet",
-  //     image: pic7,
-  //     price: 895,
-  //     oldPrice: 1095,
-  //     off: "19% OFF",
-  //     rating: 4.9,
-  //     reviews: 482,
-  //     delivery: "In 3 hours",
-  //   },
-  //   {
-  //     id: 8,
-  //     name: "Bows N Blush Chocolate Cream Cake",
-  //     image: pic8,
-  //     price: 695,
-  //     oldPrice: null,
-  //     off: null,
-  //     rating: 4.7,
-  //     reviews: 221,
-  //     delivery: "In 3 hours",
-  //   },
-  // ];
+  const [products, setProducts] = useState([]);
 
   const fetchBestSellingProducts = async () => {
     try {
       const response = await axios.get(
-        "htttp://localhost:7000/api/get-best-selling-products"
+        "http://localhost:7000/api/get-best-selling-products"
       );
       setProducts(response?.data?.data || []);
     } catch (error) {
@@ -136,8 +44,15 @@ const BestSellingProduct = () => {
     }
   }, []);
 
-  // get existing wishlist from session
-  const toggleWishlist = async (productId) => {
+  // Handle product card click navigation
+  const handleProductClick = (productName) => {
+    navigate(`/product-details/${productName}`);
+  };
+
+  // Handle wishlist toggle (prevents event bubbling)
+  const handleWishlistClick = (e, productId) => {
+    e.stopPropagation(); // Prevents the card click event
+    
     if (!user) {
       Swal.fire({
         icon: "warning",
@@ -150,7 +65,6 @@ const BestSellingProduct = () => {
 
     setWishlist((prev) => {
       const isExist = prev.includes(productId);
-
       const updated = isExist
         ? prev.filter((id) => id !== productId)
         : [...prev, productId];
@@ -165,13 +79,12 @@ const BestSellingProduct = () => {
     });
   };
 
-
   const handleWishlistApi = async (productId, isRemoving) => {
     console.log("isRemoving==>", isRemoving);
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("htttp://localhost:7000/api/wishlist/remove-wishlist", {
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -179,7 +92,7 @@ const BestSellingProduct = () => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("htttp://localhost:7000/api/wishlist/add-wishlist", {
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -189,8 +102,13 @@ const BestSellingProduct = () => {
     }
   };
 
+  // Handle Buy Now button click (prevents event bubbling)
+  const handleBuyNowClick = (e, productName) => {
+    e.stopPropagation(); // Prevents the card click event
+    navigate(`/product-details/${productName}`);
+  };
 
-  console.log("XXXZZZZXXXX==>", products)
+  console.log("XXXZZZZXXXX==>", products);
   return (
     <div className="container my-5">
       {/* Header */}
@@ -219,18 +137,22 @@ const BestSellingProduct = () => {
               className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
               key={item._id}
             >
-              <div className="product-card">
+              <div 
+                className="product-card"
+                onClick={() => handleProductClick(item?.productName)}
+                style={{ cursor: "pointer" }}
+              >
 
                 {/* Image */}
                 <div className="product-img">
                   <img
-                    src={`htttp://localhost:7000/${image}`}
+                    src={`http://localhost:7000/${image}`}
                     alt={item.productName}
                   />
 
                   <span
                     className="wishlist"
-                    onClick={() => toggleWishlist(item._id)}
+                    onClick={(e) => handleWishlistClick(e, item._id)}
                   >
                     {wishlist?.includes(item?._id) ? (
                       <FaHeart color="red" />
@@ -262,19 +184,18 @@ const BestSellingProduct = () => {
                     Earliest Delivery : <span>In 3 hours</span>
                   </p>
 
-                  <Link
-                    to={`/product-details/${item?.productName}`}
+                  <button
                     className="btn btn-dark w-100 mt-2"
+                    onClick={(e) => handleBuyNowClick(e, item?.productName)}
                   >
                     Buy Now
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
           );
         })}
       </div>
-
     </div>
   );
 };
