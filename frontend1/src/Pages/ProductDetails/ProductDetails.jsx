@@ -108,9 +108,27 @@ const ProductDetails = () => {
       const productData = res.data.data;
       setData(productData);
 
+      // if (productData?.Variant?.length > 0) {
+      //   setPrice(productData.Variant[0].finalPrice);
+
+      //   setActiveWeight(productData?.Variant[0]?.weight);
+      //   const selectedVariant = data.Variant?.find(
+      //     (variant) => variant?.weight?.sizeweight === productData?.Variant[0]?.weight
+      //   );
+
+      //   if (selectedVariant) {
+      //     setPrice(selectedVariant.finalPrice);
+      //   }
+
+      // }
+
       if (productData?.Variant?.length > 0) {
-        setPrice(productData.Variant[0].finalPrice);
+        const firstVariant = productData.Variant[0];
+
+        setActiveWeight(firstVariant?.weight?.sizeweight);
+        setPrice(firstVariant?.finalPrice);
       }
+
     } catch (error) {
       console.error("Error fetching product data:", error);
     }
@@ -182,7 +200,7 @@ const ProductDetails = () => {
       Swal.fire({
         icon: "warning",
         title: "Service Area Required",
-        text: "Please check if we deliver to your location first",
+        text: "Please check delivery availability for your location first.",
         timer: 2000
       });
       return;
@@ -393,7 +411,7 @@ const ProductDetails = () => {
       Swal.fire({
         icon: "warning",
         title: "Service Area Required",
-        text: "Please check if we deliver to your location first",
+        text: "Please check delivery availability for your location first.",
         timer: 2000
       });
       return;
@@ -535,7 +553,7 @@ const ProductDetails = () => {
                   <div className="pdx-weight-group">
                     {data.Variant?.map((v) => (
                       <button
-                        key={v._id}
+                        key={v?._id}
                         className={`pdx-weight-btn ${activeWeight === v.weight.sizeweight ? "active" : ""
                           }`}
                         onClick={() => handleWeightSelection(v.weight.sizeweight)}
@@ -667,11 +685,26 @@ const ProductDetails = () => {
                   </div>
                 )} */}
 
+                {data?.productDetails &&
+                  <div className="description-box" style={{ marginBottom: '12px',borderRadius:'13px 13px 0px 0px' }}>
+                    <h6>Product Contains</h6>
+                    <p>
+                      {new DOMParser()
+                        .parseFromString(data.productDetails || "", "text/html")
+                        .body.textContent}
+                    </p>
+                  </div>
+                }
+
                 {/* Description */}
-                <div className="description-box">
+                {data?.productDescription && <div className="description-box" style={{ marginBottom: '12px', borderRadius:'13px 13px 0px 0px' }}>
                   <h6>Description</h6>
-                  <p>{data.productDescription}</p>
-                </div>
+                  <p>
+                    {new DOMParser()
+                      .parseFromString(data.productDescription || "", "text/html")
+                      .body.textContent}
+                  </p>
+                </div>}
 
                 <RecommendedPopup
                   productId={data._id}
@@ -683,22 +716,22 @@ const ProductDetails = () => {
                   <button
                     className={`pdx-cart ${isAdded ? "remove" : ""}`}
                     onClick={addToCart}
-                    disabled={!isServiceAvailable}
-                    style={{
-                      opacity: !isServiceAvailable ? 0.6 : 1,
-                      cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
-                    }}
+                  // disabled={!isServiceAvailable}
+                  // style={{
+                  //   opacity: !isServiceAvailable ? 0.6 : 1,
+                  //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                  // }}
                   >
                     {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
                   </button>
                   <button
                     className="pdx-buy"
                     onClick={handleBuyNow}
-                    disabled={!isServiceAvailable}
-                    style={{
-                      opacity: !isServiceAvailable ? 0.6 : 1,
-                      cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
-                    }}
+                  // disabled={!isServiceAvailable}
+                  // style={{
+                  //   opacity: !isServiceAvailable ? 0.6 : 1,
+                  //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                  // }}
                   >
                     BUY NOW | ₹ {Math.round(price)}
                   </button>
