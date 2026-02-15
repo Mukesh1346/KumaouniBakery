@@ -22,7 +22,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiData = async () => {
     const res = await axios.get(
-      `http://localhost:7000/api/get-main-category`
+      `https://api.ssdipl.com/api/get-main-category`
     );
     if (res.status === 200) {
       setCategoryData(status === 'Home' ? res.data.data.filter((item) => item.ActiveonHome === true) : res.data.data);
@@ -34,7 +34,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiProductData = async () => {
     const res = await axios.get(
-      `http://localhost:7000/api/all-product`
+      `https://api.ssdipl.com/api/all-product`
     );
 
     if (res.status === 200) {
@@ -95,7 +95,7 @@ const AllProducts = ({ status = '' }) => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
+        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -103,7 +103,7 @@ const AllProducts = ({ status = '' }) => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
+        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -155,7 +155,7 @@ const AllProducts = ({ status = '' }) => {
                     {/* IMAGE */}
                     <div className="product-img">
                       <img
-                        src={`http://localhost:7000/${product.productImage[0]}`}
+                        src={`https://api.ssdipl.com/${product.productImage[0]}`}
                         alt={product.productName}
                       />
 

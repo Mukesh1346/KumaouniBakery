@@ -187,7 +187,7 @@ const moreRelations = [
   //   if (finalPayload.paymentMode === "cod") {
   //     try {
   //       const res = await axios.post(
-  //         'http://localhost:7000/api/checkout', finalPayload
+  //         'https://api.ssdipl.com/api/checkout', finalPayload
   //       )
   //       console.log("resres==>", res.data.data);
   //       if (res.status === 200) {
@@ -203,7 +203,7 @@ const moreRelations = [
   //       return;
   //     }
 
-  //     const res = await axios.post('http://localhost:7000/api/checkout', finalPayload)
+  //     const res = await axios.post('https://api.ssdipl.com/api/checkout', finalPayload)
   //     console.log("data==>", res?.data ,res?.data);
   //     const data = res?.data;
 
@@ -220,7 +220,7 @@ const moreRelations = [
   //         try {
   //           console.log("XXXXXX::=>" , response)
   //           const verifyData = await axios.post(
-  //             "http://localhost:7000/api/verify-payment",
+  //             "https://api.ssdipl.com/api/verify-payment",
   //             {
   //               razorpay_order_id: response?.razorpay_order_id,
   //               razorpay_payment_id: response?.razorpay_payment_id,
@@ -274,7 +274,7 @@ const moreRelations = [
       /* ================= COD ================= */
       if (finalPayload.paymentMode === "cod") {
         const res = await axios.post(
-          "http://localhost:7000/api/checkout",
+          "https://api.ssdipl.com/api/checkout",
           finalPayload
         );
 
@@ -294,7 +294,7 @@ const moreRelations = [
       }
 
       const res = await axios.post(
-        "http://localhost:7000/api/checkout",
+        "https://api.ssdipl.com/api/checkout",
         finalPayload
       );
       const { razorpayOrderId, amount, currency } = res.data;
@@ -318,7 +318,7 @@ const moreRelations = [
           console.log("XXXXXXX::=>", response)
           try {
             const verifyRes = await axios.post(
-              "http://localhost:7000/api/verify-payment",
+              "https://api.ssdipl.com/api/verify-payment",
               response
             );
             console.log("XXXXXXX::=>", verifyRes)
