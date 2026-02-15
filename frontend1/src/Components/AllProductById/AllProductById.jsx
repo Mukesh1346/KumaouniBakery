@@ -61,7 +61,7 @@ const AllProductById = ({ cakesArr = [] }) => {
         try {
             if (isRemoving) {
                 // ✅ REMOVE from wishlist
-                await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+                await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
                     data: {
                         user: user,
                         productId: productId,
@@ -69,7 +69,7 @@ const AllProductById = ({ cakesArr = [] }) => {
                 });
             } else {
                 // ✅ ADD to wishlist
-                await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+                await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
                     user: user,
                     productId: productId,
                 });
@@ -135,7 +135,7 @@ const AllProductById = ({ cakesArr = [] }) => {
                                         <div className="product-card">
                                             <div className="product-img">
                                                 <img
-                                                    src={`https://api.ssdipl.com/${image}`}
+                                                    src={`http://localhost:7000/${image}`}
                                                     alt={product.productName}
                                                 />
 

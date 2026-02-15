@@ -22,7 +22,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiData = async () => {
     const res = await axios.get(
-      `https://api.ssdipl.com/api/get-main-category`
+      `http://localhost:7000/api/get-main-category`
     );
     if (res.status === 200) {
       setCategoryData(status === 'Home' ? res.data.data.filter((item) => item.ActiveonHome === true) : res.data.data);
@@ -34,7 +34,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiProductData = async () => {
     const res = await axios.get(
-      `https://api.ssdipl.com/api/all-product`
+      `http://localhost:7000/api/all-product`
     );
 
     if (res.status === 200) {
@@ -90,7 +90,7 @@ const AllProducts = ({ status = '' }) => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+        await axios.delete("http://localhost:7000/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -98,7 +98,7 @@ const AllProducts = ({ status = '' }) => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+        await axios.post("http://localhost:7000/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -123,9 +123,9 @@ const AllProducts = ({ status = '' }) => {
 
             {/* CATEGORY HEADER */}
             <div className="d-flex justify-content-between align-items-center mb-4">
-              <div>
-                <h4 className="fw-bold mb-1 text-uppercase">
-                  {category.mainCategoryName}
+              <div className="textArea">
+                <h4 className="fw-bold mb-1  text-uppercase">
+                  {category.mainCategoryName}      
                 </h4>
                 <p className="text-muted mb-0">Best Gifts For Your Loved Ones</p>
               </div>
@@ -143,7 +143,7 @@ const AllProducts = ({ status = '' }) => {
                     {/* IMAGE */}
                     <div className="product-img">
                       <img
-                        src={`https://api.ssdipl.com/${product.productImage[0]}`}
+                        src={`http://localhost:7000/${product.productImage[0]}`}
                         alt={product.productName}
                       />
 

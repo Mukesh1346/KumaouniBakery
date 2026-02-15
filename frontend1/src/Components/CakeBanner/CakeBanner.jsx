@@ -32,7 +32,7 @@ const CakeBanners = () => {
   const fetchCakeBanners = async () => {
     try {
       const res = await axios.get(
-        "https://api.ssdipl.com/api/cake-banner/get-cake-banner"
+        "http://localhost:7000/api/cake-banner/get-cake-banner"
       );
       console.log("SSSSS::=>", res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner1'))
       setCakeBannerData(res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner1') || []);
@@ -48,7 +48,7 @@ const CakeBanners = () => {
         <div className="cake-banner-container two-banner">
           {cakeBannerData?.map((item) => (
             <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} className="cake-banner-card" key={item?._id}>
-              <img src={`https://api.ssdipl.com/${item?.cakeBanner}`} className="cakeImgBanner" alt="cake banner" />
+              <img src={`http://localhost:7000/${item?.cakeBanner}`} className="cakeImgBanner" alt="cake banner" />
               {/* <div className="cake-overlay">
             <h4>{item.title}</h4>
             <h2>{item.highlight}</h2>
