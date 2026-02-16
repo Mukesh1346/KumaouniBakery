@@ -1214,7 +1214,7 @@ const Checkout = () => {
                     {/* Delivery Details Summary */}
                     {checkoutData.delivery.date && (
                       <div className="delivery-summary" style={{
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                         background: "linear-gradient(90deg, #df4444 0%, #de9696 100%)",
                         borderRadius: '12px',
                         padding: '20px',
                         marginTop: '20px',
@@ -1456,8 +1456,8 @@ const Checkout = () => {
                             disabled={loadingCoupon || !couponCode.trim()}
                             style={{
                               padding: '10px 20px',
-                              backgroundColor: '#153964',
-                              color: 'white',
+                               background: "linear-gradient(90deg, #df4444 #df4444  0%, #eb9191ff 100%)",
+                              color: 'black',
                               border: 'none',
                               borderRadius: '5px',
                               cursor: loadingCoupon ? 'wait' : 'pointer',
@@ -1472,7 +1472,7 @@ const Checkout = () => {
                             style={{
                               padding: '10px 20px',
                               backgroundColor: '#dc3545',
-                              color: 'white',
+                              color: 'black',
                               border: 'none',
                               borderRadius: '5px',
                               cursor: 'pointer'
@@ -1570,7 +1570,7 @@ const Checkout = () => {
 
                     {/* Price Summary Card */}
                     <div style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: "linear-gradient(90deg, #df4444 0%, #de9696 100%)",
                       borderRadius: '12px',
                       padding: '20px',
                       marginBottom: '15px',
