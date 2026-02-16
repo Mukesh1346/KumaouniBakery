@@ -1,8 +1,8 @@
 .category-container {
-  width: 90%;
-  gap: 20px;
-  margin: auto;
+  width: 95%;
+  margin: 0 auto;
   text-align: center;
+  overflow: hidden; /* Prevent overflow issues */
 }
 
 .category-heading {
@@ -14,15 +14,26 @@
   display: flex !important;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
   z-index: 1;
+  padding: 0 5px; /* Add some padding between slides */
+  box-sizing: border-box;
+}
+
+.category-image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .category-img {
-  width: 120px;
-  height: 120px;
-  object-fit: fill;
-
+  width: 100px;
+  height: 100px;
+  object-fit: cover; /* Changed from 'fill' to 'cover' for better image display */
+  border-radius: 30%; /* Optional: makes images circular */
+  /* Keep your existing clip-path if you want the custom shape */
   clip-path: polygon(
     100% 50%,
     100% 56.6%,
@@ -388,27 +399,68 @@
 }
 
 .category-name {
- font-family: ' Poppins, sans-serif'; 
-  padding:20px 0px; 
+  font-family: 'Poppins, sans-serif';
+  padding: 10px 0 5px;
   font-size: 12px;
   margin-bottom: 0;
   font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .category-link {
   text-decoration: none;
   color: black;
+  cursor: pointer;
+  display: block;
+  width: 100%;
 }
 
 .category-container .slick-track {
   display: flex;
   gap: 0px;
+  margin-left: 0;
+}
+
+.category-container .slick-slide {
+  height: inherit !important;
+  display: flex !important;
+  justify-content: center;
+}
+
+.category-container .slick-slide > div {
+  width: 100%;
 }
 
 .category-main {
   background-color: #e2e8e157;
   padding: 2rem 0;
   margin-top: -7px;
+  overflow: hidden; /* Prevent horizontal scroll */
+}
+
+/* Slick arrow styling - optional */
+.category-container .slick-prev,
+.category-container .slick-next {
+  z-index: 10;
+}
+
+.category-container .slick-prev {
+  left: 5px;
+}
+
+.category-container .slick-next {
+  right: 5px;
+}
+
+/* Responsive styles */
+@media only screen and (max-width: 992px) {
+  .category-img {
+    width: 90px;
+    height: 90px;
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -417,14 +469,50 @@
   }
 
   .category-img {
-  width: 80px;
-  height: 80px;
+    width: 80px;
+    height: 80px;
   }
+  
   .category-container .slick-track {
-    width: auto !important;
-    gap: 10px;
+    gap: 5px;
   }
+  
   .category-name {
-    font-size: 12px;
+    font-size: 11px;
+    padding: 8px 0 3px;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .category-img {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .category-container {
+    width: 100%;
+    padding: 0 5px;
+  }
+  
+  .category-name {
+    font-size: 10px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .category-img {
+    width: 65px;
+    height: 65px;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .category-img {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .category-name {
+    font-size: 9px;
   }
 }

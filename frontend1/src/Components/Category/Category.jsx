@@ -20,7 +20,6 @@ const Category = () => {
       try {
         const response = await axios.get(
           `https://api.ssdipl.com/api/get-subcategory-by-status`
-
         );
         console.log(response.data.data);
         if (response.data.success) {
@@ -39,23 +38,25 @@ const Category = () => {
     fetchCategories();
   }, []);
 
-  // Slider settings
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 8,
-  slidesToScroll: 1,
-  arrows: true,
-  autoplay: true,
-  autoplaySpeed: 3000,
-  responsive: [
-    { breakpoint: 1200, settings: { slidesToShow: 6 } },
-    { breakpoint: 992, settings: { slidesToShow: 4 } },
-    { breakpoint: 768, settings: { slidesToShow: 4 } },
-    { breakpoint: 480, settings: { slidesToShow: 2 } }, // ✅ FIX
-  ],
-};
+  // Updated slider settings with better mobile handling
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 8,
+    slidesToScroll: 1,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 1200, settings: { slidesToShow: 10 } },
+      { breakpoint: 992, settings: { slidesToShow: 5 } },
+      { breakpoint: 768, settings: { slidesToShow: 4 } },
+      { breakpoint: 576, settings: { slidesToShow: 4 } }, // Added for smaller tablets
+      { breakpoint: 480, settings: { slidesToShow: 4, slidesToScroll: 1 } },
+      { breakpoint: 360, settings: { slidesToShow: 1.5, slidesToScroll: 1, centerMode: true } }, // Better for very small screens
+    ],
+  };
 
   // Display loading message while fetching data
   if (isLoading) {
@@ -74,19 +75,22 @@ const settings = {
           <Slider {...settings}>
             {categories?.filter((item) => item?.ActiveonHome === true).map((item) => (
               <div key={item?._id} className="category-slide">
-                {/* <Link
-                  to={`/product-related/${item.subcategoryName}`}
-                  className="category-link"
-                > */}
-                <div className="category-link" onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?._id } })}>
-                  {/* Use a default image if no image is provided */}
-                  <img
-                    src={`https://api.ssdipl.com/${item?.image}`}
-                    alt={item?.subcategoryName}
-                    className="category-img"
-                  />
+                <div 
+                  className="category-link" 
+                  onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?._id } })}
+                >
+                  <div className="category-image-wrapper">
+                    <img
+                      src={`https://api.ssdipl.com/${item?.image}`}
+                      alt={item?.subcategoryName}
+                      className="category-img"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = cakeImage;
+                      }}
+                    />
+                  </div>
                   <p className="category-name">{item?.subcategoryName}</p>
-                  {/* </Link> */}
                 </div>
               </div>
             ))}
