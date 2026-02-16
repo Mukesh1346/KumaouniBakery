@@ -621,9 +621,11 @@ const ProductDetails = () => {
                                   src={`https://api.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
                                 />
-                                <h6>{item?.productName}</h6>
+                               <div style={{paddingLeft: "15px"}}>
+                                 <h6>{item?.productName}</h6>
                                 <p>₹ {item?.price}</p>
 
+                               </div>
                                 {addonQuantity === 0 ? (
                                   <button
                                     className="rp-add-btn"
