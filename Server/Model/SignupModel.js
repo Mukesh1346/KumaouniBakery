@@ -22,7 +22,13 @@ const userSchema = new mongoose.Schema({
     },
     otp: {
         type: Number
-    }
+    },
+    referralCode: { type: String },        // unique code for user
+    referredBy: { type: String },          // code used at signup
+    walletBalance: { type: Number, default: 0 },
+
+    isReferralRewardGiven: { type: Boolean, default: false }
+
 }, { timestamps: true })
 
 const user = mongoose.model("User", userSchema)

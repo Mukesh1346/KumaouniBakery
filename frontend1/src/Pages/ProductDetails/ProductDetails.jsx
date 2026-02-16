@@ -461,8 +461,8 @@ const ProductDetails = () => {
       <section className="breadCrumb">
         <div className="breadCrumbContent">
           {/* <h1>Product Details</h1> */}
-          <Link to="/" style={{color:"#df4444"}}>Home /</Link>{" "}
-          <Link to="" style={{color:"#df4444"}}>{data?.categoryName?.mainCategoryName} /</Link>{" "}
+          <Link to="/" style={{ color: "#df4444" }}>Home /</Link>{" "}
+          <Link to="" style={{ color: "#df4444" }}>{data?.categoryName?.mainCategoryName} /</Link>{" "}
           <Link to="">{data?.productName}</Link>
         </div>
       </section>

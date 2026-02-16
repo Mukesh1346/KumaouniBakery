@@ -5,10 +5,15 @@ const User = require('../Model/SignupModel');
 const transporter = require("../Utils/Mailsender");
 
 
+const generateReferralCode = (name) => {
+    const random = Math.floor(1000 + Math.random() * 9000);
+    return name.slice(0, 4).toUpperCase() + random;
+};
+
 // Create a new user record
 const createRecord = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, referralCodeUsed } = req.body;
         if (!name || !email || !password) {
             return res.status(400).json({
                 success: false,
@@ -16,7 +21,13 @@ const createRecord = async (req, res) => {
             });
         }
         const hashedPassword = await bcrypt.hash(password, 12);
-        const newUser = new User({ name, email, password: hashedPassword });
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword,
+            referralCode: generateReferralCode(name),
+            referredBy: referralCodeUsed || null,
+        });
         await newUser.save();
 
         // Send email after successful account creation
