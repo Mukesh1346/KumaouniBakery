@@ -157,6 +157,109 @@
   background: #1565c0;
 }
 
+.checkout-wrapper {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* LEFT SIDE */
+.checkout-left {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.item-name {
+  font-weight: 600;
+  margin: 0;
+}
+
+.item-qty {
+  font-size: 14px;
+  color: gray;
+}
+
+/* RIGHT SIDE */
+.checkout-right {
+  width: 350px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.bill-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.grand-total {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* Coupon */
+.coupon-box {
+  display: flex;
+  margin: 15px 0;
+}
+
+.coupon-box input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+}
+
+.coupon-box button {
+  padding: 8px 12px;
+  border: none;
+  background: #0d5c63;
+  color: white;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+}
+
+/* Special Note */
+.special-note {
+  width: 100%;
+  padding: 10px;
+  height: 80px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  resize: none;
+}
+
+/* Payment Button */
+.payment-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0d5c63;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.payment-btn:hover {
+  background: #084c50;
+}
+
+
 /* ===================================================
    RESPONSIVE BREAKPOINTS
 =================================================== */
