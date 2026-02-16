@@ -1,8 +1,51 @@
 import React from "react";
 import "./referAndEarn.css";
 import pic from "../../images/pic/refer.png";
+import Swal from "sweetalert2";
 
 const ReferAndEarn = () => {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+
+  const handleCopy = async () => {
+    if (!userData?.referralCode) return;
+
+    try {
+      await navigator.clipboard.writeText(userData.referralCode);
+
+      Swal.fire({
+        icon: "success",
+        title: "Copied!",
+        text: "Referral code copied to clipboard",
+        timer: 1200,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const shareWhatsApp = () => {
+    if (!userData?.referralCode) return;
+
+    const message = `🎂 Hey! Use my referral code *${userData.referralCode}* and get ₹100 cashback on your first cake order!
+
+Order now: ${window.location.origin}`;
+
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
+  };
+
+  const shareFacebook = () => {
+    const shareUrl = `${window.location.origin}`;
+
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      shareUrl
+    )}`;
+
+    window.open(url, "_blank");
+  };
+
   return (
     <div className="refer-page">
       <div className="container">
@@ -46,17 +89,17 @@ const ReferAndEarn = () => {
             <div className="referral-box">
               <p>Your Referral Code</p>
               <div className="code-box">
-                <span>CAKE100</span>
-                <button>Copy</button>
+                <span>{userData?.referralCode}</span>
+                <button onClick={handleCopy}>Copy</button>
               </div>
             </div>
 
             {/* SHARE BUTTONS */}
             <div className="share-buttons">
-              <button className="btn btn-success">
+              <button className="btn btn-success" onClick={shareWhatsApp}>
                 Share on WhatsApp
               </button>
-              <button className="btn btn-primary">
+              <button className="btn btn-primary" onClick={shareFacebook}>
                 Share on Facebook
               </button>
             </div>

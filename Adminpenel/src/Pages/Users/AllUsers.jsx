@@ -73,7 +73,10 @@ const AllUsers = () => {
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Role</th>
-                <th scope="col">Created At</th>
+                <th scope="col">Referral Code </th>
+                <th scope="col">Referral By </th>
+                <th scope="col">wallet Balance </th>
+                <th scope="col">Join Date</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -85,6 +88,9 @@ const AllUsers = () => {
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.role || "User"}</td>
+                    <td>{user?.referralCode || "-"}</td>
+                    <td>{user?.referredBy || "-"}</td>
+                    <td>Rs. {user?.walletBalance || 0}</td>
                     <td>{new Date(user.createdAt).toLocaleString()}</td>
                     <td>
                       <button

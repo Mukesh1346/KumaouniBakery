@@ -22,6 +22,7 @@ import logo from "../../images/pic/logo2.png";
 const Header = () => {
   const navigate = useNavigate();
   const loginvalue = sessionStorage.getItem("login");
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
   const cart = JSON.parse(sessionStorage.getItem("cart")) || []
 
 
@@ -32,7 +33,6 @@ const Header = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
-
 
   const [productSuggestions, setProductSuggestions] = useState([]);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -46,9 +46,7 @@ const Header = () => {
 
   /* SEARCH */
   const [searchQuery, setSearchQuery] = useState("");
-
   const [openIndex, setOpenIndex] = useState(null);
-
   const [allProducts, setAllProducts] = useState([]);
 
 
@@ -416,10 +414,12 @@ const Header = () => {
                         My Favourites
                       </Link>
 
-                      <Link to="/refer" className="hdr-menu-link">
+                      {loginvalue && <Link to="/refer" className="hdr-menu-link">
                         Refer and Earn <span className="hdr-badge-new">New</span>
-                      </Link>
-
+                      </Link>}
+                      {loginvalue && <Link to="/" className="hdr-menu-link">
+                        wallet Balance :-  <span className="hdr-badge-new">RS. {userData?.walletBalance}</span>
+                      </Link>}
                       <Link to="/faq" className="hdr-menu-link">
                         FAQ
                       </Link>
@@ -432,14 +432,14 @@ const Header = () => {
                         Contact Us
                       </Link>
 
-                     <a
-  href="https://wa.me/919953553051"
-  target="_blank"
-  rel="noreferrer"
-  className="hdr-menu-link hdr-whatsapp"
->
-  WhatsApp
-</a>
+                      <a
+                        href="https://wa.me/919953553051"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hdr-menu-link hdr-whatsapp"
+                      >
+                        WhatsApp
+                      </a>
 
                     </div>
                   )}

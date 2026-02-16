@@ -17,6 +17,7 @@ const Login = () => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [referralCodeUsed, setReferralCodeUsed] = useState("")
 
   const handleRegisterClick = () => setIsActive(true);
   const handleLoginClick = () => setIsActive(false);
@@ -38,13 +39,14 @@ const Login = () => {
         sessionStorage.setItem("login", true);
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("userId", response.data.data._id);
+        sessionStorage.setItem("userData", JSON.stringify(response?.data?.data));
 
         Swal.fire({
           title: "Login Successful!",
           text: "Welcome back!",
           icon: "success",
         });
-
+        // console.log("XXXXXXXXXXSSSSSSS::=>", response)
         window.location.href = "/";
       }
     } catch (error) {
@@ -67,6 +69,7 @@ const Login = () => {
         name: registerName,
         email: registerEmail,
         password: registerPassword,
+        referralCodeUsed: referralCodeUsed
       });
 
       Swal.fire({
@@ -143,27 +146,11 @@ const Login = () => {
             <h1>Registration</h1>
 
             <div className="input-box">
-              <input
-                type="text"
-                placeholder="Name"
-                value={registerName}
-                onChange={(e) =>
-                  setRegisterName(e.target.value)
-                }
-                required
-              />
+              <input type="text" placeholder="Name" value={registerName} onChange={(e) => setRegisterName(e.target.value)} required />
             </div>
 
             <div className="input-box">
-              <input
-                type="email"
-                placeholder="Email"
-                value={registerEmail}
-                onChange={(e) =>
-                  setRegisterEmail(e.target.value)
-                }
-                required
-              />
+              <input type="email" placeholder="Email" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} required />
             </div>
 
             <div className="input-box">
@@ -193,6 +180,10 @@ const Login = () => {
                   )}
                 </span>
               )}
+            </div>
+
+            <div className="input-box">
+              <input type="text" placeholder="Ref code" value={referralCodeUsed} onChange={(e) => setReferralCodeUsed(e.target.value)} required />
             </div>
 
             <button type="submit" className="btnLogin">
