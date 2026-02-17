@@ -11,6 +11,7 @@ const LocationOption = ({ onServiceChange }) => {
   const [availableService, setAvailableService] = useState([]);
   const [serviceAvailable, setServiceAvailable] = useState(false);
   const [searchMessage, setSearchMessage] = useState("");
+  const [location, setLocation] = useState({});
 
   const ServiceLocation = async () => {
     try {
@@ -29,45 +30,74 @@ const LocationOption = ({ onServiceChange }) => {
   }, []);
 
   // Function to check if service is available
+  // const checkServiceAvailability = (searchText) => {
+  //   if (!searchText || searchText.length < 2) {
+  //     setServiceAvailable(false);
+  //     setSearchMessage("");
+  //     // Send false to parent
+  //     if (onServiceChange) {
+  //       onServiceChange(false);
+  //     }
+  //     return;
+  //   }
+
+  //   const searchLower = searchText.toLowerCase();
+
+  //   // Check if any location matches ALL conditions:
+  //   const isAvailable = availableService.some(item =>
+  //     item.deleveryStatus === true &&
+  //     item.isActive === true &&
+  //     (
+  //       item.pinCode?.toString().toLowerCase() === searchLower ||
+  //       item.area?.toLowerCase().includes(searchLower)
+  //       // || item.stateName?.toLowerCase().includes(searchLower)
+  //     )
+  //   );
+
+  //   setServiceAvailable(isAvailable);
+
+  //   if (isAvailable) {
+  //     setSearchMessage("Services Available in Your Area");
+  //   } else if (searchText.length > 2) {
+  //     setSearchMessage("Services Not Available in Your Area");
+  //   } else {
+  //     setSearchMessage("");
+  //   }
+
+  //   // Send the availability status to parent component
+  //   if (onServiceChange) {
+  //     onServiceChange(isAvailable);
+  //   }
+  // };
+
   const checkServiceAvailability = (searchText) => {
-    if (!searchText || searchText.length < 2) {
+    const text = searchText.trim().toLowerCase();
+
+    if (!text || text.length < 2 || !availableService.length) {
       setServiceAvailable(false);
       setSearchMessage("");
-      // Send false to parent
-      if (onServiceChange) {
-        onServiceChange(false);
-      }
+      onServiceChange?.(false);
       return;
     }
 
-    const searchLower = searchText.toLowerCase();
+    const isAvailable = availableService.some((item) => {
+      if (!(item.deleveryStatus && item.isActive)) return false;
 
-    // Check if any location matches ALL conditions:
-    const isAvailable = availableService.some(item =>
-      item.deleveryStatus === true &&
-      item.isActive === true &&
-      (
-        item.pinCode?.toString().toLowerCase() === searchLower ||
-        item.area?.toLowerCase().includes(searchLower)
-        // || item.stateName?.toLowerCase().includes(searchLower)
-      )
-    );
+      const pin = item.pinCode?.toString().toLowerCase() || "";
+      const area = item.area?.toLowerCase() || "";
+      const areaWithPin = `${area} ${pin}`.trim();
+
+      return (pin === text || area.includes(text) || areaWithPin === text);
+    });
 
     setServiceAvailable(isAvailable);
+    onServiceChange?.(isAvailable);
 
-    if (isAvailable) {
-      setSearchMessage("Services Available in Your Area");
-    } else if (searchText.length > 2) {
-      setSearchMessage("Services Not Available in Your Area");
-    } else {
-      setSearchMessage("");
-    }
-
-    // Send the availability status to parent component
-    if (onServiceChange) {
-      onServiceChange(isAvailable);
+    if (text.length > 2) {
+      setSearchMessage(isAvailable ? "Services Available in Your Area" : "Services Not Available in Your Area");
     }
   };
+
 
   // Debounce Logic
   useEffect(() => {
@@ -87,6 +117,47 @@ const LocationOption = ({ onServiceChange }) => {
     setInput(e.target.value);
   };
 
+  const handleLocationClick = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        try {
+          const response = await axios.get(`https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`);
+          console.log("Detected location response:==>", response.data);
+
+          if (response?.data?.status === true) {
+            const detectedLocation = {
+              area: response?.data?.area || "",
+              city: response?.data?.city || "",
+              state: response?.data?.state || "",
+              pinCode: response?.data?.pincode || "",
+            };
+            setInput(`${detectedLocation?.area} ${detectedLocation?.pinCode}`);
+            setLocation(detectedLocation);
+            localStorage.setItem("CakeLocation", JSON.stringify(detectedLocation));
+            // setLocalLocation(detectedLocation);
+          } else {
+            alert("Failed to fetch location data.");
+          }
+        } catch (error) {
+          console.error("Error getting location:", error);
+          alert("Something went wrong while detecting your location.");
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("Permission denied or unable to access your location.");
+      }
+    );
+  };
+
+
   if (loading) {
     return <div className="location-wrapper">Loading locations...</div>;
   }
@@ -96,7 +167,7 @@ const LocationOption = ({ onServiceChange }) => {
       <div className="location-header">
         <span>Select Area / Location</span>
         <span className="use-location"
-        //  onClick={() => setShow(!show)}
+          onClick={() => handleLocationClick()}
         >
           Use My Location
         </span>

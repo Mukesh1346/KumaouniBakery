@@ -200,13 +200,14 @@ const getSingleMainCategoryByName = async (req, res) => {
 
 const getCategoriesWithSubcategories = async (req, res) => {
     try {
-        const categories = await MainCategory.find().lean();
+        const categories = await MainCategory.find({ ActiveonHome: true }).lean();
 
         const result = await Promise.all(
             categories.map(async (category) => {
 
                 const subcategories = await Subcategory.find({
                     categoryName: category._id,
+                    ActiveonHeader: true
                 }).lean();
 
                 const subcategoriesWithSecond = await Promise.all(
@@ -214,6 +215,7 @@ const getCategoriesWithSubcategories = async (req, res) => {
 
                         const secondSubcategories = await SecondSubCategory.find({
                             subCategoryId: sub._id,
+                            ActiveonHome: true
                         }).select("_id secondsubcategoryName").lean();
 
                         return {

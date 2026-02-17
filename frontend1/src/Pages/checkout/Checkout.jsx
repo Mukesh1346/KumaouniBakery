@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 
 const Checkout = () => {
   /* ================= STEP ================= */
-  const [step, setStep] = useState(5);
+  const [step, setStep] = useState(2);
 
   /* ================= CART ================= */
   const [cartItems, setCartItems] = useState([]);
@@ -24,32 +24,10 @@ const Checkout = () => {
 
   /* ================= CHECKOUT DATA ================= */
   const [checkoutData, setCheckoutData] = useState({
-    user: {
-      userId: "",
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-    },
-    address: {
-      receiverName: "",
-      house: "",
-      area: "Asthal Colony, Bawana",
-      pincode: "110039",
-      city: "Delhi",
-      phone: "",
-      addressType: "Home",
-    },
-    delivery: {
-      date: "",
-      time: "",
-    },
-    specialNote: {
-      occasion: "",
-      relation: "",
-      message: "",
-      toName: "",
-    },
+    user: { userId: "", name: "", phone: "", email: "", address: "", },
+    address: { receiverName: "", house: "", area: "", pincode: "", city: "", phone: "", addressType: "Home", },
+    delivery: { date: "", time: "", },
+    specialNote: { occasion: "", relation: "", message: "", toName: "", },
     paymentMode: "online",
   });
 
@@ -235,27 +213,20 @@ const Checkout = () => {
     setCouponError("");
 
     try {
-      const response = await axios.post("https://api.ssdipl.com/api/validate-coupon", {
-        code: couponCode,
-        amount: subtotal,
-        cartItems: cartItems.map(item => ({
-          id: item.id,
-          quantity: item.quantity,
-          price: item.price
-        }))
+      const response = await axios.post("https://api.ssdipl.com/api/coupon/get-coupon-by-code", {
+        couponCode: couponCode,
+        totalAmount: subtotal
       });
-
-      if (response.data.valid) {
-        const discount = response.data.discountAmount ||
-          (response.data.discountPercentage ?
-            (subtotal * response.data.discountPercentage / 100) : 0);
+      console.log("SSSSSSXXXXXXXX::=>", response)
+      if (response.status === 200) {
+        const discount = response?.data?.coupon?.discountAmount || (response.data.coupon?.discount ? (subtotal * response?.data?.coupon?.discount / 100) : 0);
 
         setCouponDiscount(discount);
         setAppliedCoupon({
           code: couponCode,
-          type: response.data.coupon?.type || 'percentage',
-          value: response.data.coupon?.value || response.data.discountPercentage,
-          description: response.data.coupon?.description || 'Coupon applied'
+          type: response?.data?.coupon?.type || 'percentage',
+          value: response.data.coupon?.value || response.data.discount,
+          description: response.data.coupon?.title || 'Coupon applied'
         });
 
         const newTotal = totalBeforeDiscount - discount;
@@ -492,7 +463,7 @@ const Checkout = () => {
           <h5 style="margin-top: 15px;">Items:</h5>
           ${cartItems.map(item => `
             <div style="display: flex; align-items: center; margin-bottom: 10px; padding: 5px; background: #f8f9fa; border-radius: 5px;">
-              <img src="${item.image || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; border-radius: 5px; margin-right: 10px; object-fit: cover;">
+              <img src="https://api.ssdipl.com/${item?.image || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; border-radius: 5px; margin-right: 10px; object-fit: cover;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between;">
                   <span>${item.name} x${item.quantity}</span>
@@ -548,7 +519,7 @@ const Checkout = () => {
       cancelButtonText: 'Continue Shopping',
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = "/order-tracking";
+        window.location.href = "/track-order";
       } else {
         window.location.href = "/";
       }
@@ -575,12 +546,12 @@ const Checkout = () => {
 
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/orders/create",
+        "https://api.ssdipl.com/api/create",
         orderPayload
       );
 
       Swal.close();
-
+      console.log("XXXXXXXZZZZZZZZZXXXXXXX=>", response.data);
       if (response.data.success) {
         if (checkoutData.paymentMode === "cod") {
           sessionStorage.removeItem("cart");
@@ -596,7 +567,7 @@ const Checkout = () => {
             timer: 2000,
             showConfirmButton: false
           });
-          await processOnlinePayment(response.data.order, orderPayload);
+          await processOnlinePayment(response.data, orderPayload);
         }
       }
     } catch (error) {
@@ -621,16 +592,20 @@ const Checkout = () => {
       return;
     }
 
+    const totalAmount = orderData?.amount;
+    const appliedCoupon = orderData?.couponCode;
+    // console.log("XXXXXXXZZZZZZZZZXXXXXXX=AAA>", orderData, totalAmount, appliedCoupon);
     const options = {
       key: "rzp_test_TmsfO3hloFEA31",
-      amount: totalAmount * 100,
+      amount: totalAmount,
       currency: "INR",
       name: "Cake N Petals",
-      description: `Order #${orderData.orderId} ${appliedCoupon ? `with ${appliedCoupon.code}` : ''}`,
+      description: `Order #${orderData?.orderId} ${appliedCoupon ? `with ${appliedCoupon?.code}` : ''}`,
       image: "https://res.cloudinary.com/dfet60ou1/image/upload/v1747043182/logo_nkf8jp.webp",
-      order_id: orderData.razorpayOrderId,
+      order_id: orderData?.razorpayOrderId,
 
       handler: async function (response) {
+        alert(JSON.stringify(response));
         try {
           Swal.fire({
             title: 'Verifying Payment',
@@ -642,7 +617,7 @@ const Checkout = () => {
           });
 
           const verifyRes = await axios.post(
-            "https://api.ssdipl.com/api/payment/verify",
+            "https://api.ssdipl.com/api/verify-payment",
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -652,10 +627,9 @@ const Checkout = () => {
               discountAmount: couponDiscount
             }
           );
-
           Swal.close();
 
-          if (verifyRes.data.success) {
+          if (verifyRes.status === 200) {
             sessionStorage.removeItem("cart");
             showOrderConfirmation({
               ...orderPayload,
@@ -705,6 +679,7 @@ const Checkout = () => {
     razorpay.open();
   };
 
+  console.log("INPUT CHECKOUT =>", checkoutData);
   return (
     <>
       {/* ================= USER INFO ================= */}
@@ -781,7 +756,7 @@ const Checkout = () => {
                   <input
                     name="area"
                     className="form-control mb-3"
-                    defaultValue="Asthal Colony, Bawana"
+                  // defaultValue="Asthal Colony, Bawana"
                   />
 
                   <div className="row">
@@ -789,7 +764,7 @@ const Checkout = () => {
                       <input
                         name="pincode"
                         className="form-control mb-3"
-                        defaultValue="110039"
+                        // defaultValue="110039"
                         required
                       />
                     </div>
@@ -797,7 +772,7 @@ const Checkout = () => {
                       <input
                         name="city"
                         className="form-control mb-3"
-                        defaultValue="Delhi"
+                      // defaultValue="Delhi"
                       />
                     </div>
                   </div>
@@ -1047,7 +1022,7 @@ const Checkout = () => {
                           flexShrink: 0
                         }}>
                           <img
-                            src={`http://localhost:7000/${item?.image}` || 'https://via.placeholder.com/100x100?text=Product'}
+                            src={`https://api.ssdipl.com/${item?.image}` || 'https://via.placeholder.com/100x100?text=Product'}
                             alt={item?.name}
                             style={{
                               width: '100%',
@@ -1533,19 +1508,7 @@ const Checkout = () => {
                     <button
                       onClick={placeOrder}
                       disabled={loading || cartItems.length === 0}
-                      style={{
-                        width: '100%',
-                        padding: '15px',
-                        fontSize: '1.1em',
-                        fontWeight: 'bold',
-                        backgroundColor: loading ? '#6c757d' : '#28a745',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: loading ? 'wait' : 'pointer',
-                        transition: 'all 0.3s ease',
-                        marginBottom: '10px'
-                      }}
+                      style={{ width: '100%', padding: '15px', fontSize: '1.1em', fontWeight: 'bold', backgroundColor: loading ? '#6c757d' : '#28a745', color: 'white', border: 'none', borderRadius: '8px', cursor: loading ? 'wait' : 'pointer', transition: 'all 0.3s ease', marginBottom: '10px' }}
                     >
                       {loading ? (
                         <span><i className="fa fa-spinner fa-spin"></i> PROCESSING...</span>

@@ -32,6 +32,7 @@ const ProductDetails = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isAdded, setIsAdded] = useState(false);
   const [isServiceAvailable, setIsServiceAvailable] = useState(false);
+  const [orderActive, setOrderActive] = useState(true)
 
   const updateServiceStatus = (status) => {
     setIsServiceAvailable(status); // This changes parent state
@@ -43,6 +44,16 @@ const ProductDetails = () => {
     if (stored) {
       setWishlist(JSON.parse(stored));
     }
+    const fetchOrderStatus = async () => {
+      try {
+        const res = await axios.get(`https://api.ssdipl.com/api/active-order/get-active-order`);
+        console.log("res.data.data==>", res.data.data.isActive)
+        setOrderActive(res.data.data.isActive);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchOrderStatus()
   }, []);
 
   // get existing wishlist from session
@@ -206,7 +217,17 @@ const ProductDetails = () => {
       });
       return;
     }
-
+    if (orderActive === false) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Orders are currently disabled by admin",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
     const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
 
     if (hasWeight && !activeWeight) {
@@ -278,7 +299,17 @@ const ProductDetails = () => {
       });
       return;
     }
-
+    if (orderActive === false) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Orders are currently disabled by admin",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
     if (!activeWeight) {
       Swal.fire("Select Weight", "Please select cake weight first", "warning");
       return;
@@ -414,6 +445,16 @@ const ProductDetails = () => {
         title: "Service Area Required",
         text: "Please check delivery availability for your location first.",
         timer: 2000
+      });
+      return;
+    }
+    // Check if service is available first
+    if (orderActive === false) {
+      Swal.fire({
+        icon: "warning",
+        title: "Orders are currently disabled by admin",
+        showConfirmButton: false,
+        timer: 1500,
       });
       return;
     }
@@ -621,11 +662,11 @@ const ProductDetails = () => {
                                   src={`https://api.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
                                 />
-                               <div style={{paddingLeft: "15px"}}>
-                                 <h6>{item?.productName}</h6>
-                                <p>₹ {item?.price}</p>
+                                <div style={{ paddingLeft: "15px" }}>
+                                  <h6>{item?.productName}</h6>
+                                  <p>₹ {item?.price}</p>
 
-                               </div>
+                                </div>
                                 {addonQuantity === 0 ? (
                                   <button
                                     className="rp-add-btn"

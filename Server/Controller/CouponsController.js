@@ -123,10 +123,10 @@ const getCouponByCode = async (req, res, next) => {
 
         console.log("Searching exact couponCode:", couponCode);
 
-        // couponCode = couponCode.trim().toUpperCase(); // case-insensitive handling
-        // const coupon = await Coupon.findOne({ couponCode: { $regex: new RegExp(`^${couponCode}$`, 'i') } });
+        const couponCodes = couponCode.trim().toUpperCase(); // case-insensitive handling
+        const coupon = await Coupon.findOne({ couponCode: { $regex: new RegExp(`^${couponCodes}$`, 'i') } });
 
-        const coupon = await Coupon.findOne({ couponCode });
+        // const coupon = await Coupon.findOne({ couponCode });
 
         if (!coupon) {
             return res.status(404).json({ success: false, message: "Coupon not found." });
