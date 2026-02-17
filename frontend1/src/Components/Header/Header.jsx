@@ -125,8 +125,7 @@ const Header = () => {
 
   //   return () => clearTimeout(delayDebounce);
 
-  // }, [searchQuery]);
-
+  // }, [searchQuery]
 
   useEffect(() => {
     const fetchAllProducts = async () => {
