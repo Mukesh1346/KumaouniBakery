@@ -166,6 +166,7 @@
 
 /* LEFT SIDE */
 .checkout-left {
+  height:fit-content !important;
   flex: 1;
   background: #fff;
   padding: 20px;
