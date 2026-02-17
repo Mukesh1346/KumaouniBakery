@@ -380,12 +380,12 @@ const FeaturedProducts = () => {
                     {item.subcategoryName?.subcategoryName}
                   </p>
 
-                  <Link
+                  {/* <Link
                     to={`/product-details/${item._id}`}
                     className="btn btn-dark w-100 mt-2"
                   >
                     Buy Now
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </div>

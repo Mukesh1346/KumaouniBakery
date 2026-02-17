@@ -62,155 +62,181 @@ const createCheckout = async (req, res) => {
         console.log("FORMDATA =>", req.body);
 
         const {
-            user,
-            address,
-            cart,
-            delivery,
-            totalAmount,
+            userId,
+            userDetails,
+            deliveryAddress,
+            deliverySlot,
+            items,
+            billing,
             paymentMode,
             specialNote,
+            specialInstructions,
+            orderDate,
         } = req.body;
 
-        // ✅ Basic validation
+        /* ------------------ ✅ VALIDATION ------------------ */
+
         if (
-            !user?.userId ||
-            !address?.receiverName ||
-            !address?.phone ||
-            !address?.house ||
-            !address?.city ||
-            !address?.pincode ||
-            !Array.isArray(cart) ||
-            cart.length === 0 ||
-            totalAmount <= 0
+            !userId ||
+            !deliveryAddress?.receiverName ||
+            !deliveryAddress?.phone ||
+            !deliveryAddress?.house ||
+            !deliveryAddress?.city ||
+            !deliveryAddress?.pincode ||
+            !Array.isArray(items) ||
+            items.length === 0 ||
+            !billing?.finalAmount
         ) {
-            return res.status(400).json({ message: "Invalid checkout data." });
+            return res.status(400).json({
+                success: false,
+                message: "Invalid checkout data.",
+            });
         }
 
-        // ✅ Format cart items for DB schema
-        const formattedCartItems = cart.map(item => ({
+        /* ------------------ ✅ FORMAT CART ITEMS ------------------ */
+
+        const formattedCartItems = items.map((item) => ({
             productId: item.productId,
             name: item.name,
             quantity: item.quantity,
             weight: item.weight || "",
             image: item.image?.replace(/\\/g, "/"),
             price: item.price,
-            // deliveryDate: item.deliveryDate || "",
+            totalPrice: item.totalPrice,
             addonProducts: item.addonProducts || [],
-            massage: item?.massage || ""
+            massage: item?.massage || "",
         }));
 
-        const fullAddress = `${address.house}, ${address.area}, ${address.city}, ${address.pincode}`;
+        /* ------------------ ✅ ADDRESS ------------------ */
 
-        const formattedTotalPrice = Number(parseFloat(totalAmount).toFixed(2));
+        const fullAddress = `${deliveryAddress.house}, ${deliveryAddress.area}, ${deliveryAddress.city}, ${deliveryAddress.pincode}`;
 
-        /* ------------------ COD ORDER ------------------ */
-        if (paymentMode?.toLowerCase() === "cod") {
-            const trackingOrders = [{
+        const formattedTotalPrice = Number(
+            parseFloat(billing.finalAmount).toFixed(2)
+        );
+
+        const trackingOrders = [
+            {
                 date: new Date().toDateString(),
                 status: "Order Confirmed",
-                massage: "Your order is out for delivery"
-            }];
+                massage: "Your order has been placed successfully",
+            },
+        ];
 
+        /* ================== 💰 COD ORDER ================== */
+
+        if (paymentMode?.toLowerCase() === "cod") {
             const newCheckout = new Checkout({
-                userId: user.userId,
-                name: address.receiverName,
-                email: user.email,
-                phone: address.phone,
+                userId,
+                name: deliveryAddress.receiverName,
+                email: userDetails?.email,
+                phone: deliveryAddress.phone,
                 address: fullAddress,
-                state: address.state || "N/A",
-                city: address.city,
-                pin: address.pincode,
-                trackingOrders: trackingOrders,
-                delivery: { date: delivery.date, time: delivery.time },
+                state: deliveryAddress.state || "N/A",
+                city: deliveryAddress.city,
+                pin: deliveryAddress.pincode,
+                delivery: {
+                    date: deliverySlot?.date,
+                    time: deliverySlot?.time,
+                },
                 cartItems: formattedCartItems,
                 totalPrice: formattedTotalPrice,
                 transactionId: null,
                 orderStatus: "Order Confirmed",
                 paymentMode: "cod",
                 paymentStatus: "Pending",
+                trackingOrders,
                 specialNote,
+                specialInstructions,
+                orderDate,
             });
 
             const savedCheckout = await newCheckout.save();
-            return res.status(200).json(savedCheckout);
+
+            return res.status(200).json({ success: true, message: "Order placed successfully (COD).", data: savedCheckout, });
         }
 
-        /* ------------------ ONLINE PAYMENT ------------------ */
+        /* ================== 💳 ONLINE PAYMENT ================== */
+
         const options = {
             amount: Math.round(formattedTotalPrice * 100),
             currency: "INR",
-            receipt: `receipt_${Date.now()}`
+            receipt: `receipt_${Date.now()}`,
         };
 
         const order = await razorpay.orders.create(options);
 
         if (!order) {
-            return res.status(500).json({ message: "Razorpay order creation failed." });
+            return res.status(500).json({
+                success: false,
+                message: "Razorpay order creation failed.",
+            });
         }
-        // console.log("ORDER =>", order)
-        const trackingOrders = [{
-            date: new Date().toDateString(),
-            status: "Order Confirmed",
-            massage: "Your order is out for delivery"
-        }];
 
         const newCheckout = new Checkout({
-            userId: user.userId,
-            name: address.receiverName,
-            email: user.email,
-            phone: address.phone,
+            userId,
+            name: deliveryAddress.receiverName,
+            email: userDetails?.email,
+            phone: deliveryAddress.phone,
             address: fullAddress,
-            state: address.state || "N/A",
-            city: address.city,
-            pin: address.pincode,
+            state: deliveryAddress.state || "N/A",
+            city: deliveryAddress.city,
+            pin: deliveryAddress.pincode,
+            delivery: {
+                date: deliverySlot?.date,
+                time: deliverySlot?.time,
+            },
             cartItems: formattedCartItems,
             totalPrice: formattedTotalPrice,
-            trackingOrders: trackingOrders,
+            trackingOrders,
             transactionId: order.id,
             orderStatus: "Order Created",
             paymentMode: "online",
             paymentStatus: "Pending",
-            specialNote
+            specialNote,
+            specialInstructions,
+            orderDate,
         });
-        console.log("SSSSS::=>", newCheckout)
+
         const savedCheckout = await newCheckout.save();
 
-        res.status(200).json({
+        return res.status(200).json({
+            success: true,
             message: "Order created. Proceed to payment.",
-            checkout: savedCheckout,
-            razorpayOrderId: order.id,
-            amount: options.amount,
-            currency: options.currency,
+            checkout: savedCheckout, razorpayOrderId: order.id, amount: options.amount, currency: options.currency,
         });
 
     } catch (error) {
         console.error("Checkout creation error:", error);
-        res.status(500).json({ message: "Server error while creating checkout." });
+        return res.status(500).json({ success: false, message: "Server error while creating checkout.", });
     }
 };
 
 
+
 const verifyPayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signatur } = req.body;
-
-        if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signatur) {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        console.log("DDDDDDDD===>", req.body)
+        if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
             return res.status(400).json({ message: "Payment verification failed. Missing parameters." });
         }
         console.log("DDDDDDDD===>", req.body)
-        const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || "1xt3UXSTLfyVhQa3G9SSVIKY");
+        const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_API_SECRET || "1xt3UXSTLfyVhQa3G9SSVIKY");
         hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
         const generatedSignature = hmac.digest('hex');
 
-        if (generatedSignature === razorpay_signatur) {
+        if (generatedSignature === razorpay_signature) {
             const updatedCheckout = await Checkout.findOneAndUpdate(
                 { transactionId: razorpay_order_id },
                 { paymentStatus: 'Success', orderStatus: 'Order Confirmed' },
                 { new: true }
             );
+            console.log("DDDDDDDD===>", updatedCheckout)
             if (!updatedCheckout) {
                 return res.status(404).json({ message: "Order not found." });
             }
+            
             return res.status(200).json({ message: 'Payment successful and order confirmed.', checkout: updatedCheckout });
         } else {
             return res.status(400).json({ message: 'Invalid signature, payment verification failed.' });

@@ -4,7 +4,7 @@ const checkoutRouter = require("express").Router()
 
 
 
-checkoutRouter.post("/checkout", createCheckout)
+checkoutRouter.post("/create", createCheckout)
 checkoutRouter.get('/checkouts', getAllCheckouts);
 checkoutRouter.get('/checkout/:id', getCheckoutById);
 checkoutRouter.put('/checkout/:id', updateCheckoutStatus);

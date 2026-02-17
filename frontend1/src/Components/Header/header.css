@@ -28,7 +28,8 @@
 
 /* EVEN columns → aliceblue */
 .mega-menu-inner > div:nth-child(even) {
-  background-color: aliceblue;
+  background-color: #f6cdcd ;
+  border-radius: 10px;
 }
 
 /* ODD columns → no background */
@@ -343,11 +344,12 @@
 }
 
 .mega-toggle{
+  margin-left:20px;
   font-size: 14px !important;
 }
 
 
-.search-suggestions {
+.search-suggestions{
   position: absolute;
   top: 100%;
   left: 0;

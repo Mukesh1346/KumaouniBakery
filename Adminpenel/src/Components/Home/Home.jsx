@@ -70,6 +70,9 @@ import EditRecommendedProduct from '../../Pages/RecommendedProducts/EditRecommen
 import AllPincode from "../../Pages/State-Pincode/AllPincode"
 import AddPincode from "../../Pages/State-Pincode/AddPincode"
 import EditPincode from "../../Pages/State-Pincode/EditPincode"
+import AllCoupon from '../../Pages/Coupon/AllCoupon'
+import AddCoupon from '../../Pages/Coupon/AddCoupon'
+import EditCoupon from '../../Pages/Coupon/EditCoupon'
 
 const Home = () => {
 
@@ -211,6 +214,11 @@ const Home = () => {
                 <Route path={"/all-pincode"} element={<AllPincode />} />
                 <Route path={"/add-pincode"} element={<AddPincode />} />
                 <Route path={"/edit-pincode/:id"} element={<EditPincode />} />
+
+                {/* all-coupon */}
+                <Route path={"/all-coupon"} element={<AllCoupon />} />
+                <Route path={"/add-coupon"} element={<AddCoupon />} />
+                <Route path={"/edit-coupon/:id"} element={<EditCoupon />} />
 
               </Routes>
             </div>

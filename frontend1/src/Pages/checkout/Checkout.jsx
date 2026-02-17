@@ -24,32 +24,10 @@ const Checkout = () => {
 
   /* ================= CHECKOUT DATA ================= */
   const [checkoutData, setCheckoutData] = useState({
-    user: {
-      userId: "",
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-    },
-    address: {
-      receiverName: "",
-      house: "",
-      area: "Asthal Colony, Bawana",
-      pincode: "110039",
-      city: "Delhi",
-      phone: "",
-      addressType: "Home",
-    },
-    delivery: {
-      date: "",
-      time: "",
-    },
-    specialNote: {
-      occasion: "",
-      relation: "",
-      message: "",
-      toName: "",
-    },
+    user: { userId: "", name: "", phone: "", email: "", address: "", },
+    address: { receiverName: "", house: "", area: "", pincode: "", city: "", phone: "", addressType: "Home", },
+    delivery: { date: "", time: "", },
+    specialNote: { occasion: "", relation: "", message: "", toName: "", },
     paymentMode: "online",
   });
 
@@ -138,7 +116,7 @@ const Checkout = () => {
 
   /* ================= COMPUTED VALUES ================= */
   const packagingCharge = 25;
-  
+
   const subtotal = useMemo(() => {
     return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   }, [cartItems]);
@@ -160,10 +138,10 @@ const Checkout = () => {
     setCartItems(prevItems => {
       const updatedItems = prevItems.map(item => {
         if (item.id === productId || item.productId === productId) {
-          const newQuantity = action === 'increase' 
-            ? item.quantity + 1 
+          const newQuantity = action === 'increase'
+            ? item.quantity + 1
             : Math.max(1, item.quantity - 1);
-          
+
           return {
             ...item,
             quantity: newQuantity
@@ -171,7 +149,7 @@ const Checkout = () => {
         }
         return item;
       });
-      
+
       // Update sessionStorage
       sessionStorage.setItem("cart", JSON.stringify(updatedItems));
       return updatedItems;
@@ -196,18 +174,18 @@ const Checkout = () => {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        const itemToRemove = cartItems.find(item => 
+        const itemToRemove = cartItems.find(item =>
           item.id === productId || item.productId === productId
         );
-        
+
         setCartItems(prevItems => {
-          const updatedItems = prevItems.filter(item => 
+          const updatedItems = prevItems.filter(item =>
             item.id !== productId && item.productId !== productId
           );
           sessionStorage.setItem("cart", JSON.stringify(updatedItems));
           return updatedItems;
         });
-        
+
         Swal.fire({
           icon: 'success',
           title: 'Removed!',
@@ -235,27 +213,20 @@ const Checkout = () => {
     setCouponError("");
 
     try {
-      const response = await axios.post("https://api.ssdipl.com/api/validate-coupon", {
-        code: couponCode,
-        amount: subtotal,
-        cartItems: cartItems.map(item => ({
-          id: item.id,
-          quantity: item.quantity,
-          price: item.price
-        }))
+      const response = await axios.post("https://api.ssdipl.com/api/coupon/get-coupon-by-code", {
+        couponCode: couponCode,
+        totalAmount: subtotal
       });
+      console.log("SSSSSSXXXXXXXX::=>", response)
+      if (response.status === 200) {
+        const discount = response?.data?.coupon?.discountAmount || (response.data.coupon?.discount ? (subtotal * response?.data?.coupon?.discount / 100) : 0);
 
-      if (response.data.valid) {
-        const discount = response.data.discountAmount || 
-                        (response.data.discountPercentage ? 
-                         (subtotal * response.data.discountPercentage / 100) : 0);
-        
         setCouponDiscount(discount);
         setAppliedCoupon({
           code: couponCode,
-          type: response.data.coupon?.type || 'percentage',
-          value: response.data.coupon?.value || response.data.discountPercentage,
-          description: response.data.coupon?.description || 'Coupon applied'
+          type: response?.data?.coupon?.type || 'percentage',
+          value: response.data.coupon?.value || response.data.discount,
+          description: response.data.coupon?.title || 'Coupon applied'
         });
 
         const newTotal = totalBeforeDiscount - discount;
@@ -289,11 +260,11 @@ const Checkout = () => {
           confirmButtonText: 'Great!',
           confirmButtonColor: '#153964',
         });
-        
+
         toast.success(`Coupon applied! You saved ₹${discount}`);
       } else {
         setCouponError(response.data.message || "Invalid coupon code");
-        
+
         Swal.fire({
           icon: 'error',
           title: '❌ Invalid Coupon',
@@ -308,7 +279,7 @@ const Checkout = () => {
       }
     } catch (error) {
       setCouponError(error.response?.data?.message || "Failed to apply coupon");
-      
+
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -340,12 +311,12 @@ const Checkout = () => {
         const oldDiscount = couponDiscount;
         const oldTotal = totalAmount;
         const newTotal = oldTotal + oldDiscount;
-        
+
         setCouponCode("");
         setCouponDiscount(0);
         setAppliedCoupon(null);
         setCouponError("");
-        
+
         Swal.fire({
           icon: 'success',
           title: 'Coupon Removed',
@@ -477,7 +448,7 @@ const Checkout = () => {
   };
 
   const showOrderConfirmation = (orderDetails) => {
-    const savingsText = orderDetails.billing.discountAmount > 0 
+    const savingsText = orderDetails.billing.discountAmount > 0
       ? `<p style="color: #28a745;"><strong>You Saved:</strong> ₹${orderDetails.billing.discountAmount} with coupon ${orderDetails.billing.couponCode}</p>`
       : '<p style="color: #6c757d;">No coupon applied</p>';
 
@@ -492,7 +463,7 @@ const Checkout = () => {
           <h5 style="margin-top: 15px;">Items:</h5>
           ${cartItems.map(item => `
             <div style="display: flex; align-items: center; margin-bottom: 10px; padding: 5px; background: #f8f9fa; border-radius: 5px;">
-              <img src="${item.image || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; border-radius: 5px; margin-right: 10px; object-fit: cover;">
+              <img src="https://api.ssdipl.com/${item?.image || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; border-radius: 5px; margin-right: 10px; object-fit: cover;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between;">
                   <span>${item.name} x${item.quantity}</span>
@@ -548,7 +519,7 @@ const Checkout = () => {
       cancelButtonText: 'Continue Shopping',
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = "/order-tracking";
+        window.location.href = "/track-order";
       } else {
         window.location.href = "/";
       }
@@ -575,12 +546,12 @@ const Checkout = () => {
 
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/orders/create",
+        "https://api.ssdipl.com/api/create",
         orderPayload
       );
 
       Swal.close();
-
+      console.log("XXXXXXXZZZZZZZZZXXXXXXX=>", response.data);
       if (response.data.success) {
         if (checkoutData.paymentMode === "cod") {
           sessionStorage.removeItem("cart");
@@ -596,13 +567,13 @@ const Checkout = () => {
             timer: 2000,
             showConfirmButton: false
           });
-          await processOnlinePayment(response.data.order, orderPayload);
+          await processOnlinePayment(response.data, orderPayload);
         }
       }
     } catch (error) {
       Swal.close();
       console.error("Order failed:", error);
-      
+
       Swal.fire({
         icon: 'error',
         title: 'Order Failed',
@@ -621,16 +592,20 @@ const Checkout = () => {
       return;
     }
 
+    const totalAmount = orderData?.amount;
+    const appliedCoupon = orderData?.couponCode;
+    // console.log("XXXXXXXZZZZZZZZZXXXXXXX=AAA>", orderData, totalAmount, appliedCoupon);
     const options = {
       key: "rzp_test_TmsfO3hloFEA31",
-      amount: totalAmount * 100,
+      amount: totalAmount,
       currency: "INR",
       name: "Cake N Petals",
-      description: `Order #${orderData.orderId} ${appliedCoupon ? `with ${appliedCoupon.code}` : ''}`,
+      description: `Order #${orderData?.orderId} ${appliedCoupon ? `with ${appliedCoupon?.code}` : ''}`,
       image: "https://res.cloudinary.com/dfet60ou1/image/upload/v1747043182/logo_nkf8jp.webp",
-      order_id: orderData.razorpayOrderId,
+      order_id: orderData?.razorpayOrderId,
 
       handler: async function (response) {
+        alert(JSON.stringify(response));
         try {
           Swal.fire({
             title: 'Verifying Payment',
@@ -642,7 +617,7 @@ const Checkout = () => {
           });
 
           const verifyRes = await axios.post(
-            "https://api.ssdipl.com/api/payment/verify",
+            "https://api.ssdipl.com/api/verify-payment",
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -652,10 +627,9 @@ const Checkout = () => {
               discountAmount: couponDiscount
             }
           );
-
           Swal.close();
 
-          if (verifyRes.data.success) {
+          if (verifyRes.status === 200) {
             sessionStorage.removeItem("cart");
             showOrderConfirmation({
               ...orderPayload,
@@ -690,7 +664,7 @@ const Checkout = () => {
       theme: { color: "#153964" },
 
       modal: {
-        ondismiss: function() {
+        ondismiss: function () {
           Swal.fire({
             icon: 'info',
             title: 'Payment Cancelled',
@@ -705,6 +679,7 @@ const Checkout = () => {
     razorpay.open();
   };
 
+  console.log("INPUT CHECKOUT =>", checkoutData);
   return (
     <>
       {/* ================= USER INFO ================= */}
@@ -766,47 +741,47 @@ const Checkout = () => {
                     <span>Let us know where to deliver</span>
                   </h4>
 
-                  <input 
-                    name="receiverName" 
-                    className="form-control mb-3" 
-                    placeholder="Receiver Name*" 
-                    required 
+                  <input
+                    name="receiverName"
+                    className="form-control mb-3"
+                    placeholder="Receiver Name*"
+                    required
                   />
-                  <input 
-                    name="house" 
-                    className="form-control mb-3" 
-                    placeholder="House / Flat*" 
-                    required 
+                  <input
+                    name="house"
+                    className="form-control mb-3"
+                    placeholder="House / Flat*"
+                    required
                   />
-                  <input 
-                    name="area" 
-                    className="form-control mb-3" 
-                    defaultValue="Asthal Colony, Bawana" 
+                  <input
+                    name="area"
+                    className="form-control mb-3"
+                  // defaultValue="Asthal Colony, Bawana"
                   />
 
                   <div className="row">
                     <div className="col-md-6">
-                      <input 
-                        name="pincode" 
-                        className="form-control mb-3" 
-                        defaultValue="110039" 
-                        required 
+                      <input
+                        name="pincode"
+                        className="form-control mb-3"
+                        // defaultValue="110039"
+                        required
                       />
                     </div>
                     <div className="col-md-6">
-                      <input 
-                        name="city" 
-                        className="form-control mb-3" 
-                        defaultValue="Delhi" 
+                      <input
+                        name="city"
+                        className="form-control mb-3"
+                      // defaultValue="Delhi"
                       />
                     </div>
                   </div>
 
-                  <input 
-                    name="phone" 
-                    className="form-control mb-3" 
-                    placeholder="Receiver Phone*" 
-                    required 
+                  <input
+                    name="phone"
+                    className="form-control mb-3"
+                    placeholder="Receiver Phone*"
+                    required
                   />
 
                   <button className="continue-btn">Continue</button>
@@ -949,7 +924,7 @@ const Checkout = () => {
                       {checkoutData.specialNote?.message?.length || 0} / 250
                     </small>
                   </div>
-                  
+
                   <textarea
                     className="form-control mb-2"
                     rows="5"
@@ -990,12 +965,12 @@ const Checkout = () => {
                     </button>
                   </div>
 
-                  <input 
-                    type="date" 
-                    name="date" 
-                    className="form-control mb-3" 
+                  <input
+                    type="date"
+                    name="date"
+                    className="form-control mb-3"
                     min={new Date().toISOString().split('T')[0]}
-                    required 
+                    required
                   />
 
                   <select name="time" className="form-control mb-4" required>
@@ -1046,9 +1021,9 @@ const Checkout = () => {
                           border: '1px solid #f0f0f0',
                           flexShrink: 0
                         }}>
-                          <img 
-                            src={item.image || 'https://via.placeholder.com/100x100?text=Product'} 
-                            alt={item.name}
+                          <img
+                            src={`https://api.ssdipl.com/${item?.image}` || 'https://via.placeholder.com/100x100?text=Product'}
+                            alt={item?.name}
                             style={{
                               width: '100%',
                               height: '100%',
@@ -1069,105 +1044,50 @@ const Checkout = () => {
                             alignItems: 'flex-start',
                             marginBottom: '8px'
                           }}>
-                            <h5 style={{ 
-                              margin: 0, 
-                              fontSize: '16px', 
+                            <h5 style={{
+                              margin: 0,
+                              fontSize: '16px',
                               fontWeight: '600',
                               color: '#333',
                               flex: 1
                             }}>
                               {item.name}
                             </h5>
-                            <span style={{ 
-                              fontWeight: 'bold', 
-                              color: '#153964',
-                              fontSize: '18px',
-                              marginLeft: '10px'
-                            }}>
+                            <span style={{ fontWeight: 'bold', color: '#153964', fontSize: '18px', marginLeft: '10px' }}>
                               ₹{item.price * item.quantity}
                             </span>
                           </div>
 
                           {/* Weight/Volume */}
                           {item.weight && (
-                            <div style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              marginBottom: '8px',
-                              color: '#666',
-                              fontSize: '14px'
-                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px', color: '#666', fontSize: '14px' }}>
                               <i className="fa fa-balance-scale" style={{ marginRight: '5px', fontSize: '12px' }}></i>
                               <span>{item.weight}</span>
                             </div>
                           )}
 
                           {/* Price per unit */}
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: '12px',
-                            color: '#28a745',
-                            fontSize: '13px'
-                          }}>
+                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', color: '#28a745', fontSize: '13px' }}>
                             <i className="fa fa-tag" style={{ marginRight: '5px' }}></i>
                             <span>₹{item.price} per item</span>
                           </div>
 
                           {/* Increment/Decrement Controls */}
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginTop: '5px'
-                          }}>
-                            <div style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              border: '1px solid #e0e0e0',
-                              borderRadius: '8px',
-                              overflow: 'hidden',
-                              backgroundColor: '#f8f9fa'
-                            }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '5px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f8f9fa' }}>
                               <button
                                 onClick={() => updateQuantity(item.id || item.productId, 'decrease')}
                                 disabled={item.quantity <= 1}
-                                style={{
-                                  border: 'none',
-                                  background: item.quantity <= 1 ? '#f1f3f4' : '#f8f9fa',
-                                  padding: '8px 16px',
-                                  cursor: item.quantity <= 1 ? 'not-allowed' : 'pointer',
-                                  fontSize: '16px',
-                                  fontWeight: 'bold',
-                                  color: item.quantity <= 1 ? '#999' : '#153964',
-                                  transition: 'all 0.2s ease'
-                                }}
+                                style={{ border: 'none', background: item.quantity <= 1 ? '#f1f3f4' : '#f8f9fa', padding: '8px 16px', cursor: item.quantity <= 1 ? 'not-allowed' : 'pointer', fontSize: '16px', fontWeight: 'bold', color: item.quantity <= 1 ? '#999' : '#153964', transition: 'all 0.2s ease' }}
                               >
                                 −
                               </button>
-                              <span style={{
-                                padding: '8px 20px',
-                                background: 'white',
-                                borderLeft: '1px solid #e0e0e0',
-                                borderRight: '1px solid #e0e0e0',
-                                minWidth: '50px',
-                                textAlign: 'center',
-                                fontWeight: '500'
-                              }}>
+                              <span style={{ padding: '8px 20px', background: 'white', borderLeft: '1px solid #e0e0e0', borderRight: '1px solid #e0e0e0', minWidth: '50px', textAlign: 'center', fontWeight: '500' }}>
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.id || item.productId, 'increase')}
-                                style={{
-                                  border: 'none',
-                                  background: '#f8f9fa',
-                                  padding: '8px 16px',
-                                  cursor: 'pointer',
-                                  fontSize: '16px',
-                                  fontWeight: 'bold',
-                                  color: '#153964',
-                                  transition: 'all 0.2s ease'
-                                }}
+                                style={{ border: 'none', background: '#f8f9fa', padding: '8px 16px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', color: '#153964', transition: 'all 0.2s ease' }}
                               >
                                 +
                               </button>
@@ -1176,16 +1096,7 @@ const Checkout = () => {
                             {/* Remove button */}
                             <button
                               onClick={() => removeItem(item.id || item.productId)}
-                              style={{
-                                border: 'none',
-                                background: 'none',
-                                color: '#dc3545',
-                                cursor: 'pointer',
-                                fontSize: '14px',
-                                padding: '5px 10px',
-                                borderRadius: '5px',
-                                transition: 'all 0.2s ease'
-                              }}
+                              style={{ border: 'none', background: 'none', color: '#dc3545', cursor: 'pointer', fontSize: '14px', padding: '5px 10px', borderRadius: '5px', transition: 'all 0.2s ease' }}
                               onMouseEnter={(e) => e.target.style.backgroundColor = '#fff5f5'}
                               onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                             >
@@ -1194,14 +1105,7 @@ const Checkout = () => {
                           </div>
 
                           {/* Item total */}
-                          <div style={{
-                            marginTop: '10px',
-                            textAlign: 'right',
-                            fontSize: '13px',
-                            color: '#666',
-                            borderTop: '1px dashed #e0e0e0',
-                            paddingTop: '8px'
-                          }}>
+                          <div style={{ marginTop: '10px', textAlign: 'right', fontSize: '13px', color: '#666', borderTop: '1px dashed #e0e0e0', paddingTop: '8px' }}>
                             <span>Item total: </span>
                             <span style={{ fontWeight: '600', color: '#153964' }}>
                               ₹{item.price * item.quantity}
@@ -1214,7 +1118,7 @@ const Checkout = () => {
                     {/* Delivery Details Summary */}
                     {checkoutData.delivery.date && (
                       <div className="delivery-summary" style={{
-                         background: "linear-gradient(90deg, #df4444 0%, #de9696 100%)",
+                        background: "linear-gradient(90deg, #df4444 0%, #de9696 100%)",
                         borderRadius: '12px',
                         padding: '20px',
                         marginTop: '20px',
@@ -1343,7 +1247,7 @@ const Checkout = () => {
                             borderRadius: '5px'
                           }}>
                             <span>
-                              <i className="fa fa-tag"></i> Discount 
+                              <i className="fa fa-tag"></i> Discount
                               <span style={{
                                 background: '#28a745',
                                 color: 'white',
@@ -1354,7 +1258,7 @@ const Checkout = () => {
                               }}>
                                 {appliedCoupon?.code}
                               </span>
-                              <button 
+                              <button
                                 onClick={removeCoupon}
                                 style={{
                                   background: 'none',
@@ -1451,7 +1355,7 @@ const Checkout = () => {
                           }}
                         />
                         {!appliedCoupon ? (
-                          <button 
+                          <button
                             onClick={applyCoupon}
                             disabled={loadingCoupon || !couponCode.trim()}
                             style={{
@@ -1467,7 +1371,7 @@ const Checkout = () => {
                             {loadingCoupon ? '...' : 'Apply'}
                           </button>
                         ) : (
-                          <button 
+                          <button
                             onClick={removeCoupon}
                             style={{
                               padding: '10px 20px',
@@ -1487,17 +1391,17 @@ const Checkout = () => {
                           <i className="fa fa-exclamation-circle"></i> {couponError}
                         </small>
                       )}
-                      
+
                       {/* Sample Coupons */}
                       <div style={{ marginTop: '10px', fontSize: '12px', color: '#6c757d' }}>
                         <span>Try: </span>
                         {['SAVE20', 'WELCOME10', 'FLAT50'].map(code => (
-                          <span 
+                          <span
                             key={code}
                             onClick={() => !appliedCoupon && setCouponCode(code)}
-                            style={{ 
-                              background: '#e9ecef', 
-                              padding: '4px 10px', 
+                            style={{
+                              background: '#e9ecef',
+                              padding: '4px 10px',
                               borderRadius: '20px',
                               marginRight: '5px',
                               cursor: appliedCoupon ? 'not-allowed' : 'pointer',
@@ -1601,22 +1505,10 @@ const Checkout = () => {
                     </div>
 
                     {/* Place Order Button */}
-                    <button 
+                    <button
                       onClick={placeOrder}
                       disabled={loading || cartItems.length === 0}
-                      style={{
-                        width: '100%',
-                        padding: '15px',
-                        fontSize: '1.1em',
-                        fontWeight: 'bold',
-                        backgroundColor: loading ? '#6c757d' : '#28a745',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: loading ? 'wait' : 'pointer',
-                        transition: 'all 0.3s ease',
-                        marginBottom: '10px'
-                      }}
+                      style={{ width: '100%', padding: '15px', fontSize: '1.1em', fontWeight: 'bold', backgroundColor: loading ? '#6c757d' : '#28a745', color: 'white', border: 'none', borderRadius: '8px', cursor: loading ? 'wait' : 'pointer', transition: 'all 0.3s ease', marginBottom: '10px' }}
                     >
                       {loading ? (
                         <span><i className="fa fa-spinner fa-spin"></i> PROCESSING...</span>
@@ -1632,8 +1524,8 @@ const Checkout = () => {
                       color: '#6c757d',
                       fontSize: '12px'
                     }}>
-                      By placing this order, you agree to our 
-                      <a href="/terms" style={{ color: '#153964', marginLeft: '3px' }}>Terms of Service</a> and 
+                      By placing this order, you agree to our
+                      <a href="/terms" style={{ color: '#153964', marginLeft: '3px' }}>Terms of Service</a> and
                       <a href="/privacy" style={{ color: '#153964', marginLeft: '3px' }}>Privacy Policy</a>
                     </small>
                   </div>
@@ -1881,7 +1773,7 @@ export default Checkout;
 //   //       order_id: data?.razorpayOrderId || "E77EE&7E",
 
 //   //       handler: async function (response) {
-//   //         try {    
+//   //         try {
 //   //           console.log("XXXXXX::=>" , response)
 //   //           const verifyData = await axios.post(
 //   //             "https://api.ssdipl.com/api/verify-payment",

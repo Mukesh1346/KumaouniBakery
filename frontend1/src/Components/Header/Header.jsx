@@ -24,6 +24,7 @@ const Header = () => {
   const loginvalue = sessionStorage.getItem("login");
   const userData = JSON.parse(sessionStorage.getItem("userData"));
   const cart = JSON.parse(sessionStorage.getItem("cart")) || []
+const menuRef = useRef(null);
 
 
   /* CATEGORY DATA (FROM API) */
@@ -57,6 +58,25 @@ const Header = () => {
 
   /* REFS */
   const mobileMenuRef = useRef(null);
+
+
+  useEffect(() => {
+  const handleOutsideClick = (e) => {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(e.target)
+    ) {
+      setOpenIndex(null);
+    }
+  };
+
+  document.addEventListener("mousedown", handleOutsideClick);
+
+  return () => {
+    document.removeEventListener("mousedown", handleOutsideClick);
+  };
+}, []);
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -125,8 +145,7 @@ const Header = () => {
 
   //   return () => clearTimeout(delayDebounce);
 
-  // }, [searchQuery]);
-
+  // }, [searchQuery]
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -282,8 +301,8 @@ const Header = () => {
 
                   {selectedCountry && (
                     <img
-                      src={selectedCountry.flag}
-                      alt={selectedCountry.name}
+                      src={selectedCountry?.flag}
+                      alt={selectedCountry?.name}
                       className="delivery-flag"
                     />
                   )}
@@ -402,6 +421,7 @@ const Header = () => {
                 {/* MENU DROPDOWN */}
                 <div
                   className="hdr-menu-trigger"
+                   ref={menuRef}
                   onClick={() => toggleDropdown("menu")}
                 >
                   <i className="bi bi-grid"></i>
@@ -544,7 +564,7 @@ const Header = () => {
               >
                 <span className="nav-link mega-toggle">
                   {cat.name}
-                  <IoIosArrowDown />
+                  {/* <IoIosArrowDown /> */}
                 </span>
 
                 {desktopMenuOpen === index && (

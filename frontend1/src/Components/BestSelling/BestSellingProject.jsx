@@ -184,12 +184,12 @@ const BestSellingProduct = () => {
                     Earliest Delivery : <span>In 3 hours</span>
                   </p>
 
-                  <button
+                  {/* <button
                     className="btn btn-dark w-100 mt-2"
                     onClick={(e) => handleBuyNowClick(e, item?.productName)}
                   >
                     Buy Now
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

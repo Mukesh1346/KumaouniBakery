@@ -194,12 +194,12 @@ const AllProducts = ({ status = '' }) => {
                         Earliest Delivery : <span>In 3 hours</span>
                       </p>
 
-                      <button
+                      {/* <button
                         className="btn btn-dark w-100 mt-2"
                         onClick={(e) => handleBuyNowClick(e, product?.productName)}
                       >
                         Buy Now
-                      </button>
+                      </button> */}
                     </div>
 
                   </div>

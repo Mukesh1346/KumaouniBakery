@@ -18,7 +18,6 @@ const AllProductById = ({ cakesArr = [] }) => {
     }, []);
 
     /* ❤️ Wishlist */
-
     useEffect(() => {
         const stored = sessionStorage.getItem("wishlist");
         if (stored) {
@@ -26,8 +25,18 @@ const AllProductById = ({ cakesArr = [] }) => {
         }
     }, []);
 
-    // get existing wishlist from session
-    const toggleWishlist = async (productId) => {
+    // Handle card click navigation
+    const handleCardClick = (product) => {
+        navigate(`/product-details/${product?.productName}`, {
+            state: { id: product?._id, status: 'product' }
+        });
+    };
+
+    // Toggle wishlist (prevents card click)
+    const toggleWishlist = async (e, productId) => {
+        e.stopPropagation(); // Prevent card click
+        e.preventDefault();
+        
         if (!user) {
             Swal.fire({
                 icon: "warning",
@@ -40,7 +49,6 @@ const AllProductById = ({ cakesArr = [] }) => {
 
         setWishlist((prev) => {
             const isExist = prev.includes(productId);
-
             const updated = isExist
                 ? prev.filter((id) => id !== productId)
                 : [...prev, productId];
@@ -54,7 +62,6 @@ const AllProductById = ({ cakesArr = [] }) => {
             return updated;
         });
     };
-
 
     const handleWishlistApi = async (productId, isRemoving) => {
         console.log("isRemoving==>", isRemoving);
@@ -79,7 +86,6 @@ const AllProductById = ({ cakesArr = [] }) => {
         }
     };
 
-
     /* 🔥 GROUP PRODUCTS BY CATEGORY */
     const groupedData = useMemo(() => {
         const map = {};
@@ -98,7 +104,8 @@ const AllProductById = ({ cakesArr = [] }) => {
         return Object.values(map);
     }, [cakesArr]);
 
-    console.log("groupedData==>", groupedData)
+    console.log("groupedData==>", groupedData);
+
     return (
         <div className="container my-5">
             {groupedData.map(({ category, products }) => {
@@ -108,7 +115,6 @@ const AllProductById = ({ cakesArr = [] }) => {
 
                 return (
                     <div key={category._id} className="mb-5">
-
                         {/* CATEGORY HEADER */}
                         <div className="d-flex justify-content-between align-items-center mb-4">
                             <div>
@@ -131,6 +137,8 @@ const AllProductById = ({ cakesArr = [] }) => {
                                     <div
                                         key={product?._id}
                                         className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
+                                        onClick={() => handleCardClick(product)}
+                                        style={{ cursor: "pointer" }}
                                     >
                                         <div className="product-card">
                                             <div className="product-img">
@@ -139,10 +147,10 @@ const AllProductById = ({ cakesArr = [] }) => {
                                                     alt={product.productName}
                                                 />
 
-                                                {/* ❤️ Wishlist */}
+                                                {/* ❤️ Wishlist - Stops propagation */}
                                                 <span
                                                     className="wishlist"
-                                                    onClick={() => toggleWishlist(product._id)}
+                                                    onClick={(e) => toggleWishlist(e, product._id)}
                                                 >
                                                     {wishlist.includes(product?._id) ? (
                                                         <FaHeart color="red" />
@@ -176,20 +184,18 @@ const AllProductById = ({ cakesArr = [] }) => {
                                                     Earliest Delivery : <span>In 3 hours</span>
                                                 </p>
 
-                                                {/* <Link
-                          to={`/product-details/${product._id}`}
-                          className="btn btn-dark w-100 mt-2"
-                        > */}
-                                                <div
-                                                    onClick={() =>
-                                                        navigate(`/product-details/${product?.productName}`,
-                                                            { state: { id: product?._id, status: 'product' } })
-                                                    }
+                                                {/* Buy Now button - Stops propagation */}
+                                                {/* <div
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent card click
+                                                        navigate(`/product-details/${product?.productName}`, {
+                                                            state: { id: product?._id, status: 'product' }
+                                                        });
+                                                    }}
                                                     className="btn btn-dark w-100 mt-2"
                                                 >
                                                     Buy Now
-                                                </div>
-                                                {/* </Link> */}
+                                                </div> */}
                                             </div>
                                         </div>
                                     </div>
