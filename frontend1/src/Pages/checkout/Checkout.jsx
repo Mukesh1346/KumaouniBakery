@@ -1456,8 +1456,8 @@ const Checkout = () => {
                             disabled={loadingCoupon || !couponCode.trim()}
                             style={{
                               padding: '10px 20px',
-                               background: "linear-gradient(90deg, #df4444 #df4444  0%, #eb9191ff 100%)",
-                              color: 'black',
+                              backgroundColor: " #df4444 ",
+                              color: 'white',
                               border: 'none',
                               borderRadius: '5px',
                               cursor: loadingCoupon ? 'wait' : 'pointer',
