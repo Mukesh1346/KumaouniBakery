@@ -310,8 +310,8 @@ const FeaturedProducts = () => {
     <div className="container my-5 featured-products">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 className="fw-bold featuretitle mb-1">Featured Products</h4>
-          <p className="text-muted mb-0">
+          <h4 className=" SuperTitle SuperTitle mb-1">Featured Products</h4>
+          <p className="text-muted SuperSubTitle mb-0">
             Life Is Celebration - We Deliver Happiness
           </p>
         </div>

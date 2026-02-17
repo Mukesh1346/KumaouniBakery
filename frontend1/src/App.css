@@ -40,6 +40,17 @@
  background-color: #f4f7f8;
 }
 
+.SuperTitle{
+   color: #df4444 !important;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.SuperSubTitle{
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .breadCrumbContent h1 {
   color: var(--color-pink);
   font-family: var(--font-family-design);
