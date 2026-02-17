@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 
 const Checkout = () => {
   /* ================= STEP ================= */
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(5);
 
   /* ================= CART ================= */
   const [cartItems, setCartItems] = useState([]);
@@ -138,7 +138,7 @@ const Checkout = () => {
 
   /* ================= COMPUTED VALUES ================= */
   const packagingCharge = 25;
-  
+
   const subtotal = useMemo(() => {
     return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   }, [cartItems]);
@@ -160,10 +160,10 @@ const Checkout = () => {
     setCartItems(prevItems => {
       const updatedItems = prevItems.map(item => {
         if (item.id === productId || item.productId === productId) {
-          const newQuantity = action === 'increase' 
-            ? item.quantity + 1 
+          const newQuantity = action === 'increase'
+            ? item.quantity + 1
             : Math.max(1, item.quantity - 1);
-          
+
           return {
             ...item,
             quantity: newQuantity
@@ -171,7 +171,7 @@ const Checkout = () => {
         }
         return item;
       });
-      
+
       // Update sessionStorage
       sessionStorage.setItem("cart", JSON.stringify(updatedItems));
       return updatedItems;
@@ -196,18 +196,18 @@ const Checkout = () => {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        const itemToRemove = cartItems.find(item => 
+        const itemToRemove = cartItems.find(item =>
           item.id === productId || item.productId === productId
         );
-        
+
         setCartItems(prevItems => {
-          const updatedItems = prevItems.filter(item => 
+          const updatedItems = prevItems.filter(item =>
             item.id !== productId && item.productId !== productId
           );
           sessionStorage.setItem("cart", JSON.stringify(updatedItems));
           return updatedItems;
         });
-        
+
         Swal.fire({
           icon: 'success',
           title: 'Removed!',
@@ -246,10 +246,10 @@ const Checkout = () => {
       });
 
       if (response.data.valid) {
-        const discount = response.data.discountAmount || 
-                        (response.data.discountPercentage ? 
-                         (subtotal * response.data.discountPercentage / 100) : 0);
-        
+        const discount = response.data.discountAmount ||
+          (response.data.discountPercentage ?
+            (subtotal * response.data.discountPercentage / 100) : 0);
+
         setCouponDiscount(discount);
         setAppliedCoupon({
           code: couponCode,
@@ -289,11 +289,11 @@ const Checkout = () => {
           confirmButtonText: 'Great!',
           confirmButtonColor: '#153964',
         });
-        
+
         toast.success(`Coupon applied! You saved ₹${discount}`);
       } else {
         setCouponError(response.data.message || "Invalid coupon code");
-        
+
         Swal.fire({
           icon: 'error',
           title: '❌ Invalid Coupon',
@@ -308,7 +308,7 @@ const Checkout = () => {
       }
     } catch (error) {
       setCouponError(error.response?.data?.message || "Failed to apply coupon");
-      
+
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -340,12 +340,12 @@ const Checkout = () => {
         const oldDiscount = couponDiscount;
         const oldTotal = totalAmount;
         const newTotal = oldTotal + oldDiscount;
-        
+
         setCouponCode("");
         setCouponDiscount(0);
         setAppliedCoupon(null);
         setCouponError("");
-        
+
         Swal.fire({
           icon: 'success',
           title: 'Coupon Removed',
@@ -477,7 +477,7 @@ const Checkout = () => {
   };
 
   const showOrderConfirmation = (orderDetails) => {
-    const savingsText = orderDetails.billing.discountAmount > 0 
+    const savingsText = orderDetails.billing.discountAmount > 0
       ? `<p style="color: #28a745;"><strong>You Saved:</strong> ₹${orderDetails.billing.discountAmount} with coupon ${orderDetails.billing.couponCode}</p>`
       : '<p style="color: #6c757d;">No coupon applied</p>';
 
@@ -602,7 +602,7 @@ const Checkout = () => {
     } catch (error) {
       Swal.close();
       console.error("Order failed:", error);
-      
+
       Swal.fire({
         icon: 'error',
         title: 'Order Failed',
@@ -690,7 +690,7 @@ const Checkout = () => {
       theme: { color: "#153964" },
 
       modal: {
-        ondismiss: function() {
+        ondismiss: function () {
           Swal.fire({
             icon: 'info',
             title: 'Payment Cancelled',
@@ -766,47 +766,47 @@ const Checkout = () => {
                     <span>Let us know where to deliver</span>
                   </h4>
 
-                  <input 
-                    name="receiverName" 
-                    className="form-control mb-3" 
-                    placeholder="Receiver Name*" 
-                    required 
+                  <input
+                    name="receiverName"
+                    className="form-control mb-3"
+                    placeholder="Receiver Name*"
+                    required
                   />
-                  <input 
-                    name="house" 
-                    className="form-control mb-3" 
-                    placeholder="House / Flat*" 
-                    required 
+                  <input
+                    name="house"
+                    className="form-control mb-3"
+                    placeholder="House / Flat*"
+                    required
                   />
-                  <input 
-                    name="area" 
-                    className="form-control mb-3" 
-                    defaultValue="Asthal Colony, Bawana" 
+                  <input
+                    name="area"
+                    className="form-control mb-3"
+                    defaultValue="Asthal Colony, Bawana"
                   />
 
                   <div className="row">
                     <div className="col-md-6">
-                      <input 
-                        name="pincode" 
-                        className="form-control mb-3" 
-                        defaultValue="110039" 
-                        required 
+                      <input
+                        name="pincode"
+                        className="form-control mb-3"
+                        defaultValue="110039"
+                        required
                       />
                     </div>
                     <div className="col-md-6">
-                      <input 
-                        name="city" 
-                        className="form-control mb-3" 
-                        defaultValue="Delhi" 
+                      <input
+                        name="city"
+                        className="form-control mb-3"
+                        defaultValue="Delhi"
                       />
                     </div>
                   </div>
 
-                  <input 
-                    name="phone" 
-                    className="form-control mb-3" 
-                    placeholder="Receiver Phone*" 
-                    required 
+                  <input
+                    name="phone"
+                    className="form-control mb-3"
+                    placeholder="Receiver Phone*"
+                    required
                   />
 
                   <button className="continue-btn">Continue</button>
@@ -949,7 +949,7 @@ const Checkout = () => {
                       {checkoutData.specialNote?.message?.length || 0} / 250
                     </small>
                   </div>
-                  
+
                   <textarea
                     className="form-control mb-2"
                     rows="5"
@@ -990,12 +990,12 @@ const Checkout = () => {
                     </button>
                   </div>
 
-                  <input 
-                    type="date" 
-                    name="date" 
-                    className="form-control mb-3" 
+                  <input
+                    type="date"
+                    name="date"
+                    className="form-control mb-3"
                     min={new Date().toISOString().split('T')[0]}
-                    required 
+                    required
                   />
 
                   <select name="time" className="form-control mb-4" required>
@@ -1046,9 +1046,9 @@ const Checkout = () => {
                           border: '1px solid #f0f0f0',
                           flexShrink: 0
                         }}>
-                          <img 
-                            src={item.image || 'https://via.placeholder.com/100x100?text=Product'} 
-                            alt={item.name}
+                          <img
+                            src={`http://localhost:7000/${item?.image}` || 'https://via.placeholder.com/100x100?text=Product'}
+                            alt={item?.name}
                             style={{
                               width: '100%',
                               height: '100%',
@@ -1069,105 +1069,50 @@ const Checkout = () => {
                             alignItems: 'flex-start',
                             marginBottom: '8px'
                           }}>
-                            <h5 style={{ 
-                              margin: 0, 
-                              fontSize: '16px', 
+                            <h5 style={{
+                              margin: 0,
+                              fontSize: '16px',
                               fontWeight: '600',
                               color: '#333',
                               flex: 1
                             }}>
                               {item.name}
                             </h5>
-                            <span style={{ 
-                              fontWeight: 'bold', 
-                              color: '#153964',
-                              fontSize: '18px',
-                              marginLeft: '10px'
-                            }}>
+                            <span style={{ fontWeight: 'bold', color: '#153964', fontSize: '18px', marginLeft: '10px' }}>
                               ₹{item.price * item.quantity}
                             </span>
                           </div>
 
                           {/* Weight/Volume */}
                           {item.weight && (
-                            <div style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              marginBottom: '8px',
-                              color: '#666',
-                              fontSize: '14px'
-                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px', color: '#666', fontSize: '14px' }}>
                               <i className="fa fa-balance-scale" style={{ marginRight: '5px', fontSize: '12px' }}></i>
                               <span>{item.weight}</span>
                             </div>
                           )}
 
                           {/* Price per unit */}
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: '12px',
-                            color: '#28a745',
-                            fontSize: '13px'
-                          }}>
+                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', color: '#28a745', fontSize: '13px' }}>
                             <i className="fa fa-tag" style={{ marginRight: '5px' }}></i>
                             <span>₹{item.price} per item</span>
                           </div>
 
                           {/* Increment/Decrement Controls */}
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginTop: '5px'
-                          }}>
-                            <div style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              border: '1px solid #e0e0e0',
-                              borderRadius: '8px',
-                              overflow: 'hidden',
-                              backgroundColor: '#f8f9fa'
-                            }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '5px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f8f9fa' }}>
                               <button
                                 onClick={() => updateQuantity(item.id || item.productId, 'decrease')}
                                 disabled={item.quantity <= 1}
-                                style={{
-                                  border: 'none',
-                                  background: item.quantity <= 1 ? '#f1f3f4' : '#f8f9fa',
-                                  padding: '8px 16px',
-                                  cursor: item.quantity <= 1 ? 'not-allowed' : 'pointer',
-                                  fontSize: '16px',
-                                  fontWeight: 'bold',
-                                  color: item.quantity <= 1 ? '#999' : '#153964',
-                                  transition: 'all 0.2s ease'
-                                }}
+                                style={{ border: 'none', background: item.quantity <= 1 ? '#f1f3f4' : '#f8f9fa', padding: '8px 16px', cursor: item.quantity <= 1 ? 'not-allowed' : 'pointer', fontSize: '16px', fontWeight: 'bold', color: item.quantity <= 1 ? '#999' : '#153964', transition: 'all 0.2s ease' }}
                               >
                                 −
                               </button>
-                              <span style={{
-                                padding: '8px 20px',
-                                background: 'white',
-                                borderLeft: '1px solid #e0e0e0',
-                                borderRight: '1px solid #e0e0e0',
-                                minWidth: '50px',
-                                textAlign: 'center',
-                                fontWeight: '500'
-                              }}>
+                              <span style={{ padding: '8px 20px', background: 'white', borderLeft: '1px solid #e0e0e0', borderRight: '1px solid #e0e0e0', minWidth: '50px', textAlign: 'center', fontWeight: '500' }}>
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.id || item.productId, 'increase')}
-                                style={{
-                                  border: 'none',
-                                  background: '#f8f9fa',
-                                  padding: '8px 16px',
-                                  cursor: 'pointer',
-                                  fontSize: '16px',
-                                  fontWeight: 'bold',
-                                  color: '#153964',
-                                  transition: 'all 0.2s ease'
-                                }}
+                                style={{ border: 'none', background: '#f8f9fa', padding: '8px 16px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', color: '#153964', transition: 'all 0.2s ease' }}
                               >
                                 +
                               </button>
@@ -1176,16 +1121,7 @@ const Checkout = () => {
                             {/* Remove button */}
                             <button
                               onClick={() => removeItem(item.id || item.productId)}
-                              style={{
-                                border: 'none',
-                                background: 'none',
-                                color: '#dc3545',
-                                cursor: 'pointer',
-                                fontSize: '14px',
-                                padding: '5px 10px',
-                                borderRadius: '5px',
-                                transition: 'all 0.2s ease'
-                              }}
+                              style={{ border: 'none', background: 'none', color: '#dc3545', cursor: 'pointer', fontSize: '14px', padding: '5px 10px', borderRadius: '5px', transition: 'all 0.2s ease' }}
                               onMouseEnter={(e) => e.target.style.backgroundColor = '#fff5f5'}
                               onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                             >
@@ -1194,14 +1130,7 @@ const Checkout = () => {
                           </div>
 
                           {/* Item total */}
-                          <div style={{
-                            marginTop: '10px',
-                            textAlign: 'right',
-                            fontSize: '13px',
-                            color: '#666',
-                            borderTop: '1px dashed #e0e0e0',
-                            paddingTop: '8px'
-                          }}>
+                          <div style={{ marginTop: '10px', textAlign: 'right', fontSize: '13px', color: '#666', borderTop: '1px dashed #e0e0e0', paddingTop: '8px' }}>
                             <span>Item total: </span>
                             <span style={{ fontWeight: '600', color: '#153964' }}>
                               ₹{item.price * item.quantity}
@@ -1214,7 +1143,7 @@ const Checkout = () => {
                     {/* Delivery Details Summary */}
                     {checkoutData.delivery.date && (
                       <div className="delivery-summary" style={{
-                         background: "linear-gradient(90deg, #df4444 0%, #de9696 100%)",
+                        background: "linear-gradient(90deg, #df4444 0%, #de9696 100%)",
                         borderRadius: '12px',
                         padding: '20px',
                         marginTop: '20px',
@@ -1343,7 +1272,7 @@ const Checkout = () => {
                             borderRadius: '5px'
                           }}>
                             <span>
-                              <i className="fa fa-tag"></i> Discount 
+                              <i className="fa fa-tag"></i> Discount
                               <span style={{
                                 background: '#28a745',
                                 color: 'white',
@@ -1354,7 +1283,7 @@ const Checkout = () => {
                               }}>
                                 {appliedCoupon?.code}
                               </span>
-                              <button 
+                              <button
                                 onClick={removeCoupon}
                                 style={{
                                   background: 'none',
@@ -1451,12 +1380,12 @@ const Checkout = () => {
                           }}
                         />
                         {!appliedCoupon ? (
-                          <button 
+                          <button
                             onClick={applyCoupon}
                             disabled={loadingCoupon || !couponCode.trim()}
                             style={{
                               padding: '10px 20px',
-                               background: "linear-gradient(90deg, #df4444 #df4444  0%, #eb9191ff 100%)",
+                              background: "linear-gradient(90deg, #df4444 #df4444  0%, #eb9191ff 100%)",
                               color: 'black',
                               border: 'none',
                               borderRadius: '5px',
@@ -1467,7 +1396,7 @@ const Checkout = () => {
                             {loadingCoupon ? '...' : 'Apply'}
                           </button>
                         ) : (
-                          <button 
+                          <button
                             onClick={removeCoupon}
                             style={{
                               padding: '10px 20px',
@@ -1487,17 +1416,17 @@ const Checkout = () => {
                           <i className="fa fa-exclamation-circle"></i> {couponError}
                         </small>
                       )}
-                      
+
                       {/* Sample Coupons */}
                       <div style={{ marginTop: '10px', fontSize: '12px', color: '#6c757d' }}>
                         <span>Try: </span>
                         {['SAVE20', 'WELCOME10', 'FLAT50'].map(code => (
-                          <span 
+                          <span
                             key={code}
                             onClick={() => !appliedCoupon && setCouponCode(code)}
-                            style={{ 
-                              background: '#e9ecef', 
-                              padding: '4px 10px', 
+                            style={{
+                              background: '#e9ecef',
+                              padding: '4px 10px',
                               borderRadius: '20px',
                               marginRight: '5px',
                               cursor: appliedCoupon ? 'not-allowed' : 'pointer',
@@ -1601,7 +1530,7 @@ const Checkout = () => {
                     </div>
 
                     {/* Place Order Button */}
-                    <button 
+                    <button
                       onClick={placeOrder}
                       disabled={loading || cartItems.length === 0}
                       style={{
@@ -1632,8 +1561,8 @@ const Checkout = () => {
                       color: '#6c757d',
                       fontSize: '12px'
                     }}>
-                      By placing this order, you agree to our 
-                      <a href="/terms" style={{ color: '#153964', marginLeft: '3px' }}>Terms of Service</a> and 
+                      By placing this order, you agree to our
+                      <a href="/terms" style={{ color: '#153964', marginLeft: '3px' }}>Terms of Service</a> and
                       <a href="/privacy" style={{ color: '#153964', marginLeft: '3px' }}>Privacy Policy</a>
                     </small>
                   </div>
@@ -1881,7 +1810,7 @@ export default Checkout;
 //   //       order_id: data?.razorpayOrderId || "E77EE&7E",
 
 //   //       handler: async function (response) {
-//   //         try {    
+//   //         try {
 //   //           console.log("XXXXXX::=>" , response)
 //   //           const verifyData = await axios.post(
 //   //             "https://api.ssdipl.com/api/verify-payment",

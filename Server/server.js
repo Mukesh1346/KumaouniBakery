@@ -27,7 +27,7 @@ const RecommendedCategoryRouter = require("./Router/RecommendedCategoryRouter")
 const RecommendedProductRoutes = require("./Router/RecommendedProductRoutes")
 const PinCodeRouter = require("./Router/PincodeRouter")
 const wishlistRouter = require("./Router/wishlistRoutes")
-
+const CouponsRouter = require("./Router/CouponsRouter")
 
 const app = express()
 
@@ -88,6 +88,7 @@ app.use("/api/recommended-category", RecommendedCategoryRouter)
 app.use("/api/recommended-product", RecommendedProductRoutes)
 app.use("/api/pincode", PinCodeRouter)
 app.use("/api/wishlist", wishlistRouter)
+app.use("/api/coupon", CouponsRouter)
 
 
 

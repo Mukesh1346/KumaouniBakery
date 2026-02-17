@@ -282,8 +282,8 @@ const Header = () => {
 
                   {selectedCountry && (
                     <img
-                      src={selectedCountry.flag}
-                      alt={selectedCountry.name}
+                      src={selectedCountry?.flag}
+                      alt={selectedCountry?.name}
                       className="delivery-flag"
                     />
                   )}
