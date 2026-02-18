@@ -185,6 +185,19 @@ const AllPinCode = () => {
             toast.error("Failed to fetch pin codes!");
         }
     }
+
+    const handleDeleveryTimeChange = async (productId, status) => {
+        try {
+            const data = {
+                productId,
+                status
+            }
+            const response = await axios.post(`http://localhost:7000/api/pincode/change-delevery-time-status`, data);
+            fetchPinCodes(searchTerm, currentPage);
+        } catch (error) {
+            toast.error("Failed to fetch pin codes!");
+        }
+    }
     return (
         <>
             <ToastContainer />
@@ -289,7 +302,7 @@ const AllPinCode = () => {
                         <th>Area</th>
                         <th>Pin Code</th>
                         <th>Deleverd</th>
-                        {/* <th>Status</th> */}
+                        <th>30 to 60 min. Deleverd</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -319,6 +332,13 @@ const AllPinCode = () => {
                                     className="form-check-input me-2"
                                     checked={item?.deleveryStatus}
                                     onChange={(e) => handleStatusChange(item?._id, e.target.checked)} />
+                                </td>
+                                <td><input
+                                    type="checkbox"
+                                    name="FeaturedProducts"
+                                    className="form-check-input me-2"
+                                    checked={item?.deleveryTime}
+                                    onChange={(e) => handleDeleveryTimeChange(item?._id, e.target.checked)} />
                                 </td>
                                 {/* <td>
                                     <span

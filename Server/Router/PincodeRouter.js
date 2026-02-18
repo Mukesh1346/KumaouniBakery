@@ -9,7 +9,8 @@ const {
     deletePincode,
     getAreapincodeByState,
     getAllPinCodesWithPagination,
-    changeStatus
+    changeStatus,
+    changeDeleveryTimeStatus
 } = require("../Controller/PincodeController");
 
 const router = express.Router();
@@ -23,4 +24,5 @@ router.post("/update-pincode/:id", updatePincode)
 router.get("/delete-Pincode/:id", deletePincode)
 router.post("/get-areapincode-by-state", getAreapincodeByState)
 router.post("/change-status", changeStatus)
+router.post("/change-delevery-time-status" ,changeDeleveryTimeStatus)
 module.exports = router

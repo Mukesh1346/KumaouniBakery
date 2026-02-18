@@ -1,17 +1,22 @@
 import { useState } from "react";
 import "./locationPopup.css";
 import axios from "axios";
+import { useEffect } from "react";
+import { useRef } from "react";
 
 const LocationPopup = ({
-  onClose,
-  countries = [],
-  selectedCountry,
-  setSelectedCountry,
+  onClose, countries = [], selectedCountry, setSelectedCountry,
 }) => {
   const [isCurrentLocation, setIsCurrentLocation] = useState(false);
   const [location, setLocation] = useState(null);
-
+  const debounceRef = useRef(null);
+  const [availableService, setAvailableService] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
+  const [searchMessage, setSearchMessage] = useState("");
+
+
+
 
   const handleLocationClick = () => {
     if (!navigator.geolocation) {
@@ -24,7 +29,7 @@ const LocationPopup = ({
         const { latitude, longitude } = position.coords;
 
         try {
-          const response = await axios.get(`https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`);
+          const response = await axios.get(`http://localhost:7000/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`);
           console.log("Detected location response:==>", response.data);
 
           if (response?.data?.status === true) {
@@ -51,6 +56,57 @@ const LocationPopup = ({
         alert("Permission denied or unable to access your location.");
       }
     );
+  };
+
+  const ServiceLocation = async () => {
+    try {
+      const res = await axios.get('https://api.ssdipl.com/api/pincode/get-all-pin-codes');
+      console.log("API Data:", res.data);
+      setAvailableService(res.data.pinCodes || []);
+      setLoading(false);
+    } catch (error) {
+      console.log(error, "Server Error");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    ServiceLocation();
+  }, []);
+
+  useEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      checkServiceAvailability(input);
+    }, 500);
+
+    return () => clearTimeout(debounceRef.current);
+  }, [input]);
+
+  const checkServiceAvailability = (searchText) => {
+    const text = searchText.trim().toLowerCase();
+
+    if (!text || text.length < 2 || !availableService.length) {
+      setSearchMessage("");
+      return;
+    }
+
+    const isAvailable = availableService.some((item) => {
+      if (!(item.deleveryStatus && item.isActive)) return false;
+
+      const pin = item.pinCode?.toString().toLowerCase() || "";
+      const area = item.area?.toLowerCase() || "";
+      const areaWithPin = `${area} ${pin}`.trim();
+
+      return (pin === text || area.includes(text) || areaWithPin === text);
+    });
+
+    if (text.length > 2) {
+      setSearchMessage(isAvailable ? "30-min delivery now live in some areas" : "Services Not Available in Your Area");
+    }
   };
 
 
@@ -105,7 +161,7 @@ const LocationPopup = ({
           className={`current-location ${isCurrentLocation ? "active" : ""
             }`}
           // onClick={() => setIsCurrentLocation(true)}
-          onClick={handleLocationClick}
+          onClick={()=>handleLocationClick()}
         >
           <i className="bi bi-crosshair"></i>
           <span>Use Current Location</span>

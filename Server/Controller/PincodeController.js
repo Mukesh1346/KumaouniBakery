@@ -214,6 +214,17 @@ const changeStatus = async (req, res) => {
         return res.status(500).json({ status: false, message: "Server error while updating pin code status", });
     }
 }
+
+const changeDeleveryTimeStatus = async (req, res) => {
+    try {
+        const { productId, status } = req.body;
+        const updatedStatus = await PinCode.findByIdAndUpdate(productId, { deleveryTime: status }, { new: true });
+        return res.status(200).json({ status: true, message: "Pin code status updated successfully", data: updatedStatus, });
+    } catch (err) {
+        console.error("Error updating pin code status:", err);
+        return res.status(500).json({ status: false, message: "Server error while updating pin code status", });
+    }
+}
 module.exports = {
-    createPincode, changeStatus, getAllPinCodes, getAllPinCodesWithPagination, createPincodeByExcel, getAllPinCodesById, deletePincode, updatePincode, getAreapincodeByState
+    createPincode, changeStatus, changeDeleveryTimeStatus, getAllPinCodes, getAllPinCodesWithPagination, createPincodeByExcel, getAllPinCodesById, deletePincode, updatePincode, getAreapincodeByState
 };

@@ -24,6 +24,10 @@ const pinCodeSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        deleveryTime: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );

@@ -501,9 +501,7 @@ const Header = () => {
                         {sub.children?.map((child, j) => (
                           <Link
                             key={j}
-                            to={`/category/${child
-                              .replace(/\s+/g, "-")
-                              .toLowerCase()}`}
+                            to={`/category/${child.replace(/\s+/g, "-").toLowerCase()}`}
                             onClick={closeAllMobileMenus}
                           >
                             {child}
