@@ -90,11 +90,35 @@ const LocationOption = ({ onServiceChange }) => {
       return (pin === text || area.includes(text) || areaWithPin === text);
     });
 
+    const isAvailable30min = availableService.some((item) => {
+      if (!(item.deleveryTime && item.isActive)) return false;
+
+      const pin = item.pinCode?.toString().toLowerCase() || "";
+      const area = item.area?.toLowerCase() || "";
+      const areaWithPin = `${area} ${pin}`.trim();
+
+      return (pin === text || area.includes(text) || areaWithPin === text);
+    });
+
     setServiceAvailable(isAvailable);
     onServiceChange?.(isAvailable);
 
+    // if (text.length > 2) {
+    //   setSearchMessage(isAvailable ? `Services Available in Your Area ${isAvailable30min? "30-min delivery now live in some areas" : ""}` : "Services Not Available in Your Area");
+    // }
+
     if (text.length > 2) {
-      setSearchMessage(isAvailable ? "Services Available in Your Area" : "Services Not Available in Your Area");
+      if (isAvailable) {
+        setSearchMessage(
+          isAvailable30min
+            ? "Great news! 🎉 Delivery is available in your area. 30-minute express delivery is live in selected locations."
+            : "Good news! Delivery service is available in your area."
+        );
+      } else {
+        setSearchMessage(
+          "We're sorry — delivery is currently unavailable in your area. Please try a different location."
+        );
+      }
     }
   };
 
@@ -156,7 +180,8 @@ const LocationOption = ({ onServiceChange }) => {
       }
     );
   };
-
+  
+console.log('availableService',availableService)
 
   if (loading) {
     return <div className="location-wrapper">Loading locations...</div>;

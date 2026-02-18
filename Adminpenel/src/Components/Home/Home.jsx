@@ -73,6 +73,9 @@ import EditPincode from "../../Pages/State-Pincode/EditPincode"
 import AllCoupon from '../../Pages/Coupon/AllCoupon'
 import AddCoupon from '../../Pages/Coupon/AddCoupon'
 import EditCoupon from '../../Pages/Coupon/EditCoupon'
+import AllCountdown from '../../Pages/countdown/AllCountdown'
+import AddCountdown from '../../Pages/countdown/AddCountdown'
+import EditCountdown from '../../Pages/countdown/EditCountdown'
 
 const Home = () => {
 
@@ -219,6 +222,11 @@ const Home = () => {
                 <Route path={"/all-coupon"} element={<AllCoupon />} />
                 <Route path={"/add-coupon"} element={<AddCoupon />} />
                 <Route path={"/edit-coupon/:id"} element={<EditCoupon />} />
+
+                {/* all-countdown */}
+                <Route path={"/all-countdown"} element={<AllCountdown />} />
+                <Route path={"/add-countdown"} element={<AddCountdown />} />
+                <Route path={"/edit-countdown/:id"} element={<EditCountdown />} />
 
               </Routes>
             </div>

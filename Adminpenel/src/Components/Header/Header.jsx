@@ -106,6 +106,7 @@ const Header = () => {
             <li><Link to="/all-users" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Users</Link></li>
             <li><Link to="/all-pincode" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All State/Pincode</Link></li>
             <li><Link to="/all-coupon" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Coupon</Link></li>
+            <li><Link to="/all-countdown" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Count Down</Link></li>
 
             <div className="logout" onClick={handleLogout}>
               Log Out <i className="fa-solid fa-right-from-bracket mb-4"></i>

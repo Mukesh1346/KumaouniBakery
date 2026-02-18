@@ -4,6 +4,15 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Swal from 'sweetalert2';
+import CountdownTimer from "../../Components/Countdown/Countdown";
+
+let ALL_SLOTS = [
+  { label: "10AM - 12PM", start: 10 },
+  { label: "12PM - 2PM", start: 12 },
+  { label: "2PM - 4PM", start: 14 },
+  { label: "4PM - 6PM", start: 16 },
+  { label: "6PM - 8PM", start: 18 },
+];
 
 const Checkout = () => {
   /* ================= STEP ================= */
@@ -21,6 +30,13 @@ const Checkout = () => {
   const [loadingCoupon, setLoadingCoupon] = useState(false);
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [loading, setLoading] = useState(false);
+
+
+  const [remainingMs, setRemainingMs] = useState(null);
+  const [availableSlots, setAvailableSlots] = useState(ALL_SLOTS);
+  const [minDate, setMinDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   /* ================= CHECKOUT DATA ================= */
   const [checkoutData, setCheckoutData] = useState({
@@ -113,6 +129,29 @@ const Checkout = () => {
 
     setCartItems(normalizedCart);
   }, []);
+
+  useEffect(() => {
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    // ❌ countdown expired
+    if (!remainingMs || remainingMs <= 0) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      setMinDate(tomorrow.toISOString().split("T")[0]);
+      setAvailableSlots(ALL_SLOTS);
+      return;
+    }
+
+    // ✅ filter future slots only
+    const filtered = ALL_SLOTS.filter(
+      (slot) => slot.start > currentHour
+    );
+
+    setAvailableSlots(filtered);
+  }, [remainingMs]);
+
 
   /* ================= COMPUTED VALUES ================= */
   const packagingCharge = 25;
@@ -679,7 +718,10 @@ const Checkout = () => {
     razorpay.open();
   };
 
-  console.log("INPUT CHECKOUT =>", checkoutData);
+  console.log("INPUT CHECKOUT =>", checkoutData, cartItems.map((item) => item?.categoryId));
+
+
+
   return (
     <>
       {/* ================= USER INFO ================= */}
@@ -756,6 +798,7 @@ const Checkout = () => {
                   <input
                     name="area"
                     className="form-control mb-3"
+                    placeholder="Area"
                   // defaultValue="Asthal Colony, Bawana"
                   />
 
@@ -764,6 +807,7 @@ const Checkout = () => {
                       <input
                         name="pincode"
                         className="form-control mb-3"
+                        placeholder="pinCode"
                         // defaultValue="110039"
                         required
                       />
@@ -772,6 +816,7 @@ const Checkout = () => {
                       <input
                         name="city"
                         className="form-control mb-3"
+                        placeholder="City"
                       // defaultValue="Delhi"
                       />
                     </div>
@@ -964,22 +1009,23 @@ const Checkout = () => {
                       <span>Back</span>
                     </button>
                   </div>
+                  <div style={{}}>
+                    <CountdownTimer
+                      categoryId={cartItems[0]?.categoryId}
+                      onTimeUpdate={setRemainingMs}
+                    />
+                  </div>
 
-                  <input
-                    type="date"
-                    name="date"
-                    className="form-control mb-3"
-                    min={new Date().toISOString().split('T')[0]}
-                    required
-                  />
-
+                  {/* <input type="date" name="date" className="form-control mb-3" min={new Date().toISOString().split('T')[0]} required /> */}
+                  <input type="date" name="date" className="form-control mb-3" min={remainingMs ? new Date().toISOString().split('T')[0] : minDate} required />
                   <select name="time" className="form-control mb-4" required>
                     <option value="">Select Time Slot</option>
-                    <option value="10AM - 12PM">10AM - 12PM</option>
-                    <option value="12PM - 2PM">12PM - 2PM</option>
-                    <option value="2PM - 4PM">2PM - 4PM</option>
-                    <option value="4PM - 6PM">4PM - 6PM</option>
-                    <option value="6PM - 8PM">6PM - 8PM</option>
+
+                    {availableSlots.map((slot) => (
+                      <option key={slot.label} value={slot.label}>
+                        {slot.label}
+                      </option>
+                    ))}
                   </select>
 
                   <button className="continue-btn">Continue to Payment</button>

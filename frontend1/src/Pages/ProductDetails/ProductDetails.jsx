@@ -13,6 +13,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { TbMapPinCode } from "react-icons/tb";
 import LocationOption from "../../Components/LocationOption/LocationOption";
 import { useNavigate } from "react-router-dom";
+import CountdownTimer from "../../Components/Countdown/Countdown";
 
 
 const ProductDetails = () => {
@@ -27,6 +28,7 @@ const ProductDetails = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState("");
+  const [countDown, setCountDown] = useState({});
   const [imageIndex, setImageIndex] = useState(0)
   const [massage, setMassage] = useState("")
   const [cartItems, setCartItems] = useState([]);
@@ -167,8 +169,26 @@ const ProductDetails = () => {
     } else {
       setIsAdded(false);
     }
-  }, [activeWeight, cartItems, data._id]);
+  }, [activeWeight, cartItems, data?._id]);
 
+  useEffect(() => {
+
+    const fetchCountdown = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.ssdipl.com/api/countdown/get-countdown-by-category/${data?.subcategoryName?._id}`
+        );
+        console.log("SSSXXXX:=>", res)
+        setCountDown(res?.data?.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    if (data?.subcategoryName?._id) {
+      fetchCountdown();
+    }
+  }, [data?.subcategoryName?._id])
   const handleWeightSelection = (weight) => {
     setActiveWeight(weight);
     const selectedVariant = data.Variant?.find(
@@ -191,6 +211,7 @@ const ProductDetails = () => {
         productId: data?._id,
         name: data.productName,
         weight: activeWeight,
+        categoryId: data?.subcategoryName?._id,
         price: price,
         massage: massage,
         quantity: 1,
@@ -261,6 +282,7 @@ const ProductDetails = () => {
       const newItem = {
         productId: data._id,
         name: data.productName,
+        categoryId: data?.subcategoryName?._id,
         weight: activeWeight,
         price: price,
         massage: massage,
@@ -766,6 +788,14 @@ const ProductDetails = () => {
                       ⚠️ Ordering is temporarily unavailable. Please try again later.
                     </div>
                   )}
+                  {orderActive && data?.subcategoryName?._id && <div
+                    className="order-close"
+                  // style={{
+                  //   background: "#fff3f3", color: "#d32f2f", padding: "8px 12px", borderRadius: "6px", fontSize: "14px", marginBottom: "10px", fontWeight: 500,
+                  // }}
+                  >
+                    <CountdownTimer categoryId={data?.subcategoryName?._id} />
+                  </div>}
                   <div className="pdx-cta">
                     <button
                       className={`pdx-cart ${isAdded ? "remove" : ""}`}

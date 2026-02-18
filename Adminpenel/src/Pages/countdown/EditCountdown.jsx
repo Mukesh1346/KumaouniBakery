@@ -1,0 +1,207 @@
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+
+const EditCountdown = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [pageLoading, setPageLoading] = useState(true);
+    const [isActive, setIsActive] = useState(true);
+    const [formData, setFormData] = useState({ title: "", endTime: "", subCategoryId: '' });
+    const [subcategories, setSubcategories] = useState([]);
+
+    const navigate = useNavigate();
+    const { id } = useParams();
+
+    /* ================= FORMAT UTC → INPUT ================= */
+
+    const formatForInput = (dateString) => {
+        if (!dateString) return "";
+
+        const date = new Date(dateString);
+        const offset = date.getTimezoneOffset();
+        const localDate = new Date(date.getTime() - offset * 60000);
+
+        return localDate.toISOString().slice(0, 16);
+    };
+
+    /* ================= HANDLE CHANGE ================= */
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    /* ================= FETCH ================= */
+
+    useEffect(() => {
+        const fetchCountdown = async () => {
+            try {
+                const res = await axios.get(
+                    `https://api.ssdipl.com/api/countdown/get-single-countdown/${id}`
+                );
+
+                if (res.data?.success && res.data.data) {
+                    const data = res.data.data;
+
+                    setFormData({
+                        title: data.title || "",
+                        endTime: formatForInput(data.endTime),
+                        subCategoryId: data.subCategoryId,
+
+                    });
+
+                    setIsActive(Boolean(data.isActive));
+                }
+            } catch (error) {
+                toast.error("Failed to load countdown");
+                console.error(error);
+            } finally {
+                setPageLoading(false);
+            }
+        };
+
+        fetchCountdown();
+    }, [id]);
+
+    useEffect(() => {
+        const fetchSubcategories = async () => {
+            try {
+                const response = await axios.get("https://api.ssdipl.com/api/get-subcategory");
+                setSubcategories(response.data.data);
+            } catch (error) {
+                toast.error("Error fetching subcategories");
+                console.error("Error fetching subcategories:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchSubcategories();
+    }, []);
+
+    /* ================= SUBMIT ================= */
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!formData.endTime) {
+            toast.error("Please select end time");
+            return;
+        }
+        if (!formData?.subCategoryId) {
+            toast.error("Please select category");
+            return;
+        }
+
+
+        setIsLoading(true);
+
+        try {
+            const body = {
+                title: formData.title?.trim(),
+                endTime: new Date(formData.endTime).toISOString(), // ✅ UTC save
+                subCategoryId: formData.subCategoryId,
+                isActive,
+            };
+
+            const res = await axios.post(
+                `https://api.ssdipl.com/api/countdown/update-countdown/${id}`,
+                body
+            );
+
+            if (res.data?.success) {
+                toast.success("Countdown updated successfully");
+
+                setTimeout(() => {
+                    navigate("/all-countdown");
+                }, 800);
+            }
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || "Failed to update countdown"
+            );
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    /* ================= LOADING ================= */
+
+    if (pageLoading) {
+        return <p style={{ padding: 20 }}>Loading countdown...</p>;
+    }
+
+
+
+
+    /* ================= UI ================= */
+
+    return (
+        <>
+            <ToastContainer />
+
+            <div className="bread">
+                <div className="head">
+                    <h4>Edit Countdown</h4>
+                </div>
+
+                <div className="links">
+                    <Link to="/all-countdown" className="add-new">
+                        Back <i className="fa-regular fa-circle-left"></i>
+                    </Link>
+                </div>
+            </div>
+
+            <div className="d-form">
+                <form className="row g-3" onSubmit={handleSubmit}>
+
+                    <div className="col-md-6">
+                        <label className="form-label">Category</label>
+                        <select name="subCategoryId" className="form-control" value={formData.subCategoryId} onChange={handleChange} required >
+                            <option value="">Select category</option>
+                            {subcategories.map((sub) => (
+                                <option key={sub?._id} value={sub?._id}>
+                                    {sub?.subcategoryName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* TITLE */}
+                    <div className="col-md-6">
+                        <label className="form-label">Countdown Title</label>
+                        <input type="text" name="title" className="form-control" value={formData.title} onChange={handleChange} placeholder="e.g. Order within" />
+                    </div>
+
+                    {/* END TIME */}
+                    <div className="col-md-6">
+                        <label className="form-label">End Time</label>
+                        <input type="datetime-local" name="endTime" className="form-control" value={formData.endTime} onChange={handleChange} required />
+                    </div>
+
+                    {/* ACTIVE */}
+                    <div className="col-12">
+                        <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", }}   >
+                            <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} style={{ width: 18, height: 18 }} />
+                            <span style={{ fontWeight: 600 }}>
+                                {isActive ? "Show Countdown" : "Hide Countdown"}
+                            </span>
+                        </label>
+                    </div>
+
+                    {/* SUBMIT */}
+                    <div className="col-md-12 mt-3">
+                        <button type="submit" className="btn" disabled={isLoading}>
+                            {isLoading ? "Saving..." : "Update Countdown"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </>
+    );
+};
+
+export default EditCountdown;
