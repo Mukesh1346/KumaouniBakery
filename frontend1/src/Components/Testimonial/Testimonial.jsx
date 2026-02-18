@@ -78,7 +78,7 @@ const Testimonial = () => {
 
   return (
     <section className="testimonialsSection">
-        <h1 className="text-center" style={{color:"  #df4444" , fontFamily:"var(--font-family-design)"}}>Our Testimonial</h1>
+        <h1 className="text-center SuperTitle mt-5" style={{color:"  #df4444"}}>Our Testimonial</h1>
       <div className="container">
         <div className="slider-container">
           <Slider {...settings}>

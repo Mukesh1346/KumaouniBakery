@@ -171,7 +171,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
         {/* PRODUCTS */}
         <div className="rp-grid">
           {product.map((p) => (
-            <div className="rp-card" key={p._id}>
+            <div className="rp-card " key={p._id}>
               <img src={`https://api.ssdipl.com/${p?.productImage[0]}`} alt={p?.productName} />
               <h6>{p.productName}</h6>
               <p>₹ {p.price}</p>

@@ -30,10 +30,11 @@ const AllCakes = () => {
   const { subcatname } = useParams();
   const [cakesArr, setCakesArr] = useState([]);
   const [subcategoryInfo, setSubcategoryInfo] = useState(null);
+  const [subCategoryBanner, setSubCategoryBanner] = useState(null)
   const location = useLocation();
   const subCategoryId = location.state.id
   const status = location.state.status
-  console.log("XXXXXX==>", location.state.id)
+  console.log("XXXXXX==>", location.state.id, status)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -45,7 +46,7 @@ const AllCakes = () => {
         if (res.data?.data?.length > 0) {
           setCakesArr(res.data.data);
           console.log(res.data?.data)
-          setSubcategoryInfo(res.data.data[0].subcategoryName);
+          setSubCategoryBanner(res.data.data[0].subcategoryName);
         }
       } catch (error) {
         console.error(error);
@@ -64,9 +65,9 @@ const AllCakes = () => {
           console.log("XXXXXXXSSSSS:=>>", res.data?.data[0]?.subcategoryName)
           // setSubcategoryInfo(res.data.data[0].subcategoryName);
           if (status === 'subCategory') {
-            setSubcategoryInfo(res.data?.data[0]?.secondsubcategoryName);
+            setSubCategoryBanner(res.data?.data[0]?.secondsubcategoryName);
           } else {
-            setSubcategoryInfo(res.data?.data[0]?.subcategoryName);
+            setSubCategoryBanner(res.data?.data[0]?.subcategoryName);
           }
         } else {
           setCakesArr([])
@@ -82,6 +83,26 @@ const AllCakes = () => {
     } else {
       fetchProducts();
     }
+
+    const fetchSecoundSubCategory = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${subCategoryId}`
+        );
+        console.log("DDDDD::=>", res)
+        if (res.data?.data?.length > 0) {
+          // setCakesArr(res.data.data);
+          // console.log("DDDDD::=>",res.data?.data)
+          setSubcategoryInfo(res.data.data);
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    if (status === 'category') {
+      fetchSecoundSubCategory()
+    }
   }, [subcatname, subCategoryId]);
 
   const bannerSettings = {
@@ -93,46 +114,49 @@ const AllCakes = () => {
     autoplaySpeed: 3000,
   };
 
-  const imageUrl =
-    subcategoryInfo?.image
-      ? subcategoryInfo.image.startsWith("http")
-        ? subcategoryInfo.image
-        : `https://api.ssdipl.com/${subcategoryInfo.image}`
-      : Banner1;
+  const imageHandler = (img) => {
+    const imageUrl = img ? img.startsWith("http") ? img : `https://api.ssdipl.com/${img}` : Banner1;
+
+    return imageUrl
+  }
 
 
+  console.log("XXXX::=>", subcategoryInfo)
   return (
     <>
       {/* TOP SUBCATEGORY */}
-      {/* {subcategoryInfo && (
-        <section className="topCategorySection">
-          <div className="topCategoryCard active">
-            <Link
-              to={`/sub-subcategory/anniversary%20flowers`}
-              className="category-link"
-            >
-              <img
-                src={imageUrl}
-                alt={subcategoryInfo?.subcategoryName || "subcategory"}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = Banner1;
-                }}
-              />
+      {subcategoryInfo && status === 'category' && (
+        subcategoryInfo?.map((subcategory, index) => (
+          <section className="topCategorySection">
+            <div className="topCategoryCard active">
+              <Link
+                to={`/sub-subcategory/anniversary%20flowers`}
+                className="category-link"
+              >
+                <img
+                  src={imageHandler(subcategory?.image)}
+                  alt={subcategory?.subcategoryName || subcategory?.secondsubcategoryName || "subcategory"}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = Banner1;
+                  }}
+                />
 
-              <p>{subcategoryInfo.subcategoryName}</p>
-            </Link>
-          </div>
-        </section>
-      )} */}
+                <p>{subcategory?.secondsubcategoryName}</p>
+              </Link>
+            </div>
+          </section>
+        ))
+
+      )}
 
 
       {/* BANNER SLIDER */}
-      {subcategoryInfo?.banner && <section className="cakeBannerSlider">
+      {subCategoryBanner?.banner || subCategoryBanner?.subCategoryId?.banner && <section className="cakeBannerSlider">
 
         <div >
           <div className="bannerBox">
-            <img src={`https://api.ssdipl.com/${subcategoryInfo?.banner}`} alt="Cake Banner" />
+            <img src={`https://api.ssdipl.com/${subCategoryBanner?.banner || subCategoryBanner?.subCategoryId?.banner}`} alt="Cake Banner" />
           </div>
         </div>
 

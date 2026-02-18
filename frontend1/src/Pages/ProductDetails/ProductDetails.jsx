@@ -419,7 +419,7 @@ const ProductDetails = () => {
       {
         breakpoint: 1200,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
         },
       },
       {
@@ -755,31 +755,44 @@ const ProductDetails = () => {
                   open={openPopup}
                   onClose={() => setOpenPopup(false)}
                 />
-
-                <div className="pdx-cta">
-                  <button
-                    className={`pdx-cart ${isAdded ? "remove" : ""}`}
-                    onClick={addToCart}
-                  // disabled={!isServiceAvailable}
-                  // style={{
-                  //   opacity: !isServiceAvailable ? 0.6 : 1,
-                  //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
-                  // }}
-                  >
-                    {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
-                  </button>
-                  <button
-                    className="pdx-buy"
-                    onClick={handleBuyNow}
-                  // disabled={!isServiceAvailable}
-                  // style={{
-                  //   opacity: !isServiceAvailable ? 0.6 : 1,
-                  //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
-                  // }}
-                  >
-                    BUY NOW | ₹ {Math.round(price)}
-                  </button>
+                <div>
+                  {!orderActive && (
+                    <div
+                      className="order-close"
+                      style={{
+                        background: "#fff3f3", color: "#d32f2f", padding: "8px 12px", borderRadius: "6px", fontSize: "14px", marginBottom: "10px", fontWeight: 500,
+                      }}
+                    >
+                      ⚠️ Ordering is temporarily unavailable. Please try again later.
+                    </div>
+                  )}
+                  <div className="pdx-cta">
+                    <button
+                      className={`pdx-cart ${isAdded ? "remove" : ""}`}
+                      onClick={addToCart}
+                      disabled={orderActive === false}
+                    // disabled={!isServiceAvailable}
+                    // style={{
+                    //   opacity: !isServiceAvailable ? 0.6 : 1,
+                    //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                    // }}
+                    >
+                      {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
+                    </button>
+                    <button
+                      className="pdx-buy"
+                      onClick={handleBuyNow}
+                      disabled={orderActive === false}
+                    // style={{
+                    //   opacity: !isServiceAvailable ? 0.6 : 1,
+                    //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
+                    // }}
+                    >
+                      BUY NOW | ₹ {Math.round(price)}
+                    </button>
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>

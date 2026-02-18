@@ -43,8 +43,8 @@ export default function Occasions() {
     <>
       <div className='OccasionsMainSec'>
         <div className='OccasionHeadSec'>
-          <h2 className='OccasionTitle'>Shop By Occassions & Relations</h2>
-          <p className='OccasionSubtitle'>Surprise Your Loved Ones : </p>
+          <h2 className=' SuperTitle'>Shop By Occassions & Relations</h2>
+          <p className=' SuperSubTitle text-muted'>Surprise Your Loved Ones : </p>
 
         </div>
 

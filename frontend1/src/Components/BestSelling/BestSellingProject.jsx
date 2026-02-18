@@ -114,10 +114,10 @@ const BestSellingProduct = () => {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 className="fw-bold BestSellingtitle mb-1">
+          <h4 className=" BestSellingtitle SuperTitle mb-1">
             Best Selling Flowers & Gifts
           </h4>
-          <p className="text-muted mb-0">Surprise Your Loved Ones</p>
+          <p className="text-muted  SuperSubTitle mb-0">Surprise Your Loved Ones</p>
         </div>
         <button className="btn btn-dark px-4" onClick={() => navigate(`/all-products`)}>View All</button>
       </div>
@@ -184,12 +184,12 @@ const BestSellingProduct = () => {
                     Earliest Delivery : <span>In 3 hours</span>
                   </p>
 
-                  <button
+                  {/* <button
                     className="btn btn-dark w-100 mt-2"
                     onClick={(e) => handleBuyNowClick(e, item?.productName)}
                   >
                     Buy Now
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

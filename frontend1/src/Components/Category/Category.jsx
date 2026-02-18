@@ -41,7 +41,7 @@ const Category = () => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 9,
+    slidesToShow: 8,
     slidesToScroll: 1,
     arrows: true,
     autoplay: true,
@@ -87,11 +87,10 @@ const Category = () => {
         <Slider {...settings}>
           {activeCategories.map((item) => (
             <div key={item?._id} className="category-slide">
-              <div 
-                className="category-link" 
-                onClick={() => navigate(
-                  `/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`, 
-                  { state: { id: item?._id } }
+              <div
+                className="category-link"
+                onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`,
+                  { state: { id: item?._id, status: 'category' } }
                 )}
               >
                 <img

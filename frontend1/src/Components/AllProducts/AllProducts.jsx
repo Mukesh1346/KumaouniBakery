@@ -132,10 +132,10 @@ const AllProducts = ({ status = '' }) => {
             {/* CATEGORY HEADER */}
             <div className="d-flex justify-content-between align-items-center mb-4">
               <div className="textArea">
-                <h4 className="fw-bold mb-1 text-uppercase">
+                <h4 className="   SuperTitle mb-1 text-uppercase">
                   {category.mainCategoryName}      
                 </h4>
-                <p className="text-muted mb-0">Best Gifts For Your Loved Ones</p>
+                <p className="  SuperSubTitle text-muted mb-0">Best Gifts For Your Loved Ones</p>
               </div>
             </div>
 
@@ -194,12 +194,12 @@ const AllProducts = ({ status = '' }) => {
                         Earliest Delivery : <span>In 3 hours</span>
                       </p>
 
-                      <button
+                      {/* <button
                         className="btn btn-dark w-100 mt-2"
                         onClick={(e) => handleBuyNowClick(e, product?.productName)}
                       >
                         Buy Now
-                      </button>
+                      </button> */}
                     </div>
 
                   </div>

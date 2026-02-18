@@ -29,7 +29,7 @@ const LocationPopup = ({
         const { latitude, longitude } = position.coords;
 
         try {
-          const response = await axios.get(`http://localhost:7000/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`);
+          const response = await axios.get(`https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`);
           console.log("Detected location response:==>", response.data);
 
           if (response?.data?.status === true) {
@@ -105,7 +105,7 @@ const LocationPopup = ({
     });
 
     if (text.length > 2) {
-      setSearchMessage(isAvailable ? "30-min delivery now live in some areas" : "Services Not Available in Your Area");
+      setSearchMessage(isAvailable ? "30-min delivery now live in some areas" : "");
     }
   };
 
@@ -119,7 +119,7 @@ const LocationPopup = ({
         {/* HEADER */}
         <div className="popup-header">
           <h5>Enter delivery location</h5>
-          <p>30-min delivery now live in some areas</p>
+          {searchMessage && <p>{searchMessage}</p>}
           <span className="close-btn" onClick={onClose}>
             ×
           </span>
@@ -161,7 +161,7 @@ const LocationPopup = ({
           className={`current-location ${isCurrentLocation ? "active" : ""
             }`}
           // onClick={() => setIsCurrentLocation(true)}
-          onClick={()=>handleLocationClick()}
+          onClick={() => handleLocationClick()}
         >
           <i className="bi bi-crosshair"></i>
           <span>Use Current Location</span>
