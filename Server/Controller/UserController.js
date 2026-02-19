@@ -227,6 +227,15 @@ const getRecord = async (req, res) => {
     }
 };
 
+const getAdminUser = async (req, res) => {
+    try {
+        const users = await User.find({ role: { $nin: ["Admin", "User"] } });
+        console.log("EERRROR:-=>", users)
+        res.status(200).json({ success: true, message: "User records found.", data: users.reverse() });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Internal Server Error." });
+    }
+}
 // Get a single user record by ID
 const getSingleRecord = async (req, res) => {
     try {
@@ -293,6 +302,28 @@ const login = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error." });
+    }
+};
+
+const updateRolesByAdmin = async (req, res) => {
+    try {
+        const { permissions } = req.body;
+        const userId = req.params.id;
+
+        if (!permissions) {
+            return res.status(400).json({ success: false, message: "Permissions are required.", });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, { permissions }, { new: true, runValidators: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: "User not found.", });
+        }
+
+        return res.status(200).json({ success: true, message: "User permissions updated successfully.", data: updatedUser, });
+    } catch (error) {
+        console.error("Update role error:", error);
+        return res.status(500).json({ success: false, message: "Internal Server Error.", });
     }
 };
 
@@ -377,5 +408,7 @@ module.exports = {
     forgetPassword2,
     forgetPassword3,
     getRecord,
-    DeleteRecord
+    getAdminUser,
+    DeleteRecord,
+    updateRolesByAdmin
 };

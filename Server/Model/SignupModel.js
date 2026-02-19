@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
     otp: {
         type: Number
     },
+    permissions: { type: Object, default: { dashboard: { read: true, write: true, update: true, delete: true }, } },
     referralCode: { type: String },        // unique code for user
     referredBy: { type: String },          // code used at signup
     walletBalance: { type: Number, default: 0 },
