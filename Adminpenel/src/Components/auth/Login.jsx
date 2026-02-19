@@ -1,20 +1,51 @@
 import React, { useState } from 'react';
 import './Login.css'; // Make sure to create and import a CSS file for styling
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email !== 'cakecrazzy@gmail.com' || password !== 'cakecrazzy@123') {
-      toast.error('Invalid Email Address or password');
-    } else {
-      sessionStorage.setItem('login', true);
-      window.location.href = '/dashboard';
+
+    try {
+      const response = await axios.post(
+        "https://api.ssdipl.com/api/user/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      console.log("SSSXXXXXXSSSS==>", response)
+      if (response.status === 200) {
+        if (response?.data?.data?.role === "Admin" || response?.data?.data?.role === "SuperAdmin") {
+          sessionStorage.setItem("login", true);
+          sessionStorage.setItem("Admintoken", response.data.token);
+          sessionStorage.setItem("AdminData", JSON.stringify(response?.data?.data));
+
+          toast.success("Login Successful!");
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 2000);
+        } else {
+          toast.error("You are not an admin");
+        }
+      }
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Invalid email or password.");
     }
+
+
+    // if (email !== 'cakecrazzy@gmail.com' || password !== 'cakecrazzy@123') {
+    //   toast.error('Invalid Email Address or password');
+    // } else {
+    //   sessionStorage.setItem('login', true);
+    //   window.location.href = '/dashboard';
+    // }
   };
 
 

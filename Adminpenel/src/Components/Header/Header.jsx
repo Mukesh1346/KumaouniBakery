@@ -8,6 +8,11 @@ import { useEffect } from 'react';
 const Header = () => {
   const [sidetoggle, setSideToggle] = useState(false)
   const [orderActive, setOrderActive] = useState(true);
+  const [AdminData, setAdminData] = useState({});
+
+  const AdminDatas = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  console.log("AdminDataAdminData=>", AdminData.role)
 
   const handletoggleBtn = () => {
     setSideToggle(!sidetoggle)
@@ -44,10 +49,27 @@ const Header = () => {
       console.log(e);
     }
   }
+  const fetchAdminUser = async () => {
+    try {
+      const res = await axios.get(`https://api.ssdipl.com/api/user/${AdminDatas?._id}`);
+      console.log(".data.data==>", res);
+      setAdminData(res.data.data);
+      sessionStorage.setItem("AdminData", JSON.stringify(res.data.data));
+    } catch (e) {
+      console.log(e);
+    }
+  }
   useEffect(() => {
+    fetchAdminUser()
     fetchOrderStatus();
   }, []);
 
+  const hasAccess = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.read === true
+    );
+  };
 
   return (
     <>
@@ -89,24 +111,26 @@ const Header = () => {
 
         <div className={`rightNav ${sidetoggle ? "active" : ""} `}>
           <ul>
-            <li><Link to="/dashboard" onClick={handletoggleBtn}> <i class="fa-solid fa-gauge"></i> Dashboard</Link></li>
-            <li><Link to="/all-orders" onClick={handletoggleBtn}> <i class="fa-solid fa-truck"></i> Manage Orders</Link></li>
-            <li><Link to="/all-contact-query" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Contact Query</Link></li>
-            <li><Link to="/all-category" onClick={handletoggleBtn}> <i class="fa-solid fa-tags"></i> Manage main Category</Link></li>
-            <li><Link to="/all-subcategory" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Category</Link></li>
-            <li><Link to="/all-sub-subcategory" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Sub-Category</Link></li>
-            <li><Link to="/all-recommended-category" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Recommended Category</Link></li>
-            <li><Link to="/all-products" onClick={handletoggleBtn}> <i class="fa-solid fa-boxes-stacked"></i> Manage Product</Link></li>
-            <li><Link to="/all-recommended-products" onClick={handletoggleBtn}> <i class="fa-solid fa-boxes-stacked"></i> Manage Recommended Product</Link></li>
-            <li><Link to="/all-size" onClick={handletoggleBtn}> <i class="fa-solid fa-ruler-combined"></i> Manage Size</Link></li>
-            <li><Link to="/all-banners" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Banners</Link></li>
-            <li><Link to="/all-promo-banners" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Promo Banners</Link></li>
-            <li><Link to="/all-cake-banner" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Cake Banners</Link></li>
-            <li><Link to="/all-reels" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Reels</Link></li>
-            <li><Link to="/all-users" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Users</Link></li>
-            <li><Link to="/all-pincode" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All State/Pincode</Link></li>
-            <li><Link to="/all-coupon" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Coupon</Link></li>
-            <li><Link to="/all-countdown" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Count Down</Link></li>
+
+            {hasAccess("dashboard") && <li><Link to="/dashboard" onClick={handletoggleBtn}> <i class="fa-solid fa-gauge"></i> Dashboard</Link></li>}
+            {hasAccess("orders") && <li><Link to="/all-orders" onClick={handletoggleBtn}> <i class="fa-solid fa-truck"></i> Manage Orders</Link></li>}
+            {hasAccess("banners") && <li><Link to="/all-banners" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Banners</Link></li>}
+            {hasAccess("cakeBanner") && <li><Link to="/all-cake-banner" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Cake Banners</Link></li>}
+            {hasAccess("contactQuery") && <li><Link to="/all-contact-query" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Contact Query</Link></li>}
+            {hasAccess("mainCategory") && <li><Link to="/all-category" onClick={handletoggleBtn}> <i class="fa-solid fa-tags"></i> Manage main Category</Link></li>}
+            {hasAccess("category") && <li><Link to="/all-subcategory" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Category</Link></li>}
+            {hasAccess("subCategory") && <li><Link to="/all-sub-subcategory" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Sub-Category</Link></li>}
+            {hasAccess("products") && <li><Link to="/all-products" onClick={handletoggleBtn}> <i class="fa-solid fa-boxes-stacked"></i> Manage Product</Link></li>}
+            {hasAccess("recommendedCategory") && <li><Link to="/all-recommended-category" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Recommended Category</Link></li>}
+            {hasAccess("recommendedProducts") && <li><Link to="/all-recommended-products" onClick={handletoggleBtn}> <i class="fa-solid fa-boxes-stacked"></i> Manage Recommended Product</Link></li>}
+            {hasAccess("size") && <li><Link to="/all-size" onClick={handletoggleBtn}> <i class="fa-solid fa-ruler-combined"></i> Manage Size</Link></li>}
+            {/* {hasAccess("dashboard") && <li><Link to="/all-promo-banners" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Promo Banners</Link></li>} */}
+            {hasAccess("reels") && <li><Link to="/all-reels" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Reels</Link></li>}
+            {hasAccess("users") && <li><Link to="/all-users" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Users</Link></li>}
+            {hasAccess("pincode") && <li><Link to="/all-pincode" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All State/Pincode</Link></li>}
+            {hasAccess("coupon") && <li><Link to="/all-coupon" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Coupon</Link></li>}
+            {hasAccess("countdown") && <li><Link to="/all-countdown" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Count Down</Link></li>}
+            {hasAccess("adminUser") && <li><Link to="/all-admin" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Admin Permission</Link></li>}
 
             <div className="logout" onClick={handleLogout}>
               Log Out <i className="fa-solid fa-right-from-bracket mb-4"></i>

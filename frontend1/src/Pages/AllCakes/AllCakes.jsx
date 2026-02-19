@@ -5,7 +5,7 @@ import axios from "axios";
 // import AllProducts from "../AllProducts/AllProducts";
 import AllProducts from "../../Components/AllProducts/AllProducts";
 import "./allcakes.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -27,6 +27,7 @@ const staticProducts = [
 ];
 
 const AllCakes = () => {
+  const navigate = useNavigate();
   const { subcatname } = useParams();
   const [cakesArr, setCakesArr] = useState([]);
   const [subcategoryInfo, setSubcategoryInfo] = useState(null);
@@ -106,13 +107,23 @@ const AllCakes = () => {
   }, [subcatname, subCategoryId]);
 
   const bannerSettings = {
-    dots: true,
-    arrows: false,
+    dots: false,
+    arrows: true,
     autoplay: true,
-    infinite: true,
-    speed: 800,
-    autoplaySpeed: 3000,
+    infinite: subcategoryInfo?.length > 8, // smart infinite
+    speed: 600,
+    autoplaySpeed: 2500,
+    slidesToShow: 8,
+    slidesToScroll: 2,
+    swipeToSlide: true,
+    responsive: [
+      { breakpoint: 1200, settings: { slidesToShow: 6 } },
+      { breakpoint: 992, settings: { slidesToShow: 4 } },
+      { breakpoint: 768, settings: { slidesToShow: 3 } },
+      { breakpoint: 576, settings: { slidesToShow: 2 } },
+    ],
   };
+
 
   const imageHandler = (img) => {
     const imageUrl = img ? img.startsWith("http") ? img : `https://api.ssdipl.com/${img}` : Banner1;
@@ -121,46 +132,95 @@ const AllCakes = () => {
   }
 
 
-  console.log("XXXX::=>", subcategoryInfo)
+  const bannerImage = subCategoryBanner?.banner || subCategoryBanner?.subCategoryId?.banner;
+
+  console.log("XXXX::=>", subcategoryInfo, bannerImage, subCategoryBanner)
   return (
     <>
       {/* TOP SUBCATEGORY */}
-      {subcategoryInfo && status === 'category' && (
-        subcategoryInfo?.map((subcategory, index) => (
-          <section className="topCategorySection">
-            <div className="topCategoryCard active">
-              <Link
-                to={`/sub-subcategory/anniversary%20flowers`}
-                className="category-link"
-              >
-                <img
-                  src={imageHandler(subcategory?.image)}
-                  alt={subcategory?.subcategoryName || subcategory?.secondsubcategoryName || "subcategory"}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = Banner1;
-                  }}
-                />
+      {/* {subcategoryInfo && status === 'category' && (
+        <Slider {...bannerSettings}>
+          {subcategoryInfo?.map((subcategory, index) => (
+            <section className="topCategorySection">
+              <div className="topCategoryCard active">
 
-                <p>{subcategory?.secondsubcategoryName}</p>
-              </Link>
+                <div onClick={() => {
+                  navigate(`/product-related/${subcategory?.secondsubcategoryName?.toLowerCase()?.replace(/[^a-z0-9]+/g, "-")?.replace(/(^-|-$)/g, "")}`,
+                    { state: { id: subcategory?._id, status: '' } });
+                }}
+                  className="mega-item mega-child"
+                >
+                  <img
+                    src={`https://api.ssdipl.com/${subcategory?.image}` || imageHandler(subcategory?.image)}
+                    alt={subcategory?.subcategoryName || subcategory?.secondsubcategoryName || "subcategory"}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = Banner1;
+                    }}
+                  />
+
+                  <p>{subcategory?.secondsubcategoryName}</p>
+                </div>
+
+              </div>
+            </section>
+          ))}
+        </Slider>
+      )} */}
+
+      {subcategoryInfo?.length > 0 && status === "category" && (
+        <Slider {...bannerSettings}>
+          {subcategoryInfo.map((subcategory) => (
+            <div key={subcategory?._id}>
+              <section className="topCategorySection">
+                <div className="topCategoryCard active">
+                  <div
+                    className="mega-item mega-child"
+                    onClick={() => {
+                      const slug = subcategory?.secondsubcategoryName
+                        ?.toLowerCase()
+                        ?.replace(/[^a-z0-9]+/g, "-")
+                        ?.replace(/(^-|-$)/g, "");
+
+                      navigate(`/product-related/${slug}`, {
+                        state: { id: subcategory?._id, status: "" },
+                      });
+                    }}
+                  >
+                    <img
+                      src={imageHandler(subcategory?.image)}
+                      alt={subcategory?.secondsubcategoryName || "subcategory"}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = Banner1;
+                      }}
+                    />
+                    <p>{subcategory?.secondsubcategoryName}</p>
+                  </div>
+                </div>
+              </section>
             </div>
-          </section>
-        ))
-
+          ))}
+        </Slider>
       )}
 
 
       {/* BANNER SLIDER */}
-      {subCategoryBanner?.banner || subCategoryBanner?.subCategoryId?.banner && <section className="cakeBannerSlider">
 
-        <div >
-          <div className="bannerBox">
-            <img src={`https://api.ssdipl.com/${subCategoryBanner?.banner || subCategoryBanner?.subCategoryId?.banner}`} alt="Cake Banner" />
+      {bannerImage && (
+        <section className="cakeBannerSlider">
+          <div>
+            <div className="bannerBox">
+              <img
+                src={`https://api.ssdipl.com/${bannerImage}`}
+                alt="Cake Banner"
+              />
+            </div>
           </div>
-        </div>
+        </section>
+      )}
 
-        {/* <Slider {...bannerSettings}>
+      {/* <Slider {...bannerSettings}>
           {[Banner1, Banner2].map((img, index) => (
             <div key={index}>
               <div className="bannerBox">
@@ -169,7 +229,6 @@ const AllCakes = () => {
             </div>
           ))}
         </Slider> */}
-      </section>}
 
       {subCategoryId && (
         <AllProductById cakesArr={cakesArr} />

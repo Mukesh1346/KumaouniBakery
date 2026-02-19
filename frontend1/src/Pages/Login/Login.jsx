@@ -183,7 +183,7 @@ const Login = () => {
             </div>
 
             <div className="input-box">
-              <input type="text" placeholder="Ref code" value={referralCodeUsed} onChange={(e) => setReferralCodeUsed(e.target.value)} required />
+              <input type="text" placeholder="Ref code" value={referralCodeUsed} onChange={(e) => setReferralCodeUsed(e.target.value)} />
             </div>
 
             <button type="submit" className="btnLogin">

@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AllSBanner = () => {
   const [banners, setBanners] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -53,6 +54,26 @@ const AllSBanner = () => {
     }
   };
 
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
+
   return (
     <>
       <ToastContainer />
@@ -60,11 +81,11 @@ const AllSBanner = () => {
         <div className="head">
           <h4>All Banners</h4>
         </div>
-        <div className="links">
+        {hasAccessAdd("banners") && <div className="links">
           <Link to="/add-banner" className="add-new">
             Add New <i className="fa-solid fa-plus"></i>
           </Link>
-        </div>
+        </div>}
       </div>
 
       <div className="filteration">
@@ -88,8 +109,8 @@ const AllSBanner = () => {
               <th scope="col">Image</th>
               <th scope="col">Banner Type</th>
               <th scope="col">Show in home page</th>
-              <th scope="col">Edit</th>
-              <th scope="col">Delete</th>
+              {hasAccessEdit("banners") && <th scope="col">Edit</th>}
+              {hasAccessDelete("banners") && <th scope="col">Delete</th>}
             </tr>
           </thead>
           <tbody>
@@ -120,19 +141,19 @@ const AllSBanner = () => {
                     />{" "}
                     {banner.bannerStatus}
                   </td>
-                  <td>
+                  {hasAccessEdit("banners") && <td>
                     <Link to={`/edit-banner/${banner._id}`} className="bt edit">
                       Edit <i className="fa-solid fa-pen-to-square"></i>
                     </Link>
-                  </td>
-                  <td>
+                  </td>}
+                  {hasAccessDelete("banners") && <td>
                     <button
-                      onClick={() => handleDelete(banner._id)}
+                      onClick={() => handleDelete(banner?._id)}
                       className="bt delete"
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             ) : (

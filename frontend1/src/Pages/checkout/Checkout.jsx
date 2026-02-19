@@ -644,7 +644,6 @@ const Checkout = () => {
       order_id: orderData?.razorpayOrderId,
 
       handler: async function (response) {
-        alert(JSON.stringify(response));
         try {
           Swal.fire({
             title: 'Verifying Payment',

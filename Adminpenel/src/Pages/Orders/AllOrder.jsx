@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AllOrder = () => {
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
   const [orders, setOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -68,6 +69,27 @@ const AllOrder = () => {
     fetchOrders();
   }, []);
 
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
+
+
   return (
     <>
       <ToastContainer />
@@ -115,7 +137,7 @@ const AllOrder = () => {
               <th scope="col">Payment Mode</th>
               <th scope="col">Payment Status</th>
               <th scope="col">Order Date</th>
-              <th scope="col">Actions</th>
+              {hasAccessDelete("orders") && <th scope="col">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -124,7 +146,7 @@ const AllOrder = () => {
                 <tr key={order._id}>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    <Link to={`/order-details/${order._id}`}>{order._id}</Link>
+                    {hasAccessEdit("orders") ? <Link to={`/order-details/${order._id}`}>{order._id}</Link> : <Link >{order?._id}</Link>}
                   </td>
                   <td>{order.cartItems.length}</td>
                   <td>{order.totalPrice}</td>
@@ -132,14 +154,14 @@ const AllOrder = () => {
                   <td>{order.paymentMode}</td>
                   <td>{order.paymentStatus}</td>
                   <td>{new Date(order.orderDate).toLocaleDateString()}</td>
-                  <td>
+                  {hasAccessDelete("orders") && <td>
                     <button
                       className="bt delete"
                       onClick={() => deleteOrder(order._id)}
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             ) : (
