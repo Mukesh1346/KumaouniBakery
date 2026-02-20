@@ -23,6 +23,12 @@
 .BestSellingtitle{
     color: #df4444;
 }
+
+.viewBtn{
+  background-color:#df4444 !important;
+  color:white !important;
+}
+
 /* =====================
    IMAGE
 ===================== */

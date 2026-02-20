@@ -114,7 +114,7 @@ const ProductDetails = () => {
 
 
   // Fetch product data by name
-  const getApiData = async () => {
+  const getApiData = async () => {  
     try {
       const res = await axios.get(
         `https://api.ssdipl.com/api/get-product-by-name/${name}`
@@ -491,7 +491,8 @@ const ProductDetails = () => {
     sessionStorage.setItem("cart", JSON.stringify(cart));
     setCartItems(cart);
     setOpenPopup(true);
-  };
+  }; 
+    
 
   const settings = {
     customPaging: function (i) {
@@ -521,14 +522,14 @@ const ProductDetails = () => {
   return (
     <>
       {/* Breadcrumb Section */}
-      <section className="breadCrumb">
+    <section className="breadCrumb">
         <div className="breadCrumbContent">
           {/* <h1>Product Details</h1> */}
           <Link to="/" style={{ color: "#df4444" }}>Home /</Link>{" "}
           <Link to="" style={{ color: "#df4444" }}>{data?.categoryName?.mainCategoryName} /</Link>{" "}
           <Link to="">{data?.productName}</Link>
         </div>
-      </section>
+     </section>
 
       <section className="pdx-wrapper">
         <div className="container">
@@ -816,7 +817,7 @@ const ProductDetails = () => {
                     // style={{
                     //   opacity: !isServiceAvailable ? 0.6 : 1,
                     //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
-                    // }}
+                    // }}    
                     >
                       BUY NOW | ₹ {Math.round(price)}
                     </button>

@@ -150,8 +150,13 @@ const Footer = () => {
             </p>
 
             <div className="subscribe-box">
+<<<<<<< HEAD
               <input type="email" onChange={(e) => setEmail(e.target.value)} required placeholder="Enter email address" />
               <button onClick={() => handleSubscribe()}>
+=======
+              <input type="email" placeholder="Enter email" />
+              <button>
+>>>>>>> c31dac92a470ca6c84ce424740b8944ddf7541b4
                 <i className="bi bi-arrow-right"></i>
               </button>
             </div>

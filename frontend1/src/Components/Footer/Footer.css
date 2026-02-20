@@ -1,6 +1,3 @@
-
-
-
 .fnp-footer {
   background:#df4444;
   font-size: 14px;
@@ -43,7 +40,7 @@
   overflow-y: auto;
 }
 
-/* SUBSCRIBE */
+/* SUBSCRIBE - Fixed overlap issue */
 .subscribe-text {
   font-size: 13px;
   color: #ffffff;
@@ -58,15 +55,16 @@
 
 .subscribe-box input {
   width: 100%;
-  padding: 10px 40px 10px 12px; /* space for arrow */
+  padding: 10px 45px 10px 12px; /* Increased right padding from 40px to 45px */
   border: none;
   outline: none;
   font-size: 14px;
+  box-sizing: border-box; /* Ensures padding is included in width */
 }
 
 .subscribe-box button {
   position: absolute;
-  right: 8px;
+  right: 12px; /* Increased from 8px for better spacing */
   top: 50%;
   transform: translateY(-50%);
   border: none;
@@ -74,6 +72,13 @@
   font-size: 18px;
   cursor: pointer;
   color: #df4444;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
 .subscribe-box input {
@@ -86,6 +91,34 @@
   border: none;
   background: transparent;
   font-size: 18px;
+}
+
+/* Mobile responsiveness for subscribe */
+@media (max-width: 768px) {
+  .subscribe-box input {
+    padding: 12px 45px 12px 12px; /* Slightly larger padding on mobile */
+    font-size: 16px; /* Prevents zoom on mobile */
+  }
+  
+  .subscribe-box button {
+    right: 10px;
+    width: 35px; /* Larger touch target on mobile */
+    height: 35px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .subscribe-box input {
+    padding: 10px 40px 10px 10px;
+  }
+  
+  .subscribe-box button {
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
 }
 
 /* MIDDLE */
@@ -117,7 +150,6 @@
   height: 30px;
 }
 
-
 /* Hide scrollbar - Chrome, Edge, Safari */
 .footer-scroll::-webkit-scrollbar {
   width: 0;
@@ -134,7 +166,6 @@
   -ms-overflow-style: none;
 }
 
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .footer-bottom .container {
@@ -146,10 +177,4 @@
   .footer-column{
     text-align: center;
   }
-
-
-
-  
-
 }
-

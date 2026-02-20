@@ -315,7 +315,7 @@ const FeaturedProducts = () => {
             Life Is Celebration - We Deliver Happiness
           </p>
         </div>
-        <Link to="/all-products" className="btn btn-dark px-4">
+        <Link to="/all-products" className="btn viewBg px-4">
           View All
         </Link>
       </div>

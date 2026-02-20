@@ -66,6 +66,11 @@
  
     color: #df4444;
 }
+
+.viewBg{
+  background-color: #df4444 !important;
+  color:white !important;
+}
 .featured-products .product-card:hover .product-img img {
   transform: scale(1.05);
 }

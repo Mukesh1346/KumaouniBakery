@@ -119,7 +119,7 @@ const BestSellingProduct = () => {
           </h4>
           <p className="text-muted  SuperSubTitle mb-0">Surprise Your Loved Ones</p>
         </div>
-        <button className="btn btn-dark px-4" onClick={() => navigate(`/all-products`)}>View All</button>
+        <button className="btn viewBtn px-4" onClick={() => navigate(`/all-products`)}>View All</button>
       </div>
 
       {/* Product Grid */}

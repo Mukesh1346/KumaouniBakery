@@ -13,6 +13,19 @@ const Category = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check screen size on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -36,7 +49,7 @@ const Category = () => {
     fetchCategories();
   }, []);
 
-  // SIMPLIFIED slider settings
+  // Slider settings - only used when not on mobile
   const settings = {
     dots: false,
     infinite: true,
@@ -84,29 +97,57 @@ const Category = () => {
   return (
     <section className="category-main">
       <div className="category-container">
-        <Slider {...settings}>
-          {activeCategories.map((item) => (
-            <div key={item?._id} className="category-slide">
-              <div
-                className="category-link"
-                onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`,
-                  { state: { id: item?._id, status: 'category' } }
-                )}
-              >
-                <img
-                  src={`https://api.ssdipl.com/${item?.image}`}
-                  alt={item?.subcategoryName}
-                  className="category-img"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = cakeImage;
-                  }}
-                />
-                <p className="category-name">{item?.subcategoryName}</p>
+        {isMobile ? (
+          // Mobile view - Grid layout (no carousel)
+          <div className="category-grid">
+            {activeCategories.map((item) => (
+              <div key={item?._id} className="category-grid-item">
+                <div
+                  className="category-link"
+                  onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`,
+                    { state: { id: item?._id, status: 'category' } }
+                  )}
+                >
+                  <img
+                    src={`https://api.ssdipl.com/${item?.image}`}
+                    alt={item?.subcategoryName}
+                    className="category-img"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = cakeImage;
+                    }}
+                  />
+                  <p className="category-name">{item?.subcategoryName}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </div>
+        ) : (
+          // Desktop/Tablet view - Carousel
+          <Slider {...settings}>
+            {activeCategories.map((item) => (
+              <div key={item?._id} className="category-slide">
+                <div
+                  className="category-link"
+                  onClick={() => navigate(`/product-related/${item?.subcategoryName?.replace(/\s+/g, "-").toLowerCase()}`,
+                    { state: { id: item?._id, status: 'category' } }
+                  )}
+                >
+                  <img
+                    src={`https://api.ssdipl.com/${item?.image}`}
+                    alt={item?.subcategoryName}
+                    className="category-img"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = cakeImage;
+                    }}
+                  />
+                  <p className="category-name">{item?.subcategoryName}</p>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        )}
       </div>
     </section>
   );
