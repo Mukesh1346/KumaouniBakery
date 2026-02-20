@@ -111,7 +111,7 @@ const Footer = () => {
             </p>
 
             <div className="subscribe-box">
-              <input type="email" placeholder="Enter email address" />
+              <input type="email" placeholder="Enter email" />
               <button>
                 <i className="bi bi-arrow-right"></i>
               </button>

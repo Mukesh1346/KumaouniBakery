@@ -1,5 +1,22 @@
+/* category.css - Complete File */
+
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.category-grid-item {
+  flex: 0 0 calc(33.333% - 10px);
+  max-width: calc(33.333% - 10px);
+  display: flex;
+  justify-content: center;
+}
+
 .category-main {
-  background-color: #e2e8e157;
+  background-color: #e2e8f157;
   padding: 2rem 0;
   margin-top: -7px;
   width: 100%;
@@ -36,7 +53,6 @@
   object-fit: cover;
   display: block;
   margin: 0 auto;
-  /* Keep your clip-path if needed */
   clip-path: polygon(
     100% 50%, 100% 56.6%, 100% 59.3%, 100% 61.4%, 99.9% 63.2%, 99.9% 64.8%, 
     99.9% 66.2%, 99.8% 67.5%, 99.8% 68.7%, 99.7% 69.8%, 99.6% 70.8%, 99.5% 71.8%, 
@@ -96,7 +112,6 @@
   );
 }
 
-/* KEY CHANGE: Make the text container take full width */
 .category-name {
   font-family: 'Poppins', sans-serif;
   font-size: 15px;
@@ -105,47 +120,74 @@
   margin-bottom: 0;
   font-weight: 400;
   padding: 0 5px;
-  text-align: center; /* Center the text */
-  width: 100%; /* Take full width of parent */
-  
-  /* Ensure the text container spans full width of its parent */
+  text-align: center;
+  width: 100%;
   display: block;
-  
-  /* Optional: Add a background to see the full width */
-  /* background-color: rgba(0,0,0,0.05); */
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - ALL mobile screens show 3 categories */
 @media screen and (max-width: 768px) {
   .category-main {
     padding: 1rem 0;
   }
 
   .category-img {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .category-name {
+    font-size: 13px;
+    margin-top: 8px;
+    width: 100%;
+  }
+  
+  .category-grid-item {
+    flex: 0 0 calc(33.333% - 10px);
+    max-width: calc(33.333% - 10px);
+  }
+}
+
+/* Small mobile screens still show 3 categories */
+@media screen and (max-width: 480px) {
+  .category-img {
+    width: 85px;
+    height: 85px;
   }
   
   .category-name {
     font-size: 12px;
-    margin-top: 5px;
-    width: 100%; /* Ensure full width on mobile */
+    width: 100%;
+  }
+  
+  .category-grid-item {
+    flex: 0 0 calc(33.333% - 10px); /* Still 3 items per row */
+    max-width: calc(33.333% - 10px);
   }
 }
 
-@media screen and (max-width: 480px) {
+/* Extra small screens - still 3 categories if possible */
+@media screen and (max-width: 360px) {
   .category-img {
-    width: 70px;
-    height: 70px;
+    width: 75px;
+    height: 75px;
   }
   
   .category-name {
     font-size: 11px;
-    width: 100%; /* Ensure full width on small mobile */
+  }
+  
+  .category-grid-item {
+    flex: 0 0 calc(33.333% - 8px);
+    max-width: calc(33.333% - 8px);
+  }
+  
+  .category-grid {
+    gap: 8px;
   }
 }
 
-/* Fix for slick slider */
+/* Fix for slick slider - desktop only */
 .slick-track {
   display: flex !important;
   gap: 5px;
@@ -163,4 +205,19 @@
   width: 100%;
   display: flex !important;
   justify-content: center !important;
+}
+
+/* Loading and error states */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #dc3545;
 }

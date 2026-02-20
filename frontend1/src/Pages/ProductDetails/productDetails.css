@@ -524,7 +524,7 @@
     border-radius: 20px;
 }
 
-
+  
 
   .location-wrapper{
   width: auto !important;
@@ -554,8 +554,15 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .pdx-cart {
+ 
+  padding: 0px;
+
+}
+
+
   .pdx-cta {
-    position: fixed;
+    position: sticky ;
     bottom: 0;
     left: 0;
     width: 100%;
