@@ -114,10 +114,10 @@ const ProductDetails = () => {
 
 
   // Fetch product data by name
-  const getApiData = async () => {  
+  const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://api.ssdipl.com/api/get-product-by-name/${name}`
+        `https://api.ssdipl.com/api/get-product-by-name/${name?.replace(/-/g, " ")}`
       );
       const productData = res.data.data;
       setData(productData);
@@ -491,8 +491,8 @@ const ProductDetails = () => {
     sessionStorage.setItem("cart", JSON.stringify(cart));
     setCartItems(cart);
     setOpenPopup(true);
-  }; 
-    
+  };
+
 
   const settings = {
     customPaging: function (i) {
@@ -518,18 +518,18 @@ const ProductDetails = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
+  
   return (
     <>
       {/* Breadcrumb Section */}
-    <section className="breadCrumb">
+      <section className="breadCrumb">
         <div className="breadCrumbContent">
           {/* <h1>Product Details</h1> */}
           <Link to="/" style={{ color: "#df4444" }}>Home /</Link>{" "}
           <Link to="" style={{ color: "#df4444" }}>{data?.categoryName?.mainCategoryName} /</Link>{" "}
           <Link to="">{data?.productName}</Link>
         </div>
-     </section>
+      </section>
 
       <section className="pdx-wrapper">
         <div className="container">
@@ -610,24 +610,30 @@ const ProductDetails = () => {
                 <div className="pdx-price">₹ {Math?.round(price)}</div>
 
                 {/* WEIGHT */}
-                <div className="pdx-block">
-                  <div className="pdx-block-head">
-                    <span>Weight</span>
-                  </div>
+                {data?.Variant?.some(v => v?.weight?.sizeweight) && (
+                  <div className="pdx-block">
+                    <div className="pdx-block-head">
+                      <span>Weight</span>
+                    </div>
 
-                  <div className="pdx-weight-group">
-                    {data.Variant?.map((v) => (
-                      <button
-                        key={v?._id}
-                        className={`pdx-weight-btn ${activeWeight === v.weight.sizeweight ? "active" : ""
-                          }`}
-                        onClick={() => handleWeightSelection(v.weight.sizeweight)}
-                      >
-                        {v.weight.sizeweight}
-                      </button>
-                    ))}
+                    <div className="pdx-weight-group">
+                      {data?.Variant
+                        ?.filter(v => v?.weight?.sizeweight)
+                        ?.map((v) => (
+                          <button
+                            key={v?._id}
+                            className={`pdx-weight-btn ${activeWeight === v?.weight?.sizeweight ? "active" : ""
+                              }`}
+                            onClick={() =>
+                              handleWeightSelection(v?.weight?.sizeweight)
+                            }
+                          >
+                            {v?.weight?.sizeweight}
+                          </button>
+                        ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* FLAVOUR */}
                 <div className="pdx-block formInput">

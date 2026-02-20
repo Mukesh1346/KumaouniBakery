@@ -175,10 +175,10 @@ const EditCakeBanner = () => {
               required
             >
               <option value="">-- Select Banner --</option>
-              <option value="cakeBanner1">Cake Banner 1</option>
-              <option value="cakeBanner2">Cake Banner 2</option>
-              <option value="cakeBanner3">Cake Banner 3</option>
-              <option value="cakeBanner4">Cake Banner 4</option>
+              <option value="cakeBanner1">Level 1</option>
+              <option value="cakeBanner2">Level 2</option>
+              <option value="cakeBanner3">Level 3</option>
+              <option value="cakeBanner4">Level 4</option>
             </select>
           </div>
           <div className="col-md-4">

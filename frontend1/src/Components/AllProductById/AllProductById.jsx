@@ -27,7 +27,7 @@ const AllProductById = ({ cakesArr = [] }) => {
 
     // Handle card click navigation
     const handleCardClick = (product) => {
-        navigate(`/product-details/${product?.productName}`, {
+        navigate(`/product-details/${product?.productName.replace(/\s+/g, "-")}`, {
             state: { id: product?._id, status: 'product' }
         });
     };

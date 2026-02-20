@@ -116,7 +116,7 @@ const AllProducts = ({ status = '' }) => {
   // Handle Buy Now button click (prevents event bubbling)
   const handleBuyNowClick = (e, productName) => {
     e.stopPropagation(); // Prevents the card click event
-    navigate(`/product-details/${productName}`);
+    navigate(`/product-details/${productName?.replace(/\s+/g, "-")}`);
   };
 
   return (

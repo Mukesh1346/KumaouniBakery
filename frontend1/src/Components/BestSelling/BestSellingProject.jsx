@@ -46,7 +46,7 @@ const BestSellingProduct = () => {
 
   // Handle product card click navigation
   const handleProductClick = (productName) => {
-    navigate(`/product-details/${productName}`);
+    navigate(`/product-details/${productName.replace(/\s+/g, "-")}`);
   };
 
   // Handle wishlist toggle (prevents event bubbling)

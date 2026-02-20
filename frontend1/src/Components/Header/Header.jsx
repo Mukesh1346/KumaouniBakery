@@ -359,7 +359,7 @@ const menuRef = useRef(null);
                           key={product._id}
                           className="suggestion-item product-suggestion"
                           onClick={() => {
-                            navigate(`/product-details/${product?.productName}`,
+                            navigate(`/product-details/${product?.productName.replace(/\s+/g, "-")}`,
                               { state: { id: product?._id, status: 'product' } });
                             setSearchQuery("");
                             setProductSuggestions([]);
@@ -582,7 +582,7 @@ const menuRef = useRef(null);
                             // >
                             <div
                               onClick={() => {
-                                navigate(`/product-related/${child?.name}`,
+                                navigate(`/product-related/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
                                   { state: { id: child?.id, status: 'subCategory' } });
                               }}
                               className="mega-item mega-child"

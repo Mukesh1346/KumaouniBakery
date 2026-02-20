@@ -35,13 +35,13 @@ const AllCakes = () => {
   const location = useLocation();
   const subCategoryId = location.state.id
   const status = location.state.status
-  console.log("XXXXXX==>", location.state.id, status)
+  console.log("XXXXXX==>", subcatname?.replace(/-/g, " "), location.state.id, status)
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`
+          `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname.replace(/-/g, " ")}`
         );
 
         if (res.data?.data?.length > 0) {

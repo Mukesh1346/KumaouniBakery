@@ -208,7 +208,7 @@
 // export default FeaturedProducts;
 
 
-import React, { useState, useEffect , } from "react";
+import React, { useState, useEffect, } from "react";
 import "./featureProduct.css";
 import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -220,11 +220,11 @@ const BASE_URL = "https://api.ssdipl.com/";
 
 const FeaturedProducts = () => {
   const navigate = useNavigate();
-   const user = sessionStorage.getItem("userId");
+  const user = sessionStorage.getItem("userId");
   const [wishlist, setWishlist] = useState([]);
   const [products, setProducts] = useState([]);
 
- useEffect(() => {
+  useEffect(() => {
     const stored = sessionStorage.getItem("wishlist");
     if (stored) {
       setWishlist(JSON.parse(stored));
@@ -306,6 +306,11 @@ const FeaturedProducts = () => {
     return BASE_URL + path.replace(/\\/g, "/");
   };
 
+
+  const handleProductClick = (productName) => {
+    navigate(`/product-details/${productName.replace(/\s+/g, "-")}`);
+  };
+
   return (
     <div className="container my-5 featured-products">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -360,7 +365,7 @@ const FeaturedProducts = () => {
                 </div>
 
                 {/* CONTENT */}
-                <div className="product-body p-3">
+                <div className="product-body p-3" onClick={() => handleProductClick(item.productName)}>
                   <p className="product-title">{item.productName}</p>
 
                   <div className="price-row">

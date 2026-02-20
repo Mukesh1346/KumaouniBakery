@@ -120,7 +120,7 @@ const scrollRight = () => {
                 <div className="d-flex gap-3">
                   <span>{activeReel?.productId?.Variant[0]?.finalPrice}</span>
                   {/* <Link to="/all-products"> */}
-                  <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-details/${activeReel?.productId?.productName}`, { state: { id: activeReel?.productId?._id, status: "single-product" } })}>
+                  <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-details/${activeReel?.productId?.productName.replace(/\s+/g, "-")}`, { state: { id: activeReel?.productId?._id, status: "single-product" } })}>
                     <button className="BuyBtn">Buy Now</button>
                   </div>
                   {/* </Link> */}

@@ -50,7 +50,7 @@ const Footer = () => {
           email: email,
         }
       );
-      console.log("ZZZZZXXXXXX==>",res)
+      console.log("ZZZZZXXXXXX==>", res)
       if (res.data.success === true) {
         Swel.fire({
           icon: 'success',
@@ -107,7 +107,7 @@ const Footer = () => {
                   <li key={index}>
                     {/* <Link to={`/product-related/${sub.subcategoryName}`}> */}
                     <div onClick={() => {
-                      navigate(`/product-related/${sub.subcategoryName}`,
+                      navigate(`/product-related/${sub.subcategoryName.replace(/\s+/g, "-")}`,
                         { state: { id: sub?._id, status: 'subCategory' } });
                     }}
                       style={{ cursor: 'pointer' }}

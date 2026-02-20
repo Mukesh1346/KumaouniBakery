@@ -39,15 +39,18 @@ import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 const App = () => {
   return (
     <>
-      <BrowserRouter>
-      <ScrollToTop/>
+      <BrowserRouter future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}>
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/all-products" element={<AllProducts />} />
           <Route path="/product-related/:subcatname" element={<AllCakes />} />
-          <Route path="/sub-subcategory/:subcatname" element={<SubSubcategory/>} />
+          <Route path="/sub-subcategory/:subcatname" element={<SubSubcategory />} />
           <Route path="/candle/all-candles" element={<AllCandles />} />
           <Route path="/product-details/:name" element={<ProductDetails />} />
           <Route path="/contact-us" element={<ContactUs />} />
@@ -59,10 +62,10 @@ const App = () => {
           <Route path="/frequently-asked-questions" element={<FAQ />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/track-order" element={<OrderTracking/>} />
-           <Route path="/faq" element={<QA/>} />
-           <Route path="/refer" element={<ReferAndEarn/>} />
-           <Route path="/wishlist" element={<Wishlist/>} />
+          <Route path="/track-order" element={<OrderTracking />} />
+          <Route path="/faq" element={<QA />} />
+          <Route path="/refer" element={<ReferAndEarn />} />
+          <Route path="/wishlist" element={<Wishlist />} />
         </Routes>
         <Footer />
       </BrowserRouter>
