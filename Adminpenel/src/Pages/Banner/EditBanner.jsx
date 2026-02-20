@@ -9,7 +9,7 @@ const EditBanner = () => {
   const [formData, setFormData] = useState({
     bannerName: "",
     bannerImage: null,
-    bannerType: "",
+    bannerType: "Both",
     bannerStatus: false,
   });
   const [previewImage, setPreviewImage] = useState("");
@@ -126,15 +126,9 @@ const EditBanner = () => {
           </div>
           <div className="col-md-6">
             <label htmlFor="bannerImage" className="form-label">
-              Banner Image
+              Shop Banner Image {formData?.bannerType === "Desktop" ? `(1270 x 342) PX` : formData?.bannerType === "Both" ? `(1270 x 342) OR (1270 x 342) PX` : `(390 x 104) PX`}
             </label>
-            <input
-              type="file"
-              name="bannerImage"
-              className="form-control"
-              id="bannerImage"
-              onChange={handleImageChange}
-            />
+            <input type="file" name="bannerImage" className="form-control" id="bannerImage" onChange={handleImageChange} />
           </div>
           <div className="col-md-6">
             {previewImage && (

@@ -5,10 +5,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaCcAmazonPay } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import Swel from 'sweetalert2';
 
 const Footer = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -30,6 +32,43 @@ const Footer = () => {
 
     fetchCategories();
   }, []);
+
+  const handleSubscribe = async (e) => {
+    if (!email) {
+      Swel.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Email is required',
+      })
+      return
+    }
+
+    try {
+      const res = await axios.post(
+        `https://api.ssdipl.com/api/subscribe-email/add-subscribe`,
+        {
+          email: email,
+        }
+      );
+      console.log("ZZZZZXXXXXX==>",res)
+      if (res.data.success === true) {
+        Swel.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Email subscribed successfully',
+        })
+        setEmail('')
+      } else {
+        Swel.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: res.data.message,
+        })
+      }
+    } catch (error) {
+      console.error("Footer API Error:", error);
+    }
+  };
 
   return (
     <footer className="fnp-footer">
@@ -111,8 +150,8 @@ const Footer = () => {
             </p>
 
             <div className="subscribe-box">
-              <input type="email" placeholder="Enter email address" />
-              <button>
+              <input type="email" onChange={(e) => setEmail(e.target.value)} required placeholder="Enter email address" />
+              <button onClick={() => handleSubscribe()}>
                 <i className="bi bi-arrow-right"></i>
               </button>
             </div>

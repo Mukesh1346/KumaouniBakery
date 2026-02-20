@@ -107,7 +107,9 @@ exports.updateRecommendedProduct = async (req, res) => {
 
 // DELETE
 exports.deleteRecommendedProduct = async (req, res) => {
+  console.log("DDD::=>" , req.params.id)
   const product = await RecommendedProduct.findById(req.params.id);
+
   if (!product) return res.status(404).json({ message: "Not found" });
 
   product.productImage.forEach(deleteImageFile);

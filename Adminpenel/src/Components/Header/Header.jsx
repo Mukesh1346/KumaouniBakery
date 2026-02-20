@@ -131,6 +131,7 @@ const Header = () => {
             {hasAccess("coupon") && <li><Link to="/all-coupon" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Coupon</Link></li>}
             {hasAccess("countdown") && <li><Link to="/all-countdown" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> Manage Count Down</Link></li>}
             {hasAccess("adminUser") && <li><Link to="/all-admin" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Admin Permission</Link></li>}
+            {hasAccess("subscribeEmail") && <li><Link to="/all-subscribeEmail" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Subscribe Email</Link></li>}
 
             <div className="logout" onClick={handleLogout}>
               Log Out <i className="fa-solid fa-right-from-bracket mb-4"></i>

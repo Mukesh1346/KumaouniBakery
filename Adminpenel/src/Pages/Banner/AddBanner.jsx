@@ -8,7 +8,7 @@ const AddBanner = () => {
     const [formData, setFormData] = useState({
         bannerName: '',
         bannerImage: null,
-        bannerType: '',
+        bannerType: 'Both',
         bannerStatus: false,
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -51,11 +51,11 @@ const AddBanner = () => {
                 }
             });
             // //console.log(response)
-           if(response.status===201){
-            toast.success("Banner added successfully");
-            navigate('/all-banners');
-            setIsLoading(false)
-           }
+            if (response.status === 201) {
+                toast.success("Banner added successfully");
+                navigate('/all-banners');
+                setIsLoading(false)
+            }
         } catch (error) {
             console.log(error)
             setIsLoading(false)
@@ -81,37 +81,17 @@ const AddBanner = () => {
                 <form className="row g-3" onSubmit={handleSubmit}>
                     <div className="col-md-6">
                         <label htmlFor="bannerName" className="form-label">Shop Banner Name</label>
-                        <input
-                            type="text"
-                            name="bannerName"
-                            value={formData.bannerName}
-                            onChange={handleChange}
-                            className="form-control"
-                            id="bannerName"
-                            required
-                        />
+                        <input type="text" name="bannerName" value={formData.bannerName} onChange={handleChange} className="form-control" id="bannerName" required />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="bannerImage" className="form-label">Shop Banner Image</label>
-                        <input
-                            type="file"
-                            name="bannerImage"
-                            className="form-control"
-                            id="bannerImage"
-                            onChange={handleImageChange}
-                            required
-                        />
+                        <label htmlFor="bannerImage" className="form-label">
+                            Shop Banner Image {formData?.bannerType === "Desktop" ? `(1270 x 342) PX` : formData?.bannerType === "Both" ? `(1270 x 342) OR (1270 x 342) PX` : `(390 x 104) PX`}
+                        </label>
+                        <input type="file" name="bannerImage" className="form-control" id="bannerImage" onChange={handleImageChange} required />
                     </div>
                     <div className="col-md-6">
                         <label htmlFor="bannerType" className="form-label">Banner Type</label>
-                        <select
-                            name="bannerType"
-                            className="form-select"
-                            id="bannerType"
-                            value={formData.bannerType}
-                            onChange={handleChange}
-                            required
-                        >
+                        <select name="bannerType" className="form-select" id="bannerType" value={formData.bannerType} onChange={handleChange} required>
                             <option value="" selected disabled>Select Banner Type</option>
                             <option value="Desktop">Desktop</option>
                             <option value="Mobile">Mobile</option>
@@ -120,16 +100,9 @@ const AddBanner = () => {
                     </div>
                     <div className="col-12">
                         <div className="form-check">
-                            <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="bannerStatus"
-                                id="bannerStatus"
-                                checked={formData.bannerStatus}
-                                onChange={handleChange}
-                            />
+                            <input className="form-check-input" type="checkbox" name="bannerStatus" id="bannerStatus" checked={formData.bannerStatus} onChange={handleChange} />
                             <label className="form-check-label" htmlFor="bannerStatus">
-                                Active 
+                                Active
                             </label>
                         </div>
                     </div>

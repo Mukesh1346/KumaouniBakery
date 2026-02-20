@@ -25,9 +25,9 @@ const AllProducts = ({ status = '' }) => {
       `https://api.ssdipl.com/api/get-main-category`
     );
     if (res.status === 200) {
-      setCategoryData(status === 'Home' ? res.data.data.filter((item) => item.ActiveonHome === true) : res.data.data);
+      setCategoryData(status === 'Home' ? res.data?.data?.filter((item) => item?.ActiveonHome === true) : res?.data?.data);
       const pageState = {};
-      res.data.data.forEach((c) => (pageState[c._id] = 1));
+      res.data.data.forEach((c) => (pageState[c?._id] = 1));
       setCurrentPage(pageState);
     }
   };
@@ -40,7 +40,7 @@ const AllProducts = ({ status = '' }) => {
     if (res.status === 200) {
       const grouped = {};
       res.data.data.forEach((p) => {
-        const cid = p.categoryName._id;
+        const cid = p?.categoryName?._id;
         if (!grouped[cid]) grouped[cid] = [];
         grouped[cid].push(p);
       });

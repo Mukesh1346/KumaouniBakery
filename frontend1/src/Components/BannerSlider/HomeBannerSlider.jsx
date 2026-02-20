@@ -13,7 +13,7 @@ const HomeBannerSlider = () => {
       const res = await axios.get("https://api.ssdipl.com/api/get-banners");
       console.log("SSSSS::=>", res)
       if (res.status === 200) {
-        setData(res.data.data);
+        setData(res?.data?.data?.filter((item) => item?.bannerStatus === 'True'));
       }
     } catch (error) {
       console.error("Error fetching banner data:", error);

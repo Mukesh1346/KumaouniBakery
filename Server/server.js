@@ -31,6 +31,7 @@ const CouponsRouter = require("./Router/CouponsRouter")
 const googleApiRouter = require("./Router/googleApiRouter")
 const ActiveOrderRouter = require("./Router/ActiveOrderRouter")
 const CountDownRouter = require("./Router/CountDownRouter")
+const SubscribeEmailRouter = require("./Router/SubscribeEmailRouter")
 
 const app = express()
 
@@ -95,6 +96,8 @@ app.use("/api/coupon", CouponsRouter)
 app.use("/api/google-api", googleApiRouter)
 app.use("/api/active-order", ActiveOrderRouter)
 app.use("/api/countdown", CountDownRouter)
+app.use("/api/subscribe-email", SubscribeEmailRouter)
+
 
 
 

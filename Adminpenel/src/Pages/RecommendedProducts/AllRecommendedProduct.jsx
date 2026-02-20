@@ -45,7 +45,7 @@ const AllRecommendedProduct = () => {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `https://api.ssdipl.com/api/delete-product/${productId}`
+          `https://api.ssdipl.com/api/recommended-product/delete-product/${productId}`
         );
         setProducts(products.filter((product) => product._id !== productId));
         toast.success("Product deleted successfully!");

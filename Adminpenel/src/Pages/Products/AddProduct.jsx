@@ -114,7 +114,7 @@ const AddProduct = () => {
     // If categoryName changes, filter subcategories
     if (name === 'categoryName') {
       const filteredSubcategories = subcategories.filter(
-        (subcategory) => subcategory.categoryName._id === value
+        (subcategory) => subcategory.categoryName?._id === value
       );
       setFilteredSubcategories(filteredSubcategories);
     }
@@ -246,7 +246,7 @@ const AddProduct = () => {
   useEffect(() => {
     if (formData?.categoryName) {
       const filteredSubcategories = subcategories.filter(
-        (subcategory) => subcategory.categoryName._id === formData.categoryName
+        (subcategory) => subcategory.categoryName?._id === formData.categoryName
       );
       setFilteredSubcategories(filteredSubcategories);
     }
@@ -282,7 +282,7 @@ const AddProduct = () => {
             <select name="categoryName" className="form-select" id="categoryName" value={formData.categoryName} onChange={handleChange}>
               <option value="" disabled>Select MAin Category</option>
               {categories.map((item, index) => (
-                <option key={index} value={item._id}>
+                <option key={index} value={item?._id}>
                   {item.mainCategoryName}
                 </option>
               ))}
@@ -301,7 +301,7 @@ const AddProduct = () => {
             >
               <option value="" selected disabled>Select Category</option>
               {filteredSubcategories.map((item, index) => (
-                <option key={index} value={item._id}>{item.subcategoryName}</option>
+                <option key={index} value={item?._id}>{item.subcategoryName}</option>
               ))}
             </select>
           </div>
@@ -423,7 +423,7 @@ const AddProduct = () => {
                     >
                       <option value="" disabled>Select Weight</option>
                       {weights.map((item) => (
-                        <option key={item._id} value={item._id}>
+                        <option key={item?._id} value={item?._id}>
                           {item.sizeweight}
                         </option>
                       ))}

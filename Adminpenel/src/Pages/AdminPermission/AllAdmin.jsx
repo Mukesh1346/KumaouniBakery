@@ -27,6 +27,7 @@ const AllAdmin = () => {
     { key: 'coupon', name: 'Coupon' },
     { key: 'countdown', name: 'Count Down' },
     { key: 'adminUser', name: 'admin User' },
+    { key: 'subscribeEmail', name: 'Subscribe Email' }
   ];
 
   // Fetch users from the API

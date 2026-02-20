@@ -63,12 +63,15 @@ const AddReels = () => {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
+      setIsLoading(false);
       toast.success(res.data?.message || "Reel added successfully");
       navigate("/all-reels");
+
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Failed to create reel"
       );
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -148,15 +151,8 @@ const AddReels = () => {
 
           {/* VIDEO */}
           <div className="col-md-6">
-            <label className="form-label">Reel Video</label>
-            <input
-              type="file"
-              name="video"
-              className="form-control"
-              accept="video/*"
-              onChange={handleChange}
-              required
-            />
+            <label className="form-label">Reel Video (Size 80MB only)</label>
+            <input type="file" name="video" className="form-control" accept="video/*" onChange={handleChange} required />
           </div>
 
           {/* PRODUCT IMAGE */}

@@ -188,12 +188,20 @@ const EditCakeBanner = () => {
 
           {/* IMAGE */}
           <div className="col-md-6">
-            <label className="form-label">Banner Image</label>
+            <label className="form-label">
+              Banner Image {
+                formData?.bannerKey === "cakeBanner1" ? `(550 x 270) PX` :
+                  formData?.bannerKey === "cakeBanner2" ? `(550 x 270) PX` :
+                    formData?.bannerKey === "cakeBanner3" ? `(270 x 310) PX` :
+                      formData?.bannerKey === "cakeBanner4" ? `(1280 x 250) PX` : ''
+              }
+            </label>
             <input
               type="file"
               name="image"
               className="form-control"
               accept="image/*"
+              disabled={!formData?.bannerKey}
               onChange={handleChange}
             />
           </div>

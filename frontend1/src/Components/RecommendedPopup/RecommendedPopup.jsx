@@ -25,7 +25,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
           "https://api.ssdipl.com/api/recommended-category/get-recommended-category"
         );
         if (res.status === 200 && res.data.data.length) {
-          setCategory(res.data.data);
+          setCategory(res.data.data.filter((item) => item.ActiveonHome === true));
           setActiveCategory(res.data.data[0]._id);
         }
       } catch (err) {
@@ -157,15 +157,23 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
 
         {/* CATEGORY BAR */}
         <div className="rp-categories">
-          {category.map((cat) => (
-            <button
-              key={cat._id}
-              className={`rp-category ${activeCategory === cat._id ? "active" : ""}`}
-              onClick={() => setActiveCategory(cat._id)}
-            >
-              {cat.name}
-            </button>
-          ))}
+          {category.map((cat) => {
+            return (<div style={{ gap: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div>
+                <img src={`https://api.ssdipl.com/${cat?.image}`} width={35} alt={cat?.name} />
+              </div>
+              <button
+                key={cat._id}
+                className={`rp-category ${activeCategory === cat._id ? "active" : ""}`}
+                onClick={() => setActiveCategory(cat._id)}
+
+              >
+                {cat.name}
+              </button>
+
+            </div>)
+
+          })}
         </div>
 
         {/* PRODUCTS */}

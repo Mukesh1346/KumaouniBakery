@@ -1,5 +1,6 @@
 const RecommendedCategory = require("../Model/RecommendedCategoryModel");
 const fs = require("fs");
+const RecommendedProduct = require("../Model/RecommendedProductModel");
 
 /* CREATE */
 exports.createRecommendedCategory = async (req, res) => {
@@ -72,10 +73,60 @@ exports.updateRecommendedCategory = async (req, res) => {
 };
 
 /* DELETE */
-exports.deleteRecommendedCategory = async (req, res) => {
-  const cat = await RecommendedCategory.findByIdAndDelete(req.params.id);
-  if (!cat) return res.status(404).json({ message: "Not found" });
 
-  if (cat.image) fs.unlinkSync(cat.image);
-  res.json({ success: true, message: "Deleted" });
+exports.deleteRecommendedCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    /* ================= CATEGORY FIND ================= */
+    const category = await RecommendedCategory.findById(id);
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    /* ================= FIND RELATED PRODUCTS ================= */
+    const products = await RecommendedProduct.find({
+      recommendedCategoryName: id,
+    });
+
+    /* ================= DELETE CATEGORY IMAGE ================= */
+    if (category.image && fs.existsSync(category.image)) {
+      try {
+        fs.unlinkSync(category.image);
+      } catch (err) {
+        console.warn("Category image delete failed:", err.message);
+      }
+    }
+
+    /* ================= DELETE PRODUCTS ================= */
+    for (const p of products) {
+      try {
+        // delete product image safely
+        if (p.productImage && fs.existsSync(p.productImage)) {
+          fs.unlinkSync(p.productImage);
+        }
+
+        await RecommendedProduct.findByIdAndDelete(p._id);
+      } catch (err) {
+        console.warn("Product delete issue:", err.message);
+      }
+    }
+
+    /* ================= DELETE CATEGORY ================= */
+    await RecommendedCategory.findByIdAndDelete(id);
+
+    return res.json({
+      success: true,
+      message: "Recommended category and related products deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete recommended category error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while deleting category",
+    });
+  }
 };
