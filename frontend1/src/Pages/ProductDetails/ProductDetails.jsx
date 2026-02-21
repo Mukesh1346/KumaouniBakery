@@ -211,7 +211,7 @@ const ProductDetails = () => {
         productId: data?._id,
         name: data.productName,
         weight: activeWeight,
-        categoryId: data?.subcategoryName?._id,
+        categoryId: data?.categoryName?._id,
         price: price,
         massage: massage,
         quantity: 1,
@@ -518,7 +518,7 @@ const ProductDetails = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  
+
   return (
     <>
       {/* Breadcrumb Section */}
@@ -795,13 +795,13 @@ const ProductDetails = () => {
                       ⚠️ Ordering is temporarily unavailable. Please try again later.
                     </div>
                   )}
-                  {orderActive && data?.subcategoryName?._id && <div
+                  {orderActive && data?.categoryName?._id && <div
                     className="order-close"
                   // style={{
                   //   background: "#fff3f3", color: "#d32f2f", padding: "8px 12px", borderRadius: "6px", fontSize: "14px", marginBottom: "10px", fontWeight: 500,
                   // }}
                   >
-                    <CountdownTimer categoryId={data?.subcategoryName?._id} />
+                    <CountdownTimer categoryId={data?.categoryName?._id} />
                   </div>}
                   <div className="pdx-cta">
                     <button

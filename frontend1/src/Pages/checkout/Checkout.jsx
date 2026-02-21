@@ -7,16 +7,16 @@ import Swal from 'sweetalert2';
 import CountdownTimer from "../../Components/Countdown/Countdown";
 
 let ALL_SLOTS = [
-  { label: "10AM - 12PM", start: 10 },
-  { label: "12PM - 2PM", start: 12 },
-  { label: "2PM - 4PM", start: 14 },
-  { label: "4PM - 6PM", start: 16 },
-  { label: "6PM - 8PM", start: 18 },
+  { label: "10AM - 12PM", start: 10, end: 12 },
+  { label: "12PM - 2PM", start: 12, end: 14 },
+  { label: "2PM - 4PM", start: 14, end: 16 },
+  { label: "4PM - 6PM", start: 16, end: 18 },
+  { label: "6PM - 8PM", start: 18, end: 20 },
 ];
 
 const Checkout = () => {
   /* ================= STEP ================= */
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(4);
 
   /* ================= CART ================= */
   const [cartItems, setCartItems] = useState([]);
@@ -33,6 +33,8 @@ const Checkout = () => {
 
 
   const [remainingMs, setRemainingMs] = useState(null);
+  const [countdownWindow, setCountdownWindow] = useState(null);
+
   const [availableSlots, setAvailableSlots] = useState(ALL_SLOTS);
   const [minDate, setMinDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -130,12 +132,40 @@ const Checkout = () => {
     setCartItems(normalizedCart);
   }, []);
 
+  // useEffect(() => {
+  //   const now = new Date();
+  //   const currentHour = now.getHours();
+
+  //   // ❌ countdown expired
+  //   if (!remainingMs || remainingMs <= 0) {
+  //     const tomorrow = new Date();
+  //     tomorrow.setDate(tomorrow.getDate() + 1);
+
+  //     setMinDate(tomorrow.toISOString().split("T")[0]);
+  //     setAvailableSlots(ALL_SLOTS);
+  //     return;
+  //   }
+
+  //   // ✅ filter future slots only
+  //   const filtered = ALL_SLOTS.filter(
+  //     (slot) => slot.start > currentHour
+  //   );
+
+  //   setAvailableSlots(filtered);
+  // }, [remainingMs]);
+
+
   useEffect(() => {
+    if (!countdownWindow) return;
+
     const now = new Date();
     const currentHour = now.getHours();
 
-    // ❌ countdown expired
-    if (!remainingMs || remainingMs <= 0) {
+    const startHour = parseInt(countdownWindow.startTime?.split(":")[0]);
+    const endHour = parseInt(countdownWindow.endTime?.split(":")[0]);
+
+    // ❌ window finished → tomorrow full slots
+    if (remainingMs <= 0) {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -144,14 +174,17 @@ const Checkout = () => {
       return;
     }
 
-    // ✅ filter future slots only
-    const filtered = ALL_SLOTS.filter(
-      (slot) => slot.start > currentHour
-    );
+    // ✅ filter by business window + current time
+    const filtered = ALL_SLOTS.filter((slot) => {
+      return (
+        slot.start >= startHour &&   // inside start window
+        slot.end <= endHour &&       // inside end window
+        slot.start > currentHour     // future slots today
+      );
+    });
 
     setAvailableSlots(filtered);
-  }, [remainingMs]);
-
+  }, [remainingMs, countdownWindow]);
 
   /* ================= COMPUTED VALUES ================= */
   const packagingCharge = 25;
@@ -1010,8 +1043,11 @@ const Checkout = () => {
                   </div>
                   <div style={{}}>
                     <CountdownTimer
-                      categoryId={cartItems[0]?.categoryId}
-                      onTimeUpdate={setRemainingMs}
+                      categoryId={cartItems?.[0]?.categoryId}
+                      onTimeUpdate={(data) => {
+                        setRemainingMs(data?.remainingMs || 0);
+                        setCountdownWindow(data);
+                      }}
                     />
                   </div>
 

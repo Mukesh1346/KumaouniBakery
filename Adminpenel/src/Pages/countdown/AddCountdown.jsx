@@ -11,8 +11,9 @@ const AddCountdown = () => {
 
   const [formData, setFormData] = useState({
     title: "",
+    startTime: "",
     endTime: "",
-    subCategoryId: "",
+    categoryId: "",
   });
 
   const [subcategories, setSubcategories] = useState([]);
@@ -31,7 +32,7 @@ const AddCountdown = () => {
     const fetchSubcategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/get-subcategory"
+          "https://api.ssdipl.com/api/get-main-category"
         );
 
         setSubcategories(res?.data?.data || []);
@@ -51,13 +52,18 @@ const AddCountdown = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.subCategoryId) {
+    if (!formData.categoryId) {
       toast.error("Please select subcategory");
       return;
     }
 
-    if (!formData.endTime) {
+    if (!formData?.endTime) {
       toast.error("Please select countdown end time");
+      return;
+    }
+
+    if (!formData?.startTime) {
+      toast.error("Please select countdown start time");
       return;
     }
 
@@ -66,13 +72,14 @@ const AddCountdown = () => {
     try {
       const body = {
         title: formData.title?.trim(),
-        endTime: new Date(formData.endTime).toISOString(),
-        subCategoryId: formData.subCategoryId,
+        endTime: formData?.endTime,
+        startTime: formData?.startTime,
+        categoryId: formData?.categoryId,
         isActive,
       };
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/countdown/create-countdown",
+        "http://localhost:7000/api/countdown/create-countdown",
         body
       );
 
@@ -121,18 +128,18 @@ const AddCountdown = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* CATEGORY */}
           <div className="col-md-6">
-            <label className="form-label">Subcategory</label>
+            <label className="form-label">Main Category</label>
             <select
-              name="subCategoryId"
+              name="categoryId"
               className="form-control"
-              value={formData.subCategoryId}
+              value={formData.categoryId}
               onChange={handleChange}
               required
             >
               <option value="">Select subcategory</option>
               {subcategories?.map((sub) => (
                 <option key={sub?._id} value={sub?._id}>
-                  {sub?.subcategoryName}
+                  {sub?.mainCategoryName}
                 </option>
               ))}
             </select>
@@ -151,11 +158,25 @@ const AddCountdown = () => {
             />
           </div>
 
+          {/* START TIME */}
+          <div className="col-md-6">
+            <label className="form-label">Countdown Start Time</label>
+            <input
+              type="time"
+              name="startTime"
+              className="form-control"
+              value={formData?.startTime}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+
           {/* END TIME */}
           <div className="col-md-6">
             <label className="form-label">Countdown End Time</label>
             <input
-              type="datetime-local"
+              type="time"
               name="endTime"
               className="form-control"
               value={formData.endTime}

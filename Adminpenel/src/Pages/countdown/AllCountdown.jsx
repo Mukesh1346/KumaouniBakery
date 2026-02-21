@@ -14,7 +14,7 @@ const AllCountdown = () => {
     const fetchCountdown = async () => {
         try {
             const res = await axios.get(
-                "https://api.ssdipl.com/api/countdown/get-all-countdown"
+                "http://localhost:7000/api/countdown/get-all-countdown"
             );
 
             if (res.data?.success) {
@@ -90,16 +90,22 @@ const AllCountdown = () => {
 
     /* ================= DATE FORMAT ================= */
 
-    const formatDate = (date) => {
-        if (!date) return "-";
+    const formatTime = (time) => {
+        if (!time) return "-";
 
-        return new Date(date).toLocaleString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
+        try {
+            const [hour, minute] = time.split(":");
+            const date = new Date();
+            date.setHours(hour, minute);
+
+            return date.toLocaleTimeString("en-IN", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+            });
+        } catch {
+            return time;
+        }
     };
 
     /* ================= LOADING ================= */
@@ -110,6 +116,7 @@ const AllCountdown = () => {
 
     /* ================= UI ================= */
 
+    console.log("XXXXXXXX::=>", countdowns)
     return (
         <>
             <ToastContainer />
@@ -133,6 +140,7 @@ const AllCountdown = () => {
                             <th>Sr.No.</th>
                             <th>Count Down Title</th>
                             <th>Category Name</th>
+                            <th>Start Time</th>
                             <th>End Time</th>
                             <th>Active</th>
                             <th>Edit</th>
@@ -147,8 +155,9 @@ const AllCountdown = () => {
                                     <th>{index + 1}</th>
 
                                     <td>{item?.title || "-"}</td>
-                                    <td>{item?.subCategoryId?.subcategoryName || "-"}</td>
-                                    <td>{formatDate(item?.endTime)}</td>
+                                    <td>{item?.categoryId?.mainCategoryName || "-"}</td>
+                                    <td>{formatTime(item?.startTime)}</td>
+                                    <td>{formatTime(item?.endTime)}</td>
 
                                     <td>
                                         <input

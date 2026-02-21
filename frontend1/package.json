@@ -31,7 +31,7 @@
     "eject": "react-scripts eject",
     "build": "react-scripts build"
   },
-  "homepage": ".",
+  "homepage": "/",
   "engines": {
     "node": ">=20.0.0"
   },

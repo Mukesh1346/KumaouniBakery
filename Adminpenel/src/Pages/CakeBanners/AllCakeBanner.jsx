@@ -91,10 +91,10 @@ const AllCakeBanners = () => {
                   <td>{banner?.titel}</td>
                   <td className="text-capitalize">
                     {banner?.bannerKey === "cakeBanner1"
-                      ? "Cake Banner 1"
-                      : banner?.bannerKey === "cakeBanner2" ? "Cake Banner 2" :
-                        banner?.bannerKey === "cakeBanner3" ? "Cake Banner 3" :
-                          "Cake Banner 4"}
+                      ? "Level 1"
+                      : banner?.bannerKey === "cakeBanner2" ? "Level 2" :
+                        banner?.bannerKey === "cakeBanner3" ? "Level 3" :
+                          "Level 4"}
                   </td>
 
                   <td>
