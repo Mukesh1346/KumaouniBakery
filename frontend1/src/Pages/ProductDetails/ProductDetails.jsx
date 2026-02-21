@@ -14,7 +14,7 @@ import { TbMapPinCode } from "react-icons/tb";
 import LocationOption from "../../Components/LocationOption/LocationOption";
 import { useNavigate } from "react-router-dom";
 import CountdownTimer from "../../Components/Countdown/Countdown";
- import styles from './RecommendedAddons.module.css';
+
 
 
 const ProductDetails = () => {
