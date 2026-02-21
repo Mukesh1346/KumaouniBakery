@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./recommendedPopup.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const RecommendedPopup = ({ 
   open, 
@@ -102,76 +103,105 @@ const RecommendedPopup = ({
     });
   };
 
-  const handleContinue = () => {
-    let mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+const handleContinue = () => {
+  let mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-    let mainIndex = getMainProductIndex(mainCart);
+  let mainIndex = getMainProductIndex(mainCart);
 
-    if (mainIndex === -1) {
-      // Create new main product with all the data from props
-      const newItem = {
-        productId: productId,
-        name: productData?.productName || "Main Product",
-        weight: activeWeight,
-        categoryId: productData?.subcategoryName?._id,
-        price: price,
-        massage: massage || "",
-        quantity: 1,
-        image: productData?.productImage?.[0],
-        deliveryDate: deliveryDate || "",
-        eggOption: eggOption || "",
-        addonProducts: [],
-      };
-      console.log("Adding new product to cart:", newItem); // Debug log
-      mainCart.push(newItem);
+  // The product should already be in cart, but just in case
+  if (mainIndex === -1) {
+    // This shouldn't happen, but handle it just in case
+    const newItem = {
+      productId: productId,
+      name: productData?.productName || "Main Product",
+      weight: activeWeight,
+      categoryId: productData?.subcategoryName?._id,
+      price: price,
+      massage: massage || "",
+      quantity: 1,
+      image: productData?.productImage?.[0],
+      deliveryDate: deliveryDate || "",
+      eggOption: eggOption || "",
+      addonProducts: [],
+    };
+    mainCart.push(newItem);
+    mainIndex = mainCart.length - 1;
+  }
+
+  const addonList = mainCart[mainIndex].addonProducts || [];
+
+  // Add all selected recommended products to cart
+  Object.entries(cart).forEach(([id, qty]) => {
+    const prod = product.find(p => p._id === id);
+    if (!prod) return;
+
+    const existingAddonIndex = addonList.findIndex(a => a.productId === id);
+
+    if (existingAddonIndex > -1) {
+      addonList[existingAddonIndex].quantity += qty;
     } else {
-      console.log("Product already exists in cart at index:", mainIndex); // Debug log
-    }
-
-    // Get the updated index (in case we just added it)
-    mainIndex = getMainProductIndex(mainCart);
-    
-    if (mainIndex !== -1) {
-      const addonList = mainCart[mainIndex].addonProducts || [];
-
-      Object.entries(cart).forEach(([id, qty]) => {
-        const prod = product.find(p => p._id === id);
-        if (!prod) return;
-
-        const existingAddonIndex = addonList.findIndex(a => a.productId === id);
-
-        if (existingAddonIndex > -1) {
-          addonList[existingAddonIndex].quantity += qty;
-        } else {
-          addonList.push({
-            productId: id,
-            name: prod.productName,
-            price: prod.price,
-            image: prod.productImage[0],
-            quantity: qty,
-          });
-        }
+      addonList.push({
+        productId: id,
+        name: prod.productName,
+        price: prod.price,
+        image: prod.productImage[0],
+        quantity: qty,
       });
-
-      mainCart[mainIndex].addonProducts = addonList;
     }
+  });
 
-    sessionStorage.setItem("cart", JSON.stringify(mainCart));
-    console.log("Updated cart:", mainCart); // Debug log
-    
-    // Dispatch event to notify other components
-    window.dispatchEvent(new Event('storage'));
+  mainCart[mainIndex].addonProducts = addonList;
 
-    onClose();
-    
-    if (source === "cart") {
-      // Stay on the same page by just reloading to show updated cart
-      window.location.reload();
-    } else {
+  sessionStorage.setItem("cart", JSON.stringify(mainCart));
+  
+  // Dispatch event to notify other components
+  window.dispatchEvent(new Event('storage'));
+
+  onClose();
+  
+  // Show success message on CONTINUE
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: "success",
+    title: "Products added to cart successfully!",
+    showConfirmButton: false,
+    timer: 1500
+  });
+  
+  if (source === "cart") {
+    // Stay on the same page
+    window.location.reload();
+  } else {
+    // Navigate to cart after a short delay to show the success message
+    setTimeout(() => {
       navigate("/cart");
-    }
-  };
+    }, 1500);
+  }
+};
 
+// Add this function for the Skip button
+const handleSkip = () => {
+  onClose();
+  
+  // Show success message on SKIP
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: "success",
+    title: "Product added to cart successfully!",
+    showConfirmButton: false,
+    timer: 1500
+  });
+  
+  if (source === "cart") {
+    window.location.reload();
+  } else {
+    setTimeout(() => {
+      navigate("/cart");
+    }, 1500);
+  }
+};
   return (
     <div className="rp-overlay">
       <div className="rp-container">
@@ -224,11 +254,11 @@ const RecommendedPopup = ({
         </div>
 
         <div className="rp-footer">
-          <button className="rp-skip" onClick={onClose}>Skip</button>
-          <button className="rp-continue" onClick={handleContinue}>
-            CONTINUE
-          </button>
-        </div>
+  <button className="rp-skip" onClick={handleSkip}>Skip</button>
+  <button className="rp-continue" onClick={handleContinue}>
+    CONTINUE
+  </button>
+</div>
 
       </div>
     </div>
