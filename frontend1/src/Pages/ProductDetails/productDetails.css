@@ -11,9 +11,8 @@
   gap: 16px;
 }
 
-.slick-slide{
-  width: 120px !important;
-}
+
+
 .pdxImg{
   display: flex;
   gap:10px;  
@@ -159,6 +158,21 @@
     border-radius: 30px;
 }
 
+.rpS-qty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+.rpS-qty button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #004d40;
+    background: transparent;
+}
+
 .rpS-add-btn {
     margin-top: 8px;
     width: 100%;
@@ -237,9 +251,7 @@
 .rpS-card {
  width: 100% !;
 }
- .slick-track{
-  width:auto !important;
- }
+
 
 .pdx-addon-scroll::-webkit-scrollbar {
   display: none;
