@@ -3,7 +3,18 @@ import "./recommendedPopup.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const RecommendedPopup = ({ open, onClose, productId }) => {
+const RecommendedPopup = ({ 
+  open, 
+  onClose, 
+  productId, 
+  productData,
+  activeWeight,
+  price,
+  massage,
+  deliveryDate,
+  eggOption,
+  source 
+}) => {
   const loginvalue = sessionStorage.getItem("login");
   const [cart, setCart] = useState({});
   const [category, setCategory] = useState([]);
@@ -11,13 +22,11 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
   const [activeCategory, setActiveCategory] = useState(null);
   const navigate = useNavigate();
 
-  /* 🔒 Lock scroll */
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
     return () => (document.body.style.overflow = "auto");
   }, [open]);
 
-  /* 📦 Load Categories */
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -35,7 +44,6 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     fetchCategories();
   }, []);
 
-  /* 🛍 Load Products by Category */
   useEffect(() => {
     if (!activeCategory) return;
 
@@ -67,7 +75,7 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
         existingAddons[addon.productId] = addon.quantity;
       });
 
-      setCart(existingAddons); // 🔥 THIS syncs quantities
+      setCart(existingAddons);
     } else {
       setCart({});
     }
@@ -79,8 +87,6 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     return cart.findIndex(item => item.productId === productId);
   };
 
-
-  /* 🛒 CART LOGIC */
   const addItem = (id) => setCart((p) => ({ ...p, [id]: 1 }));
 
   const increment = (id) => setCart((p) => ({ ...p, [id]: p[id] + 1 }));
@@ -96,55 +102,75 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
     });
   };
 
-
-  /* 🚀 Continue */
   const handleContinue = () => {
     let mainCart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
     let mainIndex = getMainProductIndex(mainCart);
 
-    // ❗ If main product not in cart, create it first
     if (mainIndex === -1) {
-      mainCart.push({
-        productId,
-        name: "Main Product",
+      // Create new main product with all the data from props
+      const newItem = {
+        productId: productId,
+        name: productData?.productName || "Main Product",
+        weight: activeWeight,
+        categoryId: productData?.subcategoryName?._id,
+        price: price,
+        massage: massage || "",
         quantity: 1,
+        image: productData?.productImage?.[0],
+        deliveryDate: deliveryDate || "",
+        eggOption: eggOption || "",
         addonProducts: [],
-      });
-      mainIndex = mainCart.length - 1;
+      };
+      console.log("Adding new product to cart:", newItem); // Debug log
+      mainCart.push(newItem);
+    } else {
+      console.log("Product already exists in cart at index:", mainIndex); // Debug log
     }
 
-    const addonList = mainCart[mainIndex].addonProducts || [];
+    // Get the updated index (in case we just added it)
+    mainIndex = getMainProductIndex(mainCart);
+    
+    if (mainIndex !== -1) {
+      const addonList = mainCart[mainIndex].addonProducts || [];
 
-    Object.entries(cart).forEach(([id, qty]) => {
-      const prod = product.find(p => p._id === id);
-      if (!prod) return;
+      Object.entries(cart).forEach(([id, qty]) => {
+        const prod = product.find(p => p._id === id);
+        if (!prod) return;
 
-      const existingAddonIndex = addonList.findIndex(a => a.productId === id);
+        const existingAddonIndex = addonList.findIndex(a => a.productId === id);
 
-      if (existingAddonIndex > -1) {
-        addonList[existingAddonIndex].quantity += qty;
-      } else {
-        addonList.push({
-          productId: id,
-          name: prod.productName,
-          price: prod.price,
-          image: prod.productImage[0],
-          quantity: qty,
-        });
-      }
-    });
+        if (existingAddonIndex > -1) {
+          addonList[existingAddonIndex].quantity += qty;
+        } else {
+          addonList.push({
+            productId: id,
+            name: prod.productName,
+            price: prod.price,
+            image: prod.productImage[0],
+            quantity: qty,
+          });
+        }
+      });
 
-    mainCart[mainIndex].addonProducts = addonList;
+      mainCart[mainIndex].addonProducts = addonList;
+    }
 
     sessionStorage.setItem("cart", JSON.stringify(mainCart));
+    console.log("Updated cart:", mainCart); // Debug log
+    
+    // Dispatch event to notify other components
+    window.dispatchEvent(new Event('storage'));
 
     onClose();
-    loginvalue ? navigate("/checkout") : navigate("/login");
+    
+    if (source === "cart") {
+      // Stay on the same page by just reloading to show updated cart
+      window.location.reload();
+    } else {
+      navigate("/cart");
+    }
   };
-
-
-
 
   return (
     <div className="rp-overlay">
@@ -155,28 +181,24 @@ const RecommendedPopup = ({ open, onClose, productId }) => {
           <button onClick={onClose}>✕</button>
         </div>
 
-        {/* CATEGORY BAR */}
         <div className="rp-categories">
           {category.map((cat) => {
-            return (<div style={{ gap: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <div>
-                <img src={`https://api.ssdipl.com/${cat?.image}`} width={35} alt={cat?.name} />
+            return (
+              <div key={cat._id} style={{ gap: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div>
+                  <img src={`https://api.ssdipl.com/${cat?.image}`} width={35} alt={cat?.name} />
+                </div>
+                <button
+                  className={`rp-category ${activeCategory === cat._id ? "active" : ""}`}
+                  onClick={() => setActiveCategory(cat._id)}
+                >
+                  {cat.name}
+                </button>
               </div>
-              <button
-                key={cat._id}
-                className={`rp-category ${activeCategory === cat._id ? "active" : ""}`}
-                onClick={() => setActiveCategory(cat._id)}
-
-              >
-                {cat.name}
-              </button>
-
-            </div>)
-
+            );
           })}
         </div>
 
-        {/* PRODUCTS */}
         <div className="rp-grid">
           {product.map((p) => (
             <div className="rp-card " key={p._id}>

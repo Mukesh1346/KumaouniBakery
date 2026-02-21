@@ -26,6 +26,7 @@ const ProductDetails = () => {
   const [price, setPrice] = useState(0);
   const [eggOption, setEggOption] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
+  const [popupSource, setPopupSource] = useState("");
   const [wishlist, setWishlist] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState("");
   const [countDown, setCountDown] = useState({});
@@ -37,7 +38,7 @@ const ProductDetails = () => {
   const [orderActive, setOrderActive] = useState(true)
 
   const updateServiceStatus = (status) => {
-    setIsServiceAvailable(status); // This changes parent state
+    setIsServiceAvailable(status);
     console.log("Service status updated:", status);
   };
 
@@ -58,7 +59,6 @@ const ProductDetails = () => {
     fetchOrderStatus()
   }, []);
 
-  // get existing wishlist from session
   const toggleWishlist = async (productId) => {
     if (!user) {
       Swal.fire({
@@ -77,10 +77,7 @@ const ProductDetails = () => {
         ? prev.filter((id) => id !== productId)
         : [...prev, productId];
 
-      // ✅ update session
       sessionStorage.setItem("wishlist", JSON.stringify(updated));
-
-      // ✅ call API (fire and forget)
       handleWishlistApi(productId, isExist);
 
       return updated;
@@ -92,7 +89,6 @@ const ProductDetails = () => {
     console.log("isRemoving==>", isRemoving);
     try {
       if (isRemoving) {
-        // ✅ REMOVE from wishlist
         await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
           data: {
             user: user,
@@ -100,7 +96,6 @@ const ProductDetails = () => {
           },
         });
       } else {
-        // ✅ ADD to wishlist
         await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
@@ -111,9 +106,6 @@ const ProductDetails = () => {
     }
   };
 
-
-
-  // Fetch product data by name
   const getApiData = async () => {
     try {
       const res = await axios.get(
@@ -122,23 +114,8 @@ const ProductDetails = () => {
       const productData = res.data.data;
       setData(productData);
 
-      // if (productData?.Variant?.length > 0) {
-      //   setPrice(productData.Variant[0].finalPrice);
-
-      //   setActiveWeight(productData?.Variant[0]?.weight);
-      //   const selectedVariant = data.Variant?.find(
-      //     (variant) => variant?.weight?.sizeweight === productData?.Variant[0]?.weight
-      //   );
-
-      //   if (selectedVariant) {
-      //     setPrice(selectedVariant.finalPrice);
-      //   }
-
-      // }
-
       if (productData?.Variant?.length > 0) {
         const firstVariant = productData.Variant[0];
-
         setActiveWeight(firstVariant?.weight?.sizeweight);
         setPrice(firstVariant?.finalPrice);
       }
@@ -153,11 +130,34 @@ const ProductDetails = () => {
     getApiData();
   }, [name]);
 
-  // Load cart from session storage
   useEffect(() => {
     const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
     setCartItems(storedCart);
   }, []);
+
+
+  // Listen for cart updates
+useEffect(() => {
+  const checkIfAdded = () => {
+    if (activeWeight && data._id) {
+      const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+      const productInCart = cart.some(
+        item => item.productId === data._id && item.weight === activeWeight
+      );
+      console.log("Checking if product in cart:", productInCart);
+      setIsAdded(productInCart);
+    }
+  };
+  
+  checkIfAdded();
+  
+  // Also check when cart changes
+  window.addEventListener('storage', checkIfAdded);
+  
+  return () => {
+    window.removeEventListener('storage', checkIfAdded);
+  };
+}, [activeWeight, data._id]);
 
   // Check if product is in cart whenever activeWeight or cartItems change
   useEffect(() => {
@@ -189,6 +189,7 @@ const ProductDetails = () => {
       fetchCountdown();
     }
   }, [data?.subcategoryName?._id])
+  
   const handleWeightSelection = (weight) => {
     setActiveWeight(weight);
     const selectedVariant = data.Variant?.find(
@@ -227,91 +228,74 @@ const ProductDetails = () => {
     return { cart, index };
   };
 
-  const addToCart = () => {
-    // Check if service is available first
-    if (!isServiceAvailable && !isAdded) {
-      Swal.fire({
-        icon: "warning",
-        title: "Service Area Required",
-        text: "Please check delivery availability for your location first.",
-        timer: 2000
-      });
-      return;
-    }
-    if (orderActive === false) {
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "warning",
-        title: "Orders are currently disabled by admin",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      return;
-    }
-    const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
+const addToCart = () => {
+  console.log("addToCart clicked");
+  console.log("isServiceAvailable:", isServiceAvailable);
+  console.log("orderActive:", orderActive);
+  console.log("activeWeight:", activeWeight);
+  console.log("data._id:", data._id);
+  
+  if (!isServiceAvailable) {
+    Swal.fire({
+      icon: "warning",
+      title: "Service Area Required",
+      text: "Please check delivery availability for your location first.",
+      timer: 2000
+    });
+    return;
+  }
 
-    if (hasWeight && !activeWeight) {
-      Swal.fire("Select Weight", "Please select cake weight first", "warning");
-      return;
-    }
+  if (orderActive === false) {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "warning",
+      title: "Orders are currently disabled by admin",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
 
-    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
+  if (hasWeight && !activeWeight) {
+    Swal.fire("Select Weight", "Please select cake weight first", "warning");
+    return;
+  }
 
-    if (isAdded) {
-      // REMOVE
-      cart = cart.filter(
-        item => !(item.productId === data._id && item.weight === activeWeight)
-      );
+  // Check if product is already in cart
+  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  console.log("Current cart:", cart);
+  
+  const existingProductIndex = cart.findIndex(
+    item => item.productId === data._id && item.weight === activeWeight
+  );
+  
+  console.log("existingProductIndex:", existingProductIndex);
+  console.log("isAdded state:", isAdded);
 
-      sessionStorage.setItem("cart", JSON.stringify(cart));
-      setCartItems(cart);
-      setIsAdded(false);
+  if (existingProductIndex !== -1) {
+    console.log("Product found in cart, redirecting to cart");
+    // Product IS in cart → redirect to cart page
+    Swal.fire({
+      icon: "success",
+      title: "Product in Cart",
+      text: "Redirecting to cart page...",
+      timer: 1500,
+      showConfirmButton: false
+    }).then(() => {
+      console.log("Navigating to /cart");
+      navigate("/cart");
+    });
+    return; // Important: Stop execution here
+  }
 
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "info",
-        title: "Product removed from cart",
-        showConfirmButton: false,
-        timer: 1200
-      });
-
-    } else {
-      // ADD
-      const newItem = {
-        productId: data._id,
-        name: data.productName,
-        categoryId: data?.subcategoryName?._id,
-        weight: activeWeight,
-        price: price,
-        massage: massage,
-        quantity: 1,
-        image: data?.productImage?.[0],
-        deliveryDate,
-        eggOption,
-        addonProducts: [],
-      };
-
-      cart.push(newItem);
-
-      sessionStorage.setItem("cart", JSON.stringify(cart));
-      setCartItems(cart);
-      setIsAdded(true);
-
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "success",
-        title: "Product added to cart",
-        showConfirmButton: false,
-        timer: 1200
-      });
-    }
-  };
-
+  console.log("Product not in cart, opening popup");
+  // Product is NOT in cart → open popup to add
+  setPopupSource("cart");
+  setOpenPopup(true);
+};
   const addAddon = (addon) => {
-    // Check if service is available first
     if (!isServiceAvailable && !isAdded) {
       Swal.fire({
         icon: "warning",
@@ -356,9 +340,8 @@ const ProductDetails = () => {
     }
 
     sessionStorage.setItem("cart", JSON.stringify(cart));
-    setCartItems(cart); // Update state
+    setCartItems(cart);
 
-    // Show success message
     Swal.fire({
       toast: true,
       position: "top-end",
@@ -380,7 +363,7 @@ const ProductDetails = () => {
       addons[addonIndex].quantity += 1;
 
       sessionStorage.setItem("cart", JSON.stringify(cart));
-      setCartItems(cart); // Update state to reflect changes
+      setCartItems(cart);
 
       Swal.fire({
         toast: true,
@@ -411,7 +394,7 @@ const ProductDetails = () => {
     cart[index].addonProducts = addons;
 
     sessionStorage.setItem("cart", JSON.stringify(cart));
-    setCartItems(cart); // Update state to reflect changes
+    setCartItems(cart);
   };
 
   const getAddonQuantity = (addonId) => {
@@ -460,8 +443,7 @@ const ProductDetails = () => {
   };
 
   const handleBuyNow = () => {
-    // Check if service is available first
-    if (!isServiceAvailable && !isAdded) {
+    if (!isServiceAvailable) {
       Swal.fire({
         icon: "warning",
         title: "Service Area Required",
@@ -470,7 +452,7 @@ const ProductDetails = () => {
       });
       return;
     }
-    // Check if service is available first
+
     if (orderActive === false) {
       Swal.fire({
         icon: "warning",
@@ -487,9 +469,32 @@ const ProductDetails = () => {
       return;
     }
 
-    const { cart } = getOrCreateMainCartItem();
-    sessionStorage.setItem("cart", JSON.stringify(cart));
-    setCartItems(cart);
+    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    
+    const existingProductIndex = cart.findIndex(
+      item => item.productId === data._id && item.weight === activeWeight
+    );
+
+    if (existingProductIndex === -1) {
+      const newItem = {
+        productId: data._id,
+        name: data.productName,
+        categoryId: data?.subcategoryName?._id,
+        weight: activeWeight,
+        price: price,
+        massage: massage,
+        quantity: 1,
+        image: data?.productImage?.[0],
+        deliveryDate,
+        eggOption,
+        addonProducts: [],
+      };
+      cart.push(newItem);
+      sessionStorage.setItem("cart", JSON.stringify(cart));
+      setCartItems(cart);
+    }
+
+    setPopupSource("buynow");
     setOpenPopup(true);
   };
 
@@ -519,12 +524,23 @@ const ProductDetails = () => {
     slidesToScroll: 1,
   };
   
+  const handlePopupClose = () => {
+    setOpenPopup(false);
+    setPopupSource("");
+  };
+  
+  // Get button text based on cart status
+  const getCartButtonText = () => {
+    if (isAdded) {
+      return "GO TO CART";
+    }
+    return "ADD TO CART";
+  };
+  
   return (
     <>
-      {/* Breadcrumb Section */}
       <section className="breadCrumb">
         <div className="breadCrumbContent">
-          {/* <h1>Product Details</h1> */}
           <Link to="/" style={{ color: "#df4444" }}>Home /</Link>{" "}
           <Link to="" style={{ color: "#df4444" }}>{data?.categoryName?.mainCategoryName} /</Link>{" "}
           <Link to="">{data?.productName}</Link>
@@ -535,12 +551,10 @@ const ProductDetails = () => {
         <div className="container">
           <div className="row gx-4">
 
-            {/* LEFT IMAGE SECTION */}
             <div className="col-lg-5">
               <div className="pdx-left-sticky">
                 <div className="d-flex pdxImg">
 
-                  {/* Thumbnails */}
                   <div className="pdx-thumb-column">
                     {data?.productImage?.map((img, i) => {
                       const imagePath = img.replace(/\\/g, "/");
@@ -557,7 +571,6 @@ const ProductDetails = () => {
                     })}
                   </div>
 
-                  {/* Main Image */}
                   <div className="pdx-main-images">
                     {data?.productImage?.length > 0 && (
                       <img
@@ -585,13 +598,13 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* RIGHT DETAILS SECTION */}
             <div className="col-lg-7">
               <div className="pdx-right-scroll">
 
                 <div className="pdx-title-row">
                   {data.eggless ? <span className="pdx-badge"> 100% EGGLESS </span> : ''}
                   <h1>{data.productName}</h1>
+                  <p className="discountSec">20 %</p>
 
                   <div
                     className={`wishlist-icon ${wishlist?.includes(data?._id) ? "active" : ""}`}
@@ -603,13 +616,11 @@ const ProductDetails = () => {
                   ) : (
                     <FaRegHeart />
                   )}
-                    {/* {isWishlisted ? <FaHeart /> : <FaRegHeart />} */}
                   </div>
                 </div>
 
                 <div className="pdx-price">₹ {Math?.round(price)}</div>
 
-                {/* WEIGHT */}
                 {data?.Variant?.some(v => v?.weight?.sizeweight) && (
                   <div className="pdx-block">
                     <div className="pdx-block-head">
@@ -635,7 +646,6 @@ const ProductDetails = () => {
                   </div>
                 )}
 
-                {/* FLAVOUR */}
                 <div className="pdx-block formInput">
                   <label>Select Flavour</label>
                   <select className="form-select  inputfield">
@@ -645,7 +655,6 @@ const ProductDetails = () => {
                   </select>
                 </div>
 
-                {/* NAME */}
                 <div className="pdx-block">
                   <label>
                     Name on Cake <small>{massage?.length} / 25</small>
@@ -660,7 +669,6 @@ const ProductDetails = () => {
                   />
                 </div>
 
-                {/* DELIVERY DATE */}
                 <div className="pdx-block">
                   <label>
                     Delivery Date <span className="text-danger">*</span>
@@ -674,7 +682,6 @@ const ProductDetails = () => {
                   />
                 </div>
 
-                {/* RECOMMENDED ADDONS */}
                 {data?.recommendedProductId?.length > 0 && (
                   <div className="pdx-block">
                     <h6 className="pdx-addon-title">Recommended Addon Products</h6>
@@ -700,11 +707,6 @@ const ProductDetails = () => {
                                   <button
                                     className="rp-add-btn"
                                     onClick={() => addAddon(item)}
-                                  // disabled={!isServiceAvailable || !activeWeight}
-                                  // style={{
-                                  //   opacity: (!isServiceAvailable || !activeWeight) ? 0.5 : 1,
-                                  //   cursor: (!isServiceAvailable || !activeWeight) ? 'not-allowed' : 'pointer'
-                                  // }}
                                   >
                                     Add
                                   </button>
@@ -740,7 +742,6 @@ const ProductDetails = () => {
                       </Slider>
                     </div>
 
-                    {/* Show message if weight not selected */}
                     {!activeWeight && isServiceAvailable && (
                       <div className="weight-warning-message">
                         ⚠️ Please select cake weight to add addons
@@ -750,13 +751,6 @@ const ProductDetails = () => {
                 )}
 
                 <LocationOption onServiceChange={updateServiceStatus} />
-
-                {/* Service Availability Warning */}
-                {/* {!isServiceAvailable && (
-                  <div className="service-warning-message">
-                    ⚠️ Please check service availability before adding to cart
-                  </div>
-                )} */}
 
                 {data?.productDetails &&
                   <div className="description-box" style={{ marginBottom: '12px', borderRadius: '13px 13px 0px 0px' }}>
@@ -769,7 +763,6 @@ const ProductDetails = () => {
                   </div>
                 }
 
-                {/* Description */}
                 {data?.productDescription && <div className="description-box" style={{ marginBottom: '12px', borderRadius: '13px 13px 0px 0px' }}>
                   <h6>Description</h6>
                   <p>
@@ -781,8 +774,15 @@ const ProductDetails = () => {
 
                 <RecommendedPopup
                   productId={data._id}
+                  productData={data}
+                  activeWeight={activeWeight}
+                  price={price}
+                  massage={massage}
+                  deliveryDate={deliveryDate}
+                  eggOption={eggOption}
                   open={openPopup}
-                  onClose={() => setOpenPopup(false)}
+                  onClose={handlePopupClose}
+                  source={popupSource}
                 />
                 <div>
                   {!orderActive && (
@@ -797,33 +797,21 @@ const ProductDetails = () => {
                   )}
                   {orderActive && data?.subcategoryName?._id && <div
                     className="order-close"
-                  // style={{
-                  //   background: "#fff3f3", color: "#d32f2f", padding: "8px 12px", borderRadius: "6px", fontSize: "14px", marginBottom: "10px", fontWeight: 500,
-                  // }}
                   >
                     <CountdownTimer categoryId={data?.subcategoryName?._id} />
                   </div>}
                   <div className="pdx-cta">
                     <button
-                      className={`pdx-cart ${isAdded ? "remove" : ""}`}
+                      className={`pdx-cart ${isAdded ? "in-cart" : ""}`}
                       onClick={addToCart}
                       disabled={orderActive === false}
-                    // disabled={!isServiceAvailable}
-                    // style={{
-                    //   opacity: !isServiceAvailable ? 0.6 : 1,
-                    //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
-                    // }}
                     >
-                      {isAdded ? "REMOVE FROM CART" : "ADD TO CART"}
+                      {getCartButtonText()}
                     </button>
                     <button
                       className="pdx-buy"
                       onClick={handleBuyNow}
                       disabled={orderActive === false}
-                    // style={{
-                    //   opacity: !isServiceAvailable ? 0.6 : 1,
-                    //   cursor: !isServiceAvailable ? 'not-allowed' : 'pointer'
-                    // }}    
                     >
                       BUY NOW | ₹ {Math.round(price)}
                     </button>
@@ -836,7 +824,6 @@ const ProductDetails = () => {
         </div>
       </section>
 
-      {/* Related Products Section */}
       <section className="relatedProducts">
         <hr style={{ marginTop: "5px", marginBottom: "5px" }} />
         <div className="container">
@@ -846,6 +833,6 @@ const ProductDetails = () => {
       </section>
     </>
   );
-};
+};     
 
 export default ProductDetails;
