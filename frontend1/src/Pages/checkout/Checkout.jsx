@@ -1620,7 +1620,7 @@ const Checkout = () => {
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [loading, setLoading] = useState(false);
 
-
+  const [couponsList, setCouponsList] = useState([])
   const [remainingMs, setRemainingMs] = useState(null);
   const [countdownWindow, setCountdownWindow] = useState(null);
   const [selectedDate, setSelectedDate] = useState(
@@ -1926,7 +1926,7 @@ const Checkout = () => {
 
   /* ================= COUPON HANDLER ================= */
   const applyCoupon = async () => {
-    if (!couponCode.trim()) {
+    if (!couponCode?.trim()) {
       setCouponError("Please enter a coupon code");
       Swal.fire({
         icon: 'warning',
@@ -2272,6 +2272,7 @@ const Checkout = () => {
     setLoading(true);
     const orderPayload = prepareOrderPayload();
 
+    console.log("XXXXXXXXCCCCCCC==>", orderPayload)
     try {
       const response = await axios.post(
         "https://api.ssdipl.com/api/create",
@@ -2405,6 +2406,22 @@ const Checkout = () => {
     const razorpay = new window.Razorpay(options);
     razorpay.open();
   };
+
+
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        const response = await axios.get('https://api.ssdipl.com/api/coupon/get-all-coupons');
+        if (response.status === 200) {
+          setCouponsList(response?.data?.coupons.filter((coupon) => coupon?.isActive === true));
+        }
+      } catch (error) {
+        console.error('Error fetching coupons:', error);
+      }
+    };
+
+    fetchCoupons();
+  }, []);
 
   console.log("INPUT CHECKOUT =>", checkoutData, cartItems.map((item) => item?.categoryId));
 
@@ -2723,7 +2740,7 @@ const Checkout = () => {
                       No slots available for selected date.
                     </p>
                   )}
-                  
+
                   <button className="continue-btn">Continue to Payment</button>
                 </form>
               )}
@@ -3099,7 +3116,7 @@ const Checkout = () => {
                         {!appliedCoupon ? (
                           <button
                             onClick={applyCoupon}
-                            disabled={loadingCoupon || !couponCode.trim()}
+                            disabled={loadingCoupon || !couponCode?.trim()}
                             style={{
                               padding: '10px 20px',
                               backgroundColor: " #df4444 ",
@@ -3107,7 +3124,7 @@ const Checkout = () => {
                               border: 'none',
                               borderRadius: '5px',
                               cursor: loadingCoupon ? 'wait' : 'pointer',
-                              opacity: loadingCoupon || !couponCode.trim() ? 0.7 : 1
+                              opacity: loadingCoupon || !couponCode?.trim() ? 0.7 : 1
                             }}
                           >
                             {loadingCoupon ? '...' : 'Apply'}
@@ -3137,10 +3154,10 @@ const Checkout = () => {
                       {/* Sample Coupons */}
                       <div style={{ marginTop: '10px', fontSize: '12px', color: '#6c757d' }}>
                         <span>Try: </span>
-                        {['SAVE20', 'WELCOME10', 'FLAT50'].map(code => (
+                        {couponsList?.map(code => (
                           <span
                             key={code}
-                            onClick={() => !appliedCoupon && setCouponCode(code)}
+                            onClick={() => !appliedCoupon && setCouponCode(code?.couponCode)}
                             style={{
                               background: '#e9ecef',
                               padding: '4px 10px',
@@ -3152,7 +3169,7 @@ const Checkout = () => {
                               opacity: appliedCoupon ? 0.5 : 1
                             }}
                           >
-                            {code}
+                            {code?.couponCode}
                           </span>
                         ))}
                       </div>

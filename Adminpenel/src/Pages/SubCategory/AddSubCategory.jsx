@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
+
 
 const AddSubCategory = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -97,6 +99,12 @@ const AddSubCategory = () => {
       setIsLoading(false);
     }
   };
+
+  const mainCategoryOptions = mainCategories.map((sub) => ({
+  value: sub._id,
+  label: sub.mainCategoryName,
+}));
+
   console.log("XXXXXXXXXXX:=>", formData)
   return (
     <>
@@ -114,13 +122,13 @@ const AddSubCategory = () => {
 
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label htmlFor="categoryName" className="form-label">
               Select Main Category
             </label>
             <select
               name="categoryName"
-              className="form-control"
+              className="form-control select-arrow"
               id="categoryName"
               value={formData.categoryName}
               onChange={handleChange}
@@ -135,7 +143,28 @@ const AddSubCategory = () => {
                 </option>
               ))}
             </select>
+          </div> */}
+
+          <div className="col-md-4">
+            <label className="form-label">Select Category</label>
+
+            <Select
+              options={mainCategoryOptions}
+              value={mainCategoryOptions.find(
+                (opt) => opt.value === formData?.categoryName
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  categoryName: selected?.value || "",
+                }))
+              }
+              placeholder="Select sub category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
+
           <div className="col-md-6">
             <label htmlFor="subcategoryName" className="form-label">
               Subcategory Name
@@ -164,7 +193,7 @@ const AddSubCategory = () => {
               required
             />
           </div>
-          
+
           <div className="col-md-6">
             <label htmlFor="image" className="form-label">
               Subcategory Image (140x140)PX

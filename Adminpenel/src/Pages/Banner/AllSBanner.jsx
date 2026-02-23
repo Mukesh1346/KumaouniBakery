@@ -88,7 +88,7 @@ const AllSBanner = () => {
         </div>}
       </div>
 
-      <div className="filteration">
+      {/* <div className="filteration">
         <div className="search">
           <label htmlFor="search">Search </label> &nbsp;
           <input
@@ -98,7 +98,7 @@ const AllSBanner = () => {
             placeholder="Search by name..."
           />
         </div>
-      </div>
+      </div> */}
 
       <section className="main-table">
         <table className="table table-bordered table-striped table-hover">

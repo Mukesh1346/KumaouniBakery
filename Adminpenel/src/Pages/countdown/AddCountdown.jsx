@@ -79,7 +79,7 @@ const AddCountdown = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:7000/api/countdown/create-countdown",
+        "https://api.ssdipl.com/api/countdown/create-countdown",
         body
       );
 

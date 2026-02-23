@@ -72,19 +72,19 @@ const productSchema = new mongoose.Schema({
     },
     ActiveonHome: {
         type: Boolean,
-        default: 0
+        default: false
     },
     FeaturedProducts: {
         type: Boolean,
-        default: 0
+        default: false
     },
     BestSellingProduct: {
         type: Boolean,
-        default: 0
+        default: false
     },
     eggless: {
         type: Boolean,
-        default: 0
+        default: false
     },
 })
 

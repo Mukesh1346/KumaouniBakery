@@ -61,8 +61,9 @@ const AllCoupon = () => {
         const updatedStatus = e.target.checked;
 
         try {
-            const response = await axios.put(`/api/coupon/update-coupon/${couponId}`, {
+            const response = await axios.post(`https://api.ssdipl.com/api/coupon/change-status`, {
                 isActive: updatedStatus,
+                couponId: couponId
             });
 
             if (response.status === 200) {

@@ -13,23 +13,23 @@ export default function ReelSection() {
   const navigate = useNavigate();
   const [activeReel, setActiveReel] = useState(null);
   const [reels, setReels] = useState([]);
-const reelRef = useRef(null);
+  const reelRef = useRef(null);
 
 
 
-const scrollLeft = () => {
-  reelRef.current.scrollBy({
-    left: -250,
-    behavior: "smooth",
-  });
-};
+  const scrollLeft = () => {
+    reelRef.current.scrollBy({
+      left: -250,
+      behavior: "smooth",
+    });
+  };
 
-const scrollRight = () => {
-  reelRef.current.scrollBy({
-    left: 250,
-    behavior: "smooth",
-  });
-};
+  const scrollRight = () => {
+    reelRef.current.scrollBy({
+      left: 250,
+      behavior: "smooth",
+    });
+  };
 
 
 
@@ -42,7 +42,7 @@ const scrollRight = () => {
   const fetchReels = async () => {
     try {
       const response = await axios.get("https://api.ssdipl.com/api/reel/get-reels");
-      setReels(response?.data?.data || []);
+      setReels(response?.data?.data.filter((reel) => reel?.activeOnHome === true) || []);
     } catch (error) {
       console.error("Error fetching reels:", error);
     }
@@ -60,47 +60,47 @@ const scrollRight = () => {
   return (
     <>
       <div className="container">
-       <div className="reel-wrapper">
-  {/* <button className="reel-arrow left" onClick={scrollLeft}>
+        <div className="reel-wrapper">
+          {/* <button className="reel-arrow left" onClick={scrollLeft}>
     ❮
   </button> */}
 
-  <section className="reel-section" ref={reelRef}>
-    {reels.map((reel) => (
-      <div
-        key={reel._id}
-        className="reel-card"
-        onClick={() => setActiveReel(reel)}
-      >
-        {reel.video && (
-          <video
-            src={getVideoUrl(reel.video)}
-            muted
-            loop
-            preload="metadata"
-            onMouseEnter={(e) => e.target.play().catch(() => {})}
-            onMouseLeave={(e) => {
-              e.target.pause();
-              e.target.currentTime = 0;
-            }}
-          />
-        )}
+          <section className="reel-section" ref={reelRef}>
+            {reels.map((reel) => (
+              <div
+                key={reel._id}
+                className="reel-card"
+                onClick={() => setActiveReel(reel)}
+              >
+                {reel.video && (
+                  <video
+                    src={getVideoUrl(reel.video)}
+                    muted
+                    loop
+                    preload="metadata"
+                    onMouseEnter={(e) => e.target.play().catch(() => { })}
+                    onMouseLeave={(e) => {
+                      e.target.pause();
+                      e.target.currentTime = 0;
+                    }}
+                  />
+                )}
 
-        <div className="reel-product">
-          <img src={BASE_URL + reel?.productId?.productImage[0]} alt="" />
-          <div>
-            <p>{reel?.productId?.productName}</p>
-            <span>{reel?.productId?.Variant[0]?.finalPrice}</span>
-          </div>
-        </div>
-      </div>
-    ))}
-  </section>
+                <div className="reel-product">
+                  <img src={BASE_URL + reel?.productId?.productImage[0]} alt="" />
+                  <div>
+                    <p>{reel?.productId?.productName}</p>
+                    <span>{reel?.productId?.Variant[0]?.finalPrice}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </section>
 
-  {/* <button className="reel-arrow right" onClick={scrollRight}>
+          {/* <button className="reel-arrow right" onClick={scrollRight}>
     ❯
   </button> */}
-</div>
+        </div>
 
       </div>
 

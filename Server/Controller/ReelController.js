@@ -24,7 +24,6 @@ const createReel = async (req, res) => {
       productId,
       price,
       video: req.files.video[0].path,
-      productImage: req.files.productImage[0].path,
       activeOnHome,
     });
 
@@ -56,7 +55,6 @@ const updateReel = async (req, res) => {
   const updateData = { title, price, activeOnHome, productId };
 
   if (req.files?.video) updateData.video = req.files.video[0].path;
-  if (req.files?.productImage) updateData.productImage = req.files.productImage[0].path;
 
   const reel = await Reel.findByIdAndUpdate(req.params.id, updateData, { new: true });
 

@@ -2,15 +2,15 @@ const Coupon = require("../Model/CouponsModel");
 
 const createCoupon = async (req, res, next) => {
     try {
-        const { couponCode, discount, title, minAmount, maxAmount, isActive, } = req.body;
-        // console.log("BODY===>>", req.body)
+        const { couponCode, discount,  title, minAmount, isActive, } = req.body;
+        console.log("BODY===>>", req.body)
 
         const existingCoupon = await Coupon.findOne({ couponCode });
         if (existingCoupon) {
             return res.status(400).json({ success: false, message: "Coupon code already exists." });
         }
         console.log("BODY===>>", req.body)
-        const newCoupon = new Coupon({ couponCode, discount, title, minAmount, maxAmount, isActive });
+        const newCoupon = new Coupon({ couponCode, discount, title, minAmount, isActive });
         await newCoupon.save();
 
         res.status(201).json({ success: true, message: "Coupon created successfully", coupon: newCoupon });
@@ -83,7 +83,7 @@ const getCouponById = async (req, res, next) => {
 const updateCoupon = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { couponCode, discount, title, minAmount, maxAmount, isActive } = req.body;
+        const { couponCode, discount, title, minAmount, isActive } = req.body;
         console.log("BODY===>>", req.body)
         if (!couponCode || typeof couponCode !== 'string') {
             return res.status(400).json({ message: "Invalid coupon code." });
@@ -95,7 +95,7 @@ const updateCoupon = async (req, res, next) => {
 
         const updatedCoupon = await Coupon.findOneAndUpdate(
             { _id: id },
-            { couponCode, discount, title, minAmount, maxAmount, isActive, updatedAt: Date.now() },
+            { couponCode, discount, title, minAmount, isActive, updatedAt: Date.now() },
             { new: true } // Return the updated document
         );
 

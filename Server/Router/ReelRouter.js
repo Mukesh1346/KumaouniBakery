@@ -5,10 +5,10 @@ const { createReel, getAllReels, getReelById, updateReel, deleteReel, } = requir
 const router = express.Router();
 
 
-router.post("/create-reel", upload.fields([{ name: "video", maxCount: 1 }, { name: "productImage", maxCount: 1 },]), createReel);
+router.post("/create-reel", upload.fields([{ name: "video", maxCount: 1 }]), createReel);
 router.get("/get-reels", getAllReels);
 router.get("/get-single-reel/:id", getReelById);
-router.put("/update-reel/:id", upload.fields([{ name: "video", maxCount: 1 }, { name: "productImage", maxCount: 1 },]), updateReel);
+router.put("/update-reel/:id", upload.fields([{ name: "video", maxCount: 1 },]), updateReel);
 router.delete("/delete-reel/:id", deleteReel);
 
 module.exports = router;

@@ -255,7 +255,7 @@ const Dashboard = () => {
           </Link>
         </div>
 
-         <div className="dashboard-card">
+        <div className="dashboard-card">
           <Link to="/all-reels">
             <i className="fa-solid fa-boxes-stacked"></i>
             <h3>Manage Reels</h3>
@@ -266,22 +266,21 @@ const Dashboard = () => {
           </Link>
         </div>
 
-           <div className="dashboard-card">
+        {/* <div className="dashboard-card">
           <Link to="/all-promo-banners">
             <i className="fa-solid fa-boxes-stacked"></i>
             <h3>Manage PromoBanners</h3>
             <p>Add, update, or remove PromoBanners</p>
             <p>PromoBanners</p>
-            {/* Display products data */}
-            {/* <pre>{JSON.stringify(products, null, 2)}</pre> */}
+           
           </Link>
-        </div>
+        </div> */}
 
-  <div className="dashboard-card">
-          <Link to="/all-cake-banners">
+        <div className="dashboard-card">
+          <Link to="/all-cake-banner">
             <i className="fa-solid fa-boxes-stacked"></i>
-            <h3>Manage Cake Banners</h3>
-            <p>Add, update, or remove Cake Banners</p>
+            <h3>Manage Level Banners</h3>
+            <p>Add, update, or remove Level Banners</p>
             <p>Cake Banners</p>
             {/* Display products data */}
             {/* <pre>{JSON.stringify(products, null, 2)}</pre> */}
@@ -302,10 +301,10 @@ const Dashboard = () => {
 
 
 
-         
+
       </div>
 
-    
+
     </div>
   );
 };

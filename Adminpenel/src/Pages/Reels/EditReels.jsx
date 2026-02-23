@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +10,9 @@ const EditReels = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [productList, setProductList] = useState([]);
+  const [existingVideo, setExistingVideo] = useState("");
+  const [existingImage, setExistingImage] = useState("");
+
   const [formData, setFormData] = useState({
     productId: "",
     title: "",
@@ -19,7 +22,21 @@ const EditReels = () => {
     productImage: null,
   });
 
+  /* ================= PREVIEWS ================= */
+
+  const videoPreview = useMemo(() => {
+    if (formData.video) return URL.createObjectURL(formData.video);
+    return existingVideo;
+  }, [formData.video, existingVideo]);
+
+  const imagePreview = useMemo(() => {
+    if (formData.productImage)
+      return URL.createObjectURL(formData.productImage);
+    return existingImage;
+  }, [formData.productImage, existingImage]);
+
   /* ================= FETCH SINGLE REEL ================= */
+
   useEffect(() => {
     const fetchReel = async () => {
       try {
@@ -27,16 +44,19 @@ const EditReels = () => {
           `https://api.ssdipl.com/api/reel/get-single-reel/${id}`
         );
 
-        const data = res.data.data;
+        const data = res.data?.data;
 
         setFormData({
-          productId: data.productId._id || "",
-          title: data.title || "",
-          price: data.price || "",
-          activeOnHome: data.activeOnHome || false,
+          productId: data?.productId?._id || "",
+          title: data?.title || "",
+          price: data?.price || "",
+          activeOnHome: Boolean(data?.activeOnHome),
           video: null,
           productImage: null,
         });
+
+        setExistingVideo(data?.videoUrl || data?.video || "");
+        setExistingImage(data?.productImage || "");
       } catch {
         toast.error("Failed to load reel");
       }
@@ -45,25 +65,78 @@ const EditReels = () => {
     fetchReel();
   }, [id]);
 
+  /* ================= FETCH PRODUCTS ================= */
+
+  useEffect(() => {
+    const fetchAllProduct = async () => {
+      try {
+        const res = await axios.get(
+          "https://api.ssdipl.com/api/all-product"
+        );
+        setProductList(res.data?.data || []);
+      } catch (error) {
+        toast.error("Error fetching products");
+      }
+    };
+
+    fetchAllProduct();
+  }, []);
+
   /* ================= HANDLE CHANGE ================= */
+
   const handleChange = (e) => {
     const { name, type, checked, files, value } = e.target;
 
-    if (type === "file") {
-      setFormData((prev) => ({ ...prev, [name]: files[0] }));
-    } else if (type === "checkbox") {
-      setFormData((prev) => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+    // ✅ product select auto fill
+    if (name === "productId") {
+      const product = productList.find((p) => p._id === value);
+
+      if (product) {
+        setFormData((prev) => ({
+          ...prev,
+          productId: product._id,
+          title: product.productName || "",
+          price: product?.Variant?.[0]?.finalPrice || "",
+        }));
+      }
+      return;
     }
+
+    // ✅ file upload with validation
+    if (type === "file") {
+      const file = files[0];
+      if (!file) return;
+
+      // video size check
+      if (name === "video") {
+        const maxSize = 80 * 1024 * 1024;
+        if (file.size > maxSize) {
+          toast.error("Video must be less than 80MB");
+          return;
+        }
+      }
+
+      setFormData((prev) => ({ ...prev, [name]: file }));
+      return;
+    }
+
+    // ✅ checkbox
+    if (type === "checkbox") {
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+      return;
+    }
+
+    // ✅ normal input
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   /* ================= SUBMIT ================= */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.price || !formData?.productId) {
-      toast.error("Title and Price are required");
+    if (!formData.productId) {
+      toast.error("Please select product");
       return;
     }
 
@@ -76,20 +149,14 @@ const EditReels = () => {
       fd.append("price", formData.price);
       fd.append("activeOnHome", formData.activeOnHome);
 
-      if (formData.video) {
-        fd.append("video", formData.video);
-      }
-
-      if (formData?.productImage) {
-        fd.append("productImage", formData?.productImage);
-      }
+      if (formData.video) fd.append("video", formData.video);
+      if (formData.productImage)
+        fd.append("productImage", formData.productImage);
 
       const res = await axios.put(
         `https://api.ssdipl.com/api/reel/update-reel/${id}`,
         fd,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
       toast.success(res.data?.message || "Reel updated successfully");
@@ -103,25 +170,12 @@ const EditReels = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchAllProduct = async () => {
-      try {
-        const res = await axios.get("https://api.ssdipl.com/api/all-product");
-        setProductList(res.data?.data || []);
-      } catch (error) {
-        toast.error("Error fetching products");
-        console.error(error);
-      }
-    };
-
-    fetchAllProduct();
-  }, []);
+  /* ================= UI ================= */
 
   return (
     <>
       <ToastContainer />
 
-      {/* ===== BREADCRUMB ===== */}
       <div className="bread">
         <div className="head">
           <h4>Edit Reel</h4>
@@ -133,45 +187,25 @@ const EditReels = () => {
         </div>
       </div>
 
-      {/* ===== FORM ===== */}
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
-
           {/* PRODUCT */}
           <div className="col-md-4">
             <label className="form-label">Product</label>
-            <select name="productId" className="form-control" value={formData?.productId} onChange={handleChange} required            >
+            <select
+              name="productId"
+              className="form-select"
+              value={formData.productId}
+              onChange={handleChange}
+              required
+            >
               <option value="">Select Product</option>
-              {productList?.map((sub) => (
-                <option key={sub?._id} value={sub?._id}>{sub?.productName} (Rs{sub?.Variant[0]?.price})</option>
+              {productList.map((p) => (
+                <option key={p._id} value={p._id}>
+                  {p.productName} (₹{p?.Variant?.[0]?.price || 0})
+                </option>
               ))}
             </select>
-          </div>
-
-          {/* TITLE */}
-          <div className="col-md-4">
-            <label className="form-label">Reel Title</label>
-            <input
-              type="text"
-              name="title"
-              className="form-control"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* PRICE */}
-          <div className="col-md-4">
-            <label className="form-label">Price</label>
-            <input
-              type="text"
-              name="price"
-              className="form-control"
-              value={formData.price}
-              onChange={handleChange}
-              required
-            />
           </div>
 
           {/* VIDEO */}
@@ -184,10 +218,18 @@ const EditReels = () => {
               accept="video/*"
               onChange={handleChange}
             />
+
+            {videoPreview && (
+              <video
+                src={videoPreview}
+                controls
+                style={{ width: 200, marginTop: 10, borderRadius: 8 }}
+              />
+            )}
           </div>
 
-          {/* PRODUCT IMAGE */}
-          <div className="col-md-6">
+          {/* IMAGE */}
+          {/* <div className="col-md-6">
             <label className="form-label">Replace Product Image</label>
             <input
               type="file"
@@ -196,7 +238,15 @@ const EditReels = () => {
               accept="image/*"
               onChange={handleChange}
             />
-          </div>
+
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="preview"
+                style={{ width: 120, marginTop: 10, borderRadius: 8 }}
+              />
+            )}
+          </div> */}
 
           {/* ACTIVE */}
           <div className="col-md-6">
@@ -220,7 +270,7 @@ const EditReels = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`${isLoading ? "not-allowed" : "allowed"}`}
+              className="btn btn-primary"
             >
               {isLoading ? "Please Wait..." : "Update Reel"}
             </button>

@@ -78,6 +78,7 @@ import AddCountdown from '../../Pages/countdown/AddCountdown'
 import EditCountdown from '../../Pages/countdown/EditCountdown'
 import AllAdmin from '../../Pages/AdminPermission/AllAdmin'
 import AllSubscribeEmail from '../../Pages/Subscribe/AllSubscribe'
+import AddAdmin from '../../Pages/AdminPermission/AddAdmin'
 
 const Home = () => {
 
@@ -232,6 +233,7 @@ const Home = () => {
 
                 {/* all-admin */}
                 <Route path={'/all-admin'} element={<AllAdmin />} />
+                 <Route path={'/add-admin'} element={<AddAdmin />} />
 
                 <Route path={'/all-subscribeEmail'} element={<AllSubscribeEmail />} />
               </Routes>

@@ -54,18 +54,18 @@ const AllCakeBanners = () => {
   };
 
   if (loading) {
-    return <p className="text-center mt-5">Loading cake banners...</p>;
+    return <p className="text-center mt-5">Loading level banners...</p>;
   }
 
   return (
     <>
       <div className="bread">
         <div className="head">
-          <h4>All Cake Banners</h4>
+          <h4>All level Banners</h4>
         </div>
         <div className="links">
           <Link to="/add-cake-banner" className="add-new">
-            Add Cake Banner
+            Add level Banner
           </Link>
         </div>
       </div>

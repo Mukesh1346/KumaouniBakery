@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import CountdownTimer from "../../Components/Countdown/Countdown";
 
 
+
 const ProductDetails = () => {
   const loginvalue = sessionStorage.getItem("login");
   const user = sessionStorage.getItem("userId");
@@ -24,6 +25,8 @@ const ProductDetails = () => {
   const [data, setData] = useState({});
   const [activeWeight, setActiveWeight] = useState(null);
   const [price, setPrice] = useState(0);
+  const [originalPrice, setOriginalPrice] = useState(0);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
   const [eggOption, setEggOption] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
   const [popupSource, setPopupSource] = useState("");
@@ -112,12 +115,16 @@ const ProductDetails = () => {
         `https://api.ssdipl.com/api/get-product-by-name/${name?.replace(/-/g, " ")}`
       );
       const productData = res.data.data;
+      console.log(productData.Variant)
+
       setData(productData);
 
       if (productData?.Variant?.length > 0) {
         const firstVariant = productData.Variant[0];
         setActiveWeight(firstVariant?.weight?.sizeweight);
         setPrice(firstVariant?.finalPrice);
+        setOriginalPrice(firstVariant?.price);
+        setDiscountPercentage(firstVariant?.discountPrice);
       }
 
     } catch (error) {
@@ -137,27 +144,27 @@ const ProductDetails = () => {
 
 
   // Listen for cart updates
-useEffect(() => {
-  const checkIfAdded = () => {
-    if (activeWeight && data._id) {
-      const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-      const productInCart = cart.some(
-        item => item.productId === data._id && item.weight === activeWeight
-      );
-      console.log("Checking if product in cart:", productInCart);
-      setIsAdded(productInCart);
-    }
-  };
-  
-  checkIfAdded();
-  
-  // Also check when cart changes
-  window.addEventListener('storage', checkIfAdded);
-  
-  return () => {
-    window.removeEventListener('storage', checkIfAdded);
-  };
-}, [activeWeight, data._id]);
+  useEffect(() => {
+    const checkIfAdded = () => {
+      if (activeWeight && data._id) {
+        const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+        const productInCart = cart.some(
+          item => item.productId === data._id && item.weight === activeWeight
+        );
+        console.log("Checking if product in cart:", productInCart);
+        setIsAdded(productInCart);
+      }
+    };
+
+    checkIfAdded();
+
+    // Also check when cart changes
+    window.addEventListener('storage', checkIfAdded);
+
+    return () => {
+      window.removeEventListener('storage', checkIfAdded);
+    };
+  }, [activeWeight, data._id]);
 
   // Check if product is in cart whenever activeWeight or cartItems change
   useEffect(() => {
@@ -189,7 +196,7 @@ useEffect(() => {
       fetchCountdown();
     }
   }, [data?.subcategoryName?._id])
-  
+
   const handleWeightSelection = (weight) => {
     setActiveWeight(weight);
     const selectedVariant = data.Variant?.find(
@@ -197,6 +204,8 @@ useEffect(() => {
     );
     if (selectedVariant) {
       setPrice(selectedVariant.finalPrice);
+      setOriginalPrice(selectedVariant.price);
+      setDiscountPercentage(selectedVariant.discountPrice);
     }
   };
 
@@ -228,73 +237,72 @@ useEffect(() => {
     return { cart, index };
   };
 
-const addToCart = () => {
-  console.log("addToCart clicked");
-  console.log("isServiceAvailable:", isServiceAvailable);
-  console.log("orderActive:", orderActive);
-  console.log("activeWeight:", activeWeight);
-  console.log("data._id:", data._id);
-  
-  if (!isServiceAvailable) {
-    Swal.fire({
-      icon: "warning",
-      title: "Service Area Required",
-      text: "Please check delivery availability for your location first.",
-      timer: 2000
-    });
-    return;
-  }
+  const addToCart = () => {
+    if (!isServiceAvailable) {
+      Swal.fire({
+        icon: "warning",
+        title: "Service Area Required",
+        text: "Please check delivery availability for your location first.",
+        timer: 2000
+      });
+      return;
+    }
 
-  if (orderActive === false) {
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      icon: "warning",
-      title: "Orders are currently disabled by admin",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    return;
-  }
+    if (orderActive === false) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Orders are currently disabled by admin",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
 
-  const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
-  if (hasWeight && !activeWeight) {
-    Swal.fire("Select Weight", "Please select cake weight first", "warning");
-    return;
-  }
+    const hasWeight = data.Variant?.some(v => v?.weight?.sizeweight);
+    if (hasWeight && !activeWeight) {
+      Swal.fire("Select Weight", "Please select cake weight first", "warning");
+      return;
+    }
 
-  // Check if product is already in cart
-  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-  console.log("Current cart:", cart);
-  
-  const existingProductIndex = cart.findIndex(
-    item => item.productId === data._id && item.weight === activeWeight
-  );
-  
-  console.log("existingProductIndex:", existingProductIndex);
-  console.log("isAdded state:", isAdded);
+    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-  if (existingProductIndex !== -1) {
-    console.log("Product found in cart, redirecting to cart");
-    // Product IS in cart → redirect to cart page
-    Swal.fire({
-      icon: "success",
-      title: "Product in Cart",
-      text: "Redirecting to cart page...",
-      timer: 1500,
-      showConfirmButton: false
-    }).then(() => {
-      console.log("Navigating to /cart");
+    // Check if product is already in cart
+    const existingProductIndex = cart.findIndex(
+      item => item.productId === data._id && item.weight === activeWeight
+    );
+
+    if (existingProductIndex !== -1) {
+      // Product IS in cart → redirect to cart page (NO SWEET ALERT HERE)
       navigate("/cart");
-    });
-    return; // Important: Stop execution here
-  }
+      return;
+    }
 
-  console.log("Product not in cart, opening popup");
-  // Product is NOT in cart → open popup to add
-  setPopupSource("cart");
-  setOpenPopup(true);
-};
+    // Product is NOT in cart → add to cart immediately
+    const newItem = {
+      productId: data._id,
+      name: data.productName,
+      categoryId: data?.categoryName?._id,
+      weight: activeWeight,
+      price: price,
+      massage: massage,
+      quantity: 1,
+      image: data?.productImage?.[0],
+      deliveryDate,
+      eggOption,
+      addonProducts: [],
+    };
+
+    cart.push(newItem);
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+    setCartItems(cart);
+
+    // Open recommended popup (NO SUCCESS MESSAGE HERE)
+    setPopupSource("cart");
+    setOpenPopup(true);
+  };
+
   const addAddon = (addon) => {
     if (!isServiceAvailable && !isAdded) {
       Swal.fire({
@@ -416,7 +424,7 @@ const addToCart = () => {
   const addonSliderSettings = {
     dots: false,
     arrows: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -470,7 +478,7 @@ const addToCart = () => {
     }
 
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    
+
     const existingProductIndex = cart.findIndex(
       item => item.productId === data._id && item.weight === activeWeight
     );
@@ -523,12 +531,12 @@ const addToCart = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  
+
   const handlePopupClose = () => {
     setOpenPopup(false);
     setPopupSource("");
   };
-  
+
   // Get button text based on cart status
   const getCartButtonText = () => {
     if (isAdded) {
@@ -536,7 +544,7 @@ const addToCart = () => {
     }
     return "ADD TO CART";
   };
-  
+
   return (
     <>
       <section className="breadCrumb">
@@ -604,7 +612,6 @@ const addToCart = () => {
                 <div className="pdx-title-row">
                   {data.eggless ? <span className="pdx-badge"> 100% EGGLESS </span> : ''}
                   <h1>{data.productName}</h1>
-                  <p className="discountSec">20 %</p>
 
                   <div
                     className={`wishlist-icon ${wishlist?.includes(data?._id) ? "active" : ""}`}
@@ -619,7 +626,22 @@ const addToCart = () => {
                   </div>
                 </div>
 
-                <div className="pdx-price">₹ {Math?.round(price)}</div>
+                <div>
+                  <div className="pdx-price">₹ {Math?.round(price)}</div>
+                  {activeWeight && originalPrice > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '5px' }}>
+                      <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '16px' }}>
+                        M.R.P: ₹{originalPrice}
+                      </span>
+                      <span style={{ color: '#4caf50', fontSize: '14px', fontWeight: 'bold' }}>
+                        {discountPercentage}% OFF
+                      </span>
+                      <span style={{ color: '#df4444', fontSize: '14px' }}>
+                        Save: ₹{originalPrice - price}
+                      </span>
+                    </div>
+                  )}
+                </div>
 
                 {data?.Variant?.some(v => v?.weight?.sizeweight) && (
                   <div className="pdx-block">
@@ -693,7 +715,7 @@ const addToCart = () => {
 
                           return (
                             <div key={index}>
-                              <div className="rp-card">
+                              <div className="rpS-card">
                                 <img
                                   src={`https://api.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
@@ -705,13 +727,13 @@ const addToCart = () => {
                                 </div>
                                 {addonQuantity === 0 ? (
                                   <button
-                                    className="rp-add-btn"
+                                    className="rpS-add-btn"
                                     onClick={() => addAddon(item)}
                                   >
                                     Add
                                   </button>
                                 ) : (
-                                  <div className="rp-qty">
+                                  <div className="rpS-qty">
                                     <button
                                       onClick={() => decrementAddon(item._id)}
                                       disabled={!isServiceAvailable}
@@ -833,6 +855,6 @@ const addToCart = () => {
       </section>
     </>
   );
-};     
+};
 
 export default ProductDetails;

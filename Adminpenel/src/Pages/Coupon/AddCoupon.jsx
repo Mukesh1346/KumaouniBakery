@@ -8,7 +8,7 @@ import axios from "axios";
 const AddCoupon = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isActive, setIsActive] = useState(false);
-    const [formData, setFormData] = useState({ couponCode: "", discount: "", couponTitle: "", minAmount: "", maxAmount: "", });
+    const [formData, setFormData] = useState({ couponCode: "", discount: "", couponTitle: "", minAmount: "", });
 
     const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const AddCoupon = () => {
         e.preventDefault();
         setIsLoading(true);
 
-        if (!formData?.couponCode || !formData?.discount || !formData?.couponTitle || !formData?.minAmount || !formData?.maxAmount) {
+        if (!formData?.couponCode || !formData?.discount || !formData?.couponTitle || !formData?.minAmount) {
             toast.error("Please fill all fields");
             setIsLoading(false);
             return;
@@ -33,8 +33,8 @@ const AddCoupon = () => {
             setIsLoading(false);
             return;
         }
-        if (Number(formData.maxAmount) < Number(formData.minAmount)) {
-            toast.error("Max amount should be greater than min amount");
+        if (Number(formData?.minAmount) <= 0) {
+            toast.error("Min Order Amount should be greater than 0");
             setIsLoading(false);
             return;
         }
@@ -43,7 +43,6 @@ const AddCoupon = () => {
             discount: formData?.discount,
             title: formData?.couponTitle,
             minAmount: formData?.minAmount,
-            maxAmount: formData?.maxAmount,
             isActive: isActive,
         };
 
@@ -125,7 +124,7 @@ const AddCoupon = () => {
                     </div>
                     <div className="col-md-4">
                         <label htmlFor="minAmount" className="form-label">
-                            Min Amount
+                            Min Order Amount
                         </label>
                         <input
                             type="number"
@@ -137,7 +136,7 @@ const AddCoupon = () => {
                             required
                         />
                     </div>
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                         <label htmlFor="maxAmount" className="form-label">
                             Max Amount
                         </label>
@@ -150,7 +149,7 @@ const AddCoupon = () => {
                             onChange={handleChange}
                             required
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label
                             style={{ display: "flex", alignItems: "center", gap: "10px" }}

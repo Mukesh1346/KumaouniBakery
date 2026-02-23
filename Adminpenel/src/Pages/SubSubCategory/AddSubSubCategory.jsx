@@ -99,11 +99,11 @@ const AddSubSubCategory = () => {
         }
       );
 
-      toast.success(res.data?.message || "Sub-Subcategory added");
+      toast.success(res.data?.message || "Child category added");
       navigate("/all-sub-subcategory");
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to create sub-subcategory"
+        error.response?.data?.message || "Failed to create Child category"
       );
     } finally {
       setIsLoading(false);
@@ -116,7 +116,7 @@ const AddSubSubCategory = () => {
 
       <div className="bread">
         <div className="head">
-          <h4>Add Sub-Subcategory</h4>
+          <h4>Add Child category</h4>
         </div>
         <div className="links">
           <Link to="/all-sub-subcategory" className="add-new">
@@ -129,15 +129,15 @@ const AddSubSubCategory = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* MAIN CATEGORY */}
           <div className="col-md-6">
-            <label className="form-label">Main Category</label>
+            <label className="form-label">Category</label>
             <select
               name="mainCategoryId"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData.mainCategoryId}
               onChange={handleChange}
               required
             >
-              <option value="">Select main category</option>
+              <option value="">Select category</option>
               {mainCategories.map((cat) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.mainCategoryName}
@@ -151,7 +151,7 @@ const AddSubSubCategory = () => {
             <label className="form-label">Sub Category</label>
             <select
               name="subCategoryId"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData.subCategoryId}
               onChange={handleChange}
               disabled={!formData.mainCategoryId}
@@ -168,7 +168,7 @@ const AddSubSubCategory = () => {
 
           {/* SUB-SUBCATEGORY NAME */}
           <div className="col-md-6">
-            <label className="form-label">Sub-Subcategory Name</label>
+            <label className="form-label">Child Category Name</label>
             <input
               type="text"
               name="secondSubCategoryName"
@@ -198,7 +198,7 @@ const AddSubSubCategory = () => {
 
           {/* IMAGE */}
           <div className="col-md-6">
-            <label className="form-label">Sub-Subcategory Image</label>
+            <label className="form-label">Child Category Image</label>
             <input
               type="file"
               className="form-control"
@@ -214,7 +214,7 @@ const AddSubSubCategory = () => {
               disabled={isLoading}
               className={`${isLoading ? "not-allowed" : "allowed"}`}
             >
-              {isLoading ? "Please Wait..." : "Add Sub-Subcategory"}
+              {isLoading ? "Please Wait..." : "Add Child Category"}
             </button>
           </div>
         </form>

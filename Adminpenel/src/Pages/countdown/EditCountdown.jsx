@@ -34,7 +34,7 @@ const EditCountdown = () => {
     const fetchCountdown = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:7000/api/countdown/get-single-countdown/${id}`
+          `https://api.ssdipl.com/api/countdown/get-single-countdown/${id}`
         );
 
         if (res.data?.success && res.data.data) {
@@ -110,7 +110,7 @@ const EditCountdown = () => {
       };
 
       const res = await axios.post(
-        `http://localhost:7000/api/countdown/update-countdown/${id}`,
+        `https://api.ssdipl.com/api/countdown/update-countdown/${id}`,
         body
       );
 

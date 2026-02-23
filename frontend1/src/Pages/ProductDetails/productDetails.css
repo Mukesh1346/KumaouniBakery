@@ -11,6 +11,8 @@
   gap: 16px;
 }
 
+
+
 .pdxImg{
   display: flex;
   gap:10px;  
@@ -140,7 +142,52 @@
   margin-bottom: 4px;
 }
 
+.rpS-card {
+    height: fit-content;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 14px;
+    width: 100%;
+    text-align: left;
+}
 
+.rpS-card img {
+    width: 100%;
+    height: 100px;
+    object-fit: fill;
+    border-radius: 30px;
+}
+
+.rpS-qty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+.rpS-qty button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #004d40;
+    background: transparent;
+}
+
+.rpS-add-btn {
+    margin-top: 8px;
+    width: 100%;
+    border: 1px solid #c7e6e0;
+    background: #0e4d65;
+    padding: 8px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+}
+
+.rpS-card h6 {
+    margin: 10px 0 4px;
+    font-size: 11px !important;
+}
 
 /* RIGHT SECTION */
 /* .pdx-right-scroll {
@@ -201,7 +248,10 @@
   margin:0px;
 }
 
- 
+.rpS-card {
+ width: 100% !;
+}
+
 
 .pdx-addon-scroll::-webkit-scrollbar {
   display: none;

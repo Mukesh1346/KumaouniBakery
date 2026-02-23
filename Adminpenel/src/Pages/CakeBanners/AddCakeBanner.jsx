@@ -3,7 +3,36 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
+// import Select from "react-select";
+
+/* ===== options ===== */
+// const subCategoryOptions = secondSubcategories.map((sub) => ({
+//   value: sub._id,
+//   label: sub.secondsubcategoryName,
+// }));
+
+// /* ===== JSX ===== */
+// <div className="col-md-4">
+//   <label className="form-label">Sub Category</label>
+
+//   <Select
+//     options={subCategoryOptions}
+//     value={subCategoryOptions.find(
+//       (opt) => opt.value === formData?.secondsubcategoryName
+//     )}
+//     onChange={(selected) =>
+//       setFormData((prev) => ({
+//         ...prev,
+//         secondsubcategoryName: selected?.value || "",
+//       }))
+//     }
+//     placeholder="Select sub category"
+//     isSearchable
+//     classNamePrefix="react-select"
+//   />
+// </div>
 const AddCakeBanner = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -96,6 +125,11 @@ const AddCakeBanner = () => {
     fetchSubSubcategories();
   }, []);
 
+  const subCategoryOptions = secondSubcategories.map((sub) => ({
+    value: sub._id,
+    label: sub.secondsubcategoryName,
+  }));
+  
   console.log("FORMDATA=>", formData);
   return (
     <>
@@ -103,7 +137,7 @@ const AddCakeBanner = () => {
 
       <div className="bread">
         <div className="head">
-          <h4>Add Cake Banner</h4>
+          <h4>Add level Banner</h4>
         </div>
         <div className="links">
           <Link to="/all-cake-banner" className="add-new">
@@ -116,11 +150,11 @@ const AddCakeBanner = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
 
           {/* SUB CATEGORY */}
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <label className="form-label">Sub Category</label>
             <select
               name="secondsubcategoryName"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData?.secondsubcategoryName}
               onChange={handleChange}
               // disabled={!formData.secondsubcategoryName}
@@ -133,19 +167,39 @@ const AddCakeBanner = () => {
                 </option>
               ))}
             </select>
+          </div> */}
+
+          <div className="col-md-4">
+            <label className="form-label">Sub Category</label>
+
+            <Select
+              options={subCategoryOptions}
+              value={subCategoryOptions.find(
+                (opt) => opt.value === formData?.secondsubcategoryName
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  secondsubcategoryName: selected?.value || "",
+                }))
+              }
+              placeholder="Select sub category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           {/* BANNER SLOT */}
           <div className="col-md-4">
-            <label className="form-label">Select Cake Banner Slot</label>
+            <label className="form-label">Select level Banner Slot</label>
             <select
               name="bannerKey"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData.bannerKey}
               onChange={handleChange}
               required
             >
-              <option value="">-- Select Banner --</option>
+              <option value="">-- Select level Banner --</option>
               <option value="cakeBanner1">Level 1</option>
               <option value="cakeBanner2">Level 2</option>
               <option value="cakeBanner3">Level 3</option>
@@ -213,7 +267,7 @@ const AddCakeBanner = () => {
               disabled={loading}
               className={`${loading ? "not-allowed" : "allowed"}`}
             >
-              {loading ? "Uploading..." : "Save Cake Banner"}
+              {loading ? "Uploading..." : "Save level Banner"}
             </button>
           </div>
         </form>

@@ -182,6 +182,18 @@ ul {
   outline: none;
 }
 
+.form-control.select-arrow {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548a.625.625 0 0 1 .884-.032L10 10.94l3.6-3.424a.625.625 0 1 1 .852.916l-4.026 3.83a.625.625 0 0 1-.852 0L5.548 8.432a.625.625 0 0 1-.032-.884z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
 .form-control:focus {
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg);

@@ -8,7 +8,7 @@ import axios from "axios";
 const EditCoupon = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isActive, setIsActive] = useState(false);
-    const [formData, setFormData] = useState({ couponCode: "", discount: "", couponTitle: "", minAmount: "", maxAmount: "", });
+    const [formData, setFormData] = useState({ couponCode: "", discount: "", couponTitle: "", minAmount: "", });
 
     const navigate = useNavigate();
     const { id } = useParams();
@@ -33,18 +33,17 @@ const EditCoupon = () => {
             setIsLoading(false);
             return;
         }
-        if (formData?.maxAmount < formData?.minAmount) {
-            toast.error("Max amount should be greater than min amount");
+        if (Number(formData?.minAmount) <= 0 || !formData?.minAmount) {
+            toast.error("Min Order Amount should be greater than 0");
             setIsLoading(false);
             return;
         }
-       
+
         let body = {
             couponCode: formData?.couponCode,
             discount: formData?.discount,
             title: formData?.couponTitle,
             minAmount: formData?.minAmount,
-            maxAmount: formData?.maxAmount,
             isActive: isActive,
         };
 
@@ -81,7 +80,6 @@ const EditCoupon = () => {
                         discount: response?.data.coupon?.discount,
                         couponTitle: response?.data.coupon?.title,
                         minAmount: response?.data.coupon?.minAmount,
-                        maxAmount: response?.data.coupon?.maxAmount,
                     });
                     setIsActive(response?.data.coupon?.isActive);
                 }
@@ -167,7 +165,7 @@ const EditCoupon = () => {
                             required
                         />
                     </div>
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                         <label htmlFor="maxAmount" className="form-label">
                             Max Amount
                         </label>
@@ -180,7 +178,7 @@ const EditCoupon = () => {
                             onChange={handleChange}
                             required
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label
                             style={{ display: "flex", alignItems: "center", gap: "10px" }}

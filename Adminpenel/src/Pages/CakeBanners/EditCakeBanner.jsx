@@ -4,6 +4,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import Select from "react-select";
+
+
+
 const EditCakeBanner = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -127,13 +131,19 @@ const EditCakeBanner = () => {
     fetchSubSubcategories();
   }, []);
 
+  const subCategoryOptions = secondSubcategories.map((sub) => ({
+    value: sub._id,
+    label: sub.secondsubcategoryName,
+  }));
+
+
   return (
     <>
       <ToastContainer />
 
       <div className="bread">
         <div className="head">
-          <h4>Edit Cake Banner</h4>
+          <h4>Edit level Banner</h4>
         </div>
         <div className="links">
           <Link to="/all-cake-banner" className="add-new">
@@ -145,11 +155,11 @@ const EditCakeBanner = () => {
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* BANNER SLOT */}
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <label className="form-label">Sub Category</label>
             <select
               name="secondsubcategoryName"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData?.secondsubcategoryName}
               onChange={handleChange}
               // disabled={!formData.secondsubcategoryName}
@@ -162,14 +172,32 @@ const EditCakeBanner = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
+          <div className="col-md-4">
+            <label className="form-label">Sub Category</label>
 
+            <Select
+              options={subCategoryOptions}
+              value={subCategoryOptions.find(
+                (opt) => opt.value === formData?.secondsubcategoryName
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  secondsubcategoryName: selected?.value || "",
+                }))
+              }
+              placeholder="Select sub category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
+          </div>
           {/* BANNER SLOT */}
           <div className="col-md-4">
-            <label className="form-label">Select Cake Banner Slot</label>
+            <label className="form-label">Select level Banner Slot</label>
             <select
               name="bannerKey"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData.bannerKey}
               onChange={handleChange}
               required
@@ -243,7 +271,7 @@ const EditCakeBanner = () => {
               disabled={loading}
               className={`${loading ? "not-allowed" : "allowed"}`}
             >
-              {loading ? "Updating..." : "Update Cake Banner"}
+              {loading ? "Updating..." : "Update level Banner"}
             </button>
           </div>
         </form>

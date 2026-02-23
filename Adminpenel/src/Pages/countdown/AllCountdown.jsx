@@ -14,7 +14,7 @@ const AllCountdown = () => {
     const fetchCountdown = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:7000/api/countdown/get-all-countdown"
+                "https://api.ssdipl.com/api/countdown/get-all-countdown"
             );
 
             if (res.data?.success) {

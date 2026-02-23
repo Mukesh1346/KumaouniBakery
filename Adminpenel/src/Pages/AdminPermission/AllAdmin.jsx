@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import RolePermissionModel from "./RolePermissionModel";
+import { Link } from "react-router-dom";
 
 const AllAdmin = () => {
   const [users, setUsers] = useState([]);
@@ -93,6 +94,11 @@ const AllAdmin = () => {
       <div className="bread">
         <div className="head">
           <h4>All Admin</h4>
+        </div>
+        <div className="links">
+          <Link to="/add-admin" className="add-new">
+            Add Admin User
+          </Link>
         </div>
       </div>
 

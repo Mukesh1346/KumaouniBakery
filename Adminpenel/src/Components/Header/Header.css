@@ -138,3 +138,12 @@
         font-size: 1.4rem;
     }
 }
+
+
+.click {
+    background: white;
+    color: red !important;
+    padding-left: 0.4rem;
+    border-radius: 15px;
+    font-weight: 600;
+}

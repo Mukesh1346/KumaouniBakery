@@ -53,7 +53,7 @@ const EditSubSubCategory = () => {
           image: null,
         });
       } catch {
-        toast.error("Failed to load sub-subcategory");
+        toast.error("Failed to load Child category");
       }
     };
 
@@ -142,7 +142,7 @@ const EditSubSubCategory = () => {
 
       <div className="bread">
         <div className="head">
-          <h4>Edit Sub-Subcategory</h4>
+          <h4>Edit Child category</h4>
         </div>
         <div className="links">
           <Link to="/all-sub-subcategory" className="add-new">
@@ -155,15 +155,15 @@ const EditSubSubCategory = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* MAIN CATEGORY */}
           <div className="col-md-6">
-            <label className="form-label">Main Category</label>
+            <label className="form-label">Category</label>
             <select
               name="mainCategoryId"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData.mainCategoryId}
               onChange={handleChange}
               required
             >
-              <option value="">Select main category</option>
+              <option value="">Select category</option>
               {mainCategories.map((cat) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.mainCategoryName}
@@ -177,7 +177,7 @@ const EditSubSubCategory = () => {
             <label className="form-label">Sub Category</label>
             <select
               name="subCategoryId"
-              className="form-control"
+              className="form-control select-arrow"
               value={formData.subCategoryId}
               onChange={handleChange}
               required
@@ -193,7 +193,7 @@ const EditSubSubCategory = () => {
 
           {/* SUB-SUBCATEGORY NAME */}
           <div className="col-md-6">
-            <label className="form-label">Sub-Subcategory Name</label>
+            <label className="form-label">Child category Name</label>
             <input
               type="text"
               name="secondsubcategoryName"
@@ -223,7 +223,7 @@ const EditSubSubCategory = () => {
 
           {/* IMAGE */}
           <div className="col-md-6">
-            <label className="form-label">Sub-Subcategory Image</label>
+            <label className="form-label">Child category Image</label>
             <input
               type="file"
               className="form-control"
@@ -238,7 +238,7 @@ const EditSubSubCategory = () => {
               disabled={isLoading}
               className={`${isLoading ? "not-allowed" : "allowed"}`}
             >
-              {isLoading ? "Please Wait..." : "Update Sub-Subcategory"}
+              {isLoading ? "Please Wait..." : "Update Child category"}
             </button>
           </div>
         </form>

@@ -18,7 +18,7 @@ const AllSubSubCategory = () => {
         );
         setSubSubcategories(res.data?.data || []);
       } catch (error) {
-        toast.error("Error fetching sub-subcategories");
+        toast.error("Error fetching Child categories");
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -32,7 +32,7 @@ const AllSubSubCategory = () => {
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
       title: "Are you sure?",
-      text: "This sub-subcategory will be permanently deleted!",
+      text: "This Child category will be permanently deleted!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -51,15 +51,15 @@ const AllSubSubCategory = () => {
         prev.filter((item) => item._id !== id)
       );
 
-      Swal.fire("Deleted!", "Sub-Subcategory deleted.", "success");
+      Swal.fire("Deleted!", "Child category deleted.", "success");
     } catch (error) {
-      Swal.fire("Error!", "Failed to delete sub-subcategory.", "error");
+      Swal.fire("Error!", "Failed to delete Child category.", "error");
       console.error(error);
     }
   };
 
   if (isLoading) {
-    return <p className="text-center mt-5">Loading sub-subcategories...</p>;
+    return <p className="text-center mt-5">Loading Child categories...</p>;
   }
 
   return (
@@ -68,7 +68,7 @@ const AllSubSubCategory = () => {
 
       <div className="bread">
         <div className="head">
-          <h4>All Sub-Subcategory List</h4>
+          <h4>All Child category List</h4>
         </div>
         <div className="links">
           <Link to="/add-sub-subcategory" className="add-new">
@@ -82,9 +82,9 @@ const AllSubSubCategory = () => {
           <thead>
             <tr>
               <th>Sr.No.</th>
-              <th>Main Category</th>
               <th>Category</th>
-              <th>Sub-Category</th>
+              <th>Sub Category</th>
+              <th>Child Category</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -124,7 +124,7 @@ const AllSubSubCategory = () => {
             ) : (
               <tr>
                 <td colSpan="6" className="text-center">
-                  No sub-subcategories found
+                  No Child categories found
                 </td>
               </tr>
             )}

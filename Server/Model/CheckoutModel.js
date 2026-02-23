@@ -34,7 +34,7 @@ const checkoutSchema = new mongoose.Schema({
             productId: { type: mongoose.Schema.ObjectId, ref: "Product", required: true },
             name: { type: String, required: true },
             quantity: { type: Number, required: true },
-            weight: { type: String, required: true },
+            weight: { type: String, },
             image: { type: String, required: true },
             price: { type: Number, required: true },
             // deliveryDate: { type: String, required: true },

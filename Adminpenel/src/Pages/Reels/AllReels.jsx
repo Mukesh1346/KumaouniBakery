@@ -83,7 +83,6 @@ const AllReels = () => {
             <tr>
               <th>Sr.No.</th>
               <th>Preview</th>
-              <th>Title</th>
               <th>Product Name</th>
               <th>Price</th>
               <th>Status</th>
@@ -108,9 +107,8 @@ const AllReels = () => {
                     />
                   </td>
 
-                  <td>{item?.title}</td>
                   <td>{item?.productId?.productName}</td>
-                  <td>{item?.price}</td>
+                  <td>{item?.productId?.Variant[0]?.finalPrice}</td>
 
                   <td>
                     {item.activeOnHome ? (

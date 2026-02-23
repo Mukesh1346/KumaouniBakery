@@ -453,7 +453,7 @@ const AddProduct = () => {
                   </div>
 
                   <div className="col-md-3">
-                    <label htmlFor={`discountPrice-${index}`} className="form-label">Discount Price<sup className="text-danger">*</sup></label>
+                    <label htmlFor={`discountPrice-${index}`} className="form-label">Discount<sup className="text-danger">*</sup></label>
                     <input
                       type="number"
                       name="discountPrice"
