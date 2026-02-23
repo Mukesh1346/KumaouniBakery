@@ -115,7 +115,7 @@ const Header = () => {
             {hasAccess("dashboard") && <li><Link to="/dashboard" onClick={handletoggleBtn}> <i class="fa-solid fa-gauge"></i> Dashboard</Link></li>}
             {hasAccess("orders") && <li><Link to="/all-orders" onClick={handletoggleBtn}> <i class="fa-solid fa-truck"></i> Manage Orders</Link></li>}
             {hasAccess("banners") && <li><Link to="/all-banners" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Banners</Link></li>}
-            {hasAccess("cakeBanner") && <li><Link to="/all-cake-banner" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Cake Banners</Link></li>}
+            {hasAccess("cakeBanner") && <li><Link to="/all-cake-banner" onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Leve Banners</Link></li>}
             {hasAccess("contactQuery") && <li><Link to="/all-contact-query" onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Contact Query</Link></li>}
             {hasAccess("mainCategory") && <li><Link to="/all-category" onClick={handletoggleBtn}> <i class="fa-solid fa-tags"></i> Manage main Category</Link></li>}
             {hasAccess("category") && <li><Link to="/all-subcategory" onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Category</Link></li>}

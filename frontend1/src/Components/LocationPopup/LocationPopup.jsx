@@ -1,22 +1,62 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import "./locationPopup.css";
 import axios from "axios";
-import { useEffect } from "react";
-import { useRef } from "react";
 
 const LocationPopup = ({
-  onClose, countries = [], selectedCountry, setSelectedCountry,
+  onClose,
+  countries = [],
+  selectedCountry,
+  setSelectedCountry,
 }) => {
-  const [isCurrentLocation, setIsCurrentLocation] = useState(false);
-  const [location, setLocation] = useState(null);
   const debounceRef = useRef(null);
+
+  const [input, setInput] = useState("");
+  const [location, setLocation] = useState(null);
   const [availableService, setAvailableService] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [input, setInput] = useState("");
   const [searchMessage, setSearchMessage] = useState("");
+  const [detecting, setDetecting] = useState(false);
 
+  /* ================= SAFE STORED LOCATION ================= */
 
+  const storedLocation = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem("CakeLocation") || "null");
+    } catch {
+      return null;
+    }
+  }, []);
 
+  /* ================= FETCH SERVICE AREAS ================= */
+
+  const fetchServiceLocations = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        "https://api.ssdipl.com/api/pincode/get-all-pin-codes"
+      );
+      setAvailableService(res.data?.pinCodes || []);
+    } catch (error) {
+      console.log("Service fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchServiceLocations();
+  }, []);
+
+  /* ================= PREFILL FROM STORAGE ================= */
+
+  useEffect(() => {
+    if (!storedLocation?.area || !storedLocation?.pinCode) return;
+
+    setInput(`${storedLocation.area} ${storedLocation.pinCode}`);
+    setLocation(storedLocation);
+  }, [storedLocation]);
+
+  /* ================= GEO LOCATION ================= */
 
   const handleLocationClick = () => {
     if (!navigator.geolocation) {
@@ -24,67 +64,51 @@ const LocationPopup = ({
       return;
     }
 
+    setDetecting(true);
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
 
         try {
-          const response = await axios.get(`https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`);
-          console.log("Detected location response:==>", response.data);
+          const res = await axios.get(
+            `https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`
+          );
 
-          if (response?.data?.status === true) {
+          if (res?.data?.status) {
             const detectedLocation = {
-              area: response?.data?.area || "",
-              city: response?.data?.city || "",
-              state: response?.data?.state || "",
-              pinCode: response?.data?.pincode || "",
+              area: res.data.area || "",
+              city: res.data.city || "",
+              state: res.data.state || "",
+              pinCode: res.data.pincode || "",
             };
-            setInput(`${detectedLocation?.area} ${detectedLocation?.pinCode}`);
+
+            const text = `${detectedLocation.area} ${detectedLocation.pinCode}`;
+
+            setInput(text);
             setLocation(detectedLocation);
-            localStorage.setItem("CakeLocation", JSON.stringify(detectedLocation));
-            // setLocalLocation(detectedLocation);
+            localStorage.setItem(
+              "CakeLocation",
+              JSON.stringify(detectedLocation)
+            );
           } else {
             alert("Failed to fetch location data.");
           }
         } catch (error) {
-          console.error("Error getting location:", error);
+          console.error("Reverse geocode error:", error);
           alert("Something went wrong while detecting your location.");
+        } finally {
+          setDetecting(false);
         }
       },
-      (error) => {
-        console.error("Geolocation error:", error);
+      () => {
+        setDetecting(false);
         alert("Permission denied or unable to access your location.");
       }
     );
   };
 
-  const ServiceLocation = async () => {
-    try {
-      const res = await axios.get('https://api.ssdipl.com/api/pincode/get-all-pin-codes');
-      console.log("API Data:", res.data);
-      setAvailableService(res.data.pinCodes || []);
-      setLoading(false);
-    } catch (error) {
-      console.log(error, "Server Error");
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    ServiceLocation();
-  }, []);
-
-  useEffect(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    debounceRef.current = setTimeout(() => {
-      checkServiceAvailability(input);
-    }, 500);
-
-    return () => clearTimeout(debounceRef.current);
-  }, [input]);
+  /* ================= SERVICE CHECK ================= */
 
   const checkServiceAvailability = (searchText) => {
     const text = searchText.trim().toLowerCase();
@@ -99,16 +123,31 @@ const LocationPopup = ({
 
       const pin = item.pinCode?.toString().toLowerCase() || "";
       const area = item.area?.toLowerCase() || "";
-      const areaWithPin = `${area} ${pin}`.trim();
+      const combined = `${area} ${pin}`.trim();
 
-      return (pin === text || area.includes(text) || areaWithPin === text);
+      return pin === text || area.includes(text) || combined === text;
     });
 
-    if (text.length > 2) {
-      setSearchMessage(isAvailable ? "30-min delivery now live in some areas" : "");
-    }
+    setSearchMessage(
+      text.length > 2 && isAvailable
+        ? "⚡ 30-min delivery now live in some areas"
+        : ""
+    );
   };
 
+  /* ================= DEBOUNCE ================= */
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      checkServiceAvailability(input);
+    }, 400);
+
+    return () => clearTimeout(debounceRef.current);
+  }, [input, availableService]);
+
+  /* ================= UI ================= */
 
   return (
     <div className="location-overlay" onClick={onClose}>
@@ -119,7 +158,7 @@ const LocationPopup = ({
         {/* HEADER */}
         <div className="popup-header">
           <h5>Enter delivery location</h5>
-          {searchMessage && <p>{searchMessage}</p>}
+          {searchMessage && <p className="service-msg">{searchMessage}</p>}
           <span className="close-btn" onClick={onClose}>
             ×
           </span>
@@ -136,7 +175,6 @@ const LocationPopup = ({
                   (c) => c.code === e.target.value
                 );
                 setSelectedCountry(country);
-                setIsCurrentLocation(false); // UI only
               }}
             >
               <option value="">Select Country</option>
@@ -152,20 +190,27 @@ const LocationPopup = ({
             type="text"
             placeholder="Enter Area / location"
             value={input}
-            onFocus={() => setIsCurrentLocation(false)}
+            onChange={(e) => setInput(e.target.value)}
           />
         </div>
 
         {/* CURRENT LOCATION */}
         <div
-          className={`current-location ${isCurrentLocation ? "active" : ""
-            }`}
-          // onClick={() => setIsCurrentLocation(true)}
-          onClick={() => handleLocationClick()}
+          className={`current-location ${detecting ? "loading" : ""}`}
+          onClick={handleLocationClick}
         >
           <i className="bi bi-crosshair"></i>
-          <span>Use Current Location</span>
+          <span>
+            {detecting ? "Detecting location..." : "Use Current Location"}
+          </span>
         </div>
+
+        {/* LOADING */}
+        {loading && (
+          <div className="location-loading">
+            Checking service areas...
+          </div>
+        )}
       </div>
     </div>
   );
