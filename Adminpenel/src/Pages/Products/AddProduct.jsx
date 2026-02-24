@@ -4,6 +4,9 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import JoditEditor from 'jodit-react';
+import Select from "react-select";
+
+
 
 const AddProduct = () => {
   const navigate = useNavigate()
@@ -17,6 +20,7 @@ const AddProduct = () => {
     productName: "",
     productDescription: "",
     BestSellingProduct: 0,
+    FeaturedProducts: 0,
     eggless: 0,
     Variant: [
       {
@@ -39,7 +43,23 @@ const AddProduct = () => {
   // State to store filtered subcategories
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
 
+  const categoriesList = categories.map((sub) => ({
+    value: sub._id,
+    label: sub.mainCategoryName,
+  }));
 
+  const subcategoriesList = filteredSubcategories.map((sub) => ({
+    value: sub._id,
+    label: sub.subcategoryName,
+  }));
+  const secondSubcategoriesList = secondSubcategories.map((sub) => ({
+    value: sub._id,
+    label: sub.secondsubcategoryName,
+  }));
+  const recommendedProductsList = recommendedProducts.map((sub) => ({
+    value: sub._id,
+    label: sub?.name || sub?.productName,
+  }));
 
   // Fetch product details and dynamic data
   useEffect(() => {
@@ -120,6 +140,15 @@ const AddProduct = () => {
     }
   };
 
+  const handleChangeRecommendedProduct = (value) => {
+    if (!formData?.recommendedProductId?.includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        recommendedProductId: [...prev.recommendedProductId, value],
+      }));
+    }
+  }
+
 
   // Handle file change for images
   const handleFileChange = (e) => {
@@ -193,6 +222,24 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    if (!formData.categoryName) {
+      toast.error("Please select a category");
+      return;
+    }
+    if (!formData.subcategoryName) {
+      toast.error("Please select a subcategory");
+      return;
+    }
+    if (!formData.secondsubcategoryName) {
+      toast.error("Please select a second subcategory");
+      return;
+    }
+    if (!formData.productName) {
+      toast.error("Please enter a product name");
+      return;
+    }
+
+
     const form = new FormData();
     form.append("categoryName", formData.categoryName);
     form.append("subcategoryName", formData.subcategoryName);
@@ -200,9 +247,9 @@ const AddProduct = () => {
     form.append("productName", formData.productName);
     form.append("productDescription", formData.productDescription);
     form.append("productDetails", formData.productDetails);
-    form.append("ActiveonHome", formData.ActiveonHome);
-    form.append("FeaturedProducts", formData.FeaturedProducts);
-    form.append("BestSellingProduct", formData?.BestSellingProduct);
+    form.append("ActiveonHome", formData.ActiveonHome || 0);
+    form.append("FeaturedProducts", formData.FeaturedProducts || 0);
+    form.append("BestSellingProduct", formData?.BestSellingProduct || 0);
     form.append("eggless", formData?.eggless);
     form.append("recommendedProductId", JSON.stringify(formData.recommendedProductId));
     // Append variants
@@ -260,6 +307,7 @@ const AddProduct = () => {
       ),
     }));
   };
+
   console.log("formData::=>", formData)
   return (
     <>
@@ -277,57 +325,69 @@ const AddProduct = () => {
 
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
+
           <div className="col-md-4">
-            <label htmlFor="categoryName" className="form-label">Mani Category Name<sup className="text-danger">*</sup></label>
-            <select name="categoryName" className="form-select" id="categoryName" value={formData.categoryName} onChange={handleChange}>
-              <option value="" disabled>Select MAin Category</option>
-              {categories.map((item, index) => (
-                <option key={index} value={item?._id}>
-                  {item.mainCategoryName}
-                </option>
-              ))}
-            </select>
+            <label className="form-label">Mani Category Name</label>
+
+            <Select
+              options={categoriesList}
+              value={categoriesList.find(
+                (opt) => opt.value === formData.categoryName
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  categoryName: selected?.value || "",
+                  secondsubcategoryName: "",
+                  subcategoryName: "",
+                }))
+              }
+              placeholder="Select Main category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           <div className="col-md-4">
-            <label htmlFor="subcategoryName" className="form-label">Category Name<sup className="text-danger">*</sup></label>
-            <select
-              name="subcategoryName"
-              className="form-select"
-              id="subcategoryName"
-              value={formData.subcategoryName}
-              onChange={handleChange}
-            // required
-            >
-              <option value="" selected disabled>Select Category</option>
-              {filteredSubcategories.map((item, index) => (
-                <option key={index} value={item?._id}>{item.subcategoryName}</option>
-              ))}
-            </select>
+            <label className="form-label">Category Name</label>
+
+            <Select
+              options={subcategoriesList}
+              value={subcategoriesList.find(
+                (opt) => opt.value === formData?.subcategoryName
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  subcategoryName: selected?.value || "",
+                  secondsubcategoryName: "",
+                }))
+              }
+              placeholder="Select category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           <div className="col-md-4">
-            <label htmlFor="secondsubcategoryName" className="form-label">
-              Sub Category Name<sup className="text-danger">*</sup>
-            </label>
-            <select
-              name="secondsubcategoryName"
-              className="form-select"
-              id="secondsubcategoryName"
-              value={formData?.secondsubcategoryName}
-              onChange={handleChange}
+            <label className="form-label">Sub Category Name</label>
+
+            <Select
+              options={secondSubcategoriesList}
+              value={secondSubcategoriesList.find(
+                (opt) => opt.value === formData.secondsubcategoryName
+              )}
               disabled={!formData?.subcategoryName}
-              required
-            >
-              <option value="" disabled>
-                Select Sub Category
-              </option>
-              {secondSubcategories.map((item, index) => (
-                <option key={index} value={item?._id}>
-                  {item?.secondsubcategoryName}
-                </option>
-              ))}
-            </select>
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  secondsubcategoryName: selected?.value || "",
+                }))
+              }
+              placeholder="Select Sub category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           <div className="col-md-6">
@@ -335,7 +395,7 @@ const AddProduct = () => {
             <input type="text" name='productName' className="form-control" id="productName" value={formData.productName} onChange={handleChange} required />
           </div>
 
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label className="form-label">
               Recommended Product Name <sup className="text-danger">*</sup>
             </label>
@@ -353,7 +413,6 @@ const AddProduct = () => {
               ))}
             </select>
 
-            {/* Selected Products */}
             <div className="mt-2 row g-2">
               {formData?.recommendedProductId?.map((id) => {
                 const product = recommendedProducts?.find(p => p?._id === id);
@@ -378,6 +437,47 @@ const AddProduct = () => {
                 );
               })}
             </div>
+          </div> */}
+
+          <div className="col-md-6">
+            <label className="form-label">Recommended Product</label>
+
+            <Select
+              options={recommendedProductsList}
+              value={recommendedProductsList.find(
+                (opt) => opt.value === formData?.recommendedProductId
+              )}
+              onChange={(selected) => handleChangeRecommendedProduct(selected?.value)}
+              placeholder="Select Recommended Product"
+              isSearchable
+              classNamePrefix="react-select"
+            />
+
+            <div className="mt-2 row g-2">
+              {formData?.recommendedProductId?.map((id) => {
+                const product = recommendedProducts?.find(p => p?._id === id);
+                if (!product) return null;
+
+                return (
+                  <div key={id} className="col-md-4">
+                    <div className="d-flex justify-content-between align-items-center bg-light px-2 py-1 rounded">
+                      <span className="text-truncate">
+                        {product?.name || product?.productName}
+                      </span>
+
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-danger ms-2"
+                        onClick={() => handleRemoveProduct(id)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
 
           <div className="col-md-12">
@@ -401,6 +501,7 @@ const AddProduct = () => {
               placeholder="Enter Product Details here..."
             />
           </div>
+
           <div className="col-md-8">
             <label htmlFor="productImage" className="form-label">Product Images<sup className="text-danger">*</sup></label>
             <input type="file" className="form-control" id="productImage" name="productImage" multiple onChange={handleFileChange} />

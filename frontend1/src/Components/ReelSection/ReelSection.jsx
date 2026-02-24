@@ -89,7 +89,7 @@ export default function ReelSection() {
                 <div className="reel-product">
                   <img src={BASE_URL + reel?.productId?.productImage[0]} alt="" />
                   <div>
-                    <p>{reel?.productId?.productName}</p>
+                    <p>{reel?.productId?.productName?.charAt(0).toUpperCase() + reel?.productId?.productName?.slice(1)}</p>
                     <span>{reel?.productId?.Variant[0]?.finalPrice}</span>
                   </div>
                 </div>
@@ -116,7 +116,7 @@ export default function ReelSection() {
             <div className="modal-product">
               <img src={BASE_URL + activeReel?.productId?.productImage[0]} alt="" />
               <div>
-                <h5 className="reeltitle">{activeReel?.productId?.productName}</h5>
+                <h5 className="reeltitle">{activeReel?.productId?.productName.charAt(0).toUpperCase() + activeReel?.productId?.productName?.slice(1)}</h5>
                 <div className="d-flex gap-3">
                   <span>{activeReel?.productId?.Variant[0]?.finalPrice}</span>
                   {/* <Link to="/all-products"> */}

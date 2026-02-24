@@ -218,7 +218,7 @@ const changeStatus = async (req, res) => {
 const changeDeleveryTimeStatus = async (req, res) => {
     try {
         const { productId, status } = req.body;
-        consolr.log("updatedStatus", req.body)
+        console.log("updatedStatus==>", req.body)
         const updatedStatus = await PinCode.findByIdAndUpdate(productId, { deleveryTime: status }, { new: true });
         console.log("updatedStatus", updatedStatus)
         return res.status(200).json({ status: true, message: "Pin code status updated successfully", data: updatedStatus, });

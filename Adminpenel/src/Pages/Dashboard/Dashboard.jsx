@@ -170,13 +170,13 @@ const Dashboard = () => {
       </div>
 
       <div className="dashboard-cards">
-        <div className="dashboard-card">
+        {/* <div className="dashboard-card">
           <Link to="/dashboard">
             <i className="fa-solid fa-gauge"></i>
             <h3>Dashboard</h3>
             <p>Overview of all your activities</p>
           </Link>
-        </div>
+        </div> */}
 
         <div className="dashboard-card">
           <Link to="/all-orders">

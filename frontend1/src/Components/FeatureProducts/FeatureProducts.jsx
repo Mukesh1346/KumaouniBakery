@@ -366,7 +366,7 @@ const FeaturedProducts = () => {
 
                 {/* CONTENT */}
                 <div className="product-body p-3" onClick={() => handleProductClick(item.productName)}>
-                  <p className="product-title">{item.productName}</p>
+                  <p className="product-title">{item?.productName?.charAt(0).toUpperCase() + item?.productName?.slice(1)}</p>
 
                   <div className="price-row">
                     <span className="price">₹ {price}</span>

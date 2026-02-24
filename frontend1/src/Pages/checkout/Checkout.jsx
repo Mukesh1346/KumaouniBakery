@@ -1605,7 +1605,7 @@ let ALL_SLOTS = [
 
 const Checkout = () => {
   /* ================= STEP ================= */
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(2);
 
   /* ================= CART ================= */
   const [cartItems, setCartItems] = useState([]);
@@ -1696,6 +1696,7 @@ const Checkout = () => {
   useEffect(() => {
     const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
     const token = sessionStorage.getItem("token");
+    const location = JSON.parse(localStorage.getItem('CakeLocation'))
 
     if (token) {
       try {
@@ -1704,11 +1705,11 @@ const Checkout = () => {
         setCheckoutData((prev) => ({
           ...prev,
           user: {
-            userId: decoded?.userId || "USER123",
-            name: decoded?.name || "Mukesh Mahar",
-            phone: decoded?.phone || "7827433992",
-            email: decoded?.email || "mukeshmahar00@gmail.com",
-            address: decoded?.address || "C-28 New Ashok Nagar Noida",
+            userId: decoded?.userId || "-",
+            name: decoded?.name || "-",
+            phone: decoded?.phone || "-",
+            email: decoded?.email || "-",
+            address: `${location?.area || ''} ${location?.city || ''} ${location?.state || ''} ${location?.pinCode || ''}` || decoded?.pinCode || "-",
           }
         }));
       } catch (err) {

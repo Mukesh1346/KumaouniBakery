@@ -395,7 +395,7 @@ const Wishlist = () => {
                     alt={product?.productName}
                   />
                   <span className="text-success">
-                    {product?.productName}
+                    {product?.productName?.charAt(0).toUpperCase() + product?.productName?.slice(1)}
                   </span>
                 </div>
 

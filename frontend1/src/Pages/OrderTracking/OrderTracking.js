@@ -104,7 +104,7 @@ const OrderTracking = () => {
 
                   <div className="ship-row">
                     <span>Recipient</span>
-                    <b>{order.name}</b>
+                    <b>{order.name?.charAt(0).toUpperCase() + order.name?.slice(1)}</b>
                   </div>
 
                   <div className="ship-row">
@@ -180,7 +180,7 @@ const OrderTracking = () => {
 
                       <div>
                         <p className="fw-semibold title mb-1">
-                          {item.name}
+                          {item.name?.charAt(0).toUpperCase() + item.name?.slice(1)}
                         </p>
 
                         <p className="price">

@@ -65,12 +65,18 @@ const createProduct = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ message: "Invalid Variant data" });
     }
-    let parseRecommendedProductId = [];
-    try {
-        parseRecommendedProductId = Array.isArray(recommendedProductId) ? recommendedProductId : JSON.parse(recommendedProductId); // Parse if it's a string
-    } catch (error) {
-        return res.status(400).json({ message: "Invalid Variant data" });
+    let recommendedIds = [];
+
+    if (req.body?.recommendedProductId) {
+        try {
+            recommendedIds = JSON.parse(req.body?.recommendedProductId).filter(id => id && id.trim() !== "");
+        } catch (e) {
+            console.log("Invalid recommendedProductId JSON");
+            recommendedIds = [];
+        }
     }
+
+    const parseRecommendedProductId = recommendedIds?.map(id => new mongoose.Types.ObjectId(id));
 
     // Proceed with creating the product
     const productData = {

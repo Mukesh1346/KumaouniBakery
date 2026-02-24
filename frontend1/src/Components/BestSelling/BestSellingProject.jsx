@@ -52,7 +52,7 @@ const BestSellingProduct = () => {
   // Handle wishlist toggle (prevents event bubbling)
   const handleWishlistClick = (e, productId) => {
     e.stopPropagation(); // Prevents the card click event
-    
+
     if (!user) {
       Swal.fire({
         icon: "warning",
@@ -137,7 +137,7 @@ const BestSellingProduct = () => {
               className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
               key={item._id}
             >
-              <div 
+              <div
                 className="product-card"
                 onClick={() => handleProductClick(item?.productName)}
                 style={{ cursor: "pointer" }}
@@ -164,7 +164,7 @@ const BestSellingProduct = () => {
 
                 {/* Content */}
                 <div className="product-body">
-                  <p className="product-title">{item.productName}</p>
+                  <p className="product-title">{item.productName?.charAt(0).toUpperCase() + item.productName?.slice(1)}</p>
 
                   <div className="price-row">
                     <span className="price">₹ {price}</span>

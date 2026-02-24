@@ -162,7 +162,7 @@ const Cart = () => {
                 />
 
                 <div className="bag-info">
-                  <h6>{mainItem?.name}</h6>
+                  <h6>{mainItem?.name?.charAt(0).toUpperCase() + mainItem?.name?.slice(1)}</h6>
 
                   {mainItem.weight && (
                     <p className="text-muted">Weight: {mainItem.weight}</p>

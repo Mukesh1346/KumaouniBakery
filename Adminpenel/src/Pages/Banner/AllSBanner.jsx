@@ -10,25 +10,25 @@ const AllSBanner = () => {
   const [isLoading, setIsLoading] = useState(false);
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(
-          "https://api.ssdipl.com/api/get-banners"
-        );
-        if (response.data.success) {
-          setBanners(response.data.data);
-        } else {
-          toast.error("Failed to load banners");
-        }
-      } catch (error) {
-        toast.error("An error occurred while fetching banners");
-      } finally {
-        setIsLoading(false);
+  const fetchBanners = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        "https://api.ssdipl.com/api/get-banners"
+      );
+      if (response.data.success) {
+        setBanners(response.data.data);
+      } else {
+        toast.error("Failed to load banners");
       }
-    };
+    } catch (error) {
+      toast.error("An error occurred while fetching banners");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchBanners();
   }, []);
 
@@ -74,6 +74,27 @@ const AllSBanner = () => {
     );
   };
 
+  const handleStatus = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You want to change status?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, change it!",
+      });
+
+      if (result.isConfirmed) {
+        await axios.put(`https://api.ssdipl.com/api/banner/status-banner/${id}`, { bannerStatus: !banners?.find((banner) => banner?._id === id)?.status });
+        fetchBanners();
+        toast.success("Status changed successfully");
+      }
+    } catch (error) {
+      toast.error("Failed to change the status");
+    }
+  }
   return (
     <>
       <ToastContainer />
@@ -137,9 +158,10 @@ const AllSBanner = () => {
                     <input
                       type="checkbox"
                       readOnly
-                      checked={banner.bannerStatus === "True"}
+                      onChange={(e) => handleStatus(banner._id, e.target.value)}
+                      checked={banner?.bannerStatus === "True"}
                     />{" "}
-                    {banner.bannerStatus}
+                    {banner?.bannerStatus}
                   </td>
                   {hasAccessEdit("banners") && <td>
                     <Link to={`/edit-banner/${banner._id}`} className="bt edit">

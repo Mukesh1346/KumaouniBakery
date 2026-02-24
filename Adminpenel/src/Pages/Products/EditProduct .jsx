@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import JoditEditor from 'jodit-react';
+import Select from "react-select";
 
 const EditProduct = () => {
     const { id } = useParams(); // Get product ID from URL
@@ -18,6 +19,7 @@ const EditProduct = () => {
         secondsubcategoryName: "",
         productName: "",
         productDescription: "",
+        FeaturedProducts: 0,
         BestSellingProduct: 0,
         eggless: 0,
         Variant: [
@@ -41,6 +43,32 @@ const EditProduct = () => {
     // State to store filtered subcategories
     const [filteredSubcategories, setFilteredSubcategories] = useState([]);
 
+    const categoriesList = categories.map((sub) => ({
+        value: sub._id,
+        label: sub.mainCategoryName,
+    }));
+
+    const subcategoriesList = filteredSubcategories.map((sub) => ({
+        value: sub._id,
+        label: sub.subcategoryName,
+    }));
+    const secondSubcategoriesList = secondSubcategories.map((sub) => ({
+        value: sub._id,
+        label: sub.secondsubcategoryName,
+    }));
+    const recommendedProductsList = recommendedProducts.map((sub) => ({
+        value: sub._id,
+        label: sub?.name || sub?.productName,
+    }));
+
+    const handleChangeRecommendedProduct = (value) => {
+        if (!formData?.recommendedProductId?.includes(value)) {
+            setFormData((prev) => ({
+                ...prev,
+                recommendedProductId: [...prev?.recommendedProductId, value],
+            }));
+        }
+    }
 
 
     // Fetch product details and dynamic data
@@ -279,7 +307,7 @@ const EditProduct = () => {
 
             <div className="d-form">
                 <form className="row g-3" onSubmit={handleSubmit}>
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                         <label htmlFor="categoryName" className="form-label">Mani Category Name<sup className="text-danger">*</sup></label>
                         <select name="categoryName" className="form-select" id="categoryName" value={formData.categoryName} onChange={handleChange}>
                             <option value="" disabled>Select MAin Category</option>
@@ -330,6 +358,69 @@ const EditProduct = () => {
                                 </option>
                             ))}
                         </select>
+                    </div> */}
+                    <div className="col-md-4">
+                        <label className="form-label">Mani Category Name</label>
+
+                        <Select
+                            options={categoriesList}
+                            value={categoriesList.find(
+                                (opt) => opt.value === formData.categoryName
+                            )}
+                            onChange={(selected) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    categoryName: selected?.value || "",
+                                    secondsubcategoryName: "",
+                                    subcategoryName: "",
+                                }))
+                            }
+                            placeholder="Select Main category"
+                            isSearchable
+                            classNamePrefix="react-select"
+                        />
+                    </div>
+
+                    <div className="col-md-4">
+                        <label className="form-label">Category Name</label>
+
+                        <Select
+                            options={subcategoriesList}
+                            value={subcategoriesList.find(
+                                (opt) => opt.value === formData?.subcategoryName
+                            )}
+                            onChange={(selected) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    subcategoryName: selected?.value || "",
+                                    secondsubcategoryName: "",
+                                }))
+                            }
+                            placeholder="Select category"
+                            isSearchable
+                            classNamePrefix="react-select"
+                        />
+                    </div>
+
+                    <div className="col-md-4">
+                        <label className="form-label">Sub Category Name</label>
+
+                        <Select
+                            options={secondSubcategoriesList}
+                            value={secondSubcategoriesList.find(
+                                (opt) => opt.value === formData.secondsubcategoryName
+                            )}
+                            disabled={!formData?.subcategoryName}
+                            onChange={(selected) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    secondsubcategoryName: selected?.value || "",
+                                }))
+                            }
+                            placeholder="Select Sub category"
+                            isSearchable
+                            classNamePrefix="react-select"
+                        />
                     </div>
 
                     <div className="col-md-6">
@@ -338,24 +429,18 @@ const EditProduct = () => {
                     </div>
 
                     <div className="col-md-6">
-                        <label className="form-label">
-                            Recommended Product Name <sup className="text-danger">*</sup>
-                        </label>
+                        <label className="form-label">Recommended Product</label>
+                        <Select
+                            options={recommendedProductsList}
+                            value={recommendedProductsList.find(
+                                (opt) => opt.value === formData?.recommendedProductId
+                            )}
+                            onChange={(selected) => handleChangeRecommendedProduct(selected?.value)}
+                            placeholder="Select Recommended Product"
+                            isSearchable
+                            classNamePrefix="react-select"
+                        />
 
-                        <select
-                            name="recommendedproduct"
-                            className="form-select"
-                            onChange={handleChange}
-                        >
-                            <option value="">Select Recommended Product</option>
-                            {recommendedProducts?.map((item) => (
-                                <option key={item?._id} value={item?._id}>
-                                    {item?.name || item?.productName}
-                                </option>
-                            ))}
-                        </select>
-
-                        {/* Selected Products */}
                         <div className="mt-2 row g-2">
                             {formData?.recommendedProductId?.map((id) => {
                                 const product = recommendedProducts?.find(p => p?._id === id);
@@ -385,23 +470,13 @@ const EditProduct = () => {
                     <div className="col-md-12">
                         <label htmlFor="productDescription" className="form-label">Product Description<sup className="text-danger">*</sup></label>
                         {/* <textarea name='productDescription' rows={6} className="form-control" id="productDescription" value={formData.productDescription} onChange={handleChange} required /> */}
-                        <JoditEditor
-                            ref={editor}
-                            value={formData.productDescription}
-                            onChange={handleEditorChange}
-                            placeholder="Enter Product Description here..."
-                        />
+                        <JoditEditor ref={editor} value={formData.productDescription} onChange={handleEditorChange} placeholder="Enter Product Description here..." />
                     </div>
 
                     <div className="col-md-12">
                         <label htmlFor="productDetails" className="form-label">Product Details<sup className="text-danger">*</sup></label>
                         {/* <textarea name='productDescription' rows={6} className="form-control" id="productDescription" value={formData.productDescription} onChange={handleChange} required /> */}
-                        <JoditEditor
-                            ref={editor}
-                            value={formData.productDetails}
-                            onChange={handleEditorChange2}
-                            placeholder="Enter Product Details here..."
-                        />
+                        <JoditEditor ref={editor} value={formData.productDetails} onChange={handleEditorChange2} placeholder="Enter Product Details here..." />
                     </div>
                     <div className="col-md-8">
                         <label htmlFor="productImage" className="form-label">Product Images<sup className="text-danger">*</sup></label>

@@ -24,7 +24,7 @@ const Header = () => {
   const loginvalue = sessionStorage.getItem("login");
   const userData = JSON.parse(sessionStorage.getItem("userData"));
   const cart = JSON.parse(sessionStorage.getItem("cart")) || []
-const menuRef = useRef(null);
+  const menuRef = useRef(null);
 
 
   /* CATEGORY DATA (FROM API) */
@@ -61,21 +61,21 @@ const menuRef = useRef(null);
 
 
   useEffect(() => {
-  const handleOutsideClick = (e) => {
-    if (
-      menuRef.current &&
-      !menuRef.current.contains(e.target)
-    ) {
-      setOpenIndex(null);
-    }
-  };
+    const handleOutsideClick = (e) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target)
+      ) {
+        setOpenIndex(null);
+      }
+    };
 
-  document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
 
-  return () => {
-    document.removeEventListener("mousedown", handleOutsideClick);
-  };
-}, []);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
 
   useEffect(() => {
@@ -90,13 +90,13 @@ const menuRef = useRef(null);
 
           const formattedData = res.data.data.map((cat) => ({
             _id: cat._id,
-            name: cat.mainCategoryName,
-            subcategories: (cat.subcategories || []).map((sub) => ({
-              _id: sub._id,
-              name: sub.subcategoryName,
+            name: cat.mainCategoryName.charAt(0).toUpperCase() + cat.mainCategoryName.slice(1),
+            subcategories: (cat?.subcategories || []).map((sub) => ({
+              _id: sub?._id,
+              name: sub?.subcategoryName?.charAt(0)?.toUpperCase() + sub?.subcategoryName?.slice(1),
               children: (sub.secondSubcategories || []).map(
                 (child) => ({
-                  name: child.secondsubcategoryName,
+                  name: child?.secondsubcategoryName?.charAt(0).toUpperCase() + child?.secondsubcategoryName?.slice(1),
                   id: child._id,
                 })
               )
@@ -418,7 +418,7 @@ const menuRef = useRef(null);
                 {/* MENU DROPDOWN */}
                 <div
                   className="hdr-menu-trigger"
-                   ref={menuRef}
+                  ref={menuRef}
                   onClick={() => toggleDropdown("menu")}
                 >
                   <i className="bi bi-grid"></i>

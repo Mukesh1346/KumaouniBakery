@@ -20,10 +20,10 @@ const Category = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -117,7 +117,7 @@ const Category = () => {
                       e.target.src = cakeImage;
                     }}
                   />
-                  <p className="category-name">{item?.subcategoryName}</p>
+                  <p className="category-name">{item?.subcategoryName.charAt(0).toUpperCase() + item?.subcategoryName.slice(1)}</p>
                 </div>
               </div>
             ))}
@@ -142,7 +142,7 @@ const Category = () => {
                       e.target.src = cakeImage;
                     }}
                   />
-                  <p className="category-name">{item?.subcategoryName}</p>
+                  <p className="category-name">{item?.subcategoryName?.charAt(0).toUpperCase() + item?.subcategoryName?.slice(1)}</p>
                 </div>
               </div>
             ))}

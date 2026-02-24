@@ -192,6 +192,7 @@ const AllPinCode = () => {
                 productId,
                 status
             }
+
             const response = await axios.post(`https://api.ssdipl.com/api/pincode/change-delevery-time-status`, data);
             fetchPinCodes(searchTerm, currentPage);
         } catch (error) {

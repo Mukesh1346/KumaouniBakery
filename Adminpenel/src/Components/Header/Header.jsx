@@ -118,7 +118,7 @@ const Header = () => {
             {hasAccess("dashboard") && <li ><Link to="/dashboard" className={isActive('/dashboard') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-solid fa-gauge"></i> Dashboard</Link></li>}
             {hasAccess("orders") && <li><Link to="/all-orders" className={isActive('/all-orders') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-solid fa-truck"></i> Manage Orders</Link></li>}
             {hasAccess("banners") && <li><Link to="/all-banners" className={isActive('/all-banners') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Banners</Link></li>}
-            {hasAccess("cakeBanner") && <li><Link to="/all-cake-banner" className={isActive('/all-cake-banner') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Leve Banners</Link></li>}
+            {hasAccess("cakeBanner") && <li><Link to="/all-cake-banner" className={isActive('/all-cake-banner') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-regular fa-images"></i> Manage Level Banners</Link></li>}
             {hasAccess("contactQuery") && <li><Link to="/all-contact-query" className={isActive('/all-contact-query') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-solid fa-users"></i> All Contact Query</Link></li>}
             {hasAccess("mainCategory") && <li><Link to="/all-category" className={isActive('/all-category') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-solid fa-tags"></i> Manage Category</Link></li>}
             {hasAccess("category") && <li><Link to="/all-subcategory" className={isActive('/all-subcategory') ? 'click' : ''} onClick={handletoggleBtn}> <i class="fa-solid fa-tag"></i> Manage Sub Category</Link></li>}

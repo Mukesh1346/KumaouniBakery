@@ -133,7 +133,7 @@ const AllProducts = ({ status = '' }) => {
             <div className="d-flex justify-content-between align-items-center mb-4">
               <div className="textArea">
                 <h4 className="   SuperTitle mb-1 text-uppercase">
-                  {category.mainCategoryName}      
+                  {category?.mainCategoryName?.charAt(0).toUpperCase() + category?.mainCategoryName?.slice(1)}      
                 </h4>
                 <p className="  SuperSubTitle text-muted mb-0">Best Gifts For Your Loved Ones</p>
               </div>
@@ -143,7 +143,7 @@ const AllProducts = ({ status = '' }) => {
             <div className="row g-4">
               {visible.map((product) => (
                 <div
-                  key={product._id}
+                  key={product?._id}
                   className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
                 >
                   <div 
@@ -177,7 +177,7 @@ const AllProducts = ({ status = '' }) => {
                     {/* CONTENT */}
                     <div className="product-body">
                       <p className="product-title">
-                        {product.productName}
+                        {product?.productName?.charAt(0).toUpperCase() + product?.productName?.slice(1)}
                       </p>
 
                       <div className="price-row">

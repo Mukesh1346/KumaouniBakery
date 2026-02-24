@@ -611,7 +611,7 @@ const ProductDetails = () => {
 
                 <div className="pdx-title-row">
                   {data.eggless ? <span className="pdx-badge"> 100% EGGLESS </span> : ''}
-                  <h1>{data.productName}</h1>
+                  <h1>{data.productName?.charAt(0).toUpperCase() + data.productName?.slice(1)}</h1>
 
                   <div
                     className={`wishlist-icon ${wishlist?.includes(data?._id) ? "active" : ""}`}
@@ -787,7 +787,7 @@ const ProductDetails = () => {
 
                 {data?.productDescription && <div className="description-box" style={{ marginBottom: '12px', borderRadius: '13px 13px 0px 0px' }}>
                   <h6>Description</h6>
-                  <p>
+                  <p style={{}}>
                     {new DOMParser()
                       .parseFromString(data.productDescription || "", "text/html")
                       .body.textContent}

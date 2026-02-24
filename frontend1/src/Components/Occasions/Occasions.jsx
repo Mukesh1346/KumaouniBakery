@@ -54,7 +54,7 @@ export default function Occasions() {
               data.map((item, index) => (
                 <div onClick={() => navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} key={item?._id} className='OccasionCard'>
                   <img src={`https://api.ssdipl.com/${item?.image || item?.cakeBanner}`} alt="" className='occasionalPic' />
-                  <h3>{item.titel}</h3>
+                  <h3>{item?.titel?.charAt(0).toUpperCase() + item?.titel?.slice(1)}</h3>
                 </div>
               ))
             }

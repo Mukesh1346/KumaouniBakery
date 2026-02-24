@@ -108,11 +108,11 @@ const Footer = () => {
                     {/* <Link to={`/product-related/${sub.subcategoryName}`}> */}
                     <div onClick={() => {
                       navigate(`/product-related/${sub.subcategoryName.replace(/\s+/g, "-")}`,
-                        { state: { id: sub?._id, status: 'subCategory' } });
+                        { state: { id: sub?._id, status: 'category' } });
                     }}
                       style={{ cursor: 'pointer' }}
                     >
-                      {sub?.subcategoryName}
+                      {sub?.subcategoryName?.charAt(0).toUpperCase() + sub?.subcategoryName?.slice(1)}
                     </div>
 
                     {/* </Link> */}
