@@ -1,10 +1,15 @@
 const mongoose = require("mongoose")
 
 const VariantSchema = new mongoose.Schema({
+    // weight: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: "Size",
+    //     default: null
+    // },
+
     weight: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Size",
-        default: null
+        type: String,
+        default: ''
     },
     flover: {
         type: mongoose.Schema.ObjectId,

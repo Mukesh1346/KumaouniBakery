@@ -5,7 +5,6 @@ const Subcategory = require("../Model/SubcategoryModel");
 // Create a new subcategory
 const createSubcategory = async (req, res) => {
     const { categoryName, subcategoryName, ActiveonHeader, ActiveonHome } = req.body;
-    console.log(req.body, req.file);
 
     const image = req.files?.image?.[0]?.path;
     const banner = req.files?.banner?.[0]?.path;

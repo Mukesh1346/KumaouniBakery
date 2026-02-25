@@ -3,7 +3,6 @@ const Countdown = require("../Model/CountDownModel");
 const createCountdown = async (req, res) => {
     try {
         const { title, endTime, startTime, isActive, categoryId } = req.body;
-        console.log("REQ BODY =>", req.body);
 
         /* ================= VALIDATION ================= */
 
@@ -38,7 +37,6 @@ const getCountdown = async (req, res) => {
         const data = await Countdown.find().sort({ createdAt: -1 })
             .populate("categoryId")
             .lean();
-        console.log("ZZXXXXZ==>", data)
         return res.status(200).json({ success: true, count: data.length, data, });
     } catch (err) {
         console.error("Get countdown error:", err);
@@ -50,7 +48,6 @@ const getCountdown = async (req, res) => {
 const updateCountdown = async (req, res) => {
     try {
         const { title, endTime, startTime, isActive, categoryId } = req.body;
-        console.log("req.params.id==>", req.body);
         let record = await Countdown.findOne({ _id: req.params.id });
         if (!record) {
             return res.status(404).json({ success: false });
@@ -72,7 +69,6 @@ const updateCountdown = async (req, res) => {
 const getSingleCountdown = async (req, res) => {
     try {
         const record = await Countdown.findOne({ _id: req.params.id }).populate("categoryId");
-        console.log("req.params.id==>", record);
         if (!record) {
             return res.status(404).json({ success: false });
         }
@@ -120,9 +116,7 @@ const updateStatus = async (req, res) => {
 const getCountdownByCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log("ExistRecord==>", id);
         const data = await Countdown.findOne({ categoryId: id })
-        console.log("ExistRecord==>data==>", data);
         return res.status(200).json({ success: true, data, });
     } catch (err) {
         console.error("Get countdown error:", err);

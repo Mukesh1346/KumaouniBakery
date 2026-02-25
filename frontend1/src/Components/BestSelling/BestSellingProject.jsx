@@ -80,7 +80,6 @@ const BestSellingProduct = () => {
   };
 
   const handleWishlistApi = async (productId, isRemoving) => {
-    console.log("isRemoving==>", isRemoving);
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
@@ -108,7 +107,6 @@ const BestSellingProduct = () => {
     navigate(`/product-details/${productName}`);
   };
 
-  console.log("XXXZZZZXXXX==>", products);
   return (
     <div className="container my-5">
       {/* Header */}
@@ -176,9 +174,9 @@ const BestSellingProduct = () => {
                     )}
                   </div>
 
-                  <div className="rating">
+                  {/* <div className="rating">
                     ⭐ 4.8 <span>(245 Reviews)</span>
-                  </div>
+                  </div> */}
 
                   <p className="delivery">
                     Earliest Delivery : <span>In 3 hours</span>

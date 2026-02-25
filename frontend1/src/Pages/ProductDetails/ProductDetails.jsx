@@ -121,7 +121,7 @@ const ProductDetails = () => {
 
       if (productData?.Variant?.length > 0) {
         const firstVariant = productData.Variant[0];
-        setActiveWeight(firstVariant?.weight?.sizeweight);
+        setActiveWeight(firstVariant?.weight);
         setPrice(firstVariant?.finalPrice);
         setOriginalPrice(firstVariant?.price);
         setDiscountPercentage(firstVariant?.discountPrice);
@@ -200,7 +200,7 @@ const ProductDetails = () => {
   const handleWeightSelection = (weight) => {
     setActiveWeight(weight);
     const selectedVariant = data.Variant?.find(
-      (variant) => variant?.weight?.sizeweight === weight
+      (variant) => variant?.weight === weight
     );
     if (selectedVariant) {
       setPrice(selectedVariant.finalPrice);
@@ -643,7 +643,7 @@ const ProductDetails = () => {
                   )}
                 </div>
 
-                {data?.Variant?.some(v => v?.weight?.sizeweight) && (
+                {data?.Variant?.some(v => v?.weight) && (
                   <div className="pdx-block">
                     <div className="pdx-block-head">
                       <span>Weight</span>
@@ -651,17 +651,17 @@ const ProductDetails = () => {
 
                     <div className="pdx-weight-group">
                       {data?.Variant
-                        ?.filter(v => v?.weight?.sizeweight)
+                        ?.filter(v => v?.weight)
                         ?.map((v) => (
                           <button
                             key={v?._id}
-                            className={`pdx-weight-btn ${activeWeight === v?.weight?.sizeweight ? "active" : ""
+                            className={`pdx-weight-btn ${activeWeight === v?.weight ? "active" : ""
                               }`}
                             onClick={() =>
-                              handleWeightSelection(v?.weight?.sizeweight)
+                              handleWeightSelection(v?.weight)
                             }
                           >
-                            {v?.weight?.sizeweight}
+                            {v?.weight}
                           </button>
                         ))}
                     </div>

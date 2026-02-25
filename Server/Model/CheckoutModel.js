@@ -13,6 +13,7 @@ const addonProductSchema = new mongoose.Schema(
 
 const checkoutSchema = new mongoose.Schema({
     userId: { type: String, required: true },
+    walletUsed: { type: Number },
     name: { type: String, required: true },
     phone: { type: String, required: true },
     email: { type: String, required: true },

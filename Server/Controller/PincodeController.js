@@ -146,7 +146,6 @@ const getAllPinCodesWithPagination = async (req, res) => {
 const createPincode = async (req, res) => {
     try {
         const { stateName, area, pinCode } = req.body;
-        console.log("BODY:- ", req.body);
         const newPin = await PinCode.create({ stateName, area, pinCode, });
         return res.status(200).json({ status: true, message: "Pin code created successfully", data: newPin, });
     } catch (err) {
@@ -190,8 +189,6 @@ const getAreapincodeByState = async (req, res) => {
     try {
         const { state } = req?.body;
 
-        console.log("state-state-", state)
-
         if (!state) {
             return res.status(400).json({ message: "State is required" });
         }
@@ -218,9 +215,7 @@ const changeStatus = async (req, res) => {
 const changeDeleveryTimeStatus = async (req, res) => {
     try {
         const { productId, status } = req.body;
-        console.log("updatedStatus==>", req.body)
         const updatedStatus = await PinCode.findByIdAndUpdate(productId, { deleveryTime: status }, { new: true });
-        console.log("updatedStatus", updatedStatus)
         return res.status(200).json({ status: true, message: "Pin code status updated successfully", data: updatedStatus, });
     } catch (err) {
         console.error("Error updating pin code status:", err);

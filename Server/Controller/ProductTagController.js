@@ -19,8 +19,6 @@ const deleteImageFile = (relativeFilePath) => {
 // Create a new Product Tag
 exports.createProductTag = async (req, res) => {
     try {
-        console.log(req.files);
-        console.log(req.body);
 
         const { tagHeading, sortDescription, multipulProduct, priceRange } = req.body;
         const image = req.files ? req.files.image[0].path : null;
@@ -77,7 +75,6 @@ exports.createProductTag = async (req, res) => {
             data: savedProductTag,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             success: false,
             message: "Failed to create product tag",
@@ -89,8 +86,6 @@ exports.createProductTag = async (req, res) => {
 
 exports.updateProductTag = async (req, res) => {
     try {
-        console.log(req.body);
-        console.log(req.files);
 
         const { id } = req.params;
         const updates = req.body;
@@ -265,7 +260,6 @@ exports.deleteProductTag = async (req, res) => {
             message: "Product tag deleted successfully",
         });
     } catch (error) {
-        console.log(error)
         res.status(500).json({
             success: false,
             message: "Failed to delete product tag",

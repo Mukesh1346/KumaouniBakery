@@ -5,7 +5,6 @@ const Subcategory = require("../Model/SubcategoryModel");
 // Create a new subcategory
 const createSecondSubcategory = async (req, res) => {
     const { mainCategoryId, subCategoryId, secondSubcategoryName, ActiveonHome } = req.body;
-    console.log("ZZZZXXXXXXXZZZZZZZ=>", req.body, req.file);
 
     // Validate required fields
     if (!mainCategoryId) {
@@ -186,7 +185,7 @@ const getSecondSubcategoryByName = async (req, res) => {
 const updateSecondSubcategory = async (req, res) => {
     const { mainCategoryId, subCategoryId, secondsubcategoryName, ActiveonHome } = req.body;
     const { id } = req.params;
-    console.log("DDD:=>", req.body)
+    
     try {
         if (!id) {
             return res.status(400).json({ success: false, message: "ID is required" });

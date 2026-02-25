@@ -18,7 +18,6 @@ const deleteImageFile = (relativeFilePath) => {
 
 
 const createProduct = async (req, res) => {
-    console.log(req.body);
     const { categoryName, subcategoryName, secondsubcategoryName, productName, productDescription, productDetails, Variant, ActiveonHome, FeaturedProducts, BestSellingProduct, eggless, recommendedProductId } = req.body;
     const errorMessage = [];
 
@@ -52,10 +51,7 @@ const createProduct = async (req, res) => {
 
     // If no images are uploaded
     if (!req.files || req.files.length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: "Product Images are required"
-        });
+        return res.status(400).json({ success: false, message: "Product Images are required" });
     }
 
     // Check and parse Variant if it's a string (JSON string)
@@ -71,7 +67,6 @@ const createProduct = async (req, res) => {
         try {
             recommendedIds = JSON.parse(req.body?.recommendedProductId).filter(id => id && id.trim() !== "");
         } catch (e) {
-            console.log("Invalid recommendedProductId JSON");
             recommendedIds = [];
         }
     }
@@ -93,18 +88,16 @@ const createProduct = async (req, res) => {
         recommendedProductId: parseRecommendedProductId,
         Variant: parsedVariant.map(variant => ({
             ...variant,
-            weight: variant.weight ? new mongoose.Types.ObjectId(variant.weight) : null,  // Handle empty weight
+            // weight: variant.weight ? new mongoose.Types.ObjectId(variant.weight) : null,  // Handle empty weight
             flover: variant.flover ? new mongoose.Types.ObjectId(variant.flover) : null   // Handle empty flover
         })),
         productImage: req.files.map(file => file.path), // Save paths to the uploaded images
     };
-
     try {
         const product = new Product(productData);
         await product.save();
         res.status(201).json({ message: 'Product created successfully', product });
     } catch (err) {
-        console.log(err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -118,10 +111,10 @@ const getProductsActiveonHome = async (req, res) => {
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
-            .populate({
-                path: 'Variant.weight',
-                model: 'Size',
-            })
+            // .populate({
+            //     path: 'Variant.weight',
+            //     model: 'Size',
+            // })
             .populate({
                 path: 'Variant.flover',
                 model: 'Flover',
@@ -141,10 +134,10 @@ const getFeaturedProducts = async (req, res) => {
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
-            .populate({
-                path: 'Variant.weight',
-                model: 'Size',
-            })
+            // .populate({
+            //     path: 'Variant.weight',
+            //     model: 'Size',
+            // })
             .populate({
                 path: 'Variant.flover',
                 model: 'Flover',
@@ -163,10 +156,10 @@ const getBestSellingProducts = async (req, res) => {
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
-            .populate({
-                path: 'Variant.weight',
-                model: 'Size',
-            })
+            // .populate({
+            //     path: 'Variant.weight',
+            //     model: 'Size',
+            // })
             .populate({
                 path: 'Variant.flover',
                 model: 'Flover',
@@ -186,10 +179,10 @@ const getProducts = async (req, res) => {
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
-            .populate({
-                path: 'Variant.weight',
-                model: 'Size',
-            })
+            // .populate({
+            //     path: 'Variant.weight',
+            //     model: 'Size',
+            // })
             .populate({
                 path: 'Variant.flover',
                 model: 'Flover',
@@ -212,7 +205,7 @@ const getProduct = async (req, res) => {
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
-            .populate('Variant.weight')
+            // .populate('Variant.weight')
             .populate('Variant.flover');
 
         if (!product) {
@@ -220,7 +213,6 @@ const getProduct = async (req, res) => {
         }
         res.status(200).json({ data: product });
     } catch (err) {
-        console.log(err)
         res.status(500).json({ error: err.message });
     }
 };
@@ -229,21 +221,19 @@ const getProduct = async (req, res) => {
 // Get Single Product
 const getProductByname = async (req, res) => {
     const { name } = req.params;
-    console.log(name)
     try {
         const product = await Product.findOne({ productName: name }).populate('categoryName')
             .sort({ createdAt: -1 })
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
-            .populate('Variant.weight')
+            // .populate('Variant.weight')
             .populate('Variant.flover');
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
         res.status(200).json({ data: product });
     } catch (err) {
-        console.log(err)
         res.status(500).json({ error: err.message });
     }
 };
@@ -252,7 +242,6 @@ const getProductByname = async (req, res) => {
 // Get Products By Subcategory Name
 const getProductsBySubcategory = async (req, res) => {
     const { subcategoryName } = req.params;  // Expecting a single subcategory name
-    console.log('Subcategory name:', subcategoryName);
     try {
         const products = await Product.find()
             .sort({ createdAt: -1 })
@@ -268,7 +257,6 @@ const getProductsBySubcategory = async (req, res) => {
 
         res.status(200).json({ data: filterProductData });
     } catch (err) {
-        console.log('Error:', err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -285,7 +273,6 @@ const getProductsBySubcategoryId = async (req, res) => {
             ]
         }).sort({ createdAt: -1 }).populate("categoryName").populate("subcategoryName").populate("secondsubcategoryName").populate("recommendedProductId");
 
-        console.log("Products:==>", products);
 
         res.status(200).json({ data: products });
 
@@ -298,8 +285,7 @@ const getProductsBySubcategoryId = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     const { id } = req.params;
-    console.log(req.body);
-
+    console.log('ddddd-->', req.body)
     // Collect updated data from the request body
     const updatedData = {
         categoryName: req.body.categoryName,
@@ -388,7 +374,6 @@ const deleteProduct = async (req, res) => {
         await Product.findByIdAndDelete(id);
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (err) {
-        console.log(err)
         res.status(500).json({ error: err.message });
     }
 };

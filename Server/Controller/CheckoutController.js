@@ -1,7 +1,7 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const Checkout = require('../Model/CheckoutModel');
-
+const User = require('../Model/SignupModel')
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_API_KEY || "rzp_test_XPcfzOlm39oYi8",
     key_secret: process.env.RAZORPAY_API_SECRET || "Q79P6w7erUar31TwW4GLAkpa",
@@ -9,7 +9,6 @@ const razorpay = new Razorpay({
 
 // const createCheckout = async (req, res) => {
 //     try {
-//         console.log("FORMDATA=>", req.body)
 //         const { userId, name, email, phone, address, state, city, pin, cartItems, totalPrice, paymentMode } = req.body;
 
 //         if (!userId || !name || !email || !phone || !address || !state || !city || !pin || !Array.isArray(cartItems) || cartItems.length === 0 || totalPrice <= 0) {
@@ -59,10 +58,10 @@ const razorpay = new Razorpay({
 
 const createCheckout = async (req, res) => {
     try {
-        console.log("FORMDATA =>", req.body);
 
         const {
             userId,
+            walletUsed,
             userDetails,
             deliveryAddress,
             deliverySlot,
@@ -126,6 +125,9 @@ const createCheckout = async (req, res) => {
         /* ================== 💰 COD ORDER ================== */
 
         if (paymentMode?.toLowerCase() === "cod") {
+            console.log("userExst==>", userId)
+            const userExst = await User.findById(userId)
+            console.log("userExst==>", userExst)
             const newCheckout = new Checkout({
                 userId,
                 name: deliveryAddress.receiverName,
@@ -148,12 +150,14 @@ const createCheckout = async (req, res) => {
                 trackingOrders,
                 specialNote,
                 specialInstructions,
+                walletUsed: Number(walletUsed),
                 orderDate,
             });
 
             const savedCheckout = await newCheckout.save();
-
-            return res.status(200).json({ success: true, message: "Order placed successfully (COD).", data: savedCheckout, });
+            userExst.walletBalance = walletUsed > 0 ? 0 : userExst?.walletBalance
+            userExst.save()
+            return res.status(200).json({ success: true, message: "Order placed successfully (COD).", data: savedCheckout,userExst });
         }
 
         /* ================== 💳 ONLINE PAYMENT ================== */
@@ -217,11 +221,9 @@ const createCheckout = async (req, res) => {
 const verifyPayment = async (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-        console.log("DDDDDDDD===>", req.body)
         if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
             return res.status(400).json({ message: "Payment verification failed. Missing parameters." });
         }
-        console.log("DDDDDDDD===>", req.body)
         const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_API_SECRET || "1xt3UXSTLfyVhQa3G9SSVIKY");
         hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
         const generatedSignature = hmac.digest('hex');
@@ -232,11 +234,10 @@ const verifyPayment = async (req, res) => {
                 { paymentStatus: 'Success', orderStatus: 'Order Confirmed' },
                 { new: true }
             );
-            console.log("DDDDDDDD===>", updatedCheckout)
             if (!updatedCheckout) {
                 return res.status(404).json({ message: "Order not found." });
             }
-            
+
             return res.status(200).json({ message: 'Payment successful and order confirmed.', checkout: updatedCheckout });
         } else {
             return res.status(400).json({ message: 'Invalid signature, payment verification failed.' });
@@ -324,7 +325,6 @@ const getCheckOutByUserID = async (req, res) => {
         }
         res.status(200).json({ success: true, data });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 };

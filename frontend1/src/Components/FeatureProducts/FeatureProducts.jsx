@@ -262,7 +262,6 @@ const FeaturedProducts = () => {
 
 
   const handleWishlistApi = async (productId, isRemoving) => {
-    console.log("isRemoving==>", isRemoving);
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist

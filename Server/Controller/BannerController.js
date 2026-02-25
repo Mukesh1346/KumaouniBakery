@@ -15,7 +15,6 @@ const deleteImageFile = (relativeFilePath) => {
 };
 
 const createBanner = async (req, res) => {
-    console.log(req.body)
     try {
         const { bannerName, bannerType, bannerStatus } = req.body;
         const errorMessage = [];

@@ -43,6 +43,7 @@ const createRecord = async (req, res) => {
 
             if (referrerUser) {
                 referrerUser.isReferralRewardGiven = true;
+                referrerUser.walletBalance = referrerUser?.walletBalance + 100
                 await referrerUser.save();
             }
         }
@@ -70,7 +71,7 @@ const createRecord = async (req, res) => {
             password: hashedPassword,
             referralCode: newReferralCode,
             referredBy: referralCodeUsed || null,
-            walletBalance: referrerUser ? 100 : 0,
+            // walletBalance: referrerUser ? 100 : 0,
         });
 
         // ✅ send email (non-blocking but safe)
@@ -149,7 +150,6 @@ const getRecord = async (req, res) => {
 const getAdminUser = async (req, res) => {
     try {
         const users = await User.find({ role: { $nin: ["Admin", "User"] } });
-        console.log("EERRROR:-=>", users)
         res.status(200).json({ success: true, message: "User records found.", data: users.reverse() });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error." });
@@ -175,7 +175,6 @@ const getSingleRecord = async (req, res) => {
 const DeleteRecord = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        console.log(user)
         if (!user) {
             return res.status(400).json({ success: false, message: "User record not found." });
         }
@@ -203,7 +202,6 @@ const login = async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ success: false, message: "Invalid username or password." });
         }
-        // console.log("XXXXXXXX::=>", user, isMatch);
         const key = user.role === "Admin" ? process.env.JWT_SALT_KEY_ADMIN : process.env.JWT_SALT_KEY_BUYER;
 
         const token = jwt.sign({
@@ -213,7 +211,6 @@ const login = async (req, res) => {
             profilePic: user?.profilePic, cart: user?.cart,
         }, key, { expiresIn: '15d' });
 
-        // console.log("XXXXXXXX::=>", user, isMatch, key);
         res.status(200).json({
             success: true,
             data: user,

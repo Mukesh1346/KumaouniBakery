@@ -98,7 +98,7 @@ const EditProduct = () => {
                     `https://api.ssdipl.com/api/get-single-product/${id}`
                 );
                 const productData = productResponse.data.data;
-                // console.log("XXXXX::=>", productData);
+                console.log("XXXXX::=>SSS", productData);
                 setFormData({
                     ...productData,
                     ActiveonHome: productData?.ActiveonHome === true ? 1 : 0,
@@ -222,23 +222,23 @@ const EditProduct = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!formData.categoryName){
+        if (!formData.categoryName) {
             toast.error("Please select a category");
             return;
         }
-        if(!formData.subcategoryName){
+        if (!formData.subcategoryName) {
             toast.error("Please select a subcategory");
             return;
         }
-        if(!formData.secondsubcategoryName){
+        if (!formData.secondsubcategoryName) {
             toast.error("Please select a second subcategory");
             return;
         }
-        if(!formData.productName){
+        if (!formData.productName) {
             toast.error("Please enter a product name");
             return;
         }
-        
+
         setIsLoading(true);
         const form = new FormData();
         form.append("categoryName", formData.categoryName);
@@ -455,7 +455,7 @@ const EditProduct = () => {
                         {formData.Variant.map((variant, index) => (
                             <div key={index} className="variant-container">
                                 <div className="row">
-                                    <div className="col-md-3 mb-1">
+                                    {/* <div className="col-md-3 mb-1">
                                         <label htmlFor={`weight-${index}`} className="form-label">Weight/Sizes<sup className="text-danger">*</sup></label>
                                         <select
                                             name="weight"
@@ -471,8 +471,17 @@ const EditProduct = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                    </div> */}
+                                    <div className="col-md-3 mb-1">
+                                        <label htmlFor={`weight-${index}`} className="form-label">Weight/Size<sup className="text-danger">*</sup></label>
+                                        <input
+                                            type="text"
+                                            name="weight"
+                                            className="form-control"
+                                            value={variant.weight}
+                                            onChange={(e) => handleVariantChange(index, e)}
+                                        />
                                     </div>
-
                                     {/* <div className="col-md-3 mb-1">
                                         <label htmlFor={`stock-${index}`} className="form-label">Stock<sup className="text-danger">*</sup></label>
                                         <input

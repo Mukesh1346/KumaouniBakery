@@ -31,11 +31,11 @@
 }
 
 /* Hover effect – stops the float and slightly enlarges */
-.eg-floating-icon:hover {
+/* .eg-floating-icon:hover {
   animation: none;
   transform: scale(1.1);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-}
+} */
 
 /* Image inside icon */
 .eg-floating-icon img {

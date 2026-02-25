@@ -66,7 +66,7 @@ const Footer = () => {
         })
       }
     } catch (error) {
-      console.error("Footer API Error:", error);
+      console.log("Footer API Error:==>", error);
     }
   };
 

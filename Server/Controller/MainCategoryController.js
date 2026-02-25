@@ -4,7 +4,6 @@ const SecondSubCategory = require("../Model/SecondSubcategoryModel");
 
 const createMainCategory = async (req, res) => {
     try {
-        console.log("I am hit", req.body)
         const { mainCategoryName, ActiveonHome } = req.body;
 
         if (!mainCategoryName) {

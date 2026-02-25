@@ -63,7 +63,7 @@ const AllProducts = ({ status = '' }) => {
   // Handle wishlist toggle (prevents event bubbling)
   const handleWishlistClick = (e, productId) => {
     e.stopPropagation(); // Prevents the card click event
-    
+
     if (!user) {
       Swal.fire({
         icon: "warning",
@@ -125,7 +125,7 @@ const AllProducts = ({ status = '' }) => {
         const products = productData[category?._id] || [];
         const start = (currentPage[category?._id] - 1) * productsPerPage;
         const visible = products.slice(start, start + productsPerPage);
-
+        console.log("visible==>", visible)
         return (
           <div key={category._id} className="mb-5">
 
@@ -133,7 +133,7 @@ const AllProducts = ({ status = '' }) => {
             <div className="d-flex justify-content-between align-items-center mb-4">
               <div className="textArea">
                 <h4 className="   SuperTitle mb-1 text-uppercase">
-                  {category?.mainCategoryName?.charAt(0).toUpperCase() + category?.mainCategoryName?.slice(1)}      
+                  {category?.mainCategoryName?.charAt(0).toUpperCase() + category?.mainCategoryName?.slice(1)}
                 </h4>
                 <p className="  SuperSubTitle text-muted mb-0">Best Gifts For Your Loved Ones</p>
               </div>
@@ -146,7 +146,7 @@ const AllProducts = ({ status = '' }) => {
                   key={product?._id}
                   className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
                 >
-                  <div 
+                  <div
                     className="product-card"
                     onClick={() => handleProductClick(product?.productName)}
                     style={{ cursor: "pointer" }}
@@ -171,7 +171,7 @@ const AllProducts = ({ status = '' }) => {
                         )}
                       </span>
 
-                      <span className="off-badge">20% OFF</span>
+                      <span className="off-badge">{product?.Variant[0]?.discountPrice}% OFF</span>
                     </div>
 
                     {/* CONTENT */}
@@ -181,14 +181,14 @@ const AllProducts = ({ status = '' }) => {
                       </p>
 
                       <div className="price-row">
-                        <span className="price">₹ 300</span>
-                        <span className="old-price">₹ 375</span>
-                        <span className="off">20% OFF</span>
+                        <span className="price">₹ {product?.Variant[0]?.finalPrice}</span>
+                        <span className="old-price">₹ {product?.Variant[0]?.price}</span>
+                        <span className="off">{product?.Variant[0]?.discountPrice}% OFF</span>
                       </div>
 
-                      <div className="rating">
+                      {/* <div className="rating">
                         ⭐ 4.8 <span>(245 Reviews)</span>
-                      </div>
+                      </div> */}
 
                       <p className="delivery">
                         Earliest Delivery : <span>In 3 hours</span>

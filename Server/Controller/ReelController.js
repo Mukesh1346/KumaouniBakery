@@ -18,7 +18,7 @@ const deleteImageFile = (relativeFilePath) => {
 const createReel = async (req, res) => {
   try {
     const { title, price, activeOnHome, productId } = req.body;
-    console.log("XXXXSSSSS:=>", req.files, req.body);
+    
     const newReel = new Reel({
       title,
       productId,

@@ -82,7 +82,7 @@ const AllProduct = () => {
   const filteredProducts = products.filter((product) =>
     product.productName.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
+  console.log("filteredProducts==>", filteredProducts)
   return (
     <>
       <ToastContainer />

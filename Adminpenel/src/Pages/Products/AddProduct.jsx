@@ -512,7 +512,7 @@ const AddProduct = () => {
             {formData.Variant.map((variant, index) => (
               <div key={index} className="variant-container">
                 <div className="row">
-                  <div className="col-md-3 mb-1">
+                  {/* <div className="col-md-3 mb-1">
                     <label htmlFor={`weight-${index}`} className="form-label">Weight/Sizes<sup className="text-danger">*</sup></label>
                     <select
                       name="weight"
@@ -528,18 +528,18 @@ const AddProduct = () => {
                         </option>
                       ))}
                     </select>
-                  </div>
+                  </div> */}
 
-                  {/* <div className="col-md-3 mb-1">
-                                        <label htmlFor={`stock-${index}`} className="form-label">Stock<sup className="text-danger">*</sup></label>
-                                        <input
-                                            type="number"
-                                            name="stock"
-                                            className="form-control"
-                                            value={variant.stock}
-                                            onChange={(e) => handleVariantChange(index, e)}
-                                        />
-                                    </div> */}
+                  <div className="col-md-3 mb-1">
+                    <label htmlFor={`weight-${index}`} className="form-label">Weight/Size<sup className="text-danger">*</sup></label>
+                    <input
+                      type="text"
+                      name="weight"
+                      className="form-control"
+                      value={variant.weight}
+                      onChange={(e) => handleVariantChange(index, e)}
+                    />
+                  </div>
 
                   <div className="col-md-3">
                     <label htmlFor={`price-${index}`} className="form-label">Price<sup className="text-danger">*</sup></label>

@@ -6,14 +6,14 @@ exports.createSubscribe = async (req, res) => {
         const { email } = req.body;
 
         if (!email) {
-            return res.status(400).json({ success: false, message: "Email is required", });
+            return res.status(200).json({ success: false, message: "Email is required", });
         }
 
         // check duplicate
         const exists = await Subscribe.findOne({ email: email.toLowerCase().trim(), });
 
         if (exists) {
-            return res.status(400).json({ success: false, message: "Email already subscribed", });
+            return res.status(200).json({ success: false, message: "Email already subscribed", });
         }
 
         const record = await Subscribe.create({ email: email.toLowerCase().trim(), });

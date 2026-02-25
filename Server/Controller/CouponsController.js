@@ -3,13 +3,11 @@ const Coupon = require("../Model/CouponsModel");
 const createCoupon = async (req, res, next) => {
     try {
         const { couponCode, discount,  title, minAmount, isActive, } = req.body;
-        console.log("BODY===>>", req.body)
 
         const existingCoupon = await Coupon.findOne({ couponCode });
         if (existingCoupon) {
             return res.status(400).json({ success: false, message: "Coupon code already exists." });
         }
-        console.log("BODY===>>", req.body)
         const newCoupon = new Coupon({ couponCode, discount, title, minAmount, isActive });
         await newCoupon.save();
 
@@ -23,7 +21,6 @@ const createCoupon = async (req, res, next) => {
 const getAllCoupons = async (req, res, next) => {
     try {
         const coupons = await Coupon.find().sort({ createdAt: -1 });
-        console.log(coupons)
         res.status(200).json({ success: true, coupons });
     } catch (error) {
         console.error(error);
@@ -84,7 +81,6 @@ const updateCoupon = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { couponCode, discount, title, minAmount, isActive } = req.body;
-        console.log("BODY===>>", req.body)
         if (!couponCode || typeof couponCode !== 'string') {
             return res.status(400).json({ message: "Invalid coupon code." });
         }
@@ -120,8 +116,6 @@ const getCouponByCode = async (req, res, next) => {
         if (!totalAmount) {
             return res.status(400).json({ success: false, message: "Total amount is required." });
         }
-
-        console.log("Searching exact couponCode:", couponCode);
 
         const couponCodes = couponCode.trim().toUpperCase(); // case-insensitive handling
         const coupon = await Coupon.findOne({ couponCode: { $regex: new RegExp(`^${couponCodes}$`, 'i') } });

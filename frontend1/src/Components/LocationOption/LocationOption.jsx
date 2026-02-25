@@ -3,14 +3,41 @@ import "./location.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+
+
+
 const LocationOption = ({ onServiceChange }) => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [availableService, setAvailableService] = useState([]);
   const [serviceAvailable, setServiceAvailable] = useState(false);
   const [searchMessage, setSearchMessage] = useState("");
+  const [savedLocation, setSavedLocation] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   const debounceRef = useRef(null);
+
+  let buttonStyle = {
+    background: isPressed
+      ? '#0d47a1'           // darker when pressed
+      : isHovered
+        ? '#1565c0'           // hover state
+        : '#1a73e8',          // default
+    color: 'white',
+    border: 'none',
+    borderRadius: '40px',
+    padding: '12px 24px',
+    fontSize: '16px',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'background 0.2s, transform 0.1s, box-shadow 0.2s',
+    boxShadow: isHovered
+      ? '0 6px 14px rgba(26, 115, 232, 0.4)'
+      : '0 4px 10px rgba(26, 115, 232, 0.3)',
+    transform: isPressed ? 'scale(0.96)' : 'scale(1)',
+    outline: 'none',
+  };
 
   /* ================= GET STORED LOCATION ================= */
 
@@ -45,10 +72,17 @@ const LocationOption = ({ onServiceChange }) => {
   /* ================= AUTO FILL FROM LOCAL ================= */
 
   useEffect(() => {
-    if (!storedLocation?.area || !storedLocation?.pinCode) return;
+    if (!storedLocation?.area || !storedLocation?.pinCode) {
+      if (storedLocation) {
+        const text = `${storedLocation}`;
+        setInput(text);
+      }
+      return;
+    } else {
+      const text = `${storedLocation?.area} ${storedLocation?.pinCode}`;
+      setInput(text);
+    }
 
-    const text = `${storedLocation.area} ${storedLocation.pinCode}`;
-    setInput(text);
   }, [storedLocation]);
 
   /* ================= SERVICE CHECK ================= */
@@ -152,10 +186,7 @@ const LocationOption = ({ onServiceChange }) => {
             const text = `${detectedLocation.area} ${detectedLocation.pinCode}`;
 
             setInput(text);
-            localStorage.setItem(
-              "CakeLocation",
-              JSON.stringify(detectedLocation)
-            );
+            localStorage.setItem("CakeLocation", JSON.stringify(detectedLocation));
 
             Swal.fire({
               toast: true,
@@ -177,6 +208,14 @@ const LocationOption = ({ onServiceChange }) => {
     );
   };
 
+
+  const handleSave = () => {
+    if (input.trim()) {
+      setSavedLocation(input);
+      localStorage.setItem("CakeLocation", JSON.stringify(input));
+      // alert(`Location saved: ${input}`); // Replace with actual save logic
+    }
+  };
   /* ================= LOADING ================= */
 
   if (loading) {
@@ -206,6 +245,29 @@ const LocationOption = ({ onServiceChange }) => {
           placeholder="Enter your pincode or area..."
           className="search-input"
         />
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10, flexDirection: 'column' }}>
+        {input && (
+          <button
+            style={buttonStyle}
+            onClick={handleSave}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => {
+              setIsHovered(false);
+              setIsPressed(false);
+            }}
+            onMouseDown={() => setIsPressed(true)}
+            onMouseUp={() => setIsPressed(false)}
+          >
+            Save
+          </button>
+        )}
+        {(savedLocation && input) && (
+          <div className="saved-location">
+            <span>✅ Current saved location: {savedLocation}</span>
+          </div>
+        )}
       </div>
     </div>
   );
