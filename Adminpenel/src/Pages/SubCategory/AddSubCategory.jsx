@@ -111,7 +111,7 @@ const AddSubCategory = () => {
       <ToastContainer />
       <div className="bread">
         <div className="head">
-          <h4>Add Subcategory</h4>
+          <h4>Add Sub Category</h4>
         </div>
         <div className="links">
           <Link to="/all-subcategory" className="add-new">
@@ -146,7 +146,7 @@ const AddSubCategory = () => {
           </div> */}
 
           <div className="col-md-4">
-            <label className="form-label">Select Category</label>
+            <label className="form-label">Select Main Category</label>
 
             <Select
               options={mainCategoryOptions}
@@ -159,7 +159,7 @@ const AddSubCategory = () => {
                   categoryName: selected?.value || "",
                 }))
               }
-              placeholder="Select sub category"
+              placeholder="Select Main category"
               isSearchable
               classNamePrefix="react-select"
             />
@@ -167,7 +167,7 @@ const AddSubCategory = () => {
 
           <div className="col-md-6">
             <label htmlFor="subcategoryName" className="form-label">
-              Subcategory Name
+              Sub Category Name
             </label>
             <input
               type="text"
@@ -182,7 +182,7 @@ const AddSubCategory = () => {
 
           <div className="col-md-6">
             <label htmlFor="banner" className="form-label">
-              Subcategory Banner (1150x310)PX
+              Sub Category Banner (1150x310)PX
             </label>
             <input
               type="file"
@@ -196,7 +196,7 @@ const AddSubCategory = () => {
 
           <div className="col-md-6">
             <label htmlFor="image" className="form-label">
-              Subcategory Image (140x140)PX
+              Sub Category Image (140x140)PX
             </label>
             <input
               type="file"
@@ -249,7 +249,7 @@ const AddSubCategory = () => {
               disabled={isLoading}
               className={`${isLoading ? "not-allowed" : "allowed"}`}
             >
-              {isLoading ? "Please Wait..." : "Add Subcategory"}
+              {isLoading ? "Please Wait..." : "Add Sub Category"}
             </button>
           </div>
         </form>

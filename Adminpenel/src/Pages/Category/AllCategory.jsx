@@ -8,7 +8,28 @@ import "react-toastify/dist/ReactToastify.css";
 const AllCategory = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -45,14 +66,14 @@ const AllCategory = () => {
           `https://api.ssdipl.com/api/delete-main-category/${id}`
         );
         setCategories(categories.filter((category) => category._id !== id));
-        Swal.fire("Deleted!", "Your category has been deleted.", "success");
+        Swal.fire("Deleted!", "Your Main category has been deleted.", "success");
       } catch (error) {
         Swal.fire(
           "Error!",
-          "There was an error deleting the category.",
+          "There was an error deleting the Main category.",
           "error"
         );
-        console.error("Error deleting category:", error);
+        console.error("Error deleting Main category:", error);
       }
     }
   };
@@ -66,13 +87,15 @@ const AllCategory = () => {
       <ToastContainer />
       <div className="bread">
         <div className="head">
-          <h4>All Category List</h4>
+          <h4>All Main Category List</h4>
         </div>
-        <div className="links">
-          <Link to="/add-category" className="add-new">
-            Add New <i className="fa-solid fa-plus"></i>
-          </Link>
-        </div>
+        {hasAccessAdd('mainCategory') &&
+          <div className="links">
+            <Link to="/add-category" className="add-new">
+              Add New <i className="fa-solid fa-plus"></i>
+            </Link>
+          </div>
+        }
       </div>
 
       <section className="main-table ">
@@ -81,8 +104,8 @@ const AllCategory = () => {
             <tr>
               <th scope="col">Sr.No.</th>
               <th scope="col">Name</th>
-              <th scope="col">Edit</th>
-              <th scope="col">Delete</th>
+              {hasAccessEdit('mainCategory') && <th scope="col">Edit</th>}
+              {hasAccessDelete('mainCategory') && <th scope="col">Delete</th>}
             </tr>
           </thead>
           <tbody>
@@ -91,22 +114,22 @@ const AllCategory = () => {
                 <tr key={category._id}>
                   <th scope="row">{index + 1}</th>
                   <td>{category.mainCategoryName}</td>
-                  <td>
+                  {hasAccessEdit('mainCategory') && <td>
                     <Link
                       to={`/edit-category/${category._id}`}
                       className="bt edit"
                     >
                       Edit <i className="fa-solid fa-pen-to-square"></i>
                     </Link>
-                  </td>
-                  <td>
+                  </td>}
+                  {hasAccessDelete('mainCategory') && <td>
                     <button
                       className="bt delete"
                       onClick={() => handleDelete(category._id)}
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             ) : (

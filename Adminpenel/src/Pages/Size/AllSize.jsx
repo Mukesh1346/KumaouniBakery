@@ -8,6 +8,28 @@ import "react-toastify/dist/ReactToastify.css";
 const AllSize = () => {
   const [sizes, setSizes] = useState([]); // State to store size data
   const [loading, setLoading] = useState(true); // State to manage loading
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
 
   useEffect(() => {
     const fetchSizes = async () => {
@@ -62,11 +84,13 @@ const AllSize = () => {
         <div className="head">
           <h4>All Sizes</h4>
         </div>
-        <div className="links">
-          <Link to="/add-size" className="add-new">
-            Add New <i className="fa-solid fa-plus"></i>
-          </Link>
-        </div>
+        {hasAccessAdd('size') &&
+          <div className="links">
+            <Link to="/add-size" className="add-new">
+              Add New <i className="fa-solid fa-plus"></i>
+            </Link>
+          </div>
+        }
       </div>
 
       <div className="filteration">
@@ -83,8 +107,8 @@ const AllSize = () => {
               <th scope="col">Sr.No.</th>
               <th scope="col">Size (Weight)</th>
               <th scope="col">Size Status</th>
-              <th scope="col">Edit</th>
-              <th scope="col">Delete</th>
+              {hasAccessEdit('size') && <th scope="col">Edit</th>}
+              {hasAccessDelete('size') && <th scope="col">Delete</th>}
             </tr>
           </thead>
           <tbody>
@@ -106,19 +130,19 @@ const AllSize = () => {
                   <th scope="row">{index + 1}</th>
                   <td>{size.sizeweight}</td> {/* Display size weight */}
                   <td>{size.sizeStatus}</td> {/* Display size status */}
-                  <td>
+                  {hasAccessEdit('size') && <td>
                     <Link to={`/edit-size/${size._id}`} className="bt edit">
                       Edit <i className="fa-solid fa-pen-to-square"></i>
                     </Link>
-                  </td>
-                  <td>
+                  </td>}
+                  {hasAccessDelete('size') && <td>
                     <button
                       onClick={() => handleDelete(size._id)}
                       className="bt delete"
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             )}

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import JoditEditor from "jodit-react";
+import Select from "react-select";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -82,6 +83,10 @@ const AddProduct = () => {
     }
   };
 
+  const categoriesList = categories.map((sub) => ({
+    value: sub._id,
+    label: sub.name,
+  }));
   console.log("SSS::=>", formData);
   return (
     <>
@@ -99,7 +104,7 @@ const AddProduct = () => {
 
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <label htmlFor="recommendedCategoryName" className="form-label">
               Recommended Category Name<sup className="text-danger">*</sup>
             </label>
@@ -118,6 +123,26 @@ const AddProduct = () => {
                 </option>
               ))}
             </select>
+          </div> */}
+
+          <div className="col-md-4">
+            <label className="form-label">Select recommended Category Name</label>
+
+            <Select
+              options={categoriesList}
+              value={categoriesList.find(
+                (opt) => opt.value === formData.recommendedCategoryName
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  recommendedCategoryName: selected?.value || "",
+                }))
+              }
+              placeholder="Select recommended Category Name"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           <div className="col-md-4">

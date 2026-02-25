@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
 const AddCountdown = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -107,6 +108,11 @@ const AddCountdown = () => {
   }
 
   /* ================= UI ================= */
+  const categoryLists = subcategories.map((sub) => ({
+    value: sub._id,
+    label: `${sub?.mainCategoryName}`,
+  }));
+
 
   return (
     <>
@@ -124,10 +130,10 @@ const AddCountdown = () => {
         </div>
       </div>
 
-      <div className="d-form">
+      <div className="d-form" style={{height:500}}>
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* CATEGORY */}
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label className="form-label">Main Category</label>
             <select
               name="categoryId"
@@ -143,10 +149,28 @@ const AddCountdown = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
+          <div className="col-md-4">
+            <label className="form-label"> Select Sub Category </label>
 
+            <Select
+              options={categoryLists}
+              value={categoryLists.find(
+                (opt) => opt.value === formData?.categoryId
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  categoryId: selected?.value || "",
+                }))
+              }
+              placeholder="Select Sub Category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
+          </div>
           {/* TITLE */}
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label className="form-label">Countdown Title</label>
             <input
               type="text"
@@ -156,10 +180,10 @@ const AddCountdown = () => {
               value={formData.title}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
 
           {/* START TIME */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Countdown Start Time</label>
             <input
               type="time"
@@ -173,7 +197,7 @@ const AddCountdown = () => {
 
 
           {/* END TIME */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Countdown End Time</label>
             <input
               type="time"

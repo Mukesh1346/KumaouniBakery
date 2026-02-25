@@ -195,7 +195,7 @@ const AllCakes = () => {
                         e.target.src = Banner1;
                       }}
                     />
-                    <p>{subcategory?.secondsubcategoryName}</p>
+                    <p>{subcategory?.secondsubcategoryName?.charAt(0).toUpperCase() + subcategory?.secondsubcategoryName?.slice(1)}</p>
                   </div>
                 </div>
               </section>

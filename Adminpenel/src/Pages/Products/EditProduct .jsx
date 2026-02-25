@@ -222,6 +222,23 @@ const EditProduct = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(!formData.categoryName){
+            toast.error("Please select a category");
+            return;
+        }
+        if(!formData.subcategoryName){
+            toast.error("Please select a subcategory");
+            return;
+        }
+        if(!formData.secondsubcategoryName){
+            toast.error("Please select a second subcategory");
+            return;
+        }
+        if(!formData.productName){
+            toast.error("Please enter a product name");
+            return;
+        }
+        
         setIsLoading(true);
         const form = new FormData();
         form.append("categoryName", formData.categoryName);
@@ -307,58 +324,7 @@ const EditProduct = () => {
 
             <div className="d-form">
                 <form className="row g-3" onSubmit={handleSubmit}>
-                    {/* <div className="col-md-4">
-                        <label htmlFor="categoryName" className="form-label">Mani Category Name<sup className="text-danger">*</sup></label>
-                        <select name="categoryName" className="form-select" id="categoryName" value={formData.categoryName} onChange={handleChange}>
-                            <option value="" disabled>Select MAin Category</option>
-                            {categories.map((item, index) => (
-                                <option key={index} value={item?._id}>
-                                    {item.mainCategoryName}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
 
-                    <div className="col-md-4">
-                        <label htmlFor="subcategoryName" className="form-label">Category Name<sup className="text-danger">*</sup></label>
-                        <select
-                            name="subcategoryName"
-                            className="form-select"
-                            id="subcategoryName"
-                            value={formData.subcategoryName}
-                            onChange={handleChange}
-                        // required
-                        >
-                            <option value="" selected disabled>Select Category</option>
-                            {filteredSubcategories.map((item, index) => (
-                                <option key={index} value={item?._id}>{item.subcategoryName}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-md-4">
-                        <label htmlFor="secondsubcategoryName" className="form-label">
-                            Sub Category Name<sup className="text-danger">*</sup>
-                        </label>
-                        <select
-                            name="secondsubcategoryName"
-                            className="form-select"
-                            id="secondsubcategoryName"
-                            value={formData?.secondsubcategoryName}
-                            onChange={handleChange}
-                            disabled={!formData?.subcategoryName}
-                            required
-                        >
-                            <option value="" disabled>
-                                Select Sub Category
-                            </option>
-                            {secondSubcategories.map((item, index) => (
-                                <option key={index} value={item?._id}>
-                                    {item?.secondsubcategoryName}
-                                </option>
-                            ))}
-                        </select>
-                    </div> */}
                     <div className="col-md-4">
                         <label className="form-label">Mani Category Name</label>
 
@@ -382,7 +348,7 @@ const EditProduct = () => {
                     </div>
 
                     <div className="col-md-4">
-                        <label className="form-label">Category Name</label>
+                        <label className="form-label">Sub Category Name</label>
 
                         <Select
                             options={subcategoriesList}
@@ -396,14 +362,14 @@ const EditProduct = () => {
                                     secondsubcategoryName: "",
                                 }))
                             }
-                            placeholder="Select category"
+                            placeholder="Select Sub Category"
                             isSearchable
                             classNamePrefix="react-select"
                         />
                     </div>
 
                     <div className="col-md-4">
-                        <label className="form-label">Sub Category Name</label>
+                        <label className="form-label">Child Category Name</label>
 
                         <Select
                             options={secondSubcategoriesList}
@@ -417,7 +383,7 @@ const EditProduct = () => {
                                     secondsubcategoryName: selected?.value || "",
                                 }))
                             }
-                            placeholder="Select Sub category"
+                            placeholder="Select Child category"
                             isSearchable
                             classNamePrefix="react-select"
                         />

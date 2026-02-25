@@ -7,6 +7,28 @@ import { ToastContainer, toast } from "react-toastify";
 const AllRecommendedCategory = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
 
   useEffect(() => {
     fetchCategories();
@@ -52,11 +74,11 @@ const AllRecommendedCategory = () => {
         <div className="head">
           <h4>Recommended Categories</h4>
         </div>
-        <div className="links">
+        {hasAccessAdd('recommendedCategory') && <div className="links">
           <Link to="/add-recommended-category" className="add-new">
             Add New <i className="fa-solid fa-plus"></i>
           </Link>
-        </div>
+        </div>}
       </div>
       <section className="main-table">
         <table className="table table-bordered table-striped table-hover">
@@ -66,7 +88,7 @@ const AllRecommendedCategory = () => {
               <th>Image</th>
               <th>Name</th>
               <th>Status</th>
-              <th>Action</th>
+              {(hasAccessDelete('recommendedCategory') || hasAccessEdit('recommendedCategory')) && <th>Action</th>}
             </tr>
           </thead>
           <tbody>
@@ -88,19 +110,19 @@ const AllRecommendedCategory = () => {
                     </span>
                   </td>
                   <td>
-                    <Link
+                    {hasAccessEdit('recommendedCategory') && <Link
                       to={`/edit-recommended-category/${item._id}`}
                       className="bt edit"
                     >
                       Edit <i className="fa-solid fa-pen-to-square"></i>
-                    </Link>
+                    </Link>}
                     &nbsp;
-                    <button
+                    {hasAccessDelete('recommendedCategory') && <button
                       onClick={() => handleDelete(item._id)}
                       className="bt delete"
                     >
                       Delete <i className="fa-solid fa-trash"></i>
-                    </button>
+                    </button>}
                   </td>
                 </tr>
               ))

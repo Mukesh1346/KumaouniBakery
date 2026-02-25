@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import JoditEditor from 'jodit-react';
+import Select from "react-select";
 
 const EditProduct = () => {
     const { id } = useParams(); // Get product ID from URL
@@ -115,6 +116,11 @@ const EditProduct = () => {
         }
     };
 
+    const categoriesList = categories.map((sub) => ({
+        value: sub._id,
+        label: sub.name,
+    }));
+
     // console.log("formData::=>", formData)
     return (
         <>
@@ -133,15 +139,23 @@ const EditProduct = () => {
             <div className="d-form">
                 <form className="row g-3" onSubmit={handleSubmit}>
                     <div className="col-md-4">
-                        <label htmlFor="recommendedCategoryName" className="form-label">Recommended Category Name<sup className="text-danger">*</sup></label>
-                        <select name="recommendedCategoryName" className="form-select" id="categoryName" value={formData.recommendedCategoryName} onChange={handleChange}>
-                            <option value="" disabled>Select recommended Category</option>
-                            {categories.map((item, index) => (
-                                <option key={index} value={item?._id}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </select>
+                        <label className="form-label">Select recommended Category Name</label>
+
+                        <Select
+                            options={categoriesList}
+                            value={categoriesList.find(
+                                (opt) => opt.value === formData.recommendedCategoryName
+                            )}
+                            onChange={(selected) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    recommendedCategoryName: selected?.value || "",
+                                }))
+                            }
+                            placeholder="Select recommended Category Name"
+                            isSearchable
+                            classNamePrefix="react-select"
+                        />
                     </div>
 
                     <div className="col-md-4">

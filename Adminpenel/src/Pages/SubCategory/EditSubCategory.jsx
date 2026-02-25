@@ -169,7 +169,7 @@ const EditSubCategory = () => {
             </select>
           </div> */}
           <div className="col-md-4">
-            <label className="form-label">Select Category</label>
+            <label className="form-label">Select Main Category</label>
 
             <Select
               options={mainCategoryOptions}
@@ -182,7 +182,7 @@ const EditSubCategory = () => {
                   categoryName: selected?.value || "",
                 }))
               }
-              placeholder="Select sub category"
+              placeholder="Select Main category"
               isSearchable
               classNamePrefix="react-select"
             />
@@ -190,7 +190,7 @@ const EditSubCategory = () => {
 
           <div className="col-md-6">
             <label htmlFor="subcategoryName" className="form-label">
-              Subcategory Name
+              Sub Category Name
             </label>
             <input
               type="text"
@@ -205,7 +205,7 @@ const EditSubCategory = () => {
 
           <div className="col-md-6">
             <label htmlFor="banner" className="form-label">
-              Subcategory Banner (1150x310)PX
+              Sub Category Banner (1150x310)PX
             </label>
             <input
               type="file"
@@ -227,7 +227,7 @@ const EditSubCategory = () => {
 
           <div className="col-md-6">
             <label htmlFor="image" className="form-label">
-              Subcategory Image (140x140)PX
+              Sub Category Image (140x140)PX
             </label>
             <input
               type="file"
@@ -289,7 +289,7 @@ const EditSubCategory = () => {
               disabled={isLoading}
               className={`${isLoading ? "not-allowed" : "allowed"}`}
             >
-              {isLoading ? "Please Wait..." : "Update Subcategory"}
+              {isLoading ? "Please Wait..." : "Update Sub Category"}
             </button>
           </div>
         </form>

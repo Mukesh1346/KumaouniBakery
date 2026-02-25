@@ -9,6 +9,28 @@ const AllProduct = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
 
   // Fetch all products
   useEffect(() => {
@@ -68,11 +90,11 @@ const AllProduct = () => {
         <div className="head">
           <h4>All Product List</h4>
         </div>
-        <div className="links">
+        {hasAccessAdd('products') && <div className="links">
           <Link to="/add-product" className="add-new">
             Add New <i className="fa-solid fa-plus"></i>
           </Link>
-        </div>
+        </div>}
       </div>
 
       {/* <div className="filteration">
@@ -94,11 +116,11 @@ const AllProduct = () => {
             <tr>
               <th>S no</th>
               <th>Main Category</th>
-              <th>Category</th>
-              <th>Sub category</th>
+              <th>Sub Category</th>
+              <th>Child Category</th>
               <th>Product Name</th>
               <th>Images</th>
-              <th>Actions</th>
+              {(hasAccessDelete('products') || hasAccessEdit('products')) && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -133,19 +155,19 @@ const AllProduct = () => {
                     ))}
                   </td>
                   <td>
-                    <Link
+                    {hasAccessEdit('products') && <Link
                       to={`/edit-product/${product._id}`}
                       className="bt edit"
                     >
                       Edit <i className="fa-solid fa-pen-to-square"></i>
-                    </Link>
+                    </Link>}
                     &nbsp;
-                    <button
+                    {hasAccessDelete('products') && <button
                       onClick={() => handleDelete(product._id)}
                       className="bt delete"
                     >
                       Delete <i className="fa-solid fa-trash"></i>
-                    </button>
+                    </button>}
                   </td>
                 </tr>
               ))

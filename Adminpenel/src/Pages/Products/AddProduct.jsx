@@ -221,7 +221,6 @@ const AddProduct = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     if (!formData.categoryName) {
       toast.error("Please select a category");
       return;
@@ -238,7 +237,7 @@ const AddProduct = () => {
       toast.error("Please enter a product name");
       return;
     }
-
+    setIsLoading(true);
 
     const form = new FormData();
     form.append("categoryName", formData.categoryName);
@@ -349,7 +348,7 @@ const AddProduct = () => {
           </div>
 
           <div className="col-md-4">
-            <label className="form-label">Category Name</label>
+            <label className="form-label">Sub Category Name</label>
 
             <Select
               options={subcategoriesList}
@@ -363,14 +362,14 @@ const AddProduct = () => {
                   secondsubcategoryName: "",
                 }))
               }
-              placeholder="Select category"
+              placeholder="Select Sub Category"
               isSearchable
               classNamePrefix="react-select"
             />
           </div>
 
           <div className="col-md-4">
-            <label className="form-label">Sub Category Name</label>
+            <label className="form-label">Child Category Name</label>
 
             <Select
               options={secondSubcategoriesList}
@@ -384,7 +383,7 @@ const AddProduct = () => {
                   secondsubcategoryName: selected?.value || "",
                 }))
               }
-              placeholder="Select Sub category"
+              placeholder="Select Child Category"
               isSearchable
               classNamePrefix="react-select"
             />
@@ -392,7 +391,7 @@ const AddProduct = () => {
 
           <div className="col-md-6">
             <label htmlFor="productName" className="form-label">Product Name<sup className="text-danger">*</sup></label>
-            <input type="text" name='productName' className="form-control" id="productName" value={formData.productName} onChange={handleChange} required />
+            <input type="text" name='productName' className="form-control" id="productName" value={formData?.productName} onChange={handleChange} required />
           </div>
 
           {/* <div className="col-md-6">

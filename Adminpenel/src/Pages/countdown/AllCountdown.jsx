@@ -8,6 +8,28 @@ import "react-toastify/dist/ReactToastify.css";
 const AllCountdown = () => {
     const [countdowns, setCountdowns] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+    const hasAccessAdd = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.write === true
+        );
+    };
+
+    const hasAccessDelete = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.delete === true
+        );
+    };
+
+    const hasAccessEdit = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.update === true
+        );
+    };
 
     /* ================= FETCH ================= */
 
@@ -126,11 +148,11 @@ const AllCountdown = () => {
                     <h4>All Count Down</h4>
                 </div>
 
-                <div className="links">
+               {hasAccessAdd('countdown')&& <div className="links">
                     <Link to="/add-countdown" className="add-new">
                         Add New <i className="fa-solid fa-plus"></i>
                     </Link>
-                </div>
+                </div>}
             </div>
 
             <section className="main-table">
@@ -138,13 +160,13 @@ const AllCountdown = () => {
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
-                            <th>Count Down Title</th>
+                            {/* <th>Count Down Title</th> */}
                             <th>Category Name</th>
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Active</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                          {hasAccessEdit('countdown')&&  <th>Edit</th>}
+                          {hasAccessDelete('countdown')&&  <th>Delete</th>}
                         </tr>
                     </thead>
 
@@ -154,7 +176,7 @@ const AllCountdown = () => {
                                 <tr key={item._id}>
                                     <th>{index + 1}</th>
 
-                                    <td>{item?.title || "-"}</td>
+                                    {/* <td>{item?.title || "-"}</td> */}
                                     <td>{item?.categoryId?.mainCategoryName || "-"}</td>
                                     <td>{formatTime(item?.startTime)}</td>
                                     <td>{formatTime(item?.endTime)}</td>
@@ -168,23 +190,23 @@ const AllCountdown = () => {
                                         />
                                     </td>
 
-                                    <td>
+                                  {hasAccessEdit('countdown')&&  <td>
                                         <Link
                                             to={`/edit-countdown/${item?._id}`}
                                             className="bt edit"
                                         >
                                             Edit <i className="fa-solid fa-pen-to-square"></i>
                                         </Link>
-                                    </td>
+                                    </td>}
 
-                                    <td>
+                                   {hasAccessDelete('countdown')&& <td>
                                         <button
                                             className="bt cursor-pointer delete"
                                             onClick={() => handleDelete(item._id)}
                                         >
                                             Delete <i className="fa-solid fa-trash"></i>
                                         </button>
-                                    </td>
+                                    </td>}
                                 </tr>
                             ))
                         ) : (

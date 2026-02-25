@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Country, State, City } from "country-state-city";
+import Select from "react-select";
 
 const AddPinCode = () => {
     const navigate = useNavigate();
@@ -88,6 +89,11 @@ const AddPinCode = () => {
         }
     };
 
+    const stateLists = stateList.map((sub) => ({
+        value: sub?.name,
+        label: `${sub?.name}`,
+    }));
+
     return (
         <>
             <ToastContainer />
@@ -110,23 +116,22 @@ const AddPinCode = () => {
 
                     {/* STATE */}
                     <div className="col-md-6">
-                        <label className="form-label">
-                            State <sup className="text-danger">*</sup>
-                        </label>
-                        <select
-                            name="stateName"
-                            className="form-select"
-                            value={formData.stateName}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select State</option>
-                            {stateList.map((state) => (
-                                <option key={state._id} value={state.name}>
-                                    {state.name}
-                                </option>
-                            ))}
-                        </select>
+                        <label className="form-label"> Select State </label>
+                        <Select
+                            options={stateLists}
+                            value={stateLists.find(
+                                (opt) => opt.value === formData.stateName
+                            )}
+                            onChange={(selected) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    stateName: selected?.value || "",
+                                }))
+                            }
+                            placeholder="Select State"
+                            isSearchable
+                            classNamePrefix="react-select"
+                        />
                     </div>
 
                     {/* AREA */}

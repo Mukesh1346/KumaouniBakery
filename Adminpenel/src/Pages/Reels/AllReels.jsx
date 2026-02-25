@@ -8,6 +8,29 @@ import "react-toastify/dist/ReactToastify.css";
 const AllReels = () => {
   const [reels, setReels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
+
 
   /* ================= FETCH REELS ================= */
   useEffect(() => {
@@ -69,11 +92,11 @@ const AllReels = () => {
         <div className="head">
           <h4>All Reels List</h4>
         </div>
-        <div className="links">
+        {hasAccessAdd('reels') && <div className="links">
           <Link to="/add-reels" className="add-new">
             Add New <i className="fa-solid fa-plus"></i>
           </Link>
-        </div>
+        </div>}
       </div>
 
       {/* ===== TABLE ===== */}
@@ -86,8 +109,8 @@ const AllReels = () => {
               <th>Product Name</th>
               <th>Price</th>
               <th>Status</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              {hasAccessEdit('reels') && <th>Edit</th>}
+              {hasAccessDelete('reels') && <th>Delete</th>}
             </tr>
           </thead>
 
@@ -118,23 +141,23 @@ const AllReels = () => {
                     )}
                   </td>
 
-                  <td>
+                  {hasAccessEdit('reels') && <td>
                     <Link
                       to={`/edit-reels/${item?._id}`}
                       className="bt edit"
                     >
                       Edit <i className="fa-solid fa-pen-to-square"></i>
                     </Link>
-                  </td>
+                  </td>}
 
-                  <td>
+                  {hasAccessDelete('reels') && <td>
                     <button
                       className="bt delete"
                       onClick={() => handleDelete(item?._id)}
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             ) : (

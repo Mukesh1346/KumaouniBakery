@@ -8,6 +8,28 @@ import "react-toastify/dist/ReactToastify.css";
 const AllSubSubCategory = () => {
   const [subSubcategories, setSubSubcategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
 
   /* ================= FETCH SUB-SUBCATEGORIES ================= */
   useEffect(() => {
@@ -70,11 +92,12 @@ const AllSubSubCategory = () => {
         <div className="head">
           <h4>All Child category List</h4>
         </div>
-        <div className="links">
-          <Link to="/add-sub-subcategory" className="add-new">
-            Add New <i className="fa-solid fa-plus"></i>
-          </Link>
-        </div>
+        {hasAccessAdd('subCategory') &&
+          <div className="links">
+            <Link to="/add-sub-subcategory" className="add-new">
+              Add New <i className="fa-solid fa-plus"></i>
+            </Link>
+          </div>}
       </div>
 
       <section className="main-table">
@@ -82,11 +105,11 @@ const AllSubSubCategory = () => {
           <thead>
             <tr>
               <th>Sr.No.</th>
-              <th>Category</th>
+              <th>Main Category</th>
               <th>Sub Category</th>
               <th>Child Category</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              {hasAccessEdit('subCategory') && <th>Edit</th>}
+              {hasAccessDelete('subCategory') && <th>Delete</th>}
             </tr>
           </thead>
 
@@ -102,23 +125,23 @@ const AllSubSubCategory = () => {
 
                   <td>{item?.secondsubcategoryName}</td>
 
-                  <td>
+                  {hasAccessEdit('subCategory') && <td>
                     <Link
                       to={`/edit-sub-subcategory/${item._id}`}
                       className="bt edit"
                     >
                       Edit <i className="fa-solid fa-pen-to-square"></i>
                     </Link>
-                  </td>
+                  </td>}
 
-                  <td>
+                  {hasAccessDelete('subCategory') && <td>
                     <button
                       className="bt delete"
                       onClick={() => handleDelete(item._id)}
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             ) : (

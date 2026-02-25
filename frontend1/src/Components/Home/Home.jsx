@@ -15,6 +15,7 @@ import FeaturedProducts from "../FeatureProducts/FeatureProducts";
 import ReelSection from "../ReelSection/ReelSection";
 import Coustomize from "../Coustomize/Coustomize";
 import CakeIngredientScroll from "../CakeStory/CakeIngredientScroll";
+import EggLess from "../EggLess/EggLess";
 
 const Home = () => {
   return (
@@ -22,6 +23,7 @@ const Home = () => {
       <HomeBannerSlider />  {/* DONE */}
       <Category /> {/* DONE */}
       <WhatsAppChat />
+      <EggLess />
       <CakeBanners /> {/* DONE */}
       <ReelSection />  {/* DONE */}
       <BestSellingProduct />
@@ -35,7 +37,7 @@ const Home = () => {
       <PromoBanner />  {/* DONE */}
       <Occasions />
 
-       {/* <CategorySection/> */}
+      {/* <CategorySection/> */}
       <Testimonial />
       <Banner />
     </>

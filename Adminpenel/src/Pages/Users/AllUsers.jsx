@@ -4,6 +4,16 @@ import Swal from "sweetalert2";
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+
 
   // Fetch users from the API
   const fetchUsers = async () => {
@@ -92,14 +102,15 @@ const AllUsers = () => {
                     <td>{user?.referredBy || "-"}</td>
                     <td>Rs. {user?.walletBalance || 0}</td>
                     <td>{new Date(user.createdAt).toLocaleString()}</td>
-                    <td>
-                      <button
-                        onClick={() => deleteUser(user._id)}
-                        className="bt delete"
-                      >
-                        Delete <i className="fa-solid fa-trash"></i>
-                      </button>
-                    </td>
+                    {hasAccessDelete('users') &&
+                      <td>
+                        <button
+                          onClick={() => deleteUser(user._id)}
+                          className="bt delete"
+                        >
+                          Delete <i className="fa-solid fa-trash"></i>
+                        </button>
+                      </td>}
                   </tr>
                 ))
               ) : (

@@ -5,6 +5,14 @@ import Swal from "sweetalert2";
 const AllContactQuery = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
 
   /* ================= FORMAT MESSAGE ================= */
   const formatMessage = (text = "", wordsPerLine = 80) => {
@@ -95,7 +103,7 @@ const AllContactQuery = () => {
                 <th>Subject</th>
                 <th style={{ minWidth: 300 }}>Message</th>
                 <th>Created At</th>
-                <th>Delete</th>
+                {hasAccessDelete('contactQuery') && <th>Delete</th>}
               </tr>
             </thead>
 
@@ -119,7 +127,7 @@ const AllContactQuery = () => {
                       lineHeight: "1.4",
                       maxWidth: "570px",
                       whiteSpace: "pre-line",
-                      overflowY:'scroll',
+                      overflowY: 'scroll',
                     }}>
                       {formatMessage(user.message, 80)}
                     </td>
@@ -128,14 +136,14 @@ const AllContactQuery = () => {
                       {new Date(user.createdAt).toLocaleString()}
                     </td>
 
-                    <td>
+                    {hasAccessDelete('contactQuery') && <td>
                       <button
                         onClick={() => handleDelete(user._id)}
                         className="bt delete"
                       >
                         Delete <i className="fa-solid fa-trash"></i>
                       </button>
-                    </td>
+                    </td>}
                   </tr>
                 ))
               ) : (

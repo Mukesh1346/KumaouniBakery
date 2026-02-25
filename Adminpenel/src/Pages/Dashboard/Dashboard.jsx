@@ -27,6 +27,7 @@ const Dashboard = () => {
   // States to store data for each section
   const [users, setUsers] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [levelBanners, setLevelBanners] = useState([])
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [colors, setColors] = useState([]);
@@ -34,7 +35,7 @@ const Dashboard = () => {
   const [flowers, setFlowers] = useState([]);
   const [products, setProducts] = useState([]);
   const [tags, setTags] = useState([]);
-  const [vouchers, setVouchers] = useState([]);
+  const [reels, setReels] = useState([]);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -93,6 +94,11 @@ const Dashboard = () => {
         );
         setTags(tagsResponse.data.data);
 
+        const res = await axios.get(
+          "https://api.ssdipl.com/api/reel/get-reels"
+        );
+        setReels(res.data?.data || []);
+
         // Fetch vouchers
         // const vouchersResponse = await axios.get('https://api.ssdipl.com/api/vouchers');
         // setVouchers(vouchersResponse.data);
@@ -101,8 +107,14 @@ const Dashboard = () => {
         const ordersResponse = await axios.get(
           "https://api.ssdipl.com/api/checkouts"
         );
-        // console.log(ordersResponse)
-        setOrders(ordersResponse.data.data);
+        console.log("ORDER==>", ordersResponse.data)
+        setOrders(ordersResponse.data);
+
+        const levelBannerRespons = await axios.get(
+          "https://api.ssdipl.com/api/cake-banner/get-cake-banner"
+        );
+        setLevelBanners(levelBannerRespons.data?.data || []);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -165,8 +177,8 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1>Welcome to Cake Admin Panel</h1>
-        <p>Manage your cake store data from here!</p>
+        <h1>Welcome to Admin Panel</h1>
+        <p>Manage your online cake store from here!</p>
       </div>
 
       <div className="dashboard-cards">
@@ -260,7 +272,7 @@ const Dashboard = () => {
             <i className="fa-solid fa-boxes-stacked"></i>
             <h3>Manage Reels</h3>
             <p>Add, update, or remove Reels</p>
-            <p> Reels</p>
+            <p> {reels?.length} Reels</p>
             {/* Display products data */}
             {/* <pre>{JSON.stringify(products, null, 2)}</pre> */}
           </Link>
@@ -281,7 +293,7 @@ const Dashboard = () => {
             <i className="fa-solid fa-boxes-stacked"></i>
             <h3>Manage Level Banners</h3>
             <p>Add, update, or remove Level Banners</p>
-            <p>Cake Banners</p>
+            <p>{levelBanners?.length} Level Banners</p>
             {/* Display products data */}
             {/* <pre>{JSON.stringify(products, null, 2)}</pre> */}
           </Link>

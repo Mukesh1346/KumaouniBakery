@@ -18,7 +18,28 @@ const AllPinCode = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
+    const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
+    const hasAccessAdd = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.write === true
+        );
+    };
+
+    const hasAccessDelete = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.delete === true
+        );
+    };
+
+    const hasAccessEdit = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.update === true
+        );
+    };
     /* ================= FETCH ================= */
     const fetchPinCodes = async () => {
         setIsLoading(true);
@@ -49,10 +70,10 @@ const AllPinCode = () => {
 
         if (confirm.isConfirmed) {
             try {
-                await axios.delete(
+                await axios.get(
                     `https://api.ssdipl.com/api/pincode/delete-Pincode/${id}`
                 );
-                setPinCodes((prev) => prev.filter((item) => item._id !== id));
+                setPinCodes((prev) => prev.filter((item) => item?._id !== id));
                 toast.success("PinCode deleted successfully!");
             } catch {
                 toast.error("Failed to delete pin code!");
@@ -187,6 +208,7 @@ const AllPinCode = () => {
     }
 
     const handleDeleveryTimeChange = async (productId, status) => {
+
         try {
             const data = {
                 productId,
@@ -210,16 +232,16 @@ const AllPinCode = () => {
                 <div className="d-flex flex-wrap align-items-center gap-2">
 
                     {/* Sample Download */}
-                    <button
+                    {hasAccessAdd('pincode') && <button
                         onClick={downloadCSV}
                         className="btn btn-outline-primary btn-sm d-flex align-items-center"
                     >
                         <i className="fa-solid fa-download me-2"></i>
                         Sample
-                    </button>
+                    </button>}
 
                     {/* Upload Excel */}
-                    <label className="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center">
+                    {hasAccessAdd('pincode') && <label className="btn btn-outline-secondary btn-sm mb-0 d-flex align-items-center">
                         <i className="fa-solid fa-upload me-2"></i>
                         Upload Excel
                         <input
@@ -228,7 +250,7 @@ const AllPinCode = () => {
                             hidden
                             onChange={handleFileUpload}
                         />
-                    </label>
+                    </label>}
 
                     {/* Export */}
                     <button
@@ -240,13 +262,14 @@ const AllPinCode = () => {
                     </button>
 
                     {/* Add New */}
-                    <Link
-                        to="/add-pincode"
-                        className="btn btn-primary btn-sm d-flex align-items-center"
-                    >
-                        <i className="fa-solid fa-plus me-2"></i>
-                        Add New
-                    </Link>
+                    {hasAccessAdd('pincode') &&
+                        <Link
+                            to="/add-pincode"
+                            className="btn btn-primary btn-sm d-flex align-items-center"
+                        >
+                            <i className="fa-solid fa-plus me-2"></i>
+                            Add New
+                        </Link>}
 
                 </div>
 
@@ -304,7 +327,7 @@ const AllPinCode = () => {
                         <th>Pin Code</th>
                         <th>Deleverd</th>
                         <th>30 to 60 min. Deleverd</th>
-                        <th>Actions</th>
+                        {(hasAccessDelete('pincode') || hasAccessEdit('pincode')) && <th>Actions</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -331,6 +354,7 @@ const AllPinCode = () => {
                                     type="checkbox"
                                     name="FeaturedProducts"
                                     className="form-check-input me-2"
+                                    disabled={!hasAccessEdit('pincode')}
                                     checked={item?.deleveryStatus}
                                     onChange={(e) => handleStatusChange(item?._id, e.target.checked)} />
                                 </td>
@@ -339,6 +363,7 @@ const AllPinCode = () => {
                                     name="FeaturedProducts"
                                     className="form-check-input me-2"
                                     checked={item?.deleveryTime}
+                                    disabled={!hasAccessEdit('pincode')}
                                     onChange={(e) => handleDeleveryTimeChange(item?._id, e.target.checked)} />
                                 </td>
                                 {/* <td>
@@ -350,18 +375,18 @@ const AllPinCode = () => {
                                     </span>
                                 </td> */}
                                 <td>
-                                    <Link
-                                        to={`/edit-pincode/${item._id}`}
+                                    {hasAccessEdit('pincode') && <Link
+                                        to={`/edit-pincode/${item?._id}`}
                                         className="btn btn-sm btn-warning me-2"
                                     >
                                         Edit
-                                    </Link>
-                                    <button
-                                        onClick={() => handleDelete(item._id)}
+                                    </Link>}
+                                    {hasAccessDelete('pincode') && <button
+                                        onClick={() => handleDelete(item?._id)}
                                         className="btn btn-sm btn-danger"
                                     >
                                         Delete
-                                    </button>
+                                    </button>}
                                 </td>
                             </tr>
                         ))

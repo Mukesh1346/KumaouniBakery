@@ -6,6 +6,29 @@ import Swal from "sweetalert2";
 const AllCakeBanners = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
+
 
   /* ================= FETCH BANNERS ================= */
   useEffect(() => {
@@ -53,6 +76,7 @@ const AllCakeBanners = () => {
     }
   };
 
+
   if (loading) {
     return <p className="text-center mt-5">Loading level banners...</p>;
   }
@@ -63,11 +87,11 @@ const AllCakeBanners = () => {
         <div className="head">
           <h4>All level Banners</h4>
         </div>
-        <div className="links">
+        {hasAccessAdd('cakeBanner') && <div className="links">
           <Link to="/add-cake-banner" className="add-new">
             Add level Banner
           </Link>
-        </div>
+        </div>}
       </div>
 
       <section className="main-table">
@@ -78,8 +102,8 @@ const AllCakeBanners = () => {
               <th>Title</th>
               <th>Banner Slot</th>
               <th>Preview</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              {hasAccessEdit('cakeBanner') && <th>Edit</th>}
+              {hasAccessDelete('cakeBanner') && <th>Delete</th>}
             </tr>
           </thead>
 
@@ -111,23 +135,23 @@ const AllCakeBanners = () => {
                     />
                   </td>
 
-                  <td>
+                {hasAccessEdit('cakeBanner') &&  <td>
                     <Link
                       to={`/edit-cake-banner/${banner?._id}`}
                       className="bt edit"
                     >
                       Edit
                     </Link>
-                  </td>
+                  </td>}
 
-                  <td>
+                 {hasAccessDelete('cakeBanner') && <td>
                     <button
                       className="bt delete"
                       onClick={() => handleDelete(banner?._id)}
                     >
                       Delete
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             ) : (

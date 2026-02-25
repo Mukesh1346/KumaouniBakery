@@ -47,7 +47,7 @@ const AddCategory = () => {
       <ToastContainer />
       <div className="bread">
         <div className="head">
-          <h4>Add Category</h4>
+          <h4>Add Main Category</h4>
         </div>
         <div className="links">
           <Link to="/all-category" className="add-new">
@@ -60,7 +60,7 @@ const AddCategory = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
           <div className="col-md-6">
             <label htmlFor="mainCategoryName" className="form-label">
-              Category Name
+            Main Category Name
             </label>
             <input
               type="text"
@@ -98,7 +98,7 @@ const AddCategory = () => {
               disabled={isLoading}
               className={`${isLoading ? "not-allowed" : "allowed"}`}
             >
-              {isLoading ? "Please Wait..." : "Add Category"}
+              {isLoading ? "Please Wait..." : "Add Main Category"}
             </button>
           </div>
         </form>

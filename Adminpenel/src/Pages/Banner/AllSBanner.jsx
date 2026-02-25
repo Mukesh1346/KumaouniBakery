@@ -60,6 +60,7 @@ const AllSBanner = () => {
       AdminData?.permissions?.[module]?.write === true
     );
   };
+  
   const hasAccessDelete = (module) => {
     return (
       AdminData?.role === "Admin" ||

@@ -25,8 +25,8 @@ const EditCategory = () => {
           ActiveonHome,
         });
       } catch (error) {
-        toast.error("Error fetching category data");
-        console.error("Error fetching category:", error);
+        toast.error("Error fetching Main category data");
+        console.error("Error fetching Main category:", error);
       }
     };
 
@@ -66,7 +66,7 @@ const EditCategory = () => {
       <ToastContainer />
       <div className="bread">
         <div className="head">
-          <h4>Edit Category</h4>
+          <h4>Edit Main Category</h4>
         </div>
         <div className="links">
           <Link to="/all-category" className="add-new">
@@ -79,7 +79,7 @@ const EditCategory = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
           <div className="col-md-6">
             <label htmlFor="mainCategoryName" className="form-label">
-              Category Name
+            Main Category Name
             </label>
             <input
               type="text"

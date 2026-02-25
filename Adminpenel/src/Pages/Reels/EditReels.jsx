@@ -3,6 +3,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
 const EditReels = () => {
   const { id } = useParams();
@@ -171,6 +172,10 @@ const EditReels = () => {
   };
 
   /* ================= UI ================= */
+  const productLists = productList.map((sub) => ({
+    value: sub._id,
+    label: `${sub?.productName} ₹(${sub?.Variant?.[0]?.price || 0})`,
+  }));
 
   return (
     <>
@@ -190,22 +195,24 @@ const EditReels = () => {
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* PRODUCT */}
-          <div className="col-md-4">
-            <label className="form-label">Product</label>
-            <select
-              name="productId"
-              className="form-select"
-              value={formData.productId}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Product</option>
-              {productList.map((p) => (
-                <option key={p._id} value={p._id}>
-                  {p.productName} (₹{p?.Variant?.[0]?.price || 0})
-                </option>
-              ))}
-            </select>
+          <div className="col-md-6">
+            <label className="form-label"> Select Product </label>
+
+            <Select
+              options={productLists}
+              value={productLists.find(
+                (opt) => opt.value === formData.productId
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  productId: selected?.value || "",
+                }))
+              }
+              placeholder="Select Product"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           {/* VIDEO */}

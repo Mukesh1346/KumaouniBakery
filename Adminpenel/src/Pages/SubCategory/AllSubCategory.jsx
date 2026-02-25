@@ -8,7 +8,28 @@ import "react-toastify/dist/ReactToastify.css";
 const AllSubCategory = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
   useEffect(() => {
     const fetchSubcategories = async () => {
       try {
@@ -69,11 +90,11 @@ const AllSubCategory = () => {
         <div className="head">
           <h4>All Sub Category List</h4>
         </div>
-        <div className="links">
+        {hasAccessAdd('category') && <div className="links">
           <Link to="/add-subcategory" className="add-new">
             Add New <i className="fa-solid fa-plus"></i>
           </Link>
-        </div>
+        </div>}
       </div>
 
       <section className="main-table">
@@ -83,10 +104,10 @@ const AllSubCategory = () => {
               <th scope="col">Sr.No.</th>
               <th scope="col"> Image</th>
               <th scope="col"> Banner</th>
-              <th scope="col">Category Name</th>
-              <th scope="col">Subcategory Name</th>
-              <th scope="col">Edit</th>
-              <th scope="col">Delete</th>
+              <th scope="col">Main Category Name</th>
+              <th scope="col">Sub Category Name</th>
+              {hasAccessEdit('category') && <th scope="col">Edit</th>}
+              {hasAccessDelete('category') && <th scope="col">Delete</th>}
             </tr>
           </thead>
           <tbody>
@@ -98,28 +119,28 @@ const AllSubCategory = () => {
                   <th><img src={`https://api.ssdipl.com/${subcategory?.banner}`} alt={subcategory.subcategoryName} /></th>
                   <td>{subcategory?.categoryName?.mainCategoryName}</td>
                   <td>{subcategory.subcategoryName}</td>
-                  <td>
+                  {hasAccessEdit('category') && <td>
                     <Link
                       to={`/edit-subcategory/${subcategory._id}`}
                       className="bt edit"
                     >
                       Edit <i className="fa-solid fa-pen-to-square"></i>
                     </Link>
-                  </td>
-                  <td>
+                  </td>}
+                  {hasAccessDelete('category') && <td>
                     <button
                       className="bt delete"
                       onClick={() => handleDelete(subcategory._id)}
                     >
                       Delete <i className="fa-solid fa-trash"></i>
                     </button>
-                  </td>
+                  </td>}
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan="4" className="text-center">
-                  No subcategories found
+                  No sub categories found
                 </td>
               </tr>
             )}

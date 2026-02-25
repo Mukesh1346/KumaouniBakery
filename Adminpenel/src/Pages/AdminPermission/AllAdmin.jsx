@@ -14,13 +14,13 @@ const AllAdmin = () => {
     { key: "orders", name: "Orders" },
     { key: 'contactQuery', name: 'Contact Query' },
     { key: 'mainCategory', name: 'Main Category' },
-    { key: 'category', name: 'Category' },
-    { key: 'subCategory', name: 'Sub Category' },
+    { key: 'category', name: 'Sub Category' },
+    { key: 'subCategory', name: 'Child Category' },
     { key: "products", name: "Products" },
     { key: 'recommendedProducts', name: 'Recommended Products' },
     { key: 'recommendedCategory', name: 'Recommended Category' },
     { key: 'size', name: 'Size' },
-    { key: 'cakeBanner', name: 'Cake Banner' },
+    { key: 'cakeBanner', name: 'Level Banner' },
     { key: 'banners', name: 'Banner' },
     { key: 'reels', name: 'Reels' },
     { key: 'users', name: 'Users' },
@@ -30,6 +30,28 @@ const AllAdmin = () => {
     { key: 'adminUser', name: 'admin User' },
     { key: 'subscribeEmail', name: 'Subscribe Email' }
   ];
+  const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+  const hasAccessAdd = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.write === true
+    );
+  };
+
+  const hasAccessDelete = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.delete === true
+    );
+  };
+
+  const hasAccessEdit = (module) => {
+    return (
+      AdminData?.role === "Admin" ||
+      AdminData?.permissions?.[module]?.update === true
+    );
+  };
 
   // Fetch users from the API
   const fetchUsers = async () => {
@@ -95,11 +117,12 @@ const AllAdmin = () => {
         <div className="head">
           <h4>All Admin</h4>
         </div>
-        <div className="links">
+        {hasAccessAdd('adminUser') && <div className="links">
           <Link to="/add-admin" className="add-new">
             Add Admin User
           </Link>
-        </div>
+        </div>}
+
       </div>
 
       <section className="main-table">
@@ -113,7 +136,7 @@ const AllAdmin = () => {
                 <th scope="col">Role</th>
                 <th scope="col">Referral Code </th>
                 <th scope="col">Join Date</th>
-                <th scope="col">Actions</th>
+                {(hasAccessDelete('adminUser') || hasAccessEdit('adminUser')) && <th scope="col">Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -128,18 +151,18 @@ const AllAdmin = () => {
                     <td>{new Date(user.createdAt).toLocaleString()}</td>
                     <td>
                       <div style={{ gap: 12, display: 'flex' }}>
-                        <button
+                        {hasAccessEdit('adminUser') && <button
                           onClick={() => handlePermission(user)}
                           className="bt edit"
                         >
                           Permission <i className="fa-solid fa-user-shield"></i>
-                        </button>
-                        <button
+                        </button>}
+                        {hasAccessDelete('adminUser') && <button
                           onClick={() => deleteUser(user?._id)}
                           className="bt delete"
                         >
                           Delete <i className="fa-solid fa-trash"></i>
-                        </button>
+                        </button>}
                       </div>
                     </td>
                   </tr>

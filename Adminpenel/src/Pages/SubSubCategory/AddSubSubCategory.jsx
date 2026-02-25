@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
 const AddSubSubCategory = () => {
   const navigate = useNavigate();
@@ -70,16 +71,18 @@ const AddSubSubCategory = () => {
   /* ================= SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (
       !formData.mainCategoryId ||
-      !formData.subCategoryId ||
       !formData.secondSubCategoryName ||
       !formData.image
     ) {
       toast.error("All fields are required");
       return;
     }
+if(!formData.subCategoryId){
+  toast.error("Please select again subcategory");
+  return;
+}
 
     setIsLoading(true);
 
@@ -110,6 +113,16 @@ const AddSubSubCategory = () => {
     }
   };
 
+  const mainCategoryOptions = mainCategories.map((sub) => ({
+    value: sub._id,
+    label: sub.mainCategoryName,
+  }));
+
+  const subCategoryOptions = subCategories.map((sub) => ({
+    value: sub._id,
+    label: sub.subcategoryName,
+  }));
+
   return (
     <>
       <ToastContainer />
@@ -128,46 +141,50 @@ const AddSubSubCategory = () => {
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
           {/* MAIN CATEGORY */}
-          <div className="col-md-6">
-            <label className="form-label">Category</label>
-            <select
-              name="mainCategoryId"
-              className="form-control select-arrow"
-              value={formData.mainCategoryId}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select category</option>
-              {mainCategories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.mainCategoryName}
-                </option>
-              ))}
-            </select>
+          <div className="col-md-4">
+            <label className="form-label">Select Main Category</label>
+
+            <Select
+              options={mainCategoryOptions}
+              value={mainCategoryOptions.find(
+                (opt) => opt.value === formData?.mainCategoryId
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  mainCategoryId: selected?.value || "",
+                  subCategoryId: "", // reset subcategory
+                }))
+              }
+              placeholder="Select Main category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           {/* SUB CATEGORY */}
-          <div className="col-md-6">
-            <label className="form-label">Sub Category</label>
-            <select
-              name="subCategoryId"
-              className="form-control select-arrow"
-              value={formData.subCategoryId}
-              onChange={handleChange}
-              disabled={!formData.mainCategoryId}
-              required
-            >
-              <option value="">Select sub category</option>
-              {subCategories.map((sub) => (
-                <option key={sub?._id} value={sub?._id}>
-                  {sub.subcategoryName}
-                </option>
-              ))}
-            </select>
+          <div className="col-md-4">
+            <label className="form-label">Select Sub Category</label>
+
+            <Select
+              options={subCategoryOptions}
+              value={subCategoryOptions.find(
+                (opt) => opt.value === formData?.subCategoryId
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  subCategoryId: selected?.value || "",
+                }))
+              }
+              placeholder="Select Sub Category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
           </div>
 
           {/* SUB-SUBCATEGORY NAME */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Child Category Name</label>
             <input
               type="text"

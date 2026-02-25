@@ -9,6 +9,28 @@ import axios from 'axios';
 const AllCoupon = () => {
     const [coupons, setCoupons] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
+
+    const hasAccessAdd = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.write === true
+        );
+    };
+
+    const hasAccessDelete = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.delete === true
+        );
+    };
+
+    const hasAccessEdit = (module) => {
+        return (
+            AdminData?.role === "Admin" ||
+            AdminData?.permissions?.[module]?.update === true
+        );
+    };
 
     useEffect(() => {
         const fetchCoupons = async () => {
@@ -95,11 +117,11 @@ const AllCoupon = () => {
                 <div className="head">
                     <h4>All Coupons</h4>
                 </div>
-                <div className="links">
+                {hasAccessAdd('coupon') && <div className="links">
                     <Link to="/add-coupon" className="add-new">
                         Add New <i className="fa-solid fa-plus"></i>
                     </Link>
-                </div>
+                </div>}
             </div>
 
             {/* <div className="filteration">
@@ -128,8 +150,8 @@ const AllCoupon = () => {
                             <th scope="col">Coupon Code</th>
                             <th scope="col">Discount</th>
                             <th scope="col">Show Top in Home Page</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
+                            {hasAccessEdit('coupon') && <th scope="col">Edit</th>}
+                            {hasAccessDelete('coupon') && <th scope="col">Delete</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -148,16 +170,16 @@ const AllCoupon = () => {
                                             onChange={(e) => handleCheckboxChange(e, coupon._id)}
                                         />
                                     </td>
-                                    <td>
+                                    {hasAccessEdit('coupon') && <td>
                                         <Link to={`/edit-coupon/${coupon?._id}`} className="bt edit">
                                             Edit <i className="fa-solid fa-pen-to-square"></i>
                                         </Link>
-                                    </td>
-                                    <td>
+                                    </td>}
+                                    {hasAccessDelete('coupon') && <td>
                                         <button className="bt cursor-pointer delete" onClick={() => handleDelete(coupon?._id)}>
                                             Delete <i className="fa-solid fa-trash"></i>
                                         </button>
-                                    </td>
+                                    </td>}
                                 </tr>
                             ))
                         ) : (
