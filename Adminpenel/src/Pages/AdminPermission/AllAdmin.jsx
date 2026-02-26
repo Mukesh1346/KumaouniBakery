@@ -134,7 +134,7 @@ const AllAdmin = () => {
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Role</th>
-                <th scope="col">Referral Code </th>
+                {/* <th scope="col">Referral Code </th> */}
                 <th scope="col">Join Date</th>
                 {(hasAccessDelete('adminUser') || hasAccessEdit('adminUser')) && <th scope="col">Actions</th>}
               </tr>
@@ -147,7 +147,7 @@ const AllAdmin = () => {
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.role || "User"}</td>
-                    <td>{user?.referralCode || "-"}</td>
+                    {/* <td>{user?.referralCode || "-"}</td> */}
                     <td>{new Date(user.createdAt).toLocaleString()}</td>
                     <td>
                       <div style={{ gap: 12, display: 'flex' }}>

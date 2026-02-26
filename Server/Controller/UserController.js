@@ -79,24 +79,24 @@ const createRecord = async (req, res) => {
             const mailOptions = {
                 from: process.env.MAIL_SENDER,
                 to: newUser.email,
-                subject: "Welcome to Cake Crazzy - Your Account Has Been Created!",
+                subject: "Welcome to CAKE NPETALS - Your Account Has Been Created!",
                 html: `
                 <html>
                     <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
                         <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
                             <div style="text-align: center; background-color: #ff5733; color: #ffffff; padding: 20px;">
-                                <h1 style="margin: 0;">Welcome to Cake Crazzy!</h1>
+                                <h1 style="margin: 0;">Welcome to CAKE NPETALS!</h1>
                             </div>
                             <div style="margin-top: 20px; padding: 20px; text-align: center;">
                                 <p style="font-size: 16px; line-height: 1.6;">Hello ${newUser.name},</p>
-                                <p style="font-size: 16px; line-height: 1.6;">We're excited to let you know that your account has been successfully created with Cake Crazzy!</p>
+                                <p style="font-size: 16px; line-height: 1.6;">We're excited to let you know that your account has been successfully created with CAKE NPETALS!</p>
                                 <p style="font-size: 16px; line-height: 1.6;">You can now explore a wide range of delicious cakes and treats available for you. Enjoy our amazing deals!</p>
-                                <a href="https://cakecrazzy.com" style="display: inline-block; padding: 12px 30px; background-color: #ff5733; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">Shop Now</a>
+                                <a href="https://ssdipl.com/" style="display: inline-block; padding: 12px 30px; background-color: #ff5733; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">Shop Now</a>
                             </div>
                             <div style="margin-top: 40px; text-align: center; font-size: 14px; color: #777777;">
-                                <p style="margin: 0;">Thank you for choosing Cake Crazzy. We are excited to serve you the best cakes in town!</p>
-                                <p style="margin: 0;">Team Cake Crazzy</p>
-                                <p style="margin: 0;">If you have any questions, feel free to contact us at <a href="mailto:support@cakecrazzy.com" style="color: #ff5733;">support@cakecrazzy.com</a></p>
+                                <p style="margin: 0;">Thank you for choosing CAKE NPETALS. We are excited to serve you the best cakes in town!</p>
+                                <p style="margin: 0;">Team CAKE NPETALS</p>
+                                <p style="margin: 0;">If you have any questions, feel free to contact us at <a href="mailto:support@cakenpetals.com" style="color: #ff5733;">support@cakenpetals.com</a></p>
                             </div>
                         </div>
                     </body>

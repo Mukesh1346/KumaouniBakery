@@ -133,7 +133,7 @@ const Footer = () => {
 
           {/* International */}
           <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
-            <h6 className="text-dark pt-4">International Presence</h6>
+            <h6 className="text-dark">International Presence</h6>
             <ul>
               <li>Dubai</li>
               <li>Qatar</li>

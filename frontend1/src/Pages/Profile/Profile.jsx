@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./profile.css";
 
 const Profile = () => {
   const userid = sessionStorage.getItem("userId");
-
+  const navigate = useNavigate()
   const [user, setUser] = useState({});
   const [orders, setOrders] = useState([]);
 
@@ -38,10 +38,10 @@ const Profile = () => {
   //   getOrderData();
   // }, [userid]);
 
-useEffect(() => {
-  getApiData();
-  getOrderData();
-}, [getApiData, getOrderData]);
+  useEffect(() => {
+    getApiData();
+    getOrderData();
+  }, [getApiData, getOrderData]);
 
 
 
@@ -49,6 +49,8 @@ useEffect(() => {
     sessionStorage.clear();
     window.location.href = "/login";
   };
+
+  console.log("orders==>orders==>", orders);
 
   return (
     <>
@@ -79,7 +81,11 @@ useEffect(() => {
         </div>
 
         <div className="orderHistory">
-          <h2>Order History</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <h2>Order History</h2>
+            <button style={{ background: '#DF4444', padding: 10, borderRadius: 10, color: 'white', cursor: 'pointer' }} onClick={() => navigate('/track-order')}>Order Track</button>
+          </div>
+
           {orders.length > 0 ? (
             orders.map((order) => (
               <div className="order-container" key={order._id}>
@@ -102,6 +108,9 @@ useEffect(() => {
                   <p>
                     <b>Payment Mode:</b> {order.paymentMode}
                   </p>
+                  <p>
+                    <b>Delivery Date:</b> {order?.delivery?.date}
+                  </p>
                 </div>
                 <div className="cart-items">
                   <h3>Cart Items</h3>
@@ -112,10 +121,10 @@ useEffect(() => {
                         <th>Product Name</th>
                         <th>Quantity</th>
                         <th>Weight</th>
-                        <th>Egg Option</th>
+                        {/* <th>Egg Option</th> */}
                         <th>Price</th>
                         <th>Delivery Date</th>
-                        <th>Message</th>
+                        {/* <th>Message</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -128,15 +137,15 @@ useEffect(() => {
                               style={{ height: 50 }}
                             />
                           </td>
-                          <td>{item.name}</td>
-                          <td>{item.quantity}</td>
-                          <td>{item.weight}</td>
-                          <td>{item.eggOption}</td>
-                          <td>₹{item.price}</td>
+                          <td>{item?.name}</td>
+                          <td>{item?.quantity}</td>
+                          <td>{item?.weight}</td>
+                          {/* <td>{item.eggOption}</td> */}
+                          <td>₹{item?.price}</td>
                           <td>
-                            {new Date(item.deliveryDate).toLocaleDateString()}
+                            {order?.delivery?.date}
                           </td>
-                          <td>{item.message}</td>
+                          {/* <td>{item.message}</td> */}
                         </tr>
                       ))}
                     </tbody>
