@@ -21,6 +21,9 @@ const EditProduct = () => {
         productDescription: "",
         FeaturedProducts: 0,
         BestSellingProduct: 0,
+        ActiveonFlavours: 0,
+        NameOnCake: 0,
+        ActiveonDeliveryDate: 0,
         eggless: 0,
         Variant: [
             {
@@ -43,19 +46,20 @@ const EditProduct = () => {
     // State to store filtered subcategories
     const [filteredSubcategories, setFilteredSubcategories] = useState([]);
 
-    const categoriesList = categories.map((sub) => ({
-        value: sub._id,
-        label: sub.mainCategoryName,
-    }));
+    // const categoriesList = categories.map((sub) => ({
+    //     value: sub._id,
+    //     label: sub.mainCategoryName,
+    // }));
 
-    const subcategoriesList = filteredSubcategories.map((sub) => ({
-        value: sub._id,
-        label: sub.subcategoryName,
-    }));
-    const secondSubcategoriesList = secondSubcategories.map((sub) => ({
-        value: sub._id,
-        label: sub.secondsubcategoryName,
-    }));
+    // const subcategoriesList = filteredSubcategories.map((sub) => ({
+    //     value: sub._id,
+    //     label: sub.subcategoryName,
+    // }));
+    // const secondSubcategoriesList = secondSubcategories.map((sub) => ({
+    //     value: sub._id,
+    //     label: sub.secondsubcategoryName,
+    // }));
+
     const recommendedProductsList = recommendedProducts.map((sub) => ({
         value: sub._id,
         label: sub?.name || sub?.productName,
@@ -76,12 +80,12 @@ const EditProduct = () => {
         const fetchData = async () => {
             try {
                 // Fetch dynamic data
-                const categoryResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-main-category"
-                );
-                const subcategoryResponse = await axios.get(
-                    "https://api.ssdipl.com/api/get-subcategory"
-                );
+                // const categoryResponse = await axios.get(
+                //     "https://api.ssdipl.com/api/get-main-category"
+                // );
+                // const subcategoryResponse = await axios.get(
+                //     "https://api.ssdipl.com/api/get-subcategory"
+                // );
                 const weightResponse = await axios.get(
                     "https://api.ssdipl.com/api/get-size"
                 );
@@ -89,8 +93,8 @@ const EditProduct = () => {
                     "https://api.ssdipl.com/api/recommended-product/all-product"
                 );
 
-                setCategories(categoryResponse.data.data);
-                setSubcategories(subcategoryResponse.data.data);
+                // setCategories(categoryResponse.data.data);
+                // setSubcategories(subcategoryResponse.data.data);
                 setWeights(weightResponse.data.data);
                 setRecommendedProducts(RecommendedProductResponse.data.data);
                 // Fetch product details
@@ -102,6 +106,9 @@ const EditProduct = () => {
                 setFormData({
                     ...productData,
                     ActiveonHome: productData?.ActiveonHome === true ? 1 : 0,
+                    ActiveonFlavours: productData?.ActiveonFlavours === true ? 1 : 0 || 0,
+                    NameOnCake: productData?.NameOnCake === true ? 1 : 0 || 0,
+                    ActiveonDeliveryDate: productData?.ActiveonDeliveryDate === true ? 1 : 0 || 0,
                     FeaturedProducts: productData?.FeaturedProducts === true ? 1 : 0 || 0,
                     BestSellingProduct: productData?.BestSellingProduct === true ? 1 : 0 || 0,
                     eggless: productData?.eggless === true ? 1 : 0 || 0,
@@ -222,18 +229,18 @@ const EditProduct = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.categoryName) {
-            toast.error("Please select a category");
-            return;
-        }
-        if (!formData.subcategoryName) {
-            toast.error("Please select a subcategory");
-            return;
-        }
-        if (!formData.secondsubcategoryName) {
-            toast.error("Please select a second subcategory");
-            return;
-        }
+        // if (!formData.categoryName) {
+        //     toast.error("Please select a category");
+        //     return;
+        // }
+        // if (!formData.subcategoryName) {
+        //     toast.error("Please select a subcategory");
+        //     return;
+        // }
+        // if (!formData.secondsubcategoryName) {
+        //     toast.error("Please select a second subcategory");
+        //     return;
+        // }
         if (!formData.productName) {
             toast.error("Please enter a product name");
             return;
@@ -248,7 +255,10 @@ const EditProduct = () => {
         form.append("productDescription", formData.productDescription);
         form.append("productDetails", formData.productDetails);
         form.append("ActiveonHome", formData.ActiveonHome);
+        form.append("ActiveonFlavours", formData?.ActiveonFlavours);
+        form.append("ActiveonDeliveryDate", formData?.ActiveonDeliveryDate);
         form.append("FeaturedProducts", formData.FeaturedProducts);
+        form.append("NameOnCake", formData?.NameOnCake);
         form.append("BestSellingProduct", formData?.BestSellingProduct);
         form.append("eggless", formData?.eggless);
         form.append("recommendedProductId", JSON.stringify(formData.recommendedProductId));
@@ -276,28 +286,28 @@ const EditProduct = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchSecondSubcategories = async () => {
-            try {
-                const response = await axios.get(
-                    `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
-                );
-                setSecondSubcategories(response?.data?.data);
-            } catch (error) {
-                console.error("Error fetching second subcategories:", error);
-            }
-        }
-        fetchSecondSubcategories();
-    }, [formData?.subcategoryName])
+    // useEffect(() => {
+    //     const fetchSecondSubcategories = async () => {
+    //         try {
+    //             const response = await axios.get(
+    //                 `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+    //             );
+    //             setSecondSubcategories(response?.data?.data);
+    //         } catch (error) {
+    //             console.error("Error fetching second subcategories:", error);
+    //         }
+    //     }
+    //     fetchSecondSubcategories();
+    // }, [formData?.subcategoryName])
 
-    useEffect(() => {
-        if (formData?.categoryName) {
-            const filteredSubcategories = subcategories.filter(
-                (subcategory) => subcategory.categoryName?._id === formData.categoryName
-            );
-            setFilteredSubcategories(filteredSubcategories);
-        }
-    }, [formData?.categoryName])
+    // useEffect(() => {
+    //     if (formData?.categoryName) {
+    //         const filteredSubcategories = subcategories.filter(
+    //             (subcategory) => subcategory.categoryName?._id === formData.categoryName
+    //         );
+    //         setFilteredSubcategories(filteredSubcategories);
+    //     }
+    // }, [formData?.categoryName])
 
     const handleRemoveProduct = (id) => {
         setFormData((prev) => ({
@@ -307,6 +317,7 @@ const EditProduct = () => {
             ),
         }));
     };
+
     console.log("formData::=>", formData)
     return (
         <>
@@ -325,7 +336,7 @@ const EditProduct = () => {
             <div className="d-form">
                 <form className="row g-3" onSubmit={handleSubmit}>
 
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                         <label className="form-label">Mani Category Name</label>
 
                         <Select
@@ -387,7 +398,7 @@ const EditProduct = () => {
                             isSearchable
                             classNamePrefix="react-select"
                         />
-                    </div>
+                    </div> */}
 
                     <div className="col-md-6">
                         <label htmlFor="productName" className="form-label">Product Name<sup className="text-danger">*</sup></label>
@@ -584,6 +595,61 @@ const EditProduct = () => {
                                 />
                                 <label className="form-check-label">100% Eggless</label>
                             </div>
+                        </div>
+                    </div>
+                    <div className="col-md-12">
+                        <div className="row align-items-center">
+                            <div className="col-md-3 form-check">
+                                <input
+                                    type="checkbox"
+                                    name="ActiveonFlavours"
+                                    className="form-check-input me-2"
+                                    checked={formData.ActiveonFlavours === 1}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, ActiveonFlavours: e.target.checked ? 1 : 0 })
+                                    }
+                                />
+                                <label className="form-check-label">Active on Flavours</label>
+                            </div>
+
+                            <div className="col-md-3 form-check">
+                                <input
+                                    type="checkbox"
+                                    name="NameOnCake"
+                                    className="form-check-input me-2"
+                                    checked={formData.NameOnCake === 1}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, NameOnCake: e.target.checked ? 1 : 0 })
+                                    }
+                                />
+                                <label className="form-check-label">Name On Cake</label>
+                            </div>
+
+                            <div className="col-md-3 form-check">
+                                <input
+                                    type="checkbox"
+                                    name="ActiveonDeliveryDate"
+                                    className="form-check-input me-2"
+                                    checked={formData.ActiveonDeliveryDate === 1}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, ActiveonDeliveryDate: e.target.checked ? 1 : 0 })
+                                    }
+                                />
+                                <label className="form-check-label">Active On Delivery Date</label>
+                            </div>
+
+                            {/* <div className="col-md-3 form-check">
+                                <input
+                                    type="checkbox"
+                                    name="eggless"
+                                    className="form-check-input me-2"
+                                    checked={formData.eggless === 1}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, eggless: e.target.checked ? 1 : 0 })
+                                    }
+                                />
+                                <label className="form-check-label">100% Eggless</label>
+                            </div> */}
                         </div>
                     </div>
 

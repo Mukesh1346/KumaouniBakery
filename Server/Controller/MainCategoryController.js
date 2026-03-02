@@ -214,7 +214,7 @@ const getCategoriesWithSubcategories = async (req, res) => {
 
                         const secondSubcategories = await SecondSubCategory.find({
                             subCategoryId: sub._id,
-                            ActiveonHome: true
+                            ActiveonHeader: true
                         }).select("_id secondsubcategoryName").lean();
 
                         return {

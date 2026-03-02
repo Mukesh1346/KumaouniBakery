@@ -18,13 +18,14 @@ const deleteImageFile = (relativeFilePath) => {
 
 
 const createProduct = async (req, res) => {
-    const { categoryName, subcategoryName, secondsubcategoryName, productName, productDescription, productDetails, Variant, ActiveonHome, FeaturedProducts, BestSellingProduct, eggless, recommendedProductId } = req.body;
+    const { categoryName, subcategoryName, secondsubcategoryName, productName, productDescription, productDetails, Variant,
+        ActiveonHome, FeaturedProducts, ActiveonFlavours, NameOnCake, BestSellingProduct, eggless, recommendedProductId } = req.body;
     const errorMessage = [];
 
     // Validation for required fields
-    if (!categoryName) errorMessage.push("Category Name is required");
-    if (!subcategoryName) errorMessage.push("Subcategory Name is required");
-    if (!secondsubcategoryName) errorMessage.push("Second Subcategory Name is required");
+    // if (!categoryName) errorMessage.push("Category Name is required");
+    // if (!subcategoryName) errorMessage.push("Subcategory Name is required");
+    // if (!secondsubcategoryName) errorMessage.push("Second Subcategory Name is required");
     if (!productName) errorMessage.push("Product Name is required");
     if (!productDescription) errorMessage.push("Product Description is required");
     if (!productDetails) errorMessage.push("Product Details is required");
@@ -75,14 +76,16 @@ const createProduct = async (req, res) => {
 
     // Proceed with creating the product
     const productData = {
-        categoryName,
-        subcategoryName,
-        secondsubcategoryName,
+        // categoryName,
+        // subcategoryName,
+        // secondsubcategoryName,
         productName,
         productDescription,
         productDetails,
         ActiveonHome,
+        ActiveonFlavours,
         FeaturedProducts,
+        NameOnCake,
         eggless,
         BestSellingProduct,
         recommendedProductId: parseRecommendedProductId,
@@ -107,9 +110,9 @@ const getProductsActiveonHome = async (req, res) => {
     try {
         const products = await Product.find({ ActiveonHome: 1 })
             .sort({ createdAt: -1 })
-            .populate('categoryName')
-            .populate('subcategoryName')
-            .populate('secondsubcategoryName')
+            // .populate('categoryName')
+            // .populate('subcategoryName')
+            // .populate('secondsubcategoryName')
             .populate('recommendedProductId')
             // .populate({
             //     path: 'Variant.weight',
@@ -128,7 +131,7 @@ const getProductsActiveonHome = async (req, res) => {
 
 const getFeaturedProducts = async (req, res) => {
     try {
-        const products = await Product.find({ ActiveonHome: 1, FeaturedProducts: 1 })
+        const products = await Product.find({ FeaturedProducts: 1 })
             .sort({ createdAt: -1 })
             .populate('categoryName')
             .populate('subcategoryName')
@@ -150,7 +153,7 @@ const getFeaturedProducts = async (req, res) => {
 }
 const getBestSellingProducts = async (req, res) => {
     try {
-        const products = await Product.find({ ActiveonHome: 1, BestSellingProduct: 1 })
+        const products = await Product.find({ BestSellingProduct: 1 })
             .sort({ createdAt: -1 })
             .populate('categoryName')
             .populate('subcategoryName')
@@ -288,14 +291,16 @@ const updateProduct = async (req, res) => {
     console.log('ddddd-->', req.body)
     // Collect updated data from the request body
     const updatedData = {
-        categoryName: req.body.categoryName,
-        subcategoryName: req.body.subcategoryName,
-        secondsubcategoryName: req.body.secondsubcategoryName,
+        // categoryName: req.body.categoryName,
+        // subcategoryName: req.body.subcategoryName,
+        // secondsubcategoryName: req.body.secondsubcategoryName,
         productName: req.body.productName,
         productDescription: req.body.productDescription,
         productDetails: req.body.productDetails,
         ActiveonHome: req.body.ActiveonHome || 0, // Default to 0 if not provided
+        ActiveonFlavours: req.body.ActiveonFlavours || 0,
         FeaturedProducts: req.body.FeaturedProducts || 0,
+        NameOnCake: req.body.NameOnCake || 0,
         eggless: req.body.eggless || 0,
         BestSellingProduct: req.body.BestSellingProduct || 0,
         recommendedProductId: req.body.recommendedProductId ? JSON.parse(req.body.recommendedProductId) : [],

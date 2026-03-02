@@ -16,7 +16,7 @@ const deleteImageFile = (relativeFilePath) => {
 
 const createBanner = async (req, res) => {
     try {
-        const { bannerKey, bannerStatus, secondsubcategoryName, titel } = req.body;
+        const { bannerKey, bannerStatus, secondsubcategoryName, categoryName, subcategoryName, titel } = req.body;
         const errorMessage = [];
         if (!bannerKey) errorMessage.push("Banner Name is required");
         // if (!bannerType) errorMessage.push("Banner Type is required");
@@ -29,6 +29,8 @@ const createBanner = async (req, res) => {
 
         const banner = new Banner({
             bannerKey,
+            categoryName,
+            subcategoryName,
             secondsubcategoryName,
             titel,
             cakeBanner: req.file.path, // Save the file path
@@ -68,7 +70,7 @@ const getBannerById = async (req, res) => {
 const updateBanner = async (req, res) => {
     try {
         const { id } = req.params;
-        const { bannerKey, bannerStatus, secondsubcategoryName, titel } = req.body;
+        const { bannerKey, bannerStatus, secondsubcategoryName, categoryName, subcategoryName, titel } = req.body;
         const banner = await Banner.findById(id);
         if (!banner) return res.status(404).json({ success: false, message: "Banner not found" });
 
@@ -79,6 +81,8 @@ const updateBanner = async (req, res) => {
         }
 
         // Update banner details
+        banner.categoryName = categoryName || banner.categoryName;
+        banner.subcategoryName = subcategoryName || banner.subcategoryName;
         banner.secondsubcategoryName = secondsubcategoryName || banner.secondsubcategoryName;
         banner.titel = titel || banner.titel;
         banner.bannerKey = bannerKey || banner.bannerKey;

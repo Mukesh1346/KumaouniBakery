@@ -582,7 +582,8 @@ const Header = () => {
                             // >
                             <div
                               onClick={() => {
-                                navigate(`/product-related/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
+                                // navigate(`/product-related/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
+                                navigate(`/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
                                   { state: { id: child?.id, status: 'subCategory' } });
                               }}
                               className="mega-item mega-child"

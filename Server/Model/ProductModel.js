@@ -38,17 +38,20 @@ const productSchema = new mongoose.Schema({
     categoryName: {
         type: mongoose.Schema.ObjectId,
         ref: "Main-Category",
-        required: true
+        // required:true
+        default: null
     },
     subcategoryName: {
         type: mongoose.Schema.ObjectId,
         ref: "Subcategory",
-        required: true
+        // required: true
+        default: null
     },
     secondsubcategoryName: {
         type: mongoose.Schema.ObjectId,
         ref: "SecondSubcategory",
-        required: true
+        // required: true
+        default: null
     },
     recommendedProductId: [{
         type: mongoose.Schema.ObjectId,
@@ -76,6 +79,14 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     ActiveonHome: {
+        type: Boolean,
+        default: false
+    },
+    ActiveonFlavours: {
+        type: Boolean,
+        default: false
+    },
+    NameOnCake: {
         type: Boolean,
         default: false
     },

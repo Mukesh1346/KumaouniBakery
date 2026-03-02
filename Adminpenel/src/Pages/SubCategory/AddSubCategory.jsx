@@ -62,11 +62,11 @@ const AddSubCategory = () => {
     }
 
     // Validate image upload
-    if (!formData.image) {
-      toast.error("Subcategory image is required");
-      setIsLoading(false);
-      return;
-    }
+    // if (!formData.image) {
+    //   toast.error("Subcategory image is required");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     try {
       // Create FormData object
@@ -180,7 +180,7 @@ const AddSubCategory = () => {
             />
           </div>
 
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label htmlFor="banner" className="form-label">
               Sub Category Banner (1150x310)PX
             </label>
@@ -206,12 +206,13 @@ const AddSubCategory = () => {
               onChange={handleChange}
               required
             />
-          </div>
+          </div> */}
+          
           <div className="col-md-6">
             <label htmlFor="ActiveonHome" className="form-label">
               Display on Homepage
             </label>
-            <div className="form-check">
+            {/* <div className="form-check">
               <input
                 type="checkbox"
                 name="ActiveonHome"
@@ -223,7 +224,7 @@ const AddSubCategory = () => {
               <label className="form-check-label" htmlFor="ActiveonHome">
                 Active on Homepage
               </label>
-            </div>
+            </div> */}
 
             <div className="col-md-6">
               <div className="form-check">

@@ -132,7 +132,7 @@ const Footer = () => {
           </div>
 
           {/* International */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
+          {/* <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
             <h6 className="text-dark">International Presence</h6>
             <ul>
               <li>Dubai</li>
@@ -140,7 +140,7 @@ const Footer = () => {
               <li>Saudi Arabia</li>
               <li>Singapore</li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Subscribe */}
           <div className="col-lg-2 footer-column col-md-8 col-6">

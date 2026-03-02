@@ -37,7 +37,11 @@ const AddCakeBanner = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
   const [secondSubcategories, setSecondSubcategories] = useState([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState([]);
+
   const [formData, setFormData] = useState({
     bannerKey: "",
     secondsubcategoryName: "",
@@ -73,7 +77,14 @@ const AddCakeBanner = () => {
       toast.error("Please upload a banner image");
       return;
     }
-
+    if (!formData.categoryName) {
+      toast.error("Please select a category");
+      return;
+    }
+    if (!formData.subcategoryName) {
+      toast.error("Please select a subcategory");
+      return;
+    }
     if (!formData.secondsubcategoryName) {
       toast.error("Please select a sub-subcategory");
       return;
@@ -90,6 +101,8 @@ const AddCakeBanner = () => {
       fd.append("bannerKey", formData.bannerKey);
       fd.append("cakeBanner", formData.image);
       fd.append("bannerStatus", formData.bannerStatus || false);
+      fd.append("categoryName", formData.categoryName);
+      fd.append("subcategoryName", formData.subcategoryName);
       fd.append("secondsubcategoryName", formData.secondsubcategoryName);
       fd.append("titel", formData.titel);
 
@@ -115,7 +128,15 @@ const AddCakeBanner = () => {
         const res = await axios.get(
           "https://api.ssdipl.com/api/second-sub-category/get-second-sub-category"
         );
+        const categoryResponse = await axios.get(
+          "https://api.ssdipl.com/api/get-main-category"
+        );
+        const subcategoryResponse = await axios.get(
+          "https://api.ssdipl.com/api/get-subcategory"
+        );
         setSecondSubcategories(res.data?.data || []);
+        setCategories(categoryResponse.data.data);
+        setSubcategories(subcategoryResponse.data.data || []);
       } catch (error) {
         toast.error("Error fetching sub-subcategories");
         console.error(error);
@@ -125,11 +146,49 @@ const AddCakeBanner = () => {
     fetchSubSubcategories();
   }, []);
 
-  const subCategoryOptions = secondSubcategories.map((sub) => ({
+  useEffect(() => {
+    const fetchSecondSubcategories = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+        );
+        setSecondSubcategories(response?.data?.data);
+      } catch (error) {
+        console.error("Error fetching second subcategories:", error);
+      }
+    }
+    if (formData?.subcategoryName) {
+      fetchSecondSubcategories();
+    }
+
+  }, [formData?.subcategoryName])
+
+  useEffect(() => {
+    if (formData?.categoryName) {
+      const filteredSubcategories = subcategories.filter(
+        (subcategory) => subcategory.categoryName?._id === formData.categoryName
+      );
+      setFilteredSubcategories(filteredSubcategories);
+    }
+  }, [formData?.categoryName])
+
+
+
+  const categoriesList = categories.map((sub) => ({
+    value: sub._id,
+    label: sub.mainCategoryName,
+  }));
+
+  const subCategoryOptions = filteredSubcategories.map((sub) => ({
+    value: sub._id,
+    label: sub.subcategoryName,
+  }));
+
+  const secondSubcategoriesList = secondSubcategories.map((sub) => ({
     value: sub._id,
     label: sub.secondsubcategoryName,
   }));
-  
+
   console.log("FORMDATA=>", formData);
   return (
     <>
@@ -150,24 +209,28 @@ const AddCakeBanner = () => {
         <form className="row g-3" onSubmit={handleSubmit}>
 
           {/* SUB CATEGORY */}
-          {/* <div className="col-md-4">
-            <label className="form-label">Sub Category</label>
-            <select
-              name="secondsubcategoryName"
-              className="form-control select-arrow"
-              value={formData?.secondsubcategoryName}
-              onChange={handleChange}
-              // disabled={!formData.secondsubcategoryName}
-              required
-            >
-              <option value="">Select sub category</option>
-              {secondSubcategories.map((sub) => (
-                <option key={sub?._id} value={sub?._id}>
-                  {sub?.secondsubcategoryName}
-                </option>
-              ))}
-            </select>
-          </div> */}
+
+          <div className="col-md-4">
+            <label className="form-label">Main Category Name</label>
+
+            <Select
+              options={categoriesList}
+              value={categoriesList.find(
+                (opt) => opt.value === formData.categoryName
+              )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  categoryName: selected?.value || "",
+                  secondsubcategoryName: "",
+                  subcategoryName: "",
+                }))
+              }
+              placeholder="Select Main category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
+          </div>
 
           <div className="col-md-4">
             <label className="form-label">Sub Category</label>
@@ -175,15 +238,36 @@ const AddCakeBanner = () => {
             <Select
               options={subCategoryOptions}
               value={subCategoryOptions.find(
-                (opt) => opt.value === formData?.secondsubcategoryName
+                (opt) => opt.value === formData?.subcategoryName
               )}
+              onChange={(selected) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  subcategoryName: selected?.value || "",
+                  secondsubcategoryName: "",
+                }))
+              }
+              placeholder="Select sub category"
+              isSearchable
+              classNamePrefix="react-select"
+            />
+          </div>
+
+          <div className="col-md-4">
+            <label className="form-label">Child Category Name</label>
+            <Select
+              options={secondSubcategoriesList}
+              value={secondSubcategoriesList.find(
+                (opt) => opt.value === formData.secondsubcategoryName
+              )}
+              disabled={!formData?.subcategoryName}
               onChange={(selected) =>
                 setFormData((prev) => ({
                   ...prev,
                   secondsubcategoryName: selected?.value || "",
                 }))
               }
-              placeholder="Select sub category"
+              placeholder="Select Child Category"
               isSearchable
               classNamePrefix="react-select"
             />
@@ -206,13 +290,14 @@ const AddCakeBanner = () => {
               <option value="cakeBanner4">Level 4</option>
             </select>
           </div>
+
           <div className="col-md-4">
             <label className="form-label">Titel</label>
             <input type="text" name="titel" className="form-control" value={formData.titel} onChange={handleChange} required />
           </div>
 
           {/* IMAGE */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">
               Banner Image {
                 formData?.bannerKey === "cakeBanner1" ? `(550 x 270) PX` :

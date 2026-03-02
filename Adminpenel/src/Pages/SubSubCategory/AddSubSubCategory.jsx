@@ -12,14 +12,37 @@ const AddSubSubCategory = () => {
   /* ================= STATE ================= */
   const [mainCategories, setMainCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-
+  const [productList, setProductList] = useState([])
   const [formData, setFormData] = useState({
     mainCategoryId: "",
     subCategoryId: "",
     secondSubCategoryName: "",
     activeOnHome: false,
     image: null,
+    productId: [],
   });
+
+  const productListOptions = productList.map((sub) => ({
+    value: sub._id,
+    label: sub?.name || sub?.productName,
+  }));
+
+  /* ================= FETCH PRODUCT LIST ================= */
+  useEffect(() => {
+    const fetchProductList = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.ssdipl.com/api/all-product"
+        );
+        //console.log(response);
+        setProductList(response.data.data || []);
+      } catch {
+        toast.error("Failed to fetch main categories");
+      }
+    };
+
+    fetchProductList();
+  }, []);
 
   /* ================= FETCH MAIN CATEGORIES ================= */
   useEffect(() => {
@@ -73,16 +96,28 @@ const AddSubSubCategory = () => {
     e.preventDefault();
     if (
       !formData.mainCategoryId ||
-      !formData.secondSubCategoryName ||
-      !formData.image
+      !formData.secondSubCategoryName
+      // !formData.image
     ) {
       toast.error("All fields are required");
       return;
     }
-if(!formData.subCategoryId){
-  toast.error("Please select again subcategory");
-  return;
-}
+
+    if (formData?.activeOnHome) {
+      if (!formData.productId.length) {
+        toast.error("Please select again product");
+        return;
+      }
+      if (!formData.image) {
+        toast.error("Please select again image");
+        return;
+      }
+    }
+
+    if (!formData.subCategoryId) {
+      toast.error("Please select again subcategory");
+      return;
+    }
 
     setIsLoading(true);
 
@@ -91,8 +126,11 @@ if(!formData.subCategoryId){
       fd.append("mainCategoryId", formData.mainCategoryId);
       fd.append("subCategoryId", formData.subCategoryId);
       fd.append("secondSubcategoryName", formData.secondSubCategoryName);
-      fd.append("ActiveonHome", formData.activeOnHome);
-      fd.append("image", formData.image);
+      fd.append("ActiveonHeader", formData?.activeOnHeader);
+      fd.append("ActiveonHome", formData?.activeOnHome);
+      fd.append("productId", JSON.stringify(formData?.productId));
+
+      fd.append("image", formData?.activeOnHome ? formData.image : null);
 
       const res = await axios.post(
         "https://api.ssdipl.com/api/second-sub-category/create-second-sub-category",
@@ -123,6 +161,22 @@ if(!formData.subCategoryId){
     label: sub.subcategoryName,
   }));
 
+  const handleChangeProduct = (value) => {
+    if (!formData?.productId?.includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        productId: [...prev.productId, value],
+      }));
+    }
+  }
+  const handleRemoveProduct = (id) => {
+    setFormData((prev) => ({
+      ...prev,
+      productId: prev.productId.filter(
+        (item) => item !== id
+      ),
+    }));
+  };
   return (
     <>
       <ToastContainer />
@@ -196,6 +250,47 @@ if(!formData.subCategoryId){
             />
           </div>
 
+          <div className="col-md-12">
+            <label className="form-label">Select Product List</label>
+
+            <Select
+              options={productListOptions}
+              value={productListOptions.find(
+                (opt) => opt.value === formData?.productId
+              )}
+              onChange={(selected) => handleChangeProduct(selected?.value)}
+              placeholder="Select Product"
+              isSearchable
+              classNamePrefix="react-select"
+            />
+
+            <div className="mt-2 row g-2">
+              {formData?.productId?.map((id) => {
+                const product = productList?.find(p => p?._id === id);
+                if (!product) return null;
+
+                return (
+                  <div key={id} className="col-md-4">
+                    <div className="d-flex justify-content-between align-items-center bg-light px-2 py-1 rounded">
+                      <span className="text-truncate">
+                        {product?.name || product?.productName}
+                      </span>
+
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-danger ms-2"
+                        onClick={() => handleRemoveProduct(id)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+
           {/* ACTIVE */}
           <div className="col-md-6">
             <label className="form-label">Display on Homepage</label>
@@ -211,10 +306,24 @@ if(!formData.subCategoryId){
                 Active on Homepage
               </label>
             </div>
+
+            <div className="form-check">
+              <input
+                type="checkbox"
+                name="activeOnHeader"
+                className="form-check-input"
+                checked={formData?.activeOnHeader}
+                onChange={handleChange}
+              />
+              <label className="form-check-label">
+                Active on Header
+              </label>
+            </div>
+
           </div>
 
           {/* IMAGE */}
-          <div className="col-md-6">
+          {formData?.activeOnHome === true && <div className="col-md-6">
             <label className="form-label">Child Category Image</label>
             <input
               type="file"
@@ -222,7 +331,7 @@ if(!formData.subCategoryId){
               onChange={handleChange}
               required
             />
-          </div>
+          </div>}
 
           {/* BUTTON */}
           <div className="col-12 text-center">

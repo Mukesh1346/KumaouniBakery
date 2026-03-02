@@ -13,14 +13,39 @@ const EditSubSubCategory = () => {
 
   const [mainCategories, setMainCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-
+  const [productList, setProductList] = useState([])
   const [formData, setFormData] = useState({
     mainCategoryId: "",
     subCategoryId: "",
     secondsubcategoryName: "",
     ActiveonHome: false,
+    ActiveonHeader: false,
     image: null,
+    productId: [],
   });
+
+  const productListOptions = productList.map((sub) => ({
+    value: sub._id,
+    label: sub?.name || sub?.productName,
+  }));
+
+  /* ================= FETCH PRODUCT LIST ================= */
+  useEffect(() => {
+    const fetchProductList = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.ssdipl.com/api/all-product"
+        );
+        //console.log(response);
+        setProductList(response.data.data || []);
+      } catch {
+        toast.error("Failed to fetch main categories");
+      }
+    };
+
+    fetchProductList();
+  }, []);
+
 
   /* ================= FETCH MAIN CATEGORIES ================= */
   useEffect(() => {
@@ -51,6 +76,8 @@ const EditSubSubCategory = () => {
           subCategoryId: data.subCategoryId?._id || "",
           secondsubcategoryName: data.secondsubcategoryName || "",
           ActiveonHome: data.ActiveonHome || false,
+          ActiveonHeader: data.ActiveonHeader || false,
+          productId: data?.productId.map((item) => item?._id) || [],
           image: null,
         });
       } catch {
@@ -113,6 +140,8 @@ const EditSubSubCategory = () => {
       fd.append("subCategoryId", formData.subCategoryId);
       fd.append("secondsubcategoryName", formData.secondsubcategoryName);
       fd.append("ActiveonHome", formData.ActiveonHome);
+      fd.append("ActiveonHeader", formData.ActiveonHeader);
+      fd.append("productId", JSON.stringify(formData.productId));
 
       if (formData.image) {
         fd.append("image", formData.image);
@@ -146,6 +175,23 @@ const EditSubSubCategory = () => {
     value: sub._id,
     label: sub.subcategoryName,
   }));
+
+  const handleChangeProduct = (value) => {
+    if (!formData?.productId?.includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        productId: [...prev.productId, value],
+      }));
+    }
+  }
+  const handleRemoveProduct = (id) => {
+    setFormData((prev) => ({
+      ...prev,
+      productId: prev.productId.filter(
+        (item) => item !== id
+      ),
+    }));
+  };
 
   return (
     <>
@@ -220,6 +266,46 @@ const EditSubSubCategory = () => {
             />
           </div>
 
+          <div className="col-md-12">
+            <label className="form-label">Select Product List</label>
+
+            <Select
+              options={productListOptions}
+              value={productListOptions.find(
+                (opt) => opt.value === formData?.productId
+              )}
+              onChange={(selected) => handleChangeProduct(selected?.value)}
+              placeholder="Select Product"
+              isSearchable
+              classNamePrefix="react-select"
+            />
+
+            <div className="mt-2 row g-2">
+              {formData?.productId?.map((id) => {
+                const product = productList?.find(p => p?._id === id);
+                if (!product) return null;
+
+                return (
+                  <div key={id} className="col-md-4">
+                    <div className="d-flex justify-content-between align-items-center bg-light px-2 py-1 rounded">
+                      <span className="text-truncate">
+                        {product?.name || product?.productName}
+                      </span>
+
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-danger ms-2"
+                        onClick={() => handleRemoveProduct(id)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
           {/* ACTIVE */}
           <div className="col-md-6">
             <label className="form-label">Display on Homepage</label>
@@ -235,17 +321,31 @@ const EditSubSubCategory = () => {
                 Active on Homepage
               </label>
             </div>
+
+            <div className="form-check">
+              <input
+                type="checkbox"
+                name="ActiveonHeader"
+                className="form-check-input"
+                checked={formData?.ActiveonHeader}
+                onChange={handleChange}
+              />
+              <label className="form-check-label">
+                Active on Header
+              </label>
+            </div>
+
           </div>
 
           {/* IMAGE */}
-          <div className="col-md-6">
+          {formData?.ActiveonHome === true && <div className="col-md-6">
             <label className="form-label">Child category Image</label>
             <input
               type="file"
               className="form-control"
               onChange={handleChange}
             />
-          </div>
+          </div>}
 
           {/* BUTTON */}
           <div className="col-12 text-center">

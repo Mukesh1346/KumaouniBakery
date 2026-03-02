@@ -1,6 +1,16 @@
 const mongoose = require("mongoose")
 
 const bannerSchema = new mongoose.Schema({
+    categoryName: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Main-Category",
+        required: true
+    },
+    subcategoryName: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Subcategory",
+        required: true
+    },
     secondsubcategoryName: {
         type: mongoose.Schema.ObjectId,
         ref: "SecondSubcategory",

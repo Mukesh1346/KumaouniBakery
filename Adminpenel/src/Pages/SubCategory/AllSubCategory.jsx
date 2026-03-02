@@ -102,8 +102,8 @@ const AllSubCategory = () => {
           <thead>
             <tr>
               <th scope="col">Sr.No.</th>
-              <th scope="col"> Image</th>
-              <th scope="col"> Banner</th>
+              {/* <th scope="col"> Image</th> */}
+              {/* <th scope="col"> Banner</th> */}
               <th scope="col">Main Category Name</th>
               <th scope="col">Sub Category Name</th>
               {hasAccessEdit('category') && <th scope="col">Edit</th>}
@@ -115,8 +115,8 @@ const AllSubCategory = () => {
               subcategories.map((subcategory, index) => (
                 <tr key={subcategory._id}>
                   <th scope="row">{index + 1}</th>
-                  <th><img src={`https://api.ssdipl.com/${subcategory?.image}`} alt={subcategory?.subcategoryName} /></th>
-                  <th><img src={`https://api.ssdipl.com/${subcategory?.banner}`} alt={subcategory.subcategoryName} /></th>
+                  {/* <th><img src={`https://api.ssdipl.com/${subcategory?.image}`} alt={subcategory?.subcategoryName} /></th> */}
+                  {/* <th><img src={`https://api.ssdipl.com/${subcategory?.banner}`} alt={subcategory.subcategoryName} /></th> */}
                   <td>{subcategory?.categoryName?.mainCategoryName}</td>
                   <td>{subcategory.subcategoryName}</td>
                   {hasAccessEdit('category') && <td>

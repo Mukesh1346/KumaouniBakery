@@ -33,6 +33,7 @@ import ReferAndEarn from "./Pages/ReferEarn/ReferEarn";
 import SubSubcategory from "./Pages/SubSubCategories/SubSubCategories"
 import Wishlist from './Components/Wishlist/Wishlist'
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
+import AllProductByChildCategory from "./Pages/AllProductByChildCategory/AllProductByChildCategory";
 
 
 
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/all-products" element={<AllProducts />} />
           <Route path="/product-related/:subcatname" element={<AllCakes />} />
+          <Route path="/:subcatname" element={<AllProductByChildCategory />} />
           <Route path="/sub-subcategory/:subcatname" element={<SubSubcategory />} />
           <Route path="/candle/all-candles" element={<AllCandles />} />
           <Route path="/product-details/:name" element={<ProductDetails />} />

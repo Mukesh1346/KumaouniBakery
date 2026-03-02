@@ -41,13 +41,17 @@ const CakeBanners = () => {
     }
   };
 
-
+  // console.log("SSSSS::=>", cakeBannerData)
   return (
     <>
       <div className="container">
         <div className="cake-banner-container two-banner">
           {cakeBannerData?.map((item) => (
-            <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} className="cake-banner-card" key={item?._id}>
+            <div style={{ cursor: 'pointer' }} onClick={() =>
+              // navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
+              navigate(`/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
+                { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })
+            } className="cake-banner-card" key={item?._id}>
               <img src={`https://api.ssdipl.com/${item?.cakeBanner}`} className="cakeImgBanner" alt="cake banner" />
               {/* <div className="cake-overlay">
             <h4>{item.title}</h4>

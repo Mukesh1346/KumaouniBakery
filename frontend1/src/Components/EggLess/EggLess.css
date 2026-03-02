@@ -20,13 +20,13 @@
 /* Continuous up‑down animation */
 @keyframes float {
   0% {
-    transform: translateY(450px);
+    transform: translateY(400px);
   }
   50% {
     transform: translateY(-60px); /* moves up */
   }
   100% {
-    transform: translateY(450px); /* back down */
+    transform: translateY(400px); /* back down */
   }
 }
 

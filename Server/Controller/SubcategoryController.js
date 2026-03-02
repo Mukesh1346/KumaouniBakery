@@ -9,9 +9,9 @@ const createSubcategory = async (req, res) => {
     const image = req.files?.image?.[0]?.path;
     const banner = req.files?.banner?.[0]?.path;
 
-    if (!image || !banner) {
-        return res.status(400).json({ message: "Both image and banner are required" });
-    }
+    // if (!image || !banner) {
+    //     return res.status(400).json({ message: "Both image and banner are required" });
+    // }
 
     // Validate required fields
     if (!categoryName) {
@@ -68,8 +68,8 @@ const createSubcategory = async (req, res) => {
         const subcategory = new Subcategory({
             categoryName,
             subcategoryName: normalizedSubcategoryName,
-            image: image, // Save the path to the uploaded image
-            banner: banner, // Save the path to the uploaded banner
+            // image: image, // Save the path to the uploaded image
+            // banner: banner, // Save the path to the uploaded banner
             ActiveonHeader: ActiveonHeader || false, // Default to false if not provided
             ActiveonHome: ActiveonHome || false, // Default to false if not provided
         });
@@ -233,23 +233,23 @@ const updateSubcategory = async (req, res) => {
         if (ActiveonHeader !== undefined) subcategory.ActiveonHeader = ActiveonHeader;
 
         // Handle image update if a new file is uploaded
-        if (image) {
-            // Delete the old image file (optional, based on your requirements)
-            if (subcategory.image) {
-                deleteImageFile(subcategory.image); // Assuming you have a function to delete files
-            }
-            // Save the new image path
-            subcategory.image = image;
-        }
+        // if (image) {
+        //     // Delete the old image file (optional, based on your requirements)
+        //     if (subcategory.image) {
+        //         deleteImageFile(subcategory.image); // Assuming you have a function to delete files
+        //     }
+        //     // Save the new image path
+        //     subcategory.image = image;
+        // }
 
-        if (banner) {
-            // Delete the old image file (optional, based on your requirements)
-            if (subcategory.banner) {
-                deleteImageFile(subcategory.banner); // Assuming you have a function to delete files
-            }
-            // Save the new image path
-            subcategory.banner = banner;
-        }
+        // if (banner) {
+        //     // Delete the old image file (optional, based on your requirements)
+        //     if (subcategory.banner) {
+        //         deleteImageFile(subcategory.banner); // Assuming you have a function to delete files
+        //     }
+        //     // Save the new image path
+        //     subcategory.banner = banner;
+        // }
 
         await subcategory.save();
 

@@ -39,7 +39,10 @@ export default function Banner() {
         <div className='BannerSection'>
           {
             data.map((item, index) => (
-              <div onClick={() => navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} key={item?._id} className='BannerSection'>
+              <div onClick={() =>
+                // navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
+                navigate(`/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
+                  { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} key={item?._id} className='BannerSection'>
                 <img src={`https://api.ssdipl.com/${item?.image || item?.cakeBanner}`} alt="" className='BannerImg' />
               </div>
             ))

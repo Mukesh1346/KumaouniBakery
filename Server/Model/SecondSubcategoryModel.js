@@ -11,6 +11,12 @@ const SecondSubCategorySchema = new mongoose.Schema({
         ref: "Subcategory",
         required: true
     },
+    productId: {
+        type: Array,
+        default: [],
+        ref: "Product"
+
+    },
     image: {
         type: String,
     },
@@ -19,6 +25,10 @@ const SecondSubCategorySchema = new mongoose.Schema({
         required: true
     },
     ActiveonHome: {
+        type: Boolean,
+        default: false
+    },
+    ActiveonHeader: {
         type: Boolean,
         default: false
     },

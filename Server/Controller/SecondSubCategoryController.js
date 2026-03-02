@@ -4,8 +4,8 @@ const Subcategory = require("../Model/SubcategoryModel");
 
 // Create a new subcategory
 const createSecondSubcategory = async (req, res) => {
-    const { mainCategoryId, subCategoryId, secondSubcategoryName, ActiveonHome } = req.body;
-
+    const { mainCategoryId, subCategoryId, productId, secondSubcategoryName, ActiveonHome, ActiveonHeader } = req.body;
+    console.log("ActiveonHeader and ActiveonHome", ActiveonHeader, ActiveonHome)
     // Validate required fields
     if (!mainCategoryId) {
         return res.status(400).json({ success: false, message: "Category Name is required" });
@@ -13,25 +13,25 @@ const createSecondSubcategory = async (req, res) => {
     if (!subCategoryId) {
         return res.status(400).json({ success: false, message: "Sub Category Name is required" });
     }
-    if (!req.file) {
-        return res.status(400).json({ success: false, message: "Image is required" });
-    }
+    // if (!req.file ) {
+    //     return res.status(400).json({ success: false, message: "Image is required" });
+    // }
 
     try {
         // Check if the category ID is valid
         const validCategory = await MainCategory.findById(mainCategoryId);
         if (!validCategory) {
             // Cleanup uploaded file if category ID is invalid
-            if (req.file) {
-                deleteImageFile(req.file.path); // Assuming you have a function to delete files
+            if (req.file && ActiveonHome) {
+                deleteImageFile(req?.file?.path); // Assuming you have a function to delete files
             }
             return res.status(404).json({ success: false, message: "Invalid Main Category Id" });
         }
         const validSubcategory = await Subcategory.findById(subCategoryId);
         if (!validSubcategory) {
             // Cleanup uploaded file if category ID is invalid
-            if (req.file) {
-                deleteImageFile(req.file.path); // Assuming you have a function to delete files
+            if (req.file && ActiveonHome) {
+                deleteImageFile(req?.file?.path); // Assuming you have a function to delete files
             }
             return res.status(404).json({ success: false, message: "Invalid Sub category Id" });
         }
@@ -40,15 +40,15 @@ const createSecondSubcategory = async (req, res) => {
         const normalizedSubcategoryName = secondSubcategoryName?.trim()?.toLowerCase();
 
         // Check if the subcategory name already exists under the same category
-        const existingSubcategory = await Subcategory.findOne({
+        const existingSubcategory = await SecondSubcategory.findOne({
             mainCategoryId,
             secondSubCategoryName: { $regex: `^${normalizedSubcategoryName}$`, $options: "i" }
         });
 
         if (existingSubcategory) {
             //    uploaded file if subcategory name already exists
-            if (req.file) {
-                deleteImageFile(req.file.path);
+            if (req.file && ActiveonHome) {
+                deleteImageFile(req?.file?.path);
             }
             return res.status(400).json({
                 success: false,
@@ -60,9 +60,11 @@ const createSecondSubcategory = async (req, res) => {
         const subcategory = new SecondSubcategory({
             mainCategoryId,
             subCategoryId,
+            productId: JSON.parse(productId),
             secondsubcategoryName: normalizedSubcategoryName,
-            image: req.file.path, // Save the path to the uploaded image
+            image: ActiveonHome ? req?.file?.path : null, // Save the path to the uploaded image
             ActiveonHome: ActiveonHome || false, // Default to false if not provided
+            ActiveonHeader: ActiveonHeader || false
         });
 
         await subcategory.save();
@@ -71,15 +73,11 @@ const createSecondSubcategory = async (req, res) => {
         validCategory.subcategoryExit = true;
         await validCategory.save();
 
-        res.status(201).json({
-            success: true,
-            message: "Subcategory created successfully",
-            data: subcategory
-        });
+        res.status(201).json({ success: true, message: "Subcategory created successfully", data: subcategory });
     } catch (error) {
         // Cleanup uploaded file if an error occurs
-        if (req.file) {
-            deleteImageFile(req.file.path);
+        if (req.file && ActiveonHome) {
+            deleteImageFile(req?.file?.path);
         }
 
         console.error("Error creating subcategory:", error);
@@ -157,7 +155,7 @@ const getAllSecondSubcategoriesStatusTrue = async (req, res) => {
 // Get a single subcategory by ID
 const getSecondSubcategoryById = async (req, res) => {
     try {
-        const subcategory = await SecondSubcategory.findById(req.params.id).populate("mainCategoryId").populate("subCategoryId");
+        const subcategory = await SecondSubcategory.findById(req.params.id).populate("mainCategoryId").populate("subCategoryId").populate("productId");
         if (!subcategory) {
             return res.status(404).json({ message: "Subcategory not found" });
         }
@@ -183,9 +181,9 @@ const getSecondSubcategoryByName = async (req, res) => {
 
 // Update a subcategory by ID and delete the old image if a new one is provided
 const updateSecondSubcategory = async (req, res) => {
-    const { mainCategoryId, subCategoryId, secondsubcategoryName, ActiveonHome } = req.body;
+    const { mainCategoryId, subCategoryId, productId, secondsubcategoryName, ActiveonHome, ActiveonHeader } = req.body;
     const { id } = req.params;
-    
+
     try {
         if (!id) {
             return res.status(400).json({ success: false, message: "ID is required" });
@@ -221,9 +219,11 @@ const updateSecondSubcategory = async (req, res) => {
         if (subCategoryId) subcategory.subCategoryId = subCategoryId;
         if (normalizedName) subcategory.secondsubcategoryName = normalizedName;
         if (ActiveonHome) subcategory.ActiveonHome = ActiveonHome;
+        if (ActiveonHeader) subcategory.ActiveonHeader = ActiveonHeader;
+        if (productId) subcategory.productId = JSON.parse(productId);
 
         // 🖼 Image update
-        if (req.file) {
+        if (req.file && ActiveonHome) {
             if (subcategory.image) {
                 try {
                     deleteImageFile(subcategory.image); // optional safe delete

@@ -115,9 +115,9 @@ const AllProduct = () => {
           <thead>
             <tr>
               <th>S no</th>
-              <th>Main Category</th>
-              <th>Sub Category</th>
-              <th>Child Category</th>
+              {/* <th>Main Category</th> */}
+              {/* <th>Sub Category</th> */}
+              {/* <th>Child Category</th> */}
               <th>Product Name</th>
               <th>Images</th>
               {(hasAccessDelete('products') || hasAccessEdit('products')) && <th>Actions</th>}
@@ -140,12 +140,12 @@ const AllProduct = () => {
               filteredProducts.map((product, index) => (
                 <tr key={product._id}>
                   <td>{index + 1}</td>
-                  <td>{product.categoryName?.mainCategoryName || "N/A"}</td>
-                  <td>{product.subcategoryName?.subcategoryName || "N/A"}</td>
-                  <td>{product.secondsubcategoryName?.secondsubcategoryName || "N/A"}</td>
+                  {/* <td>{product.categoryName?.mainCategoryName || "N/A"}</td> */}
+                  {/* <td>{product.subcategoryName?.subcategoryName || "N/A"}</td> */}
+                  {/* <td>{product.secondsubcategoryName?.secondsubcategoryName || "N/A"}</td> */}
                   <td>{product.productName}</td>
                   <td>
-                    {product.productImage.map((image, imgIndex) => (
+                    {product?.productImage?.map((image, imgIndex) => (
                       <img
                         key={imgIndex}
                         src={`https://api.ssdipl.com/${image}`}

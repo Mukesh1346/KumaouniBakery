@@ -203,7 +203,7 @@ const EditSubCategory = () => {
             />
           </div>
 
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <label htmlFor="banner" className="form-label">
               Sub Category Banner (1150x310)PX
             </label>
@@ -244,13 +244,13 @@ const EditSubCategory = () => {
                 style={{ width: "120px" }}
               />
             )}
-          </div>
+          </div> */}
 
           <div className="col-md-6">
             <label htmlFor="ActiveonHome" className="form-label">
               Display on Homepage
             </label>
-            <div className="form-check">
+            {/* <div className="form-check">
               <input
                 type="checkbox"
                 name="ActiveonHome"
@@ -262,7 +262,7 @@ const EditSubCategory = () => {
               <label className="form-check-label" htmlFor="ActiveonHome">
                 Active on Homepage
               </label>
-            </div>
+            </div> */}
 
             <div className="col-md-6">
               <div className="form-check">

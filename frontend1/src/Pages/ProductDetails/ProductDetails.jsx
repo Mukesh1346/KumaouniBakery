@@ -550,7 +550,7 @@ const ProductDetails = () => {
       <section className="breadCrumb">
         <div className="breadCrumbContent">
           <Link to="/" style={{ color: "#df4444" }}>Home /</Link>{" "}
-          <Link to="" style={{ color: "#df4444" }}>{data?.categoryName?.mainCategoryName} /</Link>{" "}
+          {/* <Link to="" style={{ color: "#df4444" }}>{data?.categoryName?.mainCategoryName} /</Link>{" "} */}
           <Link to="">{data?.productName}</Link>
         </div>
       </section>
@@ -637,7 +637,7 @@ const ProductDetails = () => {
                         {discountPercentage}% OFF
                       </span>
                       <span style={{ color: '#df4444', fontSize: '14px' }}>
-                        Save: ₹{originalPrice - price}
+                        Save: ₹{(originalPrice - price).toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -668,16 +668,16 @@ const ProductDetails = () => {
                   </div>
                 )}
 
-                <div className="pdx-block formInput">
+                {data?.ActiveonFlavours && <div className="pdx-block formInput">
                   <label>Select Flavour</label>
                   <select className="form-select  inputfield">
                     <option>Butterscotch</option>
                     <option>Chocolate</option>
                     <option>Vanilla</option>
                   </select>
-                </div>
+                </div>}
 
-                <div className="pdx-block">
+                {data?.NameOnCake && <div className="pdx-block">
                   <label>
                     Name on Cake <small>{massage?.length} / 25</small>
                   </label>
@@ -689,9 +689,9 @@ const ProductDetails = () => {
                     placeholder="Write Name Here"
                     maxLength={25}
                   />
-                </div>
+                </div>}
 
-                <div className="pdx-block">
+                {data?.ActiveonDeliveryDate && <div className="pdx-block">
                   <label>
                     Delivery Date <span className="text-danger">*</span>
                   </label>
@@ -702,7 +702,7 @@ const ProductDetails = () => {
                     min={new Date().toISOString().split("T")[0]}
                     onChange={(e) => setDeliveryDate(e.target.value)}
                   />
-                </div>
+                </div>}
 
                 {data?.recommendedProductId?.length > 0 && (
                   <div className="pdx-block">

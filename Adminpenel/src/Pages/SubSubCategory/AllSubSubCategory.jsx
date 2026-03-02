@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import noImage from "../../asses/logo512.png";
 
 const AllSubSubCategory = () => {
   const [subSubcategories, setSubSubcategories] = useState([]);
@@ -105,6 +106,7 @@ const AllSubSubCategory = () => {
           <thead>
             <tr>
               <th>Sr.No.</th>
+              <th>Image</th>
               <th>Main Category</th>
               <th>Sub Category</th>
               <th>Child Category</th>
@@ -118,7 +120,10 @@ const AllSubSubCategory = () => {
               subSubcategories.map((item, index) => (
                 <tr key={item._id}>
                   <td>{index + 1}</td>
-
+                  <td><img src={`https://api.ssdipl.com/${item?.image}`} onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = noImage;
+                  }} alt={item?.secondsubcategoryName} style={{ width: "50px", height: "50px" }} /></td>
                   <td>{item?.mainCategoryId?.mainCategoryName || "—"}</td>
 
                   <td>{item?.subCategoryId?.subcategoryName || "—"}</td>

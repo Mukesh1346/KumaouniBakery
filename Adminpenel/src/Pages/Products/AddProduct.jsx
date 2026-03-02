@@ -21,6 +21,9 @@ const AddProduct = () => {
     productDescription: "",
     BestSellingProduct: 0,
     FeaturedProducts: 0,
+    ActiveonFlavours: 0,
+    NameOnCake: 0,
+    ActiveonDeliveryDate: 0,
     eggless: 0,
     Variant: [
       {
@@ -221,18 +224,18 @@ const AddProduct = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.categoryName) {
-      toast.error("Please select a category");
-      return;
-    }
-    if (!formData.subcategoryName) {
-      toast.error("Please select a subcategory");
-      return;
-    }
-    if (!formData.secondsubcategoryName) {
-      toast.error("Please select a second subcategory");
-      return;
-    }
+    // if (!formData.categoryName) {
+    //   toast.error("Please select a category");
+    //   return;
+    // }
+    // if (!formData.subcategoryName) {
+    //   toast.error("Please select a subcategory");
+    //   return;
+    // }
+    // if (!formData.secondsubcategoryName) {
+    //   toast.error("Please select a second subcategory");
+    //   return;
+    // }
     if (!formData.productName) {
       toast.error("Please enter a product name");
       return;
@@ -247,7 +250,10 @@ const AddProduct = () => {
     form.append("productDescription", formData.productDescription);
     form.append("productDetails", formData.productDetails);
     form.append("ActiveonHome", formData.ActiveonHome || 0);
+    form.append("ActiveonFlavours", formData?.ActiveonFlavours || 0);
+    form.append("NameOnCake", formData?.NameOnCake || 0);
     form.append("FeaturedProducts", formData.FeaturedProducts || 0);
+    form.append("ActiveonDeliveryDate", formData?.ActiveonDeliveryDate || 0);
     form.append("BestSellingProduct", formData?.BestSellingProduct || 0);
     form.append("eggless", formData?.eggless);
     form.append("recommendedProductId", JSON.stringify(formData.recommendedProductId));
@@ -313,7 +319,7 @@ const AddProduct = () => {
       <ToastContainer />
       <div className="bread">
         <div className="head">
-          <h4>Edit Product</h4>
+          <h4>Add Product</h4>
         </div>
         <div className="links">
           <Link to="/all-products" className="add-new">
@@ -325,7 +331,7 @@ const AddProduct = () => {
       <div className="d-form">
         <form className="row g-3" onSubmit={handleSubmit}>
 
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <label className="form-label">Mani Category Name</label>
 
             <Select
@@ -345,9 +351,9 @@ const AddProduct = () => {
               isSearchable
               classNamePrefix="react-select"
             />
-          </div>
+          </div> */}
 
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <label className="form-label">Sub Category Name</label>
 
             <Select
@@ -366,9 +372,9 @@ const AddProduct = () => {
               isSearchable
               classNamePrefix="react-select"
             />
-          </div>
+          </div> */}
 
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <label className="form-label">Child Category Name</label>
 
             <Select
@@ -387,7 +393,7 @@ const AddProduct = () => {
               isSearchable
               classNamePrefix="react-select"
             />
-          </div>
+          </div> */}
 
           <div className="col-md-6">
             <label htmlFor="productName" className="form-label">Product Name<sup className="text-danger">*</sup></label>
@@ -512,6 +518,7 @@ const AddProduct = () => {
             {formData.Variant.map((variant, index) => (
               <div key={index} className="variant-container">
                 <div className="row">
+                  {/* flavour */}
                   {/* <div className="col-md-3 mb-1">
                     <label htmlFor={`weight-${index}`} className="form-label">Weight/Sizes<sup className="text-danger">*</sup></label>
                     <select
@@ -540,6 +547,11 @@ const AddProduct = () => {
                       onChange={(e) => handleVariantChange(index, e)}
                     />
                   </div>
+
+                  {/* <div className="col-md-3 mb-1">
+                    <label htmlFor={`flavour-${index}`} className="form-label">Flavours<sup className="text-danger">*</sup></label>
+                    <input type="text" name="flavour" className="form-control" value={variant.flavour} onChange={(e) => handleVariantChange(index, e)} />
+                  </div> */}
 
                   <div className="col-md-3">
                     <label htmlFor={`price-${index}`} className="form-label">Price<sup className="text-danger">*</sup></label>
@@ -620,6 +632,7 @@ const AddProduct = () => {
                 />
                 <label className="form-check-label">Featured Products</label>
               </div>
+
               <div className="col-md-3 form-check">
                 <input
                   type="checkbox"
@@ -632,6 +645,62 @@ const AddProduct = () => {
                 />
                 <label className="form-check-label">100% Eggless</label>
               </div>
+            </div>
+          </div>
+
+          <div className="col-md-12">
+            <div className="row align-items-center">
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="ActiveonFlavours"
+                  className="form-check-input me-2"
+                  checked={formData.ActiveonFlavours === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, ActiveonFlavours: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">Active on Flavours</label>
+              </div>
+
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="NameOnCake"
+                  className="form-check-input me-2"
+                  checked={formData.NameOnCake === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, NameOnCake: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">Name On Cake</label>
+              </div>
+
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="ActiveonDeliveryDate"
+                  className="form-check-input me-2"
+                  checked={formData.ActiveonDeliveryDate === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, ActiveonDeliveryDate: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">Active On Delivery Date</label>
+              </div>
+
+              {/* <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="eggless"
+                  className="form-check-input me-2"
+                  checked={formData.eggless === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, eggless: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label">100% Eggless</label>
+              </div> */}
             </div>
           </div>
 
