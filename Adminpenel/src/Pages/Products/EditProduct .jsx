@@ -43,6 +43,7 @@ const EditProduct = () => {
     const [secondSubcategories, setSecondSubcategories] = useState([]);
     const [recommendedProducts, setRecommendedProducts] = useState([]);
     const [weights, setWeights] = useState([]);
+    const [parentProduct, setParentProduct] = useState([]);
     // State to store filtered subcategories
     const [filteredSubcategories, setFilteredSubcategories] = useState([]);
 
@@ -63,6 +64,12 @@ const EditProduct = () => {
     const recommendedProductsList = recommendedProducts.map((sub) => ({
         value: sub._id,
         label: sub?.name || sub?.productName,
+    }));
+
+
+    const parentProductList = parentProduct.map((sub) => ({
+        value: sub._id,
+        label: sub?.parentProductName,
     }));
 
     const handleChangeRecommendedProduct = (value) => {
@@ -92,17 +99,20 @@ const EditProduct = () => {
                 const RecommendedProductResponse = await axios.get(
                     "https://api.ssdipl.com/api/recommended-product/all-product"
                 );
-
+                const response = await axios.get(
+                    "https://api.ssdipl.com/api/parent-product/get-parent-product"
+                );
                 // setCategories(categoryResponse.data.data);
                 // setSubcategories(subcategoryResponse.data.data);
                 setWeights(weightResponse.data.data);
                 setRecommendedProducts(RecommendedProductResponse.data.data);
+                setParentProduct(response.data.data)
                 // Fetch product details
                 const productResponse = await axios.get(
                     `https://api.ssdipl.com/api/get-single-product/${id}`
                 );
                 const productData = productResponse.data.data;
-                console.log("XXXXX::=>SSS", productData);
+                console.log("XXXXX::=>SSS==>", productData);
                 setFormData({
                     ...productData,
                     ActiveonHome: productData?.ActiveonHome === true ? 1 : 0,
@@ -115,6 +125,7 @@ const EditProduct = () => {
                     categoryName: productData.categoryName ? productData.categoryName?._id : "",
                     subcategoryName: productData.subcategoryName ? productData?.subcategoryName?._id : "",
                     secondsubcategoryName: productData?.secondsubcategoryName ? productData?.secondsubcategoryName?._id : "",
+                    parentProductId: productData?.parentProductId ? productData?.parentProductId?._id : "",
                     Variant: productData.Variant || [],
                     recommendedProductId: productData.recommendedProductId.map((item) => item?._id) || [],
 
@@ -252,6 +263,7 @@ const EditProduct = () => {
         form.append("subcategoryName", formData.subcategoryName);
         form.append("secondsubcategoryName", formData.secondsubcategoryName);
         form.append("productName", formData.productName);
+        form.append("parentProductId", formData.parentProductId);
         form.append("productDescription", formData.productDescription);
         form.append("productDetails", formData.productDetails);
         form.append("ActiveonHome", formData.ActiveonHome);
@@ -400,12 +412,28 @@ const EditProduct = () => {
                         />
                     </div> */}
 
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <label htmlFor="productName" className="form-label">Product Name<sup className="text-danger">*</sup></label>
                         <input type="text" name='productName' className="form-control" id="productName" value={formData.productName} onChange={handleChange} required />
                     </div>
 
-                    <div className="col-md-6">
+                    <div className="col-md-4">
+                        <label className="form-label">Parent Product Name</label>
+
+                        <Select
+                            options={parentProductList}
+                            value={parentProductList.find((opt) => opt.value === formData.parentProductId)}
+
+                            onChange={(selected) =>
+                                setFormData((prev) => ({ ...prev, parentProductId: selected?.value || "", }))
+                            }
+                            placeholder="Select Parent Product"
+                            isSearchable
+                            classNamePrefix="react-select"
+                        />
+                    </div>
+
+                    <div className="col-md-4">
                         <label className="form-label">Recommended Product</label>
                         <Select
                             options={recommendedProductsList}
@@ -543,7 +571,7 @@ const EditProduct = () => {
                         <button type="button" className="btn btn-primary mt-2" onClick={handleAddVariant}>Add Variant</button>
                     </div>
 
-                    <div className="col-md-12">
+                    <div className="col-md-12" style={{ marginLeft: '10px' }}>
                         <div className="row align-items-center">
                             <div className="col-md-3 form-check">
                                 <input
@@ -583,7 +611,7 @@ const EditProduct = () => {
                                 />
                                 <label className="form-check-label">Featured Products</label>
                             </div>
-                            <div className="col-md-3 form-check">
+                            {/* <div className="col-md-3 form-check">
                                 <input
                                     type="checkbox"
                                     name="eggless"
@@ -594,10 +622,12 @@ const EditProduct = () => {
                                     }
                                 />
                                 <label className="form-check-label">100% Eggless</label>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
-                    <div className="col-md-12">
+                    <div className="col-md-12" style={{ marginLeft: '10px' }}>
+                        <label htmlFor={`For cakes`} className="form-label" style={{ fontWeight: 'bold' }}>For Cakes Only<sup className="text-danger">*</sup></label>
+
                         <div className="row align-items-center">
                             <div className="col-md-3 form-check">
                                 <input
@@ -638,7 +668,7 @@ const EditProduct = () => {
                                 <label className="form-check-label">Active On Delivery Date</label>
                             </div>
 
-                            {/* <div className="col-md-3 form-check">
+                            <div className="col-md-3 form-check">
                                 <input
                                     type="checkbox"
                                     name="eggless"
@@ -649,7 +679,7 @@ const EditProduct = () => {
                                     }
                                 />
                                 <label className="form-check-label">100% Eggless</label>
-                            </div> */}
+                            </div>
                         </div>
                     </div>
 

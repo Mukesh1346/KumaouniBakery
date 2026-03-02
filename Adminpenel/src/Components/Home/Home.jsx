@@ -79,6 +79,9 @@ import EditCountdown from '../../Pages/countdown/EditCountdown'
 import AllAdmin from '../../Pages/AdminPermission/AllAdmin'
 import AllSubscribeEmail from '../../Pages/Subscribe/AllSubscribe'
 import AddAdmin from '../../Pages/AdminPermission/AddAdmin'
+import AllPerantProduct from '../../Pages/ParancProduct/AllParancProduct'
+import AddPerantProduct from '../../Pages/ParancProduct/AddParancProduct'
+import EditPerantProduct from '../../Pages/ParancProduct/EditParancProduct'
 
 const Home = () => {
 
@@ -153,6 +156,11 @@ const Home = () => {
                 <Route path={"/all-ref-companies"} element={<AllRefrenceCompany />} />
                 <Route path={"/add-ref-company"} element={<AddRefrenceCompany />} />
                 <Route path={"/edit-ref-company/:id"} element={<EditRefrenceCompany />} />
+
+                {/* Prant PerantProduct --  */}
+                <Route path={"/all-perant-product"} element={<AllPerantProduct />} />
+                <Route path={"/add-perant-product"} element={<AddPerantProduct />} />
+                <Route path={"/edit-perant-product/:id"} element={<EditPerantProduct />} />
 
                 {/* Product --  */}
                 <Route path={"/all-products"} element={<AllProduct />} />
@@ -233,7 +241,7 @@ const Home = () => {
 
                 {/* all-admin */}
                 <Route path={'/all-admin'} element={<AllAdmin />} />
-                 <Route path={'/add-admin'} element={<AddAdmin />} />
+                <Route path={'/add-admin'} element={<AddAdmin />} />
 
                 <Route path={'/all-subscribeEmail'} element={<AllSubscribeEmail />} />
               </Routes>

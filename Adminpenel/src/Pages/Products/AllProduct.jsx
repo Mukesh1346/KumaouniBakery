@@ -40,7 +40,7 @@ const AllProduct = () => {
         const response = await axios.get(
           "https://api.ssdipl.com/api/all-product"
         );
-        //console.log(response);
+        console.log("XXXXXXXXXXXXXXXX==>",response.data.data);
         setProducts(response.data.data || []);
       } catch (error) {
         console.error("Error fetching products:", error);

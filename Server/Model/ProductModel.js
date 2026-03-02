@@ -53,6 +53,11 @@ const productSchema = new mongoose.Schema({
         // required: true
         default: null
     },
+    parentProductId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "ParentProduct",
+        default: null
+    },
     recommendedProductId: [{
         type: mongoose.Schema.ObjectId,
         ref: "RecommendedProduct",

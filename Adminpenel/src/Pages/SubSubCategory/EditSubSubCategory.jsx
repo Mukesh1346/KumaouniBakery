@@ -26,7 +26,7 @@ const EditSubSubCategory = () => {
 
   const productListOptions = productList.map((sub) => ({
     value: sub._id,
-    label: sub?.name || sub?.productName,
+    label: `${sub?.productName} (${sub?.parentProductId?.parentProductName})` || sub?.productName,
   }));
 
   /* ================= FETCH PRODUCT LIST ================= */

@@ -21,10 +21,11 @@ const AddSubSubCategory = () => {
     image: null,
     productId: [],
   });
+  // console.log('formData.productId==>', productList);
 
   const productListOptions = productList.map((sub) => ({
     value: sub._id,
-    label: sub?.name || sub?.productName,
+    label: `${sub?.productName} (${sub?.parentProductId?.parentProductName})` || sub?.productName,
   }));
 
   /* ================= FETCH PRODUCT LIST ================= */
@@ -255,8 +256,11 @@ const AddSubSubCategory = () => {
 
             <Select
               options={productListOptions}
-              value={productListOptions.find(
-                (opt) => opt.value === formData?.productId
+              // value={productListOptions.find(
+              //   (opt) => opt.value === formData?.productId
+              // )}
+              value={productListOptions.filter((opt) =>
+                formData?.productId?.includes(opt?.value)
               )}
               onChange={(selected) => handleChangeProduct(selected?.value)}
               placeholder="Select Product"

@@ -15,8 +15,6 @@ import LocationOption from "../../Components/LocationOption/LocationOption";
 import { useNavigate } from "react-router-dom";
 import CountdownTimer from "../../Components/Countdown/Countdown";
 
-
-
 const ProductDetails = () => {
   const loginvalue = sessionStorage.getItem("login");
   const user = sessionStorage.getItem("userId");
@@ -853,6 +851,7 @@ const ProductDetails = () => {
         </div>
         <AllProducts />
       </section>
+
     </>
   );
 };

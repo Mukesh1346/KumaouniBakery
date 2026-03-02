@@ -18,7 +18,7 @@ const deleteImageFile = (relativeFilePath) => {
 
 
 const createProduct = async (req, res) => {
-    const { categoryName, subcategoryName, secondsubcategoryName, productName, productDescription, productDetails, Variant,
+    const { categoryName, subcategoryName, secondsubcategoryName, parentProductId, productName, productDescription, productDetails, Variant,
         ActiveonHome, FeaturedProducts, ActiveonFlavours, NameOnCake, BestSellingProduct, eggless, recommendedProductId } = req.body;
     const errorMessage = [];
 
@@ -79,6 +79,7 @@ const createProduct = async (req, res) => {
         // categoryName,
         // subcategoryName,
         // secondsubcategoryName,
+        parentProductId,
         productName,
         productDescription,
         productDetails,
@@ -114,6 +115,7 @@ const getProductsActiveonHome = async (req, res) => {
             // .populate('subcategoryName')
             // .populate('secondsubcategoryName')
             .populate('recommendedProductId')
+            .populate('parentProductId')
             // .populate({
             //     path: 'Variant.weight',
             //     model: 'Size',
@@ -182,6 +184,7 @@ const getProducts = async (req, res) => {
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
+            .populate('parentProductId')
             // .populate({
             //     path: 'Variant.weight',
             //     model: 'Size',
@@ -191,6 +194,7 @@ const getProducts = async (req, res) => {
                 model: 'Flover',
             });
 
+            console.log("ParentProductParentProduct=>>",products[0])
         res.status(200).json({ data: products });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -208,6 +212,7 @@ const getProduct = async (req, res) => {
             .populate('subcategoryName')
             .populate('secondsubcategoryName')
             .populate('recommendedProductId')
+            .populate('parentProductId')
             // .populate('Variant.weight')
             .populate('Variant.flover');
 
@@ -297,6 +302,7 @@ const updateProduct = async (req, res) => {
         productName: req.body.productName,
         productDescription: req.body.productDescription,
         productDetails: req.body.productDetails,
+        parentProductId: req.body.parentProductId,
         ActiveonHome: req.body.ActiveonHome || 0, // Default to 0 if not provided
         ActiveonFlavours: req.body.ActiveonFlavours || 0,
         FeaturedProducts: req.body.FeaturedProducts || 0,
