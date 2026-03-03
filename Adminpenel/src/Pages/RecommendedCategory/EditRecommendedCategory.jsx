@@ -17,11 +17,11 @@ const EditRecommendedCategory = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api.ssdipl.com/api/recommended-category/get-single-recommended-category/${id}`)
+      .get(`https://api.cakenpetals.com/api/recommended-category/get-single-recommended-category/${id}`)
       .then((res) => {
         const data = res.data.data;
         setFormData({ name: data.name, ActiveonHome: data.ActiveonHome, image: null });
-        setPreview(`https://api.ssdipl.com/${data.image}`);
+        setPreview(`https://api.cakenpetals.com/${data.image}`);
       })
       .catch(() => toast.error("Failed to load"));
   }, [id]);
@@ -47,7 +47,7 @@ const EditRecommendedCategory = () => {
     if (formData.image) fd.append("image", formData.image);
 
     await axios.put(
-      `https://api.ssdipl.com/api/recommended-category/update-recommended-category/${id}`,
+      `https://api.cakenpetals.com/api/recommended-category/update-recommended-category/${id}`,
       fd
     );
 

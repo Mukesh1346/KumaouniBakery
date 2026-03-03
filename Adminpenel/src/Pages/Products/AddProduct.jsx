@@ -77,20 +77,20 @@ const AddProduct = () => {
       try {
         // Fetch dynamic data
         const categoryResponse = await axios.get(
-          "https://api.ssdipl.com/api/get-main-category"
+          "https://api.cakenpetals.com/api/get-main-category"
         );
         const subcategoryResponse = await axios.get(
-          "https://api.ssdipl.com/api/get-subcategory"
+          "https://api.cakenpetals.com/api/get-subcategory"
         );
 
         const weightResponse = await axios.get(
-          "https://api.ssdipl.com/api/get-size"
+          "https://api.cakenpetals.com/api/get-size"
         );
         const RecommendedProductResponse = await axios.get(
-          "https://api.ssdipl.com/api/recommended-product/all-product"
+          "https://api.cakenpetals.com/api/recommended-product/all-product"
         );
         const response = await axios.get(
-          "https://api.ssdipl.com/api/parent-product/get-parent-product"
+          "https://api.cakenpetals.com/api/parent-product/get-parent-product"
         );
         setCategories(categoryResponse.data.data);
         setSubcategories(subcategoryResponse.data.data);
@@ -99,7 +99,7 @@ const AddProduct = () => {
         setParentProduct(response.data.data)
         // Fetch product details
         // const productResponse = await axios.get(
-        //     `https://api.ssdipl.com/api/get-single-product/${id}`
+        //     `https://api.cakenpetals.com/api/get-single-product/${id}`
         // );
         // const productData = productResponse.data.data;
         // // console.log("XXXXX::=>", productData);
@@ -278,7 +278,7 @@ const AddProduct = () => {
     }
 
     try {
-      await axios.post(`https://api.ssdipl.com/api/create-product`, form, {
+      await axios.post(`https://api.cakenpetals.com/api/create-product`, form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -297,7 +297,7 @@ const AddProduct = () => {
     const fetchSecondSubcategories = async () => {
       try {
         const response = await axios.get(
-          `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+          `https://api.cakenpetals.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
         );
         setSecondSubcategories(response?.data?.data);
       } catch (error) {

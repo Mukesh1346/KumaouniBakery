@@ -18,7 +18,7 @@ const AllUsers = () => {
   // Fetch users from the API
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("https://api.ssdipl.com/api/user");
+      const response = await axios.get("https://api.cakenpetals.com/api/user");
       if (response.data.success) {
         setUsers(response.data.data); // Save the user data
       } else {
@@ -45,7 +45,7 @@ const AllUsers = () => {
     if (result.isConfirmed) {
       try {
         const response = await axios.delete(
-          `https://api.ssdipl.com/api/delete-user/${userId}`
+          `https://api.cakenpetals.com/api/delete-user/${userId}`
         );
         if (response.status === 200) {
           Swal.fire("Deleted!", "The user has been deleted.", "success");

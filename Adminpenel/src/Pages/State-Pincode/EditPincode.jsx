@@ -33,7 +33,7 @@ const EditPinCode = () => {
         const fetchPinCode = async () => {
             try {
                 const res = await axios.get(
-                    `https://api.ssdipl.com/api/pincode/get-all-pin-codes-by-id/${id}`
+                    `https://api.cakenpetals.com/api/pincode/get-all-pin-codes-by-id/${id}`
                 );
 
                 if (res?.data?.status) {
@@ -97,7 +97,7 @@ const EditPinCode = () => {
 
         try {
             const res = await axios.post(
-                `https://api.ssdipl.com/api/pincode/update-pincode/${id}`,
+                `https://api.cakenpetals.com/api/pincode/update-pincode/${id}`,
                 {
                     ...formData,
                     area: formData.area.trim(),

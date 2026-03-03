@@ -12,7 +12,7 @@ const AllSubscribe = () => {
     const fetchUsers = async () => {
         try {
             const response = await axios.get(
-                "https://api.ssdipl.com/api/subscribe-email/get-subscribe"
+                "https://api.cakenpetals.com/api/subscribe-email/get-subscribe"
             );
 
             if (response?.data?.success) {
@@ -42,7 +42,7 @@ const AllSubscribe = () => {
 
         try {
             const response = await axios.delete(
-                `https://api.ssdipl.com/api/subscribe-email/delete-subscribe/${id}`
+                `https://api.cakenpetals.com/api/subscribe-email/delete-subscribe/${id}`
             );
 
             if (response?.data?.success) {

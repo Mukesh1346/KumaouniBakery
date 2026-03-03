@@ -42,9 +42,13 @@ const allowedOrigins = [
   'http://localhost:3001',
   'http://localhost:3000',
   'http://localhost:3002',
-  'https://admin.ssdipl.com',
-  'https://www.ssdipl.com',
-  'https://ssdipl.com',
+  // 'https://admin.ssdipl.com',
+  // 'https://www.ssdipl.com',
+  // 'https://ssdipl.com',
+  'https://api.cakenpetals.com',
+  'https://www.cakenpetals.com',
+  'https://cakenpetals.com',
+  'https://admin.cakenpetals.com'
 ];
 
 
@@ -101,14 +105,8 @@ app.use("/api/subscribe-email", SubscribeEmailRouter)
 app.use("/api/parent-product", ParentProductRouter)
 
 
-
-
-
-
-
 app.listen(process.env.PORT, () => {
   console.log(`Server Start in ${process.env.PORT}`)
 })
 
-console.log("MONGO_URI =>", process.env.MONGODB_URI);
 

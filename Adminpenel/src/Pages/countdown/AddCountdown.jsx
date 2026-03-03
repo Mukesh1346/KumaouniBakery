@@ -33,7 +33,7 @@ const AddCountdown = () => {
     const fetchSubcategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/get-main-category"
+          "https://api.cakenpetals.com/api/get-main-category"
         );
 
         setSubcategories(res?.data?.data || []);
@@ -80,7 +80,7 @@ const AddCountdown = () => {
       };
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/countdown/create-countdown",
+        "https://api.cakenpetals.com/api/countdown/create-countdown",
         body
       );
 

@@ -59,12 +59,12 @@ function RolePermissionModel({
 
             if (editingRole) {
                 response = await axios.put(
-                    `https://api.ssdipl.com/api/update-roles-by-admin/${editingRole?._id}`,
+                    `https://api.cakenpetals.com/api/update-roles-by-admin/${editingRole?._id}`,
                     roleForm
                 );
             } else {
                 response = await axios.post(
-                    "https://api.ssdipl.com/api/create-roles-by-admin",
+                    "https://api.cakenpetals.com/api/create-roles-by-admin",
                     roleForm
                 );
             }

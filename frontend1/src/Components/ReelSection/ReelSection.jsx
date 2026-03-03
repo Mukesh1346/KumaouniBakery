@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import React, { useState, useEffect, useRef } from "react";
-const BASE_URL = "https://api.ssdipl.com/";
+const BASE_URL = "https://api.cakenpetals.com/";
 
 
 
@@ -41,7 +41,7 @@ export default function ReelSection() {
 
   const fetchReels = async () => {
     try {
-      const response = await axios.get("https://api.ssdipl.com/api/reel/get-reels");
+      const response = await axios.get("https://api.cakenpetals.com/api/reel/get-reels");
       setReels(response?.data?.data.filter((reel) => reel?.activeOnHome === true) || []);
     } catch (error) {
       console.error("Error fetching reels:", error);

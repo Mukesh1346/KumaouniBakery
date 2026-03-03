@@ -33,7 +33,7 @@
 //     try {
 //       setLoading(true);
 //       const res = await axios.get(
-//         "https://api.ssdipl.com/api/pincode/get-all-pin-codes"
+//         "https://api.cakenpetals.com/api/pincode/get-all-pin-codes"
 //       );
 //       setAvailableService(res.data?.pinCodes || []);
 //     } catch (error) {
@@ -72,7 +72,7 @@
 
 //         try {
 //           const res = await axios.get(
-//             `https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`
+//             `https://api.cakenpetals.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`
 //           );
 
 //           if (res?.data?.status) {
@@ -291,7 +291,7 @@ const LocationPopup = ({
     try {
       setLoading(true);
       const res = await axios.get(
-        "https://api.ssdipl.com/api/pincode/get-all-pin-codes"
+        "https://api.cakenpetals.com/api/pincode/get-all-pin-codes"
       );
       setAvailableService(res.data?.pinCodes || []);
     } catch (error) {
@@ -321,7 +321,7 @@ const LocationPopup = ({
           const { latitude, longitude } = position.coords;
 
           const res = await axios.get(
-            `https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`
+            `https://api.cakenpetals.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`
           );
 
           if (!res?.data?.status) {

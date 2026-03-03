@@ -20,7 +20,7 @@ const EditBanner = () => {
     const fetchBannerData = async () => {
       try {
         const response = await axios.get(
-          `https://api.ssdipl.com/api/get-single-banner/${id}`
+          `https://api.cakenpetals.com/api/get-single-banner/${id}`
         );
         const banner = response.data.data;
         setFormData({
@@ -29,7 +29,7 @@ const EditBanner = () => {
           bannerType: banner.bannerType,
           bannerStatus: banner.bannerStatus === "True",
         });
-        setPreviewImage(`https://api.ssdipl.com/${banner.bannerImage}`);
+        setPreviewImage(`https://api.cakenpetals.com/${banner.bannerImage}`);
       } catch (error) {
         console.error("Failed to fetch banner data:", error);
         toast.error("Failed to load banner data");
@@ -74,7 +74,7 @@ const EditBanner = () => {
     try {
       setBtnLoading(true);
       const response = await axios.put(
-        `https://api.ssdipl.com/api/update-banner/${id}`,
+        `https://api.cakenpetals.com/api/update-banner/${id}`,
         submitData,
         {
           headers: {

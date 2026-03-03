@@ -36,7 +36,7 @@ const AllCountdown = () => {
     const fetchCountdown = async () => {
         try {
             const res = await axios.get(
-                "https://api.ssdipl.com/api/countdown/get-all-countdown"
+                "https://api.cakenpetals.com/api/countdown/get-all-countdown"
             );
 
             if (res.data?.success) {
@@ -70,7 +70,7 @@ const AllCountdown = () => {
 
         try {
             const res = await axios.delete(
-                `https://api.ssdipl.com/api/countdown/delete-countdown/${id}`
+                `https://api.cakenpetals.com/api/countdown/delete-countdown/${id}`
             );
 
             if (res.data?.success) {
@@ -91,7 +91,7 @@ const AllCountdown = () => {
 
         try {
             const res = await axios.post(
-                `https://api.ssdipl.com/api/countdown/update-status/${id}`,
+                `https://api.cakenpetals.com/api/countdown/update-status/${id}`,
                 { isActive: updatedStatus }
             );
 

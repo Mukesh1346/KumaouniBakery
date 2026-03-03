@@ -16,7 +16,7 @@ const Footer = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-category-with-subcategory`
+          `https://api.cakenpetals.com/api/get-category-with-subcategory`
         );
 
         if (
@@ -45,7 +45,7 @@ const Footer = () => {
 
     try {
       const res = await axios.post(
-        `https://api.ssdipl.com/api/subscribe-email/add-subscribe`,
+        `https://api.cakenpetals.com/api/subscribe-email/add-subscribe`,
         {
           email: email,
         }

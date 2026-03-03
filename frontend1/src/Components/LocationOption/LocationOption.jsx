@@ -54,7 +54,7 @@ const LocationOption = ({ onServiceChange }) => {
   const ServiceLocation = async () => {
     try {
       const res = await axios.get(
-        "https://api.ssdipl.com/api/pincode/get-all-pin-codes"
+        "https://api.cakenpetals.com/api/pincode/get-all-pin-codes"
       );
 
       setAvailableService(res.data.pinCodes || []);
@@ -172,7 +172,7 @@ const LocationOption = ({ onServiceChange }) => {
           const { latitude, longitude } = position.coords;
 
           const response = await axios.get(
-            `https://api.ssdipl.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`
+            `https://api.cakenpetals.com/api/google-api/reverse-geocode?lat=${latitude}&lon=${longitude}`
           );
 
           if (response?.data?.status) {

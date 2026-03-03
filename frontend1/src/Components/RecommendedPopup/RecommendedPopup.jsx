@@ -32,7 +32,7 @@ const RecommendedPopup = ({
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/recommended-category/get-recommended-category"
+          "https://api.cakenpetals.com/api/recommended-category/get-recommended-category"
         );
         if (res.status === 200 && res.data.data.length) {
           setCategory(res.data.data.filter((item) => item.ActiveonHome === true));
@@ -51,7 +51,7 @@ const RecommendedPopup = ({
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/recommended-product/get-product-by-category/${activeCategory}`
+          `https://api.cakenpetals.com/api/recommended-product/get-product-by-category/${activeCategory}`
         );
         if (res.status === 200) setProduct(res.data.data);
       } catch (err) {
@@ -216,7 +216,7 @@ return (
           return (
             <div key={cat._id} style={{ gap: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <div>
-                <img src={`https://api.ssdipl.com/${cat?.image}`} width={35} alt={cat?.name} />
+                <img src={`https://api.cakenpetals.com/${cat?.image}`} width={35} alt={cat?.name} />
               </div>
               <button
                 className={`rp-category ${activeCategory === cat._id ? "active" : ""}`}
@@ -232,7 +232,7 @@ return (
       <div className="rp-grid">
         {product.map((p) => (
           <div className="rp-card " key={p._id}>
-            <img src={`https://api.ssdipl.com/${p?.productImage[0]}`} alt={p?.productName} />
+            <img src={`https://api.cakenpetals.com/${p?.productImage[0]}`} alt={p?.productName} />
             <h6>{p.productName}</h6>
             <p>₹ {p.price}</p>
 

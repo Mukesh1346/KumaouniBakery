@@ -32,7 +32,7 @@ const AddShopBanner = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/send-sale",
+        "https://api.cakenpetals.com/api/send-sale",
         data,
         { responseType: "blob" }
       );

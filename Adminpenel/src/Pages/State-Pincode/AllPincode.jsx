@@ -45,7 +45,7 @@ const AllPinCode = () => {
         setIsLoading(true);
         try {
             const response = await axios.get(
-                `https://api.ssdipl.com/api/pincode/get-All-PinCodesWith-Pagination?page=${currentPage}&limit=${itemsPerPage}`
+                `https://api.cakenpetals.com/api/pincode/get-All-PinCodesWith-Pagination?page=${currentPage}&limit=${itemsPerPage}`
             );
             setPinCodes(response?.data?.pinCodes || []);
             setTotalPages(response?.data?.pagination?.totalPages || 1);
@@ -71,7 +71,7 @@ const AllPinCode = () => {
         if (confirm.isConfirmed) {
             try {
                 await axios.get(
-                    `https://api.ssdipl.com/api/pincode/delete-Pincode/${id}`
+                    `https://api.cakenpetals.com/api/pincode/delete-Pincode/${id}`
                 );
                 setPinCodes((prev) => prev.filter((item) => item?._id !== id));
                 toast.success("PinCode deleted successfully!");
@@ -153,7 +153,7 @@ const AllPinCode = () => {
 
         setExcelLoading(true);
         try {
-            const response = await axios.post("https://api.ssdipl.com/api/pincode/create-pincode-by-excel", excelData);
+            const response = await axios.post("https://api.cakenpetals.com/api/pincode/create-pincode-by-excel", excelData);
             console.log("response:==>", response)
             const { status, createdCount, duplicateCount, invalidCount, invalid = [] } = response || {};
 
@@ -200,7 +200,7 @@ const AllPinCode = () => {
                 productId,
                 status
             }
-            const response = await axios.post(`https://api.ssdipl.com/api/pincode/change-status`, data);
+            const response = await axios.post(`https://api.cakenpetals.com/api/pincode/change-status`, data);
             fetchPinCodes(searchTerm, currentPage);
         } catch (error) {
             toast.error("Failed to fetch pin codes!");
@@ -215,7 +215,7 @@ const AllPinCode = () => {
                 status
             }
 
-            const response = await axios.post(`https://api.ssdipl.com/api/pincode/change-delevery-time-status`, data);
+            const response = await axios.post(`https://api.cakenpetals.com/api/pincode/change-delevery-time-status`, data);
             fetchPinCodes(searchTerm, currentPage);
         } catch (error) {
             toast.error("Failed to fetch pin codes!");

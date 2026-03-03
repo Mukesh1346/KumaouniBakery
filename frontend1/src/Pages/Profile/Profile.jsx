@@ -11,7 +11,7 @@ const Profile = () => {
 
   const getApiData = async () => {
     try {
-      const res = await axios.get(`https://api.ssdipl.com/api/user/` + userid);
+      const res = await axios.get(`https://api.cakenpetals.com/api/user/` + userid);
       if (res.status === 200) {
         setUser(res.data.data);
       }
@@ -23,7 +23,7 @@ const Profile = () => {
   const getOrderData = async () => {
     try {
       const res = await axios.get(
-        "https://api.ssdipl.com/api/checkout/user/" + userid
+        "https://api.cakenpetals.com/api/checkout/user/" + userid
       );
       if (res.status === 200) {
         setOrders(res.data.data); // Store orders in state
@@ -132,7 +132,7 @@ const Profile = () => {
                         <tr key={item._id}>
                           <td>
                             <img
-                              src={`https://api.ssdipl.com/${item.image}`}
+                              src={`https://api.cakenpetals.com/${item.image}`}
                               alt=""
                               style={{ height: 50 }}
                             />

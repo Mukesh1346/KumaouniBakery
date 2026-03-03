@@ -38,7 +38,7 @@ const AllProduct = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "https://api.ssdipl.com/api/all-product"
+          "https://api.cakenpetals.com/api/all-product"
         );
         console.log("XXXXXXXXXXXXXXXX==>",response.data.data);
         setProducts(response.data.data || []);
@@ -67,7 +67,7 @@ const AllProduct = () => {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `https://api.ssdipl.com/api/delete-product/${productId}`
+          `https://api.cakenpetals.com/api/delete-product/${productId}`
         );
         setProducts(products.filter((product) => product._id !== productId));
         toast.success("Product deleted successfully!");
@@ -148,7 +148,7 @@ const AllProduct = () => {
                     {product?.productImage?.map((image, imgIndex) => (
                       <img
                         key={imgIndex}
-                        src={`https://api.ssdipl.com/${image}`}
+                        src={`https://api.cakenpetals.com/${image}`}
                         alt="Product"
                         style={{ width: "50px", marginRight: "5px" }}
                       />

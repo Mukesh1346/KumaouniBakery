@@ -13,7 +13,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/user/login",
+        "https://api.cakenpetals.com/api/user/login",
         {
           email: email,
           password: password,

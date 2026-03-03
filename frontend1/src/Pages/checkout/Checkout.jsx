@@ -358,7 +358,7 @@ const Checkout = () => {
     setCouponError("");
 
     try {
-      const response = await axios.post("https://api.ssdipl.com/api/coupon/get-coupon-by-code", {
+      const response = await axios.post("https://api.cakenpetals.com/api/coupon/get-coupon-by-code", {
         couponCode: couponCode,
         totalAmount: subtotal
       });
@@ -609,7 +609,7 @@ const Checkout = () => {
           <h5 style="margin-top: 15px;">Items:</h5>
           ${cartItems.map(item => `
             <div style="display: flex; align-items: center; margin-bottom: 10px; padding: 5px; background: #f8f9fa; border-radius: 5px;">
-              <img src="https://api.ssdipl.com/${item?.image || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; border-radius: 5px; margin-right: 10px; object-fit: cover;">
+              <img src="https://api.cakenpetals.com/${item?.image || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; border-radius: 5px; margin-right: 10px; object-fit: cover;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between;">
                   <span>${item.name} x${item.quantity}</span>
@@ -693,7 +693,7 @@ const Checkout = () => {
     console.log("XXXXXXXXCCCCCCC==>", orderPayload)
     try {
       const response = await axios.post(
-        "https://api.ssdipl.com/api/create",
+        "https://api.cakenpetals.com/api/create",
         orderPayload
       );
 
@@ -764,7 +764,7 @@ const Checkout = () => {
           });
 
           const verifyRes = await axios.post(
-            "https://api.ssdipl.com/api/verify-payment",
+            "https://api.cakenpetals.com/api/verify-payment",
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -830,7 +830,7 @@ const Checkout = () => {
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const response = await axios.get('https://api.ssdipl.com/api/coupon/get-all-coupons');
+        const response = await axios.get('https://api.cakenpetals.com/api/coupon/get-all-coupons');
         if (response.status === 200) {
           setCouponsList(response?.data?.coupons.filter((coupon) => coupon?.isActive === true));
         }
@@ -1167,7 +1167,7 @@ const Checkout = () => {
                         {/* Product Image */}
                         <div className="product-image" style={{ width: '100px', height: '100px', marginRight: '15px', borderRadius: '10px', overflow: 'hidden', border: '1px solid #f0f0f0', flexShrink: 0 }}>
                           <img
-                            src={`https://api.ssdipl.com/${item?.image}` || 'https://via.placeholder.com/100x100?text=Product'}
+                            src={`https://api.cakenpetals.com/${item?.image}` || 'https://via.placeholder.com/100x100?text=Product'}
                             alt={item?.name}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.src = 'https://via.placeholder.com/100x100?text=No+Image'; }} />
                         </div>

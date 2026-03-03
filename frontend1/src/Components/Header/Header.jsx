@@ -82,7 +82,7 @@ const Header = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-category-with-subcategory`
+          `https://api.cakenpetals.com/api/get-category-with-subcategory`
         );
 
         console.log(res.data.data)
@@ -129,8 +129,8 @@ const Header = () => {
   //       setLoadingSuggestions(true);
 
   //       const res = await axios.get(
-  //         // `https://api.ssdipl.com/api/search-products?query=${searchQuery}`
-  //         ` https://api.ssdipl.com/api/get-best-selling-products?query=${searchQuery}`
+  //         // `https://api.cakenpetals.com/api/search-products?query=${searchQuery}`
+  //         ` https://api.cakenpetals.com/api/get-best-selling-products?query=${searchQuery}`
 
 
   //       );
@@ -151,7 +151,7 @@ const Header = () => {
     const fetchAllProducts = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/all-product"
+          "https://api.cakenpetals.com/api/all-product"
         );
         setAllProducts(res.data?.data || []);
       } catch (err) {
@@ -260,7 +260,6 @@ const Header = () => {
     setMobileCategoryOpen(null);
   };
 
-
   console.log("megaCategories==>", megaCategories, cart?.length)
   return (
     <>
@@ -366,7 +365,7 @@ const Header = () => {
                           }}
                         >
                           <img
-                            src={`https://api.ssdipl.com/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
+                            src={`https://api.cakenpetals.com/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
                             alt={product.productName}
                             className="suggestion-image"
                           />
@@ -496,14 +495,14 @@ const Header = () => {
         {/* ================= MOBILE MENU ================= */}
         {mobileNavOpen && (
           <div className="mobile-menu-wrapper d-lg-none" ref={mobileMenuRef}>
-            {megaCategories.map((cat, index) => (
-              <div key={cat._id || index} className="mobile-cat">
+            {megaCategories?.map((cat, index) => (
+              <div key={cat?._id || index} className="mobile-cat">
 
                 <div
                   className="mobile-cat-title"
                   onClick={() => handleMobileCategoryToggle(index)}
                 >
-                  {cat.name}
+                  {cat?.name}
                   <IoIosArrowDown
                     className={`arrow ${mobileCategoryOpen === index ? "rotate" : ""
                       }`}
@@ -512,18 +511,21 @@ const Header = () => {
 
                 {mobileCategoryOpen === index && (
                   <div className="mobile-subcats">
-                    {cat.subcategories?.map((sub, i) => (
-                      <div key={sub._id || i} className="mobile-subcat">
-                        <strong>{sub.name}</strong>
-
-                        {sub.children?.map((child, j) => (
-                          <Link
-                            key={j}
-                            to={`/category/${child.replace(/\s+/g, "-").toLowerCase()}`}
-                            onClick={closeAllMobileMenus}
+                    {cat?.subcategories?.map((sub, i) => (
+                      <div key={sub?._id || i} className="mobile-subcat">
+                        <strong>{sub?.name}</strong>
+                        {sub?.children?.map((child, j) => (
+                          <div
+                            onClick={() => {
+                              // navigate(`/product-related/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
+                              navigate(`/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
+                                { state: { id: child?.id, status: 'subCategory' } });
+                              setMobileNavOpen((prev) => !prev);
+                            }}
+                            className="mega-item mega-child"
                           >
-                            {child}
-                          </Link>
+                            {child?.name}
+                          </div>
                         ))}
                       </div>
                     ))}
@@ -549,7 +551,6 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg bottom-navbar d-none d-lg-block">
         <div className="container navbarContainer">
           <ul className="navbar-nav mx-auto">
-
             {megaCategories.map((cat, index) => (
               <li
                 key={cat._id || index}
@@ -565,7 +566,6 @@ const Header = () => {
                 {desktopMenuOpen === index && (
                   <div className="mega-menu">
                     <div className="mega-menu-inner">
-
                       {cat.subcategories?.map((sub, i) => (
                         <div key={sub._id || i} className="column-mega">
                           <div className="mega-item fw-bold">

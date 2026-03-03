@@ -15,7 +15,7 @@
 //     const fetchOrderByUser = async () => {
 //       try {
 //         const res = await axios.get(
-//           `https://api.ssdipl.com/api/checkout/user/${user}`
+//           `https://api.cakenpetals.com/api/checkout/user/${user}`
 //         );
 //         setOrderData(res.data.data || []);
 //       } catch (e) {
@@ -208,7 +208,7 @@
 //                     <div className="item-card">
 //                       <div className="item-img">
 //                         <img
-//                           src={`https://api.ssdipl.com/${item.image.replace(
+//                           src={`https://api.cakenpetals.com/${item.image.replace(
 //                             /\\/g,
 //                             "/"
 //                           )}`}
@@ -373,7 +373,7 @@ import logo from "../../images/pic/logo.png";
 import axios from "axios";
 import html2pdf from "html2pdf.js";
 
-const API_BASE = process.env.REACT_APP_API_URL || "https://api.ssdipl.com";
+const API_BASE = process.env.REACT_APP_API_URL || "https://api.cakenpetals.com";
 
 const OrderTracking = () => {
   const user = sessionStorage.getItem("userId");
@@ -622,7 +622,7 @@ const OrderTracking = () => {
                     <div className="item-card">
                       <div className="item-img">
                         <img
-                          src={`https://api.ssdipl.com/${item.image.replace(
+                          src={`https://api.cakenpetals.com/${item.image.replace(
                             /\\/g,
                             "/"
                           )}`}

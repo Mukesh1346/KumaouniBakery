@@ -49,7 +49,7 @@ const EditCoupon = () => {
 
         try {
             const response = await axios.post(
-                `https://api.ssdipl.com/api/coupon/update-coupon/${id}`,
+                `https://api.cakenpetals.com/api/coupon/update-coupon/${id}`,
                 body
             );
             console.log("SSSSSS::=>", response)
@@ -71,7 +71,7 @@ const EditCoupon = () => {
         const fetchCoupon = async () => {
             try {
                 const response = await axios.get(
-                    `https://api.ssdipl.com/api/coupon/get-coupon-by-id/${id}`
+                    `https://api.cakenpetals.com/api/coupon/get-coupon-by-id/${id}`
                 );
                 console.log("SSSSSS::=>", response)
                 if (response.status === 200) {

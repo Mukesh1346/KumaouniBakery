@@ -10,8 +10,8 @@ export default function Banner() {
   // ✅ API call
   const fetchBannerData = async () => {
     try {
-      // const res = await axios.get("https://api.ssdipl.com/api/promo-banner/get-promo-banner");
-      const res = await axios.get("https://api.ssdipl.com/api/cake-banner/get-cake-banner"
+      // const res = await axios.get("https://api.cakenpetals.com/api/promo-banner/get-promo-banner");
+      const res = await axios.get("https://api.cakenpetals.com/api/cake-banner/get-cake-banner"
       );
       console.log("SSSSS::=>", res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner4'))
       // console.log("SSSSS::=>XXXXXX", res?.data?.data)
@@ -43,7 +43,7 @@ export default function Banner() {
                 // navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
                 navigate(`/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
                   { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} key={item?._id} className='BannerSection'>
-                <img src={`https://api.ssdipl.com/${item?.image || item?.cakeBanner}`} alt="" className='BannerImg' />
+                <img src={`https://api.cakenpetals.com/${item?.image || item?.cakeBanner}`} alt="" className='BannerImg' />
               </div>
             ))
           }

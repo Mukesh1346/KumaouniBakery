@@ -14,7 +14,7 @@
 //     const fetchCountdown = async () => {
 //       try {
 //         const res = await axios.get(
-//           `https://api.ssdipl.com/api/countdown/get-countdown-by-category/${categoryId}`
+//           `https://api.cakenpetals.com/api/countdown/get-countdown-by-category/${categoryId}`
 //         );
 
 //         if (res?.data?.data) {
@@ -137,7 +137,7 @@ const CountdownTimer = ({ categoryId, onTimeUpdate }) => {
     const fetchCountdown = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/countdown/get-countdown-by-category/${categoryId}`
+          `https://api.cakenpetals.com/api/countdown/get-countdown-by-category/${categoryId}`
         );
 
         if (res?.data?.data) {

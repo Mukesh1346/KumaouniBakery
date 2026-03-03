@@ -37,7 +37,7 @@ const Home = () => {
       <PromoBanner />  {/* DONE */}
       <Occasions />
 
-      <CategorySection/>
+      {/* <CategorySection/> */}
       <Testimonial />
       <Banner />
     </>

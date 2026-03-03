@@ -22,7 +22,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiData = async () => {
     const res = await axios.get(
-      `https://api.ssdipl.com/api/get-main-category`
+      `https://api.cakenpetals.com/api/get-main-category`
     );
     if (res.status === 200) {
       setCategoryData(status === 'Home' ? res.data?.data?.filter((item) => item?.ActiveonHome === true) : res?.data?.data);
@@ -34,7 +34,7 @@ const AllProducts = ({ status = '' }) => {
 
   const getApiProductData = async () => {
     const res = await axios.get(
-      `https://api.ssdipl.com/api/all-product`
+      `https://api.cakenpetals.com/api/all-product`
     );
 
     if (res.status === 200) {
@@ -96,7 +96,7 @@ const AllProducts = ({ status = '' }) => {
     try {
       if (isRemoving) {
         // ✅ REMOVE from wishlist
-        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+        await axios.delete("https://api.cakenpetals.com/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
@@ -104,7 +104,7 @@ const AllProducts = ({ status = '' }) => {
         });
       } else {
         // ✅ ADD to wishlist
-        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+        await axios.post("https://api.cakenpetals.com/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -156,7 +156,7 @@ const AllProducts = ({ status = '' }) => {
                 {/* IMAGE */}
                 <div className="product-img">
                   <img
-                    src={`https://api.ssdipl.com/${product.productImage[0]}`}
+                    src={`https://api.cakenpetals.com/${product.productImage[0]}`}
                     alt={product.productName}
                   />
 
@@ -246,8 +246,8 @@ export default AllProducts;
 //   const fetchAll = async () => {
 //     try {
 //       const [catRes, prodRes] = await Promise.all([
-//         axios.get(`https://api.ssdipl.com/api/get-main-category`),
-//         axios.get(`https://api.ssdipl.com/api/all-product`),
+//         axios.get(`https://api.cakenpetals.com/api/get-main-category`),
+//         axios.get(`https://api.cakenpetals.com/api/all-product`),
 //       ]);
 
 //       // ✅ Group products by categoryId
@@ -305,11 +305,11 @@ export default AllProducts;
 //   const handleWishlistApi = async (productId, isRemoving) => {
 //     try {
 //       if (isRemoving) {
-//         await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+//         await axios.delete("https://api.cakenpetals.com/api/wishlist/remove-wishlist", {
 //           data: { user, productId },
 //         });
 //       } else {
-//         await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+//         await axios.post("https://api.cakenpetals.com/api/wishlist/add-wishlist", {
 //           user,
 //           productId,
 //         });
@@ -363,7 +363,7 @@ export default AllProducts;
 //                       {/* IMAGE */}
 //                       <div className="product-img">
 //                         <img
-//                           src={`https://api.ssdipl.com/${image}`}
+//                           src={`https://api.cakenpetals.com/${image}`}
 //                           alt={product.productName}
 //                           onError={(e) => { e.target.onerror = null; e.target.src = "/placeholder.jpg"; }}
 //                         />

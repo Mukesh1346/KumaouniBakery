@@ -35,7 +35,7 @@ const AllParentProduct = () => {
         setIsLoading(true);
 
         const response = await axios.get(
-          "https://api.ssdipl.com/api/parent-product/get-parent-product"
+          "https://api.cakenpetals.com/api/parent-product/get-parent-product"
         );
 console.log("edit-perant-product=>" ,response.data.data)
         setParentProducts(response?.data?.data || []);
@@ -66,7 +66,7 @@ console.log("edit-perant-product=>" ,response.data.data)
 
     try {
       await axios.delete(
-        `https://api.ssdipl.com/api/parent-product/delete-parent-product/${id}`
+        `https://api.cakenpetals.com/api/parent-product/delete-parent-product/${id}`
       );
 
       // ✅ optimistic update

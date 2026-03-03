@@ -50,7 +50,7 @@ const ProductDetails = () => {
     }
     const fetchOrderStatus = async () => {
       try {
-        const res = await axios.get(`https://api.ssdipl.com/api/active-order/get-active-order`);
+        const res = await axios.get(`https://api.cakenpetals.com/api/active-order/get-active-order`);
         console.log("res.data.data==>", res.data.data.isActive)
         setOrderActive(res.data.data.isActive);
       } catch (e) {
@@ -90,14 +90,14 @@ const ProductDetails = () => {
     console.log("isRemoving==>", isRemoving);
     try {
       if (isRemoving) {
-        await axios.delete("https://api.ssdipl.com/api/wishlist/remove-wishlist", {
+        await axios.delete("https://api.cakenpetals.com/api/wishlist/remove-wishlist", {
           data: {
             user: user,
             productId: productId,
           },
         });
       } else {
-        await axios.post("https://api.ssdipl.com/api/wishlist/add-wishlist", {
+        await axios.post("https://api.cakenpetals.com/api/wishlist/add-wishlist", {
           user: user,
           productId: productId,
         });
@@ -110,7 +110,7 @@ const ProductDetails = () => {
   const getApiData = async () => {
     try {
       const res = await axios.get(
-        `https://api.ssdipl.com/api/get-product-by-name/${name?.replace(/-/g, " ")}`
+        `https://api.cakenpetals.com/api/get-product-by-name/${name?.replace(/-/g, " ")}`
       );
       const productData = res.data.data;
       console.log(productData.Variant)
@@ -181,7 +181,7 @@ const ProductDetails = () => {
     const fetchCountdown = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/countdown/get-countdown-by-category/${data?.subcategoryName?._id}`
+          `https://api.cakenpetals.com/api/countdown/get-countdown-by-category/${data?.subcategoryName?._id}`
         );
         console.log("SSSXXXX:=>", res)
         setCountDown(res?.data?.data);
@@ -513,7 +513,7 @@ const ProductDetails = () => {
           className="p-0 border-0 bg-transparent"
         >
           <img
-            src={`https://api.ssdipl.com/${data.productImage?.[i]}`}
+            src={`https://api.cakenpetals.com/${data.productImage?.[i]}`}
             className="w-100"
             style={{ borderRadius: "1rem" }}
             alt={`Thumbnail ${i + 1}`}
@@ -543,6 +543,7 @@ const ProductDetails = () => {
     return "ADD TO CART";
   };
 
+  // console.log("data==>", data);
   return (
     <>
       <section className="breadCrumb">
@@ -568,7 +569,7 @@ const ProductDetails = () => {
                       return (
                         <img
                           key={i}
-                          src={`https://api.ssdipl.com/${imagePath}`}
+                          src={`https://api.cakenpetals.com/${imagePath}`}
                           alt="thumb"
                           className={`pdx-thumb ${imageIndex === i ? "active-thumb" : ""}`}
                           onClick={() => setImageIndex(i)}
@@ -580,14 +581,14 @@ const ProductDetails = () => {
                   <div className="pdx-main-images">
                     {data?.productImage?.length > 0 && (
                       <img
-                        src={`https://api.ssdipl.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
+                        src={`https://api.cakenpetals.com/${data?.productImage[imageIndex]?.replace(/\\/g, "/")}`}
                         alt="product"
                       />
                     )}
                   </div>
                 </div>
 
-                <div className="pdx-features">
+                <div className="pdx-features" >
                   <div className="text-center">
                     <TbTruckDelivery className="fs-2" />
                     <p>20+ Min Delivered</p>
@@ -608,9 +609,10 @@ const ProductDetails = () => {
               <div className="pdx-right-scroll">
 
                 <div className="pdx-title-row">
-                  {data.eggless ? <span className="pdx-badge"> 100% EGGLESS </span> : ''}
-                  <h1>{data.productName?.charAt(0).toUpperCase() + data.productName?.slice(1)}</h1>
-
+                  <div className="pdx-title">
+                    {data.eggless ? <span className="pdx-badge"> 100% EGGLESS </span> : ''}
+                    <h1>{data.productName?.charAt(0).toUpperCase() + data.productName?.slice(1)}</h1>
+                  </div>
                   <div
                     className={`wishlist-icon ${wishlist?.includes(data?._id) ? "active" : ""}`}
                     onClick={() => toggleWishlist(data?._id)}
@@ -643,9 +645,9 @@ const ProductDetails = () => {
 
                 {data?.Variant?.some(v => v?.weight) && (
                   <div className="pdx-block">
-                    <div className="pdx-block-head">
+                    {/* <div className="pdx-block-head">
                       <span>Weight</span>
-                    </div>
+                    </div> */}
 
                     <div className="pdx-weight-group">
                       {data?.Variant
@@ -715,7 +717,7 @@ const ProductDetails = () => {
                             <div key={index}>
                               <div className="rpS-card">
                                 <img
-                                  src={`https://api.ssdipl.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                                  src={`https://api.cakenpetals.com/${item?.productImage?.[0]?.replace(/\\/g, "/")}`}
                                   alt={item?.productName}
                                 />
                                 <div style={{ paddingLeft: "15px" }}>
@@ -777,8 +779,8 @@ const ProductDetails = () => {
                     <h6>Product Contains</h6>
                     <p>
                       {new DOMParser()
-                        .parseFromString(data.productDetails || "", "text/html")
-                        .body.textContent}
+                        .parseFromString(data?.productDetails || "", "text/html")
+                        .body?.textContent}
                     </p>
                   </div>
                 }

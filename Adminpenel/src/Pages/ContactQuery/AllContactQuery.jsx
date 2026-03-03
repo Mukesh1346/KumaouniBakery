@@ -30,7 +30,7 @@ const AllContactQuery = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://api.ssdipl.com/api/contacts"
+        "https://api.cakenpetals.com/api/contacts"
       );
 
       if (response?.data?.success) {
@@ -60,7 +60,7 @@ const AllContactQuery = () => {
 
     try {
       const response = await axios.delete(
-        `https://api.ssdipl.com/api/contact/${id}`
+        `https://api.cakenpetals.com/api/contact/${id}`
       );
 
       if (response?.data?.success) {

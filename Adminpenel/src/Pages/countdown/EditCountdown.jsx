@@ -35,7 +35,7 @@ const EditCountdown = () => {
     const fetchCountdown = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/countdown/get-single-countdown/${id}`
+          `https://api.cakenpetals.com/api/countdown/get-single-countdown/${id}`
         );
 
         if (res.data?.success && res.data.data) {
@@ -67,7 +67,7 @@ const EditCountdown = () => {
     const fetchSubcategories = async () => {
       try {
         const response = await axios.get(
-          "https://api.ssdipl.com/api/get-main-category"
+          "https://api.cakenpetals.com/api/get-main-category"
         );
         setSubcategories(response.data?.data || []);
       } catch (error) {
@@ -111,7 +111,7 @@ const EditCountdown = () => {
       };
 
       const res = await axios.post(
-        `https://api.ssdipl.com/api/countdown/update-countdown/${id}`,
+        `https://api.cakenpetals.com/api/countdown/update-countdown/${id}`,
         body
       );
 

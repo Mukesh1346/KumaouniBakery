@@ -35,7 +35,7 @@ const AddColor = () => {
     try {
       // Send a POST request to add the color
       const response = await axios.post(
-        "https://api.ssdipl.com/api/create-color",
+        "https://api.cakenpetals.com/api/create-color",
         formData
       ); // Adjust the URL as needed
       toast.success(response.data.message);

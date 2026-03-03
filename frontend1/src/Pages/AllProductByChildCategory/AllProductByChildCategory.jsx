@@ -27,7 +27,7 @@ const AllProductByChildCategory = () => {
         const fetchData = async () => {
             try {
                 const res = await axios.get(
-                    `https://api.ssdipl.com/api/second-sub-category/get-single-second-sub-category/${subCategoryId}`
+                    `https://api.cakenpetals.com/api/second-sub-category/get-single-second-sub-category/${subCategoryId}`
                 );
 
                 const data = res?.data?.data;
@@ -46,7 +46,7 @@ const AllProductByChildCategory = () => {
                 // ✅ If status is 'category', fetch sibling second-subcategories for slider
                 if (status === "category" && data?.subCategoryId?._id) {
                     const siblingRes = await axios.get(
-                        `https://api.ssdipl.com/api/second-sub-category/get-by-subcategory/${data.subCategoryId._id}`
+                        `https://api.cakenpetals.com/api/second-sub-category/get-by-subcategory/${data.subCategoryId._id}`
                     );
                     setSecondSubCategories(siblingRes?.data?.data || []);
                 }
@@ -61,7 +61,7 @@ const AllProductByChildCategory = () => {
 
     const imageHandler = (img) => {
         // if (!img) return Banner1;
-        return img.startsWith("http") ? img : `https://api.ssdipl.com/${img}`;
+        return img.startsWith("http") ? img : `https://api.cakenpetals.com/${img}`;
     };
 
     const sliderSettings = {

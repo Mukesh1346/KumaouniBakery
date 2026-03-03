@@ -37,7 +37,7 @@ const AllReels = () => {
     const fetchReels = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/reel/get-reels"
+          "https://api.cakenpetals.com/api/reel/get-reels"
         );
         setReels(res.data?.data || []);
       } catch (error) {
@@ -67,7 +67,7 @@ const AllReels = () => {
 
     try {
       await axios.delete(
-        `https://api.ssdipl.com/api/reel/delete-reel/${id}`
+        `https://api.cakenpetals.com/api/reel/delete-reel/${id}`
       );
 
       setReels((prev) => prev.filter((item) => item._id !== id));
@@ -123,7 +123,7 @@ const AllReels = () => {
                   {/* VIDEO PREVIEW */}
                   <td>
                     <video
-                      src={`https://api.ssdipl.com/${item?.video}`}
+                      src={`https://api.cakenpetals.com/${item?.video}`}
                       width="60"
                       height="80"
                       muted

@@ -31,7 +31,7 @@ const AddAdmin = () => {
 
         try {
             const res = await axios.post(
-                "https://api.ssdipl.com/api/user",
+                "https://api.cakenpetals.com/api/user",
                 formData
             );
 

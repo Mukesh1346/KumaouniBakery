@@ -38,7 +38,7 @@ const AllCakes = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname.replace('-', " ")}`
+          `https://api.cakenpetals.com/api/get-product-by-subcatname/${subcatname.replace('-', " ")}`
         );
 
         if (res.data?.data?.length > 0) {
@@ -67,7 +67,7 @@ const AllCakes = () => {
     subcategoryInfo?.image
       ? subcategoryInfo.image.startsWith("http")
         ? subcategoryInfo.image
-        : `https://api.ssdipl.com/${subcategoryInfo.image}`
+        : `https://api.cakenpetals.com/${subcategoryInfo.image}`
       : Banner1;
 
 

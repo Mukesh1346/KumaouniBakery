@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const serverURL = "https://api.ssdipl.com";
+const serverURL = "https://api.cakenpetals.com";
 
 // Axios instance
 const api = axios.create({

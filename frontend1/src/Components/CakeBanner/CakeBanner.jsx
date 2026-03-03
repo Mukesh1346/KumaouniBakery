@@ -32,7 +32,7 @@ const CakeBanners = () => {
   const fetchCakeBanners = async () => {
     try {
       const res = await axios.get(
-        "https://api.ssdipl.com/api/cake-banner/get-cake-banner"
+        "https://api.cakenpetals.com/api/cake-banner/get-cake-banner"
       );
       console.log("SSSSS::=>", res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner1'))
       setCakeBannerData(res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner1') || []);
@@ -52,7 +52,7 @@ const CakeBanners = () => {
               navigate(`/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
                 { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })
             } className="cake-banner-card" key={item?._id}>
-              <img src={`https://api.ssdipl.com/${item?.cakeBanner}`} className="cakeImgBanner" alt="cake banner" />
+              <img src={`https://api.cakenpetals.com/${item?.cakeBanner}`} className="cakeImgBanner" alt="cake banner" />
               {/* <div className="cake-overlay">
             <h4>{item.title}</h4>
             <h2>{item.highlight}</h2>

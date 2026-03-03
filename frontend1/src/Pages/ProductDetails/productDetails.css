@@ -13,10 +13,11 @@
 
 
 
-.pdxImg{
+.pdxImg {
   display: flex;
-  gap:10px;  
+  gap: 10px;
 }
+
 .pdx-thumb-column {
   display: flex;
   flex-direction: column;
@@ -117,7 +118,7 @@
 }
 
 .pdx-addon-card:hover {
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 /* IMAGE */
@@ -143,50 +144,51 @@
 }
 
 .rpS-card {
-    height: fit-content;
-    border: 1px solid #eee;
-    border-radius: 14px;
-    padding: 14px;
-    width: 100%;
-    text-align: left;
+  height: fit-content;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 14px;
+  width: 100%;
+  text-align: left;
 }
 
 .rpS-card img {
-    width: 100%;
-    height: 100px;
-    object-fit: fill;
-    border-radius: 30px;
+  width: 100%;
+  height: 100px;
+  object-fit: fill;
+  border-radius: 30px;
 }
 
 .rpS-qty {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
 }
+
 .rpS-qty button {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid #004d40;
-    background: transparent;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #004d40;
+  background: transparent;
 }
 
 .rpS-add-btn {
-    margin-top: 8px;
-    width: 100%;
-    border: 1px solid #c7e6e0;
-    background: #0e4d65;
-    padding: 8px;
-    border-radius: 6px;
-    color: white;
-    font-weight: 600;
+  margin-top: 8px;
+  width: 100%;
+  border: 1px solid #c7e6e0;
+  background: #0e4d65;
+  padding: 8px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
 }
 
 .rpS-card h6 {
-    margin: 10px 0 4px;
-    font-size: 11px !important;
+  margin: 10px 0 4px;
+  font-size: 11px !important;
 }
 
 /* RIGHT SECTION */
@@ -208,7 +210,7 @@
  */
 
 
- 
+
 .wishlist-icon {
   position: static;
   top: 15px;
@@ -223,7 +225,7 @@
   cursor: pointer;
   font-size: 20px;
   color: #999;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
 }
 
@@ -236,20 +238,20 @@
 }
 
 
-  .pdx-right-scroll {
+.pdx-right-scroll {
   /* height: calc(100vh - 120px); */
-   padding:0px 20px;
-  overflow-y:unset;
+  padding: 0px 20px;
+  overflow-y: unset;
   padding-right: 10px;
   width: 100%;
 }
 
-.pdx-price{
-  margin:0px;
+.pdx-price {
+  margin: 0px;
 }
 
 .rpS-card {
- width: 100% !;
+  width: 100% !;
 }
 
 
@@ -271,8 +273,18 @@
 .pdx-title-row {
   display: flex;
   align-items: center;
+  gap: 100px;
+  position: relative;
+  /* ✅ THIS FIXES IT */
+}
+
+.pdx-title {
+  display: flex;
+  flex-direction: column;
+
   gap: 10px;
-  position: relative;   /* ✅ THIS FIXES IT */
+  position: relative;
+  /* ✅ THIS FIXES IT */
 }
 
 .pdx-title-row h1 {
@@ -286,6 +298,8 @@
   font-size: 12px;
   padding: 4px 8px;
   border-radius: 5px;
+  width: fit-content;
+  font-weight: 600;
 }
 
 .pdx-wishlist {
@@ -324,8 +338,9 @@
   background: #fff;
   border-radius: 6px;
 }
-.formInput{
-  height:40px !important;
+
+.formInput {
+  height: 40px !important;
 }
 
 .pdx-weight-btn.active {
@@ -344,7 +359,7 @@
   border: 1px solid #eee;
   border-radius: 12px;
   padding: 10px;
-  
+
   text-align: center;
 }
 
@@ -356,7 +371,7 @@
 
 .pdx-addon-card p {
   font-size: 12px;
-  padding:0px;
+  padding: 0px;
 }
 
 .pdx-addon-card button {
@@ -371,6 +386,7 @@
 .pdx-addon-name {
   margin: 0px;
 }
+
 /* CTA */
 .pdx-cta {
   display: flex;
@@ -398,30 +414,30 @@
   border: none;
 }
 
-.discountSec{
+.discountSec {
   background: #df4444;
-  padding:5px 15px;
-  color:white;
+  padding: 5px 15px;
+  color: white;
   border-radius: 10px;
 }
 
-.locationHead{
+.locationHead {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
   background-color: rgb(210, 220, 216);
-  
+
 }
 
-.locationIconSec{
+.locationIconSec {
   display: flex;
-  gap:8px;
+  gap: 8px;
   align-items: center;
 }
 
-.pdx-main-images img{
-  height:550px;
+.pdx-main-images img {
+  height: 550px;
   width: 100%;
 }
 
@@ -430,7 +446,7 @@
   border: 1px solid #b7dff3;
   border-radius: 8px;
   overflow: hidden;
-  margin-top:10px;
+  margin-top: 10px;
   background: #f9fdff;
 }
 
@@ -438,8 +454,8 @@
 .offers-header {
   border-radius: 50px;
   margin-top: 2%;
-  background:#0e4d65;
-  color:white;
+  background: #0e4d65;
+  color: white;
   padding: 12px 16px;
   display: flex;
   justify-content: space-between;
@@ -511,9 +527,10 @@
 }
 
 
-.inputfield{
+.inputfield {
   width: 75% !important;
 }
+
 .tc {
   font-size: 12px;
   color: #0077b6;
@@ -549,6 +566,42 @@
   .offers-title h6 {
     font-size: 13px;
   }
+
+  .pdx-badge {
+    font-size: 10px;
+
+  }
+
+  .pdx-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    position: relative;
+  }
+
+  .pdx-title {
+    display: flex;
+    width: 100%;
+    font-size: 22px;
+    gap: 10px;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .pdx-title h1 {
+    font-size: 68px;
+    display: flex;
+
+  }
+
+  .pdx-features {
+    margin-top: 20px;
+    display: none;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+
 }
 
 
@@ -566,43 +619,46 @@
     position: static;
     flex-direction: column;
   }
-.inputfield{
-  width: 100% !important;
-}
-.rp-card p {
-  margin:0px;
-}
 
-.pdx-main-images img {
+  .inputfield {
+    width: 100% !important;
+  }
+
+  .rp-card p {
+    margin: 0px;
+  }
+
+  .pdx-main-images img {
     width: 100%;
     height: 260px;
     object-fit: cover;
     border-radius: 20px;
-}
+  }
 
-  
 
-  .location-wrapper{
-  width: auto !important;
+
+  .location-wrapper {
+    width: auto !important;
   }
 
   .pdx-title-row h1 {
-  font-size: 13px !important;
-  flex: 1;
-}
+    font-size: 13px !important;
+    flex: 1;
+  }
 
-.pdx-title-row h1{
-  text-align: center;
-}
+  .pdx-title-row h1 {
+    text-align: center;
+  }
 
 
 
   .pdx-right-scroll {
-    padding:0px 20px;
+    padding: 0px 20px;
     height: auto;
     overflow: visible;
   }
-  .MainTitle{
+
+  .MainTitle {
     text-align: center;
   }
 
@@ -611,18 +667,18 @@
   }
 
   .pdx-cart {
- 
-  padding: 0px;
 
-}
+    padding: 0px;
+
+  }
 
 
   .pdx-cta {
-    position: sticky ;
+    position: sticky;
     bottom: 0;
     left: 0;
     width: 100%;
     padding: 15px;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   }
 }

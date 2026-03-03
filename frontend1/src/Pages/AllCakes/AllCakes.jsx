@@ -41,7 +41,7 @@ const AllCakes = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname.replace(/-/g, " ")}`
+          `https://api.cakenpetals.com/api/get-product-by-subcatname/${subcatname.replace(/-/g, " ")}`
         );
 
         if (res.data?.data?.length > 0) {
@@ -58,7 +58,7 @@ const AllCakes = () => {
     const fetchProductById = async (subCategoryId) => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-product-by-subCategoryId/${subCategoryId}`
+          `https://api.cakenpetals.com/api/get-product-by-subCategoryId/${subCategoryId}`
         );
         console.log("XXXXXXXSSSSS:=>>", res.data?.data)
         if (res.data?.data?.length > 0) {
@@ -88,7 +88,7 @@ const AllCakes = () => {
     const fetchSecoundSubCategory = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/second-sub-category/get-second-subcategory-by-subcategory/${subCategoryId}`
+          `https://api.cakenpetals.com/api/second-sub-category/get-second-subcategory-by-subcategory/${subCategoryId}`
         );
         console.log("DDDDD::=>", res)
         if (res.data?.data?.length > 0) {
@@ -126,7 +126,7 @@ const AllCakes = () => {
 
 
   const imageHandler = (img) => {
-    const imageUrl = img ? img.startsWith("http") ? img : `https://api.ssdipl.com/${img}` : Banner1;
+    const imageUrl = img ? img.startsWith("http") ? img : `https://api.cakenpetals.com/${img}` : Banner1;
 
     return imageUrl
   }
@@ -151,7 +151,7 @@ const AllCakes = () => {
                   className="mega-item mega-child"
                 >
                   <img
-                    src={`https://api.ssdipl.com/${subcategory?.image}` || imageHandler(subcategory?.image)}
+                    src={`https://api.cakenpetals.com/${subcategory?.image}` || imageHandler(subcategory?.image)}
                     alt={subcategory?.subcategoryName || subcategory?.secondsubcategoryName || "subcategory"}
                     onError={(e) => {
                       e.target.onerror = null;
@@ -212,7 +212,7 @@ const AllCakes = () => {
           <div>
             <div className="bannerBox">
               <img
-                src={`https://api.ssdipl.com/${bannerImage}`}
+                src={`https://api.cakenpetals.com/${bannerImage}`}
                 alt="Cake Banner"
               />
             </div>
@@ -261,7 +261,7 @@ export default AllCakes;
 //   // Function to fetch products based on selected price range
 //   const getProductrelatedSubcategory = async () => {
 //     try {
-//       let url = `https://api.ssdipl.com/api/get-product-by-subcatname/${subcatname}`;
+//       let url = `https://api.cakenpetals.com/api/get-product-by-subcatname/${subcatname}`;
 
 //       // Add price filter if selected
 //       if (selectedPrice) {
@@ -341,7 +341,7 @@ export default AllCakes;
 //                       <Link to={`/product-details/${item.productName}`}>
 //                       {/* <Link to={`/sub-subcategory/${item.productName}`}> */}
 //                         <img
-//                           src={`https://api.ssdipl.com/${item.productImage[0]}`}
+//                           src={`https://api.cakenpetals.com/${item.productImage[0]}`}
 //                           className="w-100"
 //                           alt="images"
 //                         />

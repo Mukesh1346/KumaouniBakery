@@ -33,7 +33,7 @@ const AddSubSubCategory = () => {
     const fetchProductList = async () => {
       try {
         const response = await axios.get(
-          "https://api.ssdipl.com/api/all-product"
+          "https://api.cakenpetals.com/api/all-product"
         );
         //console.log(response);
         setProductList(response.data.data || []);
@@ -50,7 +50,7 @@ const AddSubSubCategory = () => {
     const fetchMainCategories = async () => {
       try {
         const res = await axios.get(
-          "https://api.ssdipl.com/api/get-main-category"
+          "https://api.cakenpetals.com/api/get-main-category"
         );
         setMainCategories(res.data?.data || []);
       } catch {
@@ -68,7 +68,7 @@ const AddSubSubCategory = () => {
     const fetchSubCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.ssdipl.com/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
+          `https://api.cakenpetals.com/api/get-subcategory-by-maincategory/${formData.mainCategoryId}`
         );
         setSubCategories(res.data?.data || []);
       } catch {
@@ -134,7 +134,7 @@ const AddSubSubCategory = () => {
       fd.append("image", formData?.activeOnHome ? formData.image : null);
 
       const res = await axios.post(
-        "https://api.ssdipl.com/api/second-sub-category/create-second-sub-category",
+        "https://api.cakenpetals.com/api/second-sub-category/create-second-sub-category",
         fd,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -34,7 +34,7 @@ const AllCategory = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://api.ssdipl.com/api/get-main-category"
+          "https://api.cakenpetals.com/api/get-main-category"
         );
         setCategories(response.data.data); // assuming the data is in response.data.data
         // toast.success(response.data.message);
@@ -63,7 +63,7 @@ const AllCategory = () => {
     if (confirmDelete.isConfirmed) {
       try {
         await axios.delete(
-          `https://api.ssdipl.com/api/delete-main-category/${id}`
+          `https://api.cakenpetals.com/api/delete-main-category/${id}`
         );
         setCategories(categories.filter((category) => category._id !== id));
         Swal.fire("Deleted!", "Your Main category has been deleted.", "success");

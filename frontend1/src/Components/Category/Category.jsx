@@ -31,7 +31,7 @@
 //     const fetchCategories = async () => {
 //       try {
 //         const response = await axios.get(
-//           `https://api.ssdipl.com/api/get-subcategory-by-status`
+//           `https://api.cakenpetals.com/api/get-subcategory-by-status`
 //         );
 //         if (response.data.success) {
 //           setCategories(response.data.data);
@@ -109,7 +109,7 @@
 //                   )}
 //                 >
 //                   <img
-//                     src={`https://api.ssdipl.com/${item?.image}`}
+//                     src={`https://api.cakenpetals.com/${item?.image}`}
 //                     alt={item?.subcategoryName}
 //                     className="category-img"
 //                     onError={(e) => {
@@ -134,7 +134,7 @@
 //                   )}
 //                 >
 //                   <img
-//                     src={`https://api.ssdipl.com/${item?.image}`}
+//                     src={`https://api.cakenpetals.com/${item?.image}`}
 //                     alt={item?.subcategoryName}
 //                     className="category-img"
 //                     onError={(e) => {
@@ -182,8 +182,8 @@ const Category = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          // `https://api.ssdipl.com/api/get-subcategory-by-status`
-          "https://api.ssdipl.com/api/second-sub-category/get-second-sub-category"
+          // `https://api.cakenpetals.com/api/get-subcategory-by-status`
+          "https://api.cakenpetals.com/api/second-sub-category/get-second-sub-category"
         );
         if (response.data.data) {
           setCategories(response.data.data);
@@ -263,7 +263,7 @@ const Category = () => {
   const CategoryCard = ({ item }) => (
     <div className="category-link" onClick={() => handleNavigate(item)}>
       <img
-        src={`https://api.ssdipl.com/${item?.image}`}
+        src={`https://api.cakenpetals.com/${item?.image}`}
         alt={item?.secondsubcategoryName}
         className="category-img"
         onError={(e) => {

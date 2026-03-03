@@ -13,8 +13,8 @@ export default function Occasions() {
   // ✅ API call
   const fetchBannerData = async () => {
     try {
-      // const res = await axios.get("https://api.ssdipl.com/api/promo-banner/get-promo-banner");
-      const res = await axios.get("https://api.ssdipl.com/api/cake-banner/get-cake-banner"
+      // const res = await axios.get("https://api.cakenpetals.com/api/promo-banner/get-promo-banner");
+      const res = await axios.get("https://api.cakenpetals.com/api/cake-banner/get-cake-banner"
       );
       console.log("SSSSS::=>", res.data?.data.filter((item) => item?.bannerKey === 'cakeBanner3'))
       // console.log("SSSSS::=>XXXXXX", res?.data?.data)
@@ -43,8 +43,9 @@ export default function Occasions() {
     <>
       <div className='OccasionsMainSec'>
         <div className='OccasionHeadSec'>
-          <h2 className=' SuperTitle'>Shop By Occassions & Relations</h2>
-          <p className=' SuperSubTitle text-muted'>Surprise Your Loved Ones : </p>
+          {/* & Relations */}
+          <h2 className='SuperTitle' >Shop By Occassions </h2>
+          <p className='SuperSubTitle text-muted'>Surprise Your Loved Ones  </p>
 
         </div>
 
@@ -56,7 +57,7 @@ export default function Occasions() {
                   // navigate(`/product-related/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`, 
                   navigate(`/${item?.titel?.replace(/\s+/g, "-").toLowerCase()}`,
                     { state: { id: item?.secondsubcategoryName, status: item?.bannerKey } })} key={item?._id} className='OccasionCard'>
-                  <img src={`https://api.ssdipl.com/${item?.image || item?.cakeBanner}`} alt="" className='occasionalPic' />
+                  <img src={`https://api.cakenpetals.com/${item?.image || item?.cakeBanner}`} alt="" className='occasionalPic' />
                   <h3>{item?.titel?.charAt(0).toUpperCase() + item?.titel?.slice(1)}</h3>
                 </div>
               ))
