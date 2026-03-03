@@ -127,6 +127,7 @@ const AddSubSubCategory = () => {
       fd.append("mainCategoryId", formData.mainCategoryId);
       fd.append("subCategoryId", formData.subCategoryId);
       fd.append("secondSubcategoryName", formData.secondSubCategoryName);
+      fd.append('secondName', formData?.secondName)
       fd.append("ActiveonHeader", formData?.activeOnHeader);
       fd.append("ActiveonHome", formData?.activeOnHome);
       fd.append("productId", JSON.stringify(formData?.productId));
@@ -142,7 +143,7 @@ const AddSubSubCategory = () => {
       );
 
       toast.success(res.data?.message || "Child category added");
-      navigate("/all-sub-subcategory");
+      // navigate("/all-sub-subcategory");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Failed to create Child category"
@@ -296,7 +297,7 @@ const AddSubSubCategory = () => {
           </div>
 
           {/* ACTIVE */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Display on Homepage</label>
             <div className="form-check">
               <input
@@ -326,8 +327,13 @@ const AddSubSubCategory = () => {
 
           </div>
 
+          {formData?.activeOnHome === true && <div className="col-md-4">
+            <label className="form-label">Show on Home Page Name</label>
+            <input type="text" name="secondName" className="form-control" value={formData?.secondName} onChange={handleChange} required />
+          </div>}
+
           {/* IMAGE */}
-          {formData?.activeOnHome === true && <div className="col-md-6">
+          {formData?.activeOnHome === true && <div className="col-md-4">
             <label className="form-label">Child Category Image</label>
             <input
               type="file"

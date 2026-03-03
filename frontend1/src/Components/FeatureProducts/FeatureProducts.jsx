@@ -260,7 +260,6 @@ const FeaturedProducts = () => {
     });
   };
 
-
   const handleWishlistApi = async (productId, isRemoving) => {
     try {
       if (isRemoving) {
@@ -283,8 +282,6 @@ const FeaturedProducts = () => {
     }
   };
 
-
-
   const fetchFeaturedProducts = async () => {
     try {
       const response = await axios.get(
@@ -304,7 +301,6 @@ const FeaturedProducts = () => {
     if (!path) return "";
     return BASE_URL + path.replace(/\\/g, "/");
   };
-
 
   const handleProductClick = (productName) => {
     navigate(`/product-details/${productName.replace(/\s+/g, "-")}`);
@@ -344,7 +340,6 @@ const FeaturedProducts = () => {
                     src={getImageUrl(item.productImage?.[0])}
                     alt={item.productName}
                   />
-
                   <span
                     className="wishlist-icon"
                     onClick={() => toggleWishlist(item._id)}

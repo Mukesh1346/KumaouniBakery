@@ -75,6 +75,7 @@ const EditSubSubCategory = () => {
           mainCategoryId: data.mainCategoryId?._id || "",
           subCategoryId: data.subCategoryId?._id || "",
           secondsubcategoryName: data.secondsubcategoryName || "",
+          secondName: data.secondName || "",
           ActiveonHome: data.ActiveonHome || false,
           ActiveonHeader: data.ActiveonHeader || false,
           productId: data?.productId.map((item) => item?._id) || [],
@@ -140,6 +141,7 @@ const EditSubSubCategory = () => {
       fd.append("subCategoryId", formData.subCategoryId);
       fd.append("secondsubcategoryName", formData.secondsubcategoryName);
       fd.append("ActiveonHome", formData.ActiveonHome);
+      fd.append('secondName', formData?.secondName);
       fd.append("ActiveonHeader", formData.ActiveonHeader);
       fd.append("productId", JSON.stringify(formData.productId));
 
@@ -304,10 +306,9 @@ const EditSubSubCategory = () => {
                 );
               })}
             </div>
-
           </div>
           {/* ACTIVE */}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <label className="form-label">Display on Homepage</label>
             <div className="form-check">
               <input
@@ -337,8 +338,13 @@ const EditSubSubCategory = () => {
 
           </div>
 
+          {formData?.ActiveonHome === true && <div className="col-md-4">
+            <label className="form-label">Show on Home Page Name</label>
+            <input type="text" name="secondName" className="form-control" value={formData?.secondName} onChange={handleChange} required />
+          </div>}
+
           {/* IMAGE */}
-          {formData?.ActiveonHome === true && <div className="col-md-6">
+          {formData?.ActiveonHome === true && <div className="col-md-4">
             <label className="form-label">Child category Image</label>
             <input
               type="file"

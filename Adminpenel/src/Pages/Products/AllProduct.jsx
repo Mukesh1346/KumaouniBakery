@@ -40,9 +40,11 @@ const AllProduct = () => {
         const response = await axios.get(
           "https://api.cakenpetals.com/api/all-product"
         );
+        setIsLoading(false);
         console.log("XXXXXXXXXXXXXXXX==>",response.data.data);
         setProducts(response.data.data || []);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching products:", error);
         toast.error("Failed to fetch products!");
       } finally {

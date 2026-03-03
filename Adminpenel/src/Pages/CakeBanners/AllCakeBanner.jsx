@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const AllCakeBanners = () => {
   const [banners, setBanners] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   const hasAccessAdd = (module) => {
@@ -37,9 +37,11 @@ const AllCakeBanners = () => {
 
   const fetchCakeBanners = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         "https://api.cakenpetals.com/api/cake-banner/get-cake-banner"
       );
+      setLoading(false);
       setBanners(res.data?.data || []);
     } catch (error) {
       console.error("Failed to fetch cake banners", error);

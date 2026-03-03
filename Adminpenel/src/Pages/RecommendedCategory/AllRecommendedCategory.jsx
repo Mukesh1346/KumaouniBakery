@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 const AllRecommendedCategory = () => {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   const hasAccessAdd = (module) => {
@@ -36,11 +36,14 @@ const AllRecommendedCategory = () => {
 
   const fetchCategories = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         "https://api.cakenpetals.com/api/recommended-category/get-recommended-category"
       );
+      setLoading(false);
       setCategories(res.data?.data || []);
     } catch {
+      setLoading(false);
       toast.error("Failed to load categories");
     } finally {
       setLoading(false);

@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 
 const AllContactQuery = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   const hasAccessDelete = (module) => {
@@ -29,6 +29,7 @@ const AllContactQuery = () => {
   /* ================= FETCH ================= */
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         "https://api.cakenpetals.com/api/contacts"
       );
@@ -36,6 +37,7 @@ const AllContactQuery = () => {
       if (response?.data?.success) {
         setUsers(response.data.data || []);
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching contacts:", error);
       Swal.fire("Error", "Failed to load contacts", "error");

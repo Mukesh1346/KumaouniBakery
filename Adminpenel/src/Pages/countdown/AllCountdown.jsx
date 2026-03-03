@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AllCountdown = () => {
     const [countdowns, setCountdowns] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
     const hasAccessAdd = (module) => {
@@ -35,6 +35,7 @@ const AllCountdown = () => {
 
     const fetchCountdown = async () => {
         try {
+            setIsLoading(true);
             const res = await axios.get(
                 "https://api.cakenpetals.com/api/countdown/get-all-countdown"
             );
@@ -42,7 +43,9 @@ const AllCountdown = () => {
             if (res.data?.success) {
                 setCountdowns(res.data.data || []);
             }
+            setIsLoading(false);
         } catch (error) {
+             setIsLoading(false);
             toast.error("Failed to load countdown");
             console.error(error);
         } finally {
@@ -148,7 +151,7 @@ const AllCountdown = () => {
                     <h4>All Count Down</h4>
                 </div>
 
-               {hasAccessAdd('countdown')&& <div className="links">
+                {hasAccessAdd('countdown') && <div className="links">
                     <Link to="/add-countdown" className="add-new">
                         Add New <i className="fa-solid fa-plus"></i>
                     </Link>
@@ -165,8 +168,8 @@ const AllCountdown = () => {
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Active</th>
-                          {hasAccessEdit('countdown')&&  <th>Edit</th>}
-                          {hasAccessDelete('countdown')&&  <th>Delete</th>}
+                            {hasAccessEdit('countdown') && <th>Edit</th>}
+                            {hasAccessDelete('countdown') && <th>Delete</th>}
                         </tr>
                     </thead>
 
@@ -190,7 +193,7 @@ const AllCountdown = () => {
                                         />
                                     </td>
 
-                                  {hasAccessEdit('countdown')&&  <td>
+                                    {hasAccessEdit('countdown') && <td>
                                         <Link
                                             to={`/edit-countdown/${item?._id}`}
                                             className="bt edit"
@@ -199,7 +202,7 @@ const AllCountdown = () => {
                                         </Link>
                                     </td>}
 
-                                   {hasAccessDelete('countdown')&& <td>
+                                    {hasAccessDelete('countdown') && <td>
                                         <button
                                             className="bt cursor-pointer delete"
                                             onClick={() => handleDelete(item._id)}

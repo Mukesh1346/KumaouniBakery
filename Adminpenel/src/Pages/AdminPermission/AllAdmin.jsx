@@ -9,6 +9,7 @@ const AllAdmin = () => {
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [roleForm, setRoleForm] = useState({ role: "", permissions: {}, });
   const [editingRole, setEditingRole] = useState(null);
+
   const modules = [
     { key: "dashboard", name: "Dashboard" },
     { key: "orders", name: "Orders" },

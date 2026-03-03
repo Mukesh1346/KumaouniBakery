@@ -21,6 +21,7 @@ const AllSBanner = () => {
       } else {
         toast.error("Failed to load banners");
       }
+      setIsLoading(false);
     } catch (error) {
       toast.error("An error occurred while fetching banners");
     } finally {

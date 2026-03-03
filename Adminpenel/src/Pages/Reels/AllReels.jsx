@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AllReels = () => {
   const [reels, setReels] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   const hasAccessAdd = (module) => {
@@ -36,11 +36,14 @@ const AllReels = () => {
   useEffect(() => {
     const fetchReels = async () => {
       try {
+        setIsLoading(true);
         const res = await axios.get(
           "https://api.cakenpetals.com/api/reel/get-reels"
         );
+        setIsLoading(false);
         setReels(res.data?.data || []);
       } catch (error) {
+        setIsLoading(false);
         toast.error("Error fetching reels");
         console.error(error);
       } finally {

@@ -4,7 +4,7 @@ const Subcategory = require("../Model/SubcategoryModel");
 
 // Create a new subcategory
 const createSecondSubcategory = async (req, res) => {
-    const { mainCategoryId, subCategoryId, productId, secondSubcategoryName, ActiveonHome, ActiveonHeader } = req.body;
+    const { mainCategoryId, subCategoryId, productId,secondName, secondSubcategoryName, ActiveonHome, ActiveonHeader } = req.body;
     console.log("ActiveonHeader and ActiveonHome", ActiveonHeader, ActiveonHome)
     // Validate required fields
     if (!mainCategoryId) {
@@ -60,6 +60,7 @@ const createSecondSubcategory = async (req, res) => {
         const subcategory = new SecondSubcategory({
             mainCategoryId,
             subCategoryId,
+            secondName,
             productId: JSON.parse(productId),
             secondsubcategoryName: normalizedSubcategoryName,
             image: ActiveonHome ? req?.file?.path : null, // Save the path to the uploaded image
@@ -181,7 +182,7 @@ const getSecondSubcategoryByName = async (req, res) => {
 
 // Update a subcategory by ID and delete the old image if a new one is provided
 const updateSecondSubcategory = async (req, res) => {
-    const { mainCategoryId, subCategoryId, productId, secondsubcategoryName, ActiveonHome, ActiveonHeader } = req.body;
+    const { mainCategoryId, subCategoryId, productId,secondName, secondsubcategoryName, ActiveonHome, ActiveonHeader } = req.body;
     const { id } = req.params;
 
     try {
@@ -204,6 +205,7 @@ const updateSecondSubcategory = async (req, res) => {
                 mainCategoryId: mainCategoryId || subcategory.mainCategoryId,
                 subCategoryId: subCategoryId || subcategory.subCategoryId,
                 secondsubcategoryName: { $regex: `^${normalizedName}$`, $options: "i" },
+
             });
 
             if (duplicate) {
@@ -221,6 +223,7 @@ const updateSecondSubcategory = async (req, res) => {
         if (ActiveonHome) subcategory.ActiveonHome = ActiveonHome;
         if (ActiveonHeader) subcategory.ActiveonHeader = ActiveonHeader;
         if (productId) subcategory.productId = JSON.parse(productId);
+        if (secondName) subcategory.secondName = secondName;
 
         // 🖼 Image update
         if (req.file && ActiveonHome) {

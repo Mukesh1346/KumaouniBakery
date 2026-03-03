@@ -6,17 +6,20 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AllInnerSubCategory = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [innerSubcategories, setInnerSubcategories] = useState([]);
 
   useEffect(() => {
     const fetchInnerSubCategories = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(
           "https://api.cakenpetals.com/api/get-inner-subcategory"
         );
+        setIsLoading(false);
         setInnerSubcategories(response.data.data);
       } catch (error) {
+        setIsLoading(false);
         toast.error("Error fetching inner subcategories");
         console.error("Error fetching inner subcategories:", error);
       } finally {

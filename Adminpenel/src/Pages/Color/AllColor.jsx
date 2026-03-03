@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AllColor = () => {
   const [colors, setColors] = useState([]); // State to store color data
-  const [loading, setLoading] = useState(true); // State to manage loading
+  const [loading, setLoading] = useState(false); // State to manage loading
 
   useEffect(() => {
     const fetchColors = async () => {

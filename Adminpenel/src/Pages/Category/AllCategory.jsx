@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AllCategory = () => {
   const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   const hasAccessAdd = (module) => {
@@ -30,15 +30,19 @@ const AllCategory = () => {
       AdminData?.permissions?.[module]?.update === true
     );
   };
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(
           "https://api.cakenpetals.com/api/get-main-category"
         );
         setCategories(response.data.data); // assuming the data is in response.data.data
+        setIsLoading(false);
         // toast.success(response.data.message);
       } catch (error) {
+        setIsLoading(false);
         toast.error("Error fetching categories");
         console.error("Error fetching categories:", error);
       } finally {

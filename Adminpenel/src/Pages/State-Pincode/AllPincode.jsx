@@ -47,9 +47,11 @@ const AllPinCode = () => {
             const response = await axios.get(
                 `https://api.cakenpetals.com/api/pincode/get-All-PinCodesWith-Pagination?page=${currentPage}&limit=${itemsPerPage}`
             );
+            setIsLoading(false);
             setPinCodes(response?.data?.pinCodes || []);
             setTotalPages(response?.data?.pagination?.totalPages || 1);
         } catch (error) {
+            setIsLoading(false);
             toast.error("Failed to fetch pin codes!");
         } finally {
             setIsLoading(false);

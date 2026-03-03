@@ -148,6 +148,12 @@ const BestSellingProduct = () => {
                     alt={item.productName}
                   />
 
+                  {variant?.discountPrice && (
+                    <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+                      {variant?.discountPrice}% OFF
+                    </span>
+                  )}
+
                   <span
                     className="wishlist"
                     onClick={(e) => handleWishlistClick(e, item._id)}

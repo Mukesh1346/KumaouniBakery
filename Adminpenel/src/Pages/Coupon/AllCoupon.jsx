@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const AllCoupon = () => {
     const [coupons, setCoupons] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
     const hasAccessAdd = (module) => {
@@ -35,12 +35,14 @@ const AllCoupon = () => {
     useEffect(() => {
         const fetchCoupons = async () => {
             try {
+                setIsLoading(true);
                 const response = await axios.get('https://api.cakenpetals.com/api/coupon/get-all-coupons');
                 console.log("SSSSSS::=>", response)
 
                 if (response.status === 200) {
                     setCoupons(response?.data?.coupons);
                 }
+                setIsLoading(false);
             } catch (error) {
                 // toast.error('Error fetching coupons');
                 console.error('Error fetching coupons:', error);

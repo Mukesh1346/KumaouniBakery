@@ -272,7 +272,7 @@ const Category = () => {
         }}
       />
       <p className="category-name">
-        {item?.secondsubcategoryName?.charAt(0).toUpperCase() + item?.secondsubcategoryName?.slice(1)}
+        {item?.secondName?.charAt(0).toUpperCase() + item?.secondName?.slice(1) || item?.secondsubcategoryName?.charAt(0).toUpperCase() + item?.secondsubcategoryName?.slice(1)}
       </p>
     </div>
   );

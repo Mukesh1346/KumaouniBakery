@@ -153,9 +153,9 @@ const AllProductByChild = ({ cakesArr = [] }) => {
                                             )}
                                         </span>
 
-                                        {variant.discountPrice > 0 && (
-                                            <span className="off-badge">
-                                                {variant.discountPrice}% OFF
+                                        {variant?.discountPrice && (
+                                            <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+                                                {variant?.discountPrice}% OFF
                                             </span>
                                         )}
                                     </div>

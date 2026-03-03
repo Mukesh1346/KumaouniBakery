@@ -37,9 +37,11 @@ const AllParentProduct = () => {
         const response = await axios.get(
           "https://api.cakenpetals.com/api/parent-product/get-parent-product"
         );
+        setIsLoading(false);
 console.log("edit-perant-product=>" ,response.data.data)
         setParentProducts(response?.data?.data || []);
       } catch (error) {
+        setIsLoading(false);
         toast.error("Error fetching Parent Products");
         console.error("Error fetching Parent Products:", error);
       } finally {

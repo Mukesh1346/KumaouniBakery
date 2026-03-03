@@ -8,7 +8,7 @@ import noImage from "../../asses/logo512.png";
 
 const AllSubSubCategory = () => {
   const [subSubcategories, setSubSubcategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   const hasAccessAdd = (module) => {
@@ -36,11 +36,14 @@ const AllSubSubCategory = () => {
   useEffect(() => {
     const fetchSubSubcategories = async () => {
       try {
+        setIsLoading(true);
         const res = await axios.get(
           "https://api.cakenpetals.com/api/second-sub-category/get-second-sub-category"
         );
+        setIsLoading(false);
         setSubSubcategories(res.data?.data || []);
       } catch (error) {
+        setIsLoading(false);
         toast.error("Error fetching Child categories");
         console.error(error);
       } finally {

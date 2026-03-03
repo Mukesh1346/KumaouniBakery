@@ -19,8 +19,10 @@ const AllRecommendedProduct = () => {
           "https://api.cakenpetals.com/api/recommended-product/all-product"
         );
         //console.log(response);
+        setIsLoading(false);
         setProducts(response.data.data || []);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching products:", error);
         toast.error("Failed to fetch products!");
       } finally {

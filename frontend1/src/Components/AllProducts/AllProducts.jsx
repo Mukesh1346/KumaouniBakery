@@ -171,8 +171,12 @@ const AllProducts = ({ status = '' }) => {
                       <FaRegHeart />
                     )}
                   </span>
-
-                  <span className="off-badge">{product?.Variant[0]?.discountPrice}% OFF</span>
+                  {product?.Variant[0]?.discountPrice && (
+                    <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+                      {product?.Variant[0]?.discountPrice}% OFF
+                    </span>
+                  )}
+                  {/* <span className="off-badge">{product?.Variant[0]?.discountPrice}% OFF</span> */}
                 </div>
 
                 {/* CONTENT */}

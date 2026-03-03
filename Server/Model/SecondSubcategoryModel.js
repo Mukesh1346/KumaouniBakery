@@ -24,6 +24,9 @@ const SecondSubCategorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    secondName: {
+        type: String
+    },
     ActiveonHome: {
         type: Boolean,
         default: false

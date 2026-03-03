@@ -776,7 +776,7 @@ const ProductDetails = () => {
 
                 {data?.productDetails &&
                   <div className="description-box" style={{ marginBottom: '12px', borderRadius: '13px 13px 0px 0px' }}>
-                    <h6>Product Contains</h6>
+                    <h6>Product Details</h6>
                     <p>
                       {new DOMParser()
                         .parseFromString(data?.productDetails || "", "text/html")
