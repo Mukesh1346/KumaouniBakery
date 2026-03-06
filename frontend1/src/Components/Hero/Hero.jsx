@@ -54,7 +54,7 @@ const Hero = () => {
       <div className="hero container topspacing">
         <div className="row align-items-center">
          
-  <div className="col-md-7 text-center">
+  <div className="col-md-7">
     <p className="heroPinkHeading mb-0">Delicate Designs. Decadent Flavors.</p>
     <p className="brownHeading">Turning Sweet Moments into Beautiful Memories.</p>
     <p className="hero-description heropara">

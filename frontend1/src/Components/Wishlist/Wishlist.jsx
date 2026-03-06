@@ -226,21 +226,238 @@
 // export default Wishlist;
 
 
+// import React, { useEffect, useState } from "react";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "./wishlist.css";
+// import { FaRegTrashCan, FaHeart } from "react-icons/fa6";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import Swal from "sweetalert2";
+
+// const Wishlist = () => {
+//   const [wishlist, setWishlist] = useState([]);
+//   const user = sessionStorage.getItem("userId");
+//   const [carts, setCarts] = useState(JSON.parse(sessionStorage.getItem("cart")) || []);
+//   const navigate = useNavigate();
+
+//   // ✅ fetch wishlist
+//   const fetchWishlist = async () => {
+//     try {
+//       const res = await axios.get(
+//         `https://api.cakenpetals.com/api/wishlist/get-wishlist/${user}`
+//       );
+//       if (res.status === 200) {
+//         setWishlist(res.data.data);
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (!user) {
+//       navigate("/login");
+//       return;
+//     }
+//     fetchWishlist();
+//   }, [user]);
+
+//   // ✅ REMOVE from wishlist
+//   const handleRemove = async (productId) => {
+//     try {
+//       await axios.delete(
+//         "https://api.cakenpetals.com/api/wishlist/remove-wishlist",
+//         {
+//           data: { user, productId },
+//         }
+//       );
+
+//       // ✅ update UI instantly
+
+//       setWishlist((prev) => {
+//         const updated = prev.filter(
+//           (item) => item.productId._id !== productId
+//         );
+
+//         // ✅ ALSO update sessionStorage
+//         sessionStorage.setItem("wishlist", JSON.stringify(updated));
+
+//         return updated;
+//       });
+
+//       Swal.fire({
+//         icon: "success",
+//         title: "Removed",
+//         text: "Item removed from wishlist",
+//         timer: 1200,
+//         showConfirmButton: false,
+//       });
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     setCarts(JSON.parse(sessionStorage.getItem("cart")) || [])
+//   }, [])
+
+//   // ✅ ADD TO CART (clean version)
+//   const addToCart = (product) => {
+//     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+//     const existingIndex = cart.findIndex(
+//       (item) => item.productId === product._id
+//     );
+
+//     if (existingIndex > -1) {
+//       cart[existingIndex].quantity += 1;
+
+//       Swal.fire({
+//         icon: "success",
+//         title: "Already in cart And Quantity Updated",
+//         timer: 1000,
+//         showConfirmButton: false,
+//       });
+//       setCarts(cart[existingIndex].quantity += 1);
+//     } else {
+//       cart.push({
+//         productId: product._id,
+//         name: product.productName,
+//         price: product?.Variant?.[0]?.finalPrice || 0,
+//         quantity: 1,
+//         image: product?.productImage[0],
+//       });
+
+//       Swal.fire({
+//         icon: "success",
+//         title: "Added to cart",
+//         timer: 1000,
+//         showConfirmButton: false,
+//       });
+//     }
+
+//     // ✅ update both places
+//     sessionStorage.setItem("cart", JSON.stringify(cart));
+//     setCarts(cart);
+//   };
+
+//   const existCart = (product) => {
+//     const existingIndex = carts.findIndex(
+//       (item) => item.productId === product._id
+//     )
+//     return existingIndex
+//   }
+
+
+//   return (
+//     <div className="wishlist-page">
+//       {/* HEADER */}
+//       <div className="wishlist-header text-center">
+//         <div className="heart">
+//           <FaHeart className="text-danger" />
+//         </div>
+//         <h1>My Wishlist</h1>
+//       </div>
+
+//       <div className="container wishlistContainer">
+//         <div className="wishlist-table">
+//           <div className="wishlist-row wishlist-head">
+//             <div></div>
+//             <div>Product</div>
+//             <div>Price</div>
+//             <div>Status</div>
+//             <div></div>
+//           </div>
+
+//           {wishlist.length === 0 && (
+//             <div className="text-center py-5">
+//               <h5>Your wishlist is empty ❤️</h5>
+//             </div>
+//           )}
+
+//           {wishlist.map((item) => {
+//             const product = item.productId;
+
+//             return (
+//               <div className="wishlist-row" key={product?._id}>
+//                 {/* remove */}
+//                 <div
+//                   className="remove-icon"
+//                   onClick={() => handleRemove(product?._id)}
+//                 >
+//                   <FaRegTrashCan className="fs-4" />
+//                 </div>
+
+//                 {/* product */}
+//                 <div className="product-info">
+//                   <img
+//                     src={`https://api.cakenpetals.com/${product?.productImage?.[0]}`}
+//                     alt={product?.productName}
+//                   />
+//                   <span className="text-success">
+//                     {product?.productName?.charAt(0).toUpperCase() + product?.productName?.slice(1)}
+//                   </span>
+//                 </div>
+
+//                 {/* price */}
+//                 <div className="price">
+//                   ₹{product?.Variant?.[0]?.finalPrice?.toFixed(2)}
+//                 </div>
+
+//                 {/* stock */}
+//                 <div className="text-success fw-semibold">
+//                   In Stock
+//                 </div>
+
+//                 {/* action */}
+//                 <div className="action">
+//                   <small>
+//                     Added on: {item?.createdAt?.split("T")[0]}
+//                   </small>
+
+//                   <button
+//                     onClick={() => addToCart(product)}
+//                     className="btn btn-dark btn-sm mt-1"
+//                   >
+
+//                     {existCart(product) ? "Add to Cart" : "Update Cart Quantity"}
+//                   </button>
+//                 </div>
+//               </div>
+//             );
+//           })}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Wishlist;
+
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./wishlist.css";
-import { FaRegTrashCan, FaHeart } from "react-icons/fa6";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
+  const [carts, setCarts] = useState(
+    JSON.parse(sessionStorage.getItem("cart")) || []
+  );
+
   const user = sessionStorage.getItem("userId");
-  const [carts, setCarts] = useState(JSON.parse(sessionStorage.getItem("cart")) || []);
   const navigate = useNavigate();
 
-  // ✅ fetch wishlist
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    fetchWishlist();
+  }, [user]);
+
   const fetchWishlist = async () => {
     try {
       const res = await axios.get(
@@ -254,42 +471,23 @@ const Wishlist = () => {
     }
   };
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    fetchWishlist();
-  }, [user]);
-
-  // ✅ REMOVE from wishlist
   const handleRemove = async (productId) => {
     try {
       await axios.delete(
         "https://api.cakenpetals.com/api/wishlist/remove-wishlist",
-        {
-          data: { user, productId },
-        }
+        { data: { user, productId } }
       );
 
-      // ✅ update UI instantly
+      const updated = wishlist.filter(
+        (item) => item.productId._id !== productId
+      );
 
-      setWishlist((prev) => {
-        const updated = prev.filter(
-          (item) => item.productId._id !== productId
-        );
-
-        // ✅ ALSO update sessionStorage
-        sessionStorage.setItem("wishlist", JSON.stringify(updated));
-
-        return updated;
-      });
+      setWishlist(updated);
 
       Swal.fire({
         icon: "success",
         title: "Removed",
-        text: "Item removed from wishlist",
-        timer: 1200,
+        timer: 1000,
         showConfirmButton: false,
       });
     } catch (error) {
@@ -297,11 +495,6 @@ const Wishlist = () => {
     }
   };
 
-  useEffect(() => {
-    setCarts(JSON.parse(sessionStorage.getItem("cart")) || [])
-  }, [])
-
-  // ✅ ADD TO CART (clean version)
   const addToCart = (product) => {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
@@ -311,122 +504,93 @@ const Wishlist = () => {
 
     if (existingIndex > -1) {
       cart[existingIndex].quantity += 1;
-
-      Swal.fire({
-        icon: "success",
-        title: "Already in cart And Quantity Updated",
-        timer: 1000,
-        showConfirmButton: false,
-      });
-      setCarts(cart[existingIndex].quantity += 1);
     } else {
       cart.push({
         productId: product._id,
         name: product.productName,
         price: product?.Variant?.[0]?.finalPrice || 0,
         quantity: 1,
-        image: product?.productImage[0],
-      });
-
-      Swal.fire({
-        icon: "success",
-        title: "Added to cart",
-        timer: 1000,
-        showConfirmButton: false,
+        image: product?.productImage?.[0],
       });
     }
 
-    // ✅ update both places
     sessionStorage.setItem("cart", JSON.stringify(cart));
-    setCarts(cart);
+    setCarts([...cart]);
+
+    Swal.fire({
+      icon: "success",
+      title: "Added to Cart",
+      timer: 1000,
+      showConfirmButton: false,
+    });
   };
 
-  const existCart = (product) => {
-    const existingIndex = carts.findIndex(
-      (item) => item.productId === product._id
-    )
-    return existingIndex
-  }
-
-
   return (
-    <div className="wishlist-page">
-      {/* HEADER */}
-      <div className="wishlist-header text-center">
-        <div className="heart">
-          <FaHeart className="text-danger" />
+    <div className="wishlist-wrapper container py-5">
+      <h3 className="wishlist-title">My Wishlist</h3>
+
+      <div className="wishlist-table">
+        <div className="wishlist-head">
+          <div></div>
+          <div>Product Name</div>
+          <div>Unit Price</div>
+          <div>Stock Status</div>
+          <div>Actions</div>
         </div>
-        <h1>My Wishlist</h1>
-      </div>
 
-      <div className="container wishlistContainer">
-        <div className="wishlist-table">
-          <div className="wishlist-row wishlist-head">
-            <div></div>
-            <div>Product</div>
-            <div>Price</div>
-            <div>Status</div>
-            <div></div>
-          </div>
+        {wishlist.length === 0 && (
+          <div className="text-center py-4">Your wishlist is empty.</div>
+        )}
 
-          {wishlist.length === 0 && (
-            <div className="text-center py-5">
-              <h5>Your wishlist is empty ❤️</h5>
-            </div>
-          )}
+        {wishlist.map((item) => {
+          const product = item.productId;
 
-          {wishlist.map((item) => {
-            const product = item.productId;
-
-            return (
-              <div className="wishlist-row" key={product?._id}>
-                {/* remove */}
-                <div
-                  className="remove-icon"
-                  onClick={() => handleRemove(product?._id)}
-                >
-                  <FaRegTrashCan className="fs-4" />
-                </div>
-
-                {/* product */}
-                <div className="product-info">
-                  <img
-                    src={`https://api.cakenpetals.com/${product?.productImage?.[0]}`}
-                    alt={product?.productName}
-                  />
-                  <span className="text-success">
-                    {product?.productName?.charAt(0).toUpperCase() + product?.productName?.slice(1)}
-                  </span>
-                </div>
-
-                {/* price */}
-                <div className="price">
-                  ₹{product?.Variant?.[0]?.finalPrice?.toFixed(2)}
-                </div>
-
-                {/* stock */}
-                <div className="text-success fw-semibold">
-                  In Stock
-                </div>
-
-                {/* action */}
-                <div className="action">
-                  <small>
-                    Added on: {item?.createdAt?.split("T")[0]}
-                  </small>
-
-                  <button
-                    onClick={() => addToCart(product)}
-                    className="btn btn-dark btn-sm mt-1"
-                  >
-
-                    {existCart(product) ? "Add to Cart" : "Update Cart Quantity"}
-                  </button>
-                </div>
+          return (
+            <div className="wishlist-row" key={product?._id}>
+              {/* Remove */}
+              <div
+                className="remove"
+                onClick={() => handleRemove(product?._id)}
+              >
+                ×
               </div>
-            );
-          })}
-        </div>
+
+              {/* Product */}
+              <div className="product">
+                <img
+                  src={`https://api.cakenpetals.com/${product?.productImage?.[0]}`}
+                  alt={product?.productName}
+                />
+                <span>{product?.productName}</span>
+              </div>
+
+              {/* Price */}
+              <div className="price">
+                {product?.Variant?.[0]?.discountPrice && (
+                  <del>
+                    ₹{product?.Variant?.[0]?.price?.toFixed(2)}
+                  </del>
+                )}
+                <span>
+                  ₹{product?.Variant?.[0]?.finalPrice?.toFixed(2)}
+                </span>
+              </div>
+
+              {/* Stock */}
+              <div className="stock">In Stock</div>
+
+              {/* Action */}
+              <div>
+                <button
+                  className="add-btn"
+                  onClick={() => addToCart(product)}
+                >
+                  ADD TO CART
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

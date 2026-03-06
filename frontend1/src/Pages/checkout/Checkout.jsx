@@ -1155,7 +1155,7 @@ const Checkout = () => {
                   {/* LEFT SIDE - Product List with Images and Controls */}
                   <div className="checkout-left">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                      <h4>Order Summary ({cartItems.length} {cartItems.length === 1 ? 'item' : 'items'})</h4>
+                      <h4 className="checkout-order-sum">Order Summary ({cartItems.length} {cartItems.length === 1 ? 'item' : 'items'})</h4>
                       <button onClick={() => setStep(4)} className="back-btn">
                         <i className="fa fa-arrow-left"></i>
                         <span>Edit Delivery</span>
@@ -1163,7 +1163,7 @@ const Checkout = () => {
                     </div>
 
                     {cartItems.map((item, index) => (
-                      <div key={index} className="product-card" style={{ display: 'flex', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '15px', marginBottom: '15px', backgroundColor: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', transition: 'all 0.3s ease', position: 'relative' }}>
+                      <div key={index} className="product-card" style={{ display: 'flex', border:"none" , borderRadius: '12px', marginBottom: '15px', transition: 'all 0.3s ease', position: 'relative' }}>
                         {/* Product Image */}
                         <div className="product-image" style={{ width: '100px', height: '100px', marginRight: '15px', borderRadius: '10px', overflow: 'hidden', border: '1px solid #f0f0f0', flexShrink: 0 }}>
                           <img
@@ -1176,7 +1176,7 @@ const Checkout = () => {
                         <div className="product-details" style={{ flex: 1 }}>
                           {/* Product Name and Price Row */}
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                            <h5 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#333', flex: 1 }}>
+                            <h5 className="checkout-order-name" style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#333', flex: 1 }}>
                               {item.name}
                             </h5>
                             <span style={{ fontWeight: 'bold', color: '#153964', fontSize: '18px', marginLeft: '10px' }}>

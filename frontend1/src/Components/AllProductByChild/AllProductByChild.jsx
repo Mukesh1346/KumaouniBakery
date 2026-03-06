@@ -154,7 +154,7 @@ const AllProductByChild = ({ cakesArr = [] }) => {
                                         </span>
 
                                         {variant?.discountPrice && (
-                                            <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+                                            <span style={{fontSize:"14px"}} className="badge bg-success position-absolute top-0 start-0 m-2">
                                                 {variant?.discountPrice}% OFF
                                             </span>
                                         )}
@@ -165,9 +165,9 @@ const AllProductByChild = ({ cakesArr = [] }) => {
 
                                         <div className="price-row">
                                             <span className="price">₹ {variant.finalPrice}</span>
-                                            {variant.discountPrice > 0 && (
-                                                <span className="old-price">₹ {variant.price}</span>
-                                            )}
+                                        {/* {variant.discountPrice > 0 && (
+                                            <span className="old-price">₹ {variant.price}</span>
+                                        )} */}
                                         </div>
 
                                         <div className="rating">

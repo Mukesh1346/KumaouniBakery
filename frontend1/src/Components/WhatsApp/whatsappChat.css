@@ -4,7 +4,7 @@
   right: 20px;
   bottom: 20px;
   width: 55px;
-  height: 55px;
+  height: 51px;
   background: #25d366;
   border-radius: 50%;
   display: flex;
@@ -15,8 +15,8 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-.wa-floating-icon img {
-  width: 30px;
+.wa-floating-icon i {
+  font-size: 56px;
 }
 
 /* CHAT BOX */

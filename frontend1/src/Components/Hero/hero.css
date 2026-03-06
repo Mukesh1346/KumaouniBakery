@@ -16,7 +16,7 @@
 
 .brownHeading {
       line-height: initial;
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 700;
   font-family: var(--font-family-design);
  
@@ -24,7 +24,7 @@
 }
 
 .hero-description {
-  /* font-size: 1.1rem; */
+  
   color: #333;
   line-height: 1.5;
   margin-top: 1rem;
@@ -37,19 +37,19 @@
 
 .hero-image {
   width: 100%;
-  height: 200px; /* Consistent height for images */
-  object-fit: cover; /* Ensures image fills the area without distortion */
+  height: 200px; 
+  object-fit: cover; 
   border-radius: 0.5rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
 }
 
 .hero-image:hover {
-  transform: scale(1.05); /* Smooth zoom effect on hover */
+  transform: scale(1.05); 
 }
 
 
-/* ------------- featured section ------------  */
+
 
 .features-section {
   display: grid;
@@ -87,7 +87,7 @@
   font-size: 14px;
 }
 
-/* ------------- featured end ----------------  */
+
  .heropara{
     text-align: justify;
     padding:0px 10px;
@@ -107,7 +107,7 @@
     font-size: 1rem;
   }
   .hero-image {
-    height: 150px; /* Adjusted height for smaller screens */
+    height: 150px; 
   }
   .features-section {
     grid-template-columns: repeat(2, 1fr);

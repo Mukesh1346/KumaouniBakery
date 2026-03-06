@@ -15,10 +15,6 @@ import LocationPopup from "../LocationPopup/LocationPopup";
 /* ASSETS */
 import Banner from "../../images/pic/topBanner1.png";
 import logo from "../../images/pic/logo2.png";
-
-
-
-
 const Header = () => {
   const navigate = useNavigate();
   const loginvalue = sessionStorage.getItem("login");
@@ -337,7 +333,7 @@ const Header = () => {
                       // <IoClose className="iconFont text-dark" />
                       ""
                     ) : (
-                      <IoSearch className="iconFont text-dark" />
+                      <IoSearch className="iconFont text-dark" style={{ fontSize: "20px" }} />
                     )}
                   </button>
 
@@ -521,6 +517,8 @@ const Header = () => {
                               navigate(`/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
                                 { state: { id: child?.id, status: 'subCategory' } });
                               setMobileNavOpen((prev) => !prev);
+                              setMobileCategoryOpen(null);
+
                             }}
                             className="mega-item mega-child"
                           >
@@ -568,10 +566,9 @@ const Header = () => {
                     <div className="mega-menu-inner">
                       {cat.subcategories?.map((sub, i) => (
                         <div key={sub._id || i} className="column-mega">
-                          <div className="mega-item fw-bold">
+                          <p className="mega-item fw-bold mb-0 w-100">
                             {sub.name}
-                          </div>
-
+                          </p>
                           {sub.children?.map((child, j) => (
                             // <Link
                             //   key={j}
@@ -585,6 +582,7 @@ const Header = () => {
                                 // navigate(`/product-related/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
                                 navigate(`/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
                                   { state: { id: child?.id, status: 'subCategory' } });
+                                setDesktopMenuOpen(null);
                               }}
                               className="mega-item mega-child"
                             >

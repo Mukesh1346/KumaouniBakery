@@ -1,10 +1,10 @@
-.fnp-footer {
+/* .fnp-footer {
   background:#df4444;
   font-size: 14px;
   color: #ffffff;
 }
 
-/* TOP */
+
 .footer-top {
   padding: 50px 0;
   border-bottom: 1px solid #e5e5e5;
@@ -34,13 +34,13 @@
   color: #000;
 }
 
-/* API scroll section */
+
 .footer-scroll {
   max-height: 180px;
   overflow-y: auto;
 }
 
-/* SUBSCRIBE - Fixed overlap issue */
+
 .subscribe-text {
   font-size: 13px;
   color: #ffffff;
@@ -55,16 +55,16 @@
 
 .subscribe-box input {
   width: 100%;
-  padding: 10px 45px 10px 12px; /* Increased right padding from 40px to 45px */
+  
   border: none;
   outline: none;
   font-size: 14px;
-  box-sizing: border-box; /* Ensures padding is included in width */
+  
 }
 
 .subscribe-box button {
   position: absolute;
-  right: 12px; /* Increased from 8px for better spacing */
+  
   top: 50%;
   transform: translateY(-50%);
   border: none;
@@ -93,16 +93,16 @@
   font-size: 18px;
 }
 
-/* Mobile responsiveness for subscribe */
+
 @media (max-width: 768px) {
   .subscribe-box input {
-    padding: 12px 45px 12px 12px; /* Slightly larger padding on mobile */
-    font-size: 16px; /* Prevents zoom on mobile */
+    
+    
   }
   
   .subscribe-box button {
     right: 10px;
-    width: 35px; /* Larger touch target on mobile */
+    
     height: 35px;
     font-size: 20px;
   }
@@ -121,7 +121,7 @@
   }
 }
 
-/* MIDDLE */
+
 .footer-middle {
   padding: 25px 0;
   border-bottom: 1px solid #e5e5e5;
@@ -129,11 +129,11 @@
 }
 
 .csr-link {
-  color: #0d6efd;
+  color: white;
   text-decoration: none;
 }
 
-/* BOTTOM */
+
 .footer-bottom {
   padding: 15px 0;
 }
@@ -141,7 +141,7 @@
 .social-icons a {
   margin-right: 12px;
   color: #444;
-  /* border: 1px solid #ccc; */
+  
   border-radius: 50%;
   padding: 6px 9px;
 }
@@ -150,23 +150,23 @@
   height: 30px;
 }
 
-/* Hide scrollbar - Chrome, Edge, Safari */
+
 .footer-scroll::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-/* Hide scrollbar - Firefox */
+
 .footer-scroll {
   scrollbar-width: none;
 }
 
-/* Hide scrollbar - IE & Edge */
+
 .footer-scroll {
   -ms-overflow-style: none;
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 768px) {
   .footer-bottom .container {
     flex-direction: column;
@@ -176,5 +176,212 @@
 
   .footer-column{
     text-align: center;
+  }
+} */
+
+/* ================= MAIN FOOTER ================= */
+.fnp-footer {
+  background: linear-gradient(135deg, #df4444, #b92f2f);
+  font-size: 14px;
+  color: #ffffff;
+}
+
+/* ================= TOP SECTION ================= */
+.footer-top {
+  padding: 60px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-top h6 {
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.footer-top h6::after {
+  content: "";
+  width: 30px;
+  height: 2px;
+  background: #fff;
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+}
+
+.footer-top ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-top ul li {
+  margin-bottom: 10px;
+}
+
+.footer-top ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  font-weight: 400;
+}
+
+.footer-top ul li a:hover {
+  color: #000;
+  padding-left: 6px;
+}
+
+/* ================= SCROLL CATEGORY ================= */
+.footer-scroll {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.footer-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.footer-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+}
+
+/* ================= SUBSCRIBE SECTION ================= */
+.subscribe-text {
+  font-size: 13px;
+  color: #f5f5f5;
+  margin-bottom: 10px;
+}
+
+.subscribe-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 30px;
+  overflow: hidden;
+  padding: 5px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.subscribe-box input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 30px;
+}
+
+.subscribe-box button {
+  border: none;
+  background: #df4444;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+}
+
+.subscribe-box button:hover {
+  background: #b92f2f;
+  transform: scale(1.1);
+}
+
+/* ================= MIDDLE SECTION ================= */
+.footer-middle {
+  padding: 30px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 13px;
+  text-align: center;
+}
+
+.csr-link {
+  color: #ffffff;
+  text-decoration: underline;
+  transition: 0.3s;
+}
+
+.csr-link:hover {
+  color: #000;
+}
+
+/* ================= BOTTOM SECTION ================= */
+.footer-bottom {
+  padding: 20px 0;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* ================= SOCIAL ICONS ================= */
+.social-icons a {
+  margin-right: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  padding: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+}
+
+.social-icons a img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.social-icons a:hover {
+  background: #ffffff;
+  transform: translateY(-3px);
+}
+
+/* ================= PAYMENT ICON ================= */
+.payment-icons svg {
+  color: #ffffff;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .footer-top {
+  padding: 30px 0;
+}
+  .footer-bottom .container {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .footer-column {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .footer-top h6::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .subscribe-box button {
+ 
+  width: 45px;
+  height: 34px;
+}
+}
+
+@media (max-width: 480px) {
+  .subscribe-box {
+    padding: 5px;
+  }
+
+  .subscribe-box input {
+    font-size: 13px;
   }
 }

@@ -171,9 +171,9 @@ const AllProductById = ({ cakesArr = [] }) => {
 
                                                 <div className="price-row">
                                                     <span className="price">₹ {variant.finalPrice}</span>
-                                                    {variant.discountPrice > 0 && (
+                                                    {/* {variant.discountPrice > 0 && (
                                                         <span className="old-price">₹ {variant.price}</span>
-                                                    )}
+                                                    )} */}
                                                 </div>
 
                                                 <div className="rating">

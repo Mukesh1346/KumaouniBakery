@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
@@ -6,6 +5,10 @@ import axios from "axios";
 import { FaCcAmazonPay } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import Swel from 'sweetalert2';
+import insta from "../../images/fa-insta.png"
+import facebook from "../../images/facebook_logo.svg"
+import linkedin from "../../images/linkdin_logo.svg"
+import xtwiter from "../../images/twitter-x.svg"
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -81,6 +84,7 @@ const Footer = () => {
             <h6 className="text-dark">Policy Info</h6>
             <ul className="text-light">
               <li className="text-light"><Link to="/terms-&-conditions">Terms & Conditions</Link></li>
+              <li><Link to="/cancellation-refund-policy">Cancellation & Refund Policy</Link></li>
               <li><Link to="/privacy-policy">Privacy Policy</Link></li>
               <li><Link to="#">Terms of Use</Link></li>
               <li><Link to="#">Disclaimer</Link></li>
@@ -143,7 +147,7 @@ const Footer = () => {
           </div> */}
 
           {/* Subscribe */}
-          <div className="col-lg-2 footer-column col-md-8 col-6">
+          <div className="col-lg-3 footer-column col-md-8 col-6">
             <h6 className="text-dark">Subscribe Now</h6>
             <p className="subscribe-text">
               Get updates on promotions and offers coupons.
@@ -164,11 +168,11 @@ const Footer = () => {
       <div className="footer-middle">
         <div className="container text-center">
           <p>
-            Company Name: Cake Bakery Pvt Ltd | CIN: U52100HR2021PTC118882 |
+            Company Name: CAKENPETALS | CIN: U52100HR2021PTC118882 |
             Regd. Office: Gurugram, Haryana - 122003
           </p>
           <p>
-            Telephone No.: +91-99535 53051 | Grievance Officer: Support Team
+            Telephone No.: +91-9211929555 | Grievance Officer: Support Team
           </p>
           <Link to="#" className="csr-link">
             Corporate Social Responsibility (CSR) Policy
@@ -181,10 +185,10 @@ const Footer = () => {
         <div className="container d-flex justify-content-between align-items-center flex-wrap">
 
           <div className="social-icons">
-            <a href="#"><i className="bi bi-facebook"></i></a>
-            <a href="#"><i className="bi bi-twitter-x"></i></a>
-            <a href="#"><i className="bi bi-instagram"></i></a>
-            <a href="#"><i className="bi bi-linkedin"></i></a>
+            <a href="#"><img src={insta} /></a>
+            <a href="#"><img src={facebook} /></a>
+            <a href="#"><img src={linkedin} /></a>
+            <a href="#"><img src={xtwiter} /></a>
           </div>
 
           <p className="mb-0">

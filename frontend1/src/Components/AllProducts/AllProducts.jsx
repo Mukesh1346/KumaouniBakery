@@ -172,7 +172,7 @@ const AllProducts = ({ status = '' }) => {
                     )}
                   </span>
                   {product?.Variant[0]?.discountPrice && (
-                    <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+                    <span  style={{fontSize:"14px"}} className="badge bg-success position-absolute top-0 start-0 m-2">
                       {product?.Variant[0]?.discountPrice}% OFF
                     </span>
                   )}
@@ -188,7 +188,7 @@ const AllProducts = ({ status = '' }) => {
                   <div className="price-row">
                     <span className="price">₹ {product?.Variant[0]?.finalPrice}</span>
                     <span className="old-price">₹ {product?.Variant[0]?.price}</span>
-                    <span className="off">{product?.Variant[0]?.discountPrice}% OFF</span>
+                    {/* <span className="off">{product?.Variant[0]?.discountPrice}% OFF</span> */}
                   </div>
 
                   {/* <div className="rating">

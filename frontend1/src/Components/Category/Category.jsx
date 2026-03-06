@@ -297,7 +297,7 @@ const Category = () => {
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "start",
               flexWrap: "wrap",
               gap: "16px",
             }}

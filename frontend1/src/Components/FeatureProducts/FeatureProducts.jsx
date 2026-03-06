@@ -341,18 +341,18 @@ const FeaturedProducts = () => {
                     alt={item.productName}
                   />
                   <span
-                    className="wishlist-icon"
+                    className="wishlist"
                     onClick={() => toggleWishlist(item._id)}
                   >
                     {wishlist.includes(item._id) ? (
-                      <FaHeart size={20} color="red" />
+                      <FaHeart size={12} color="red" />
                     ) : (
-                      <FaRegHeart size={20} color="#555" />
+                      <FaRegHeart size={12} color="#555" />
                     )}
                   </span>
 
                   {variant?.discountPrice && (
-                    <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+                    <span style={{ fontSize: "14px" }} className="badge bg-success position-absolute top-0 start-0 m-2">
                       {discount}% OFF
                     </span>
                   )}
@@ -368,9 +368,9 @@ const FeaturedProducts = () => {
                     {oldPrice && oldPrice !== price && (
                       <>
                         <span className="old-price">₹ {oldPrice}</span>
-                        <span className="off">
+                        {/* <span className="off">
                           {Math.round(((oldPrice - price) / oldPrice) * 100)}% OFF
-                        </span>
+                        </span> */}
                       </>
                     )}
                   </div>

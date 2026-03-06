@@ -27,6 +27,12 @@
     gap: 20px;
 }
 
+.OccasionCardSec h3{
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin: 0;
+}
+
 /* ✅ FORCE 2 CARDS ON SMALL SCREENS */
 @media (max-width: 576px) {
     .OccasionCardSec {
@@ -53,10 +59,15 @@
 /* =====================
    IMAGE
 ===================== */
+
+.OccasionsMainSec{
+    margin-top: 4rem;
+}
+
 .occasionalPic {
     width: 100%;
-    height: 300px;
-    border-radius: 50% 50% 5% 5%;
+    height: 250px;
+    border-radius: 50% 50% 0% 0%;
     transition: transform 0.4s ease;
 }
 
@@ -69,7 +80,8 @@
    TITLE
 ===================== */
 .OccasionCard h3 {
-    margin-top: 12px;
+    /* margin-top: 12px; */
+    border-radius: 0px 0px 10px 10px;
     font-size: 16px;
     font-weight: 500;
     color: #0E4D65;
@@ -86,7 +98,9 @@
 
 @media (max-width: 768px) {
     .occasionalPic {
-
         height: 200px;
     }
+    .OccasionsMainSec{
+    margin-top: 2rem;
+}
 }

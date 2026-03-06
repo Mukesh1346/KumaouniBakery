@@ -166,12 +166,12 @@
 
 /* LEFT SIDE */
 .checkout-left {
-  height:fit-content !important;
+  height: fit-content !important;
   flex: 1;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .checkout-item {
@@ -196,7 +196,7 @@
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .bill-row {
@@ -289,10 +289,33 @@
   }
 }
 
+.product-image {
+  width: 100px;
+  height: 100px;
+  margin-right: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
 /* ---------- SMALL TABLETS / LARGE PHONES ---------- */
 @media (max-width: 768px) {
+  .product-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .checkout-order-name {
+    font-size: 14px !important;
+  }
+
   .login-box {
     padding: 16px;
+  }
+
+  .checkout-order-sum {
+    font-size: 14px;
   }
 
   .checkout-card h4 {
@@ -314,7 +337,7 @@
     padding: 15px 0 30px;
   }
 
-  .login-box .row > div {
+  .login-box .row>div {
     margin-bottom: 10px;
   }
 
@@ -351,7 +374,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .back-btn i {
@@ -360,7 +383,7 @@
 
 .back-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
   background: linear-gradient(135deg, #ff4b5c, #ff7a59);
 }
 

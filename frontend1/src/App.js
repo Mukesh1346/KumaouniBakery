@@ -34,6 +34,7 @@ import SubSubcategory from "./Pages/SubSubCategories/SubSubCategories"
 import Wishlist from './Components/Wishlist/Wishlist'
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import AllProductByChildCategory from "./Pages/AllProductByChildCategory/AllProductByChildCategory";
+import CancellationRefund from "./Pages/FooterPages/CancellationRefund";
 
 
 
@@ -49,6 +50,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/cancellation-refund-policy" element={<CancellationRefund />} />
           <Route path="/all-products" element={<AllProducts />} />
           <Route path="/product-related/:subcatname" element={<AllCakes />} />
           <Route path="/:subcatname" element={<AllProductByChildCategory />} />

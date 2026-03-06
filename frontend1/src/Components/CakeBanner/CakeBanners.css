@@ -120,3 +120,10 @@
     font-size: 12px;
   }
 }
+
+
+@media (max-width: 768px) {
+  .cake-banner-container {
+    padding: 0px;
+  }
+}

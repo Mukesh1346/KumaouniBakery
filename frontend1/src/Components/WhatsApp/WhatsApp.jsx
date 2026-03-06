@@ -136,14 +136,8 @@ const WhatsAppChat = () => {
       )}
 
       {/* FLOATING WHATSAPP ICON */}
-      <div
-        className="wa-floating-icon"
-        onClick={() => setOpen(!open)}
-      >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-          alt="WhatsApp"
-        />
+      <div className="wa-floating-icon" onClick={() => setOpen(!open)}>
+        <i className="bi bi-whatsapp" />
       </div>
     </>
   );

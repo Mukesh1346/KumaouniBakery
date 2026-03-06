@@ -191,7 +191,8 @@ const Cart = () => {
                       className="cartIncBtn"
                     >+</button>
                   </div>
-
+                  &nbsp;
+                  &nbsp;
                   <span
                     className="remove-btn"
                     onClick={() => handleRemoveMain(mainItem.productId, mainItem.weight)}

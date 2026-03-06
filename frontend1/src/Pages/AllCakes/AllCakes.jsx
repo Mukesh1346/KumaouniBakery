@@ -108,7 +108,7 @@ const AllCakes = () => {
 
   const bannerSettings = {
     dots: false,
-    arrows: true,
+    arrows: false,
     autoplay: true,
     infinite: subcategoryInfo?.length > 8, // smart infinite
     speed: 600,
@@ -120,7 +120,7 @@ const AllCakes = () => {
       { breakpoint: 1200, settings: { slidesToShow: 6 } },
       { breakpoint: 992, settings: { slidesToShow: 4 } },
       { breakpoint: 768, settings: { slidesToShow: 3 } },
-      { breakpoint: 576, settings: { slidesToShow: 2 } },
+      { breakpoint: 576, settings: { slidesToShow: 3 } },
     ],
   };
 
@@ -169,39 +169,41 @@ const AllCakes = () => {
       )} */}
 
       {subcategoryInfo?.length > 0 && status === "category" && (
-        <Slider {...bannerSettings}>
-          {subcategoryInfo.map((subcategory) => (
-            <div key={subcategory?._id}>
-              <section className="topCategorySection">
-                <div className="topCategoryCard active">
-                  <div
-                    className="mega-item mega-child"
-                    onClick={() => {
-                      const slug = subcategory?.secondsubcategoryName
-                        ?.toLowerCase()
-                        ?.replace(/[^a-z0-9]+/g, "-")
-                        ?.replace(/(^-|-$)/g, "");
+        <div className="subcategorySliderWrapper">
+          <Slider {...bannerSettings}>
+            {subcategoryInfo.map((subcategory) => (
+              <div key={subcategory?._id}>
+                <section className="topCategorySection">
+                  <div className="topCategoryCard active">
+                    <div
+                      className="mega-item mega-child"
+                      onClick={() => {
+                        const slug = subcategory?.secondsubcategoryName
+                          ?.toLowerCase()
+                          ?.replace(/[^a-z0-9]+/g, "-")
+                          ?.replace(/(^-|-$)/g, "");
 
-                      navigate(`/product-related/${slug}`, {
-                        state: { id: subcategory?._id, status: "" },
-                      });
-                    }}
-                  >
-                    <img
-                      src={imageHandler(subcategory?.image)}
-                      alt={subcategory?.secondsubcategoryName || "subcategory"}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = Banner1;
+                        navigate(`/product-related/${slug}`, {
+                          state: { id: subcategory?._id, status: "" },
+                        });
                       }}
-                    />
-                    <p>{subcategory?.secondsubcategoryName?.charAt(0).toUpperCase() + subcategory?.secondsubcategoryName?.slice(1)}</p>
+                    >
+                      <img
+                        src={imageHandler(subcategory?.image)}
+                        alt={subcategory?.secondsubcategoryName || "subcategory"}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = Banner1;
+                        }}
+                      />
+                      <p>{subcategory?.secondsubcategoryName?.charAt(0).toUpperCase() + subcategory?.secondsubcategoryName?.slice(1)}</p>
+                    </div>
                   </div>
-                </div>
-              </section>
-            </div>
-          ))}
-        </Slider>
+                </section>
+              </div>
+            ))}
+          </Slider>
+        </div>
       )}
 
 
