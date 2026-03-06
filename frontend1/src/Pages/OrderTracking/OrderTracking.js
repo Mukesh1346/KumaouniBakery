@@ -725,7 +725,7 @@ const OrderTracking = () => {
                   <div style={{ width: "45%", textAlign: "right" }}>
                     <h4 style={{ fontSize: "14px", margin: "0 0 8px", color: "#f0ad4e" }}>Seller Details:</h4>
                     <p style={{ margin: "2px 0", fontSize: "13px" }}>CAKE NPETALS STORE</p>
-                    <p style={{ margin: "2px 0", fontSize: "13px" }}>support@cakenpetals.com</p>
+                    <p style={{ margin: "2px 0", fontSize: "13px" }}>cakenpetals111@gmail.com</p>
                     <p style={{ margin: "2px 0", fontSize: "13px" }}>GST: xxxxxxxxxxx789</p>
                   </div>
                 </div>

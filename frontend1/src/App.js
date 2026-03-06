@@ -35,6 +35,7 @@ import Wishlist from './Components/Wishlist/Wishlist'
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import AllProductByChildCategory from "./Pages/AllProductByChildCategory/AllProductByChildCategory";
 import CancellationRefund from "./Pages/FooterPages/CancellationRefund";
+import EggLess from "./Components/EggLess/EggLess";
 
 
 
@@ -47,6 +48,7 @@ const App = () => {
       }}>
         <ScrollToTop />
         <Header />
+        <EggLess />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about-us" element={<AboutUs />} />

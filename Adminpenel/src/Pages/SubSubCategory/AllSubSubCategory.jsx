@@ -9,6 +9,7 @@ import noImage from "../../asses/logo512.png";
 const AllSubSubCategory = () => {
   const [subSubcategories, setSubSubcategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const AdminData = JSON.parse(sessionStorage.getItem("AdminData"))
 
   const hasAccessAdd = (module) => {
@@ -38,7 +39,7 @@ const AllSubSubCategory = () => {
       try {
         setIsLoading(true);
         const res = await axios.get(
-          "https://api.cakenpetals.com/api/second-sub-category/get-second-sub-category"
+          "http://localhost:7000/api/second-sub-category/get-second-sub-category"
         );
         setIsLoading(false);
         setSubSubcategories(res.data?.data || []);
@@ -70,7 +71,7 @@ const AllSubSubCategory = () => {
 
     try {
       await axios.delete(
-        `https://api.cakenpetals.com/api/second-sub-category/delete-second-sub-category/${id}`
+        `http://localhost:7000/api/second-sub-category/delete-second-sub-category/${id}`
       );
 
       setSubSubcategories((prev) =>
@@ -88,6 +89,13 @@ const AllSubSubCategory = () => {
     return <p className="text-center mt-5">Loading Child categories...</p>;
   }
 
+const filteredSecondSubCategory = subSubcategories.filter((subSubcategorie) =>
+  subSubcategorie?.secondsubcategoryName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  subSubcategorie?.subCategoryId?.subcategoryName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  subSubcategorie?.mainCategoryId?.mainCategoryName?.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+
   return (
     <>
       <ToastContainer />
@@ -103,7 +111,18 @@ const AllSubSubCategory = () => {
             </Link>
           </div>}
       </div>
-
+      <div className="filteration">
+        <div className="search">
+          <label htmlFor="search">Search</label> &nbsp;
+          <input
+            type="text"
+            name="search"
+            id="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
       <section className="main-table">
         <table className="table table-bordered table-striped table-hover">
           <thead>
@@ -119,11 +138,11 @@ const AllSubSubCategory = () => {
           </thead>
 
           <tbody>
-            {subSubcategories.length > 0 ? (
-              subSubcategories.map((item, index) => (
+            {filteredSecondSubCategory?.length > 0 ? (
+              filteredSecondSubCategory?.map((item, index) => (
                 <tr key={item._id}>
                   <td>{index + 1}</td>
-                  <td><img src={`https://api.cakenpetals.com/${item?.image}`} onError={(e) => {
+                  <td><img src={`http://localhost:7000/${item?.image}`} onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = noImage;
                   }} alt={item?.secondsubcategoryName} style={{ width: "50px", height: "50px" }} /></td>

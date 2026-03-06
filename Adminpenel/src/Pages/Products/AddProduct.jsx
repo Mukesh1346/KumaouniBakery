@@ -24,6 +24,7 @@ const AddProduct = () => {
     FeaturedProducts: 0,
     ActiveonFlavours: 0,
     NameOnCake: 0,
+    deliveryTo60Min: 0,
     ActiveonDeliveryDate: 0,
     eggless: 0,
     Variant: [
@@ -77,20 +78,20 @@ const AddProduct = () => {
       try {
         // Fetch dynamic data
         const categoryResponse = await axios.get(
-          "https://api.cakenpetals.com/api/get-main-category"
+          "http://localhost:7000/api/get-main-category"
         );
         const subcategoryResponse = await axios.get(
-          "https://api.cakenpetals.com/api/get-subcategory"
+          "http://localhost:7000/api/get-subcategory"
         );
 
         const weightResponse = await axios.get(
-          "https://api.cakenpetals.com/api/get-size"
+          "http://localhost:7000/api/get-size"
         );
         const RecommendedProductResponse = await axios.get(
-          "https://api.cakenpetals.com/api/recommended-product/all-product"
+          "http://localhost:7000/api/recommended-product/all-product"
         );
         const response = await axios.get(
-          "https://api.cakenpetals.com/api/parent-product/get-parent-product"
+          "http://localhost:7000/api/parent-product/get-parent-product"
         );
         setCategories(categoryResponse.data.data);
         setSubcategories(subcategoryResponse.data.data);
@@ -99,7 +100,7 @@ const AddProduct = () => {
         setParentProduct(response.data.data)
         // Fetch product details
         // const productResponse = await axios.get(
-        //     `https://api.cakenpetals.com/api/get-single-product/${id}`
+        //     `http://localhost:7000/api/get-single-product/${id}`
         // );
         // const productData = productResponse.data.data;
         // // console.log("XXXXX::=>", productData);
@@ -267,6 +268,7 @@ const AddProduct = () => {
     form.append("FeaturedProducts", formData.FeaturedProducts || 0);
     form.append("ActiveonDeliveryDate", formData?.ActiveonDeliveryDate || 0);
     form.append("BestSellingProduct", formData?.BestSellingProduct || 0);
+    form.append("deliveryTo60Min", formData?.deliveryTo60Min || 0);
     form.append("eggless", formData?.eggless);
     form.append("recommendedProductId", JSON.stringify(formData.recommendedProductId));
     // Append variants
@@ -278,7 +280,7 @@ const AddProduct = () => {
     }
 
     try {
-      await axios.post(`https://api.cakenpetals.com/api/create-product`, form, {
+      await axios.post(`http://localhost:7000/api/create-product`, form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -297,7 +299,7 @@ const AddProduct = () => {
     const fetchSecondSubcategories = async () => {
       try {
         const response = await axios.get(
-          `https://api.cakenpetals.com/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
+          `http://localhost:7000/api/second-sub-category/get-second-subcategory-by-subcategory/${formData.subcategoryName}`
         );
         setSecondSubcategories(response?.data?.data);
       } catch (error) {
@@ -660,6 +662,20 @@ const AddProduct = () => {
                 />
                 <label className="form-check-label">Featured Products</label>
               </div>
+              
+              <div className="col-md-3 form-check">
+                <input
+                  type="checkbox"
+                  name="deliveryTo60Min"
+                  className="form-check-input me-2"
+                  checked={formData.deliveryTo60Min === 1}
+                  onChange={(e) =>
+                    setFormData({ ...formData, deliveryTo60Min: e.target.checked ? 1 : 0 })
+                  }
+                />
+                <label className="form-check-label"> 30 - 60 mins delivery</label>
+              </div>
+
             </div>
           </div>
 

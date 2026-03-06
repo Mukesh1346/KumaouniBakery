@@ -18,8 +18,8 @@ const deleteImageFile = (relativeFilePath) => {
 
 
 const createProduct = async (req, res) => {
-    const { categoryName, subcategoryName, secondsubcategoryName, parentProductId, productName, productDescription, productDetails, Variant,
-        ActiveonHome, FeaturedProducts, ActiveonFlavours, NameOnCake, BestSellingProduct, eggless, recommendedProductId } = req.body;
+    const { categoryName, subcategoryName, secondsubcategoryName, parentProductId,ActiveonDeliveryDate, productName, productDescription, productDetails, Variant,
+        ActiveonHome, FeaturedProducts, ActiveonFlavours, NameOnCake, BestSellingProduct, deliveryTo60Min, eggless, recommendedProductId } = req.body;
     const errorMessage = [];
 
     // Validation for required fields
@@ -86,6 +86,8 @@ const createProduct = async (req, res) => {
         ActiveonHome,
         ActiveonFlavours,
         FeaturedProducts,
+        deliveryTo60Min,
+        ActiveonDeliveryDate,
         NameOnCake,
         eggless,
         BestSellingProduct,
@@ -194,7 +196,7 @@ const getProducts = async (req, res) => {
                 model: 'Flover',
             });
 
-            console.log("ParentProductParentProduct=>>",products[0])
+        console.log("ParentProductParentProduct=>>", products[0])
         res.status(200).json({ data: products });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -308,6 +310,8 @@ const updateProduct = async (req, res) => {
         FeaturedProducts: req.body.FeaturedProducts || 0,
         NameOnCake: req.body.NameOnCake || 0,
         eggless: req.body.eggless || 0,
+        ActiveonDeliveryDate: req.body.ActiveonDeliveryDate || 0,
+        deliveryTo60Min: req.body.deliveryTo60Min || 0,
         BestSellingProduct: req.body.BestSellingProduct || 0,
         recommendedProductId: req.body.recommendedProductId ? JSON.parse(req.body.recommendedProductId) : [],
         Variant: req.body.Variant ? JSON.parse(req.body.Variant) : [], // Parse Variant if provided, default to empty array
@@ -389,6 +393,33 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const changeStatus = async (req, res) => {
+    try {
+        const { productId, isActive, type } = req.body;
+        let updatedStatus = '';
+
+        if (type === 'ActiveonHome') {
+
+            updatedStatus = await Product.findByIdAndUpdate(productId, { ActiveonHome: isActive }, { new: true });
+        }
+        if (type === 'BestSellingProduct') {
+            updatedStatus = await Product.findByIdAndUpdate(productId, { BestSellingProduct: isActive }, { new: true });
+        }
+        if (type === 'FeaturedProducts') {
+            updatedStatus = await Product.findByIdAndUpdate(productId, { FeaturedProducts: isActive }, { new: true });
+        }
+        if (type === 'deliveryTo60Min') {
+            updatedStatus = await Product.findByIdAndUpdate(productId, { deliveryTo60Min: isActive }, { new: true });
+        }
+
+        console.log("RES=>", updatedStatus);
+        return res.status(200).json({ status: true, message: "Product status updated successfully", data: updatedStatus, });
+    } catch (err) {
+        console.error("Error updating product status:", err);
+        return res.status(500).json({ status: false, message: "Server error while updating product status", });
+    }
+}
+
 module.exports = {
     createProduct,
     getProducts,
@@ -400,5 +431,6 @@ module.exports = {
     getProductsBySubcategory,
     getProductsActiveonHome,
     getFeaturedProducts,
-    getBestSellingProducts
+    getBestSellingProducts,
+    changeStatus
 };

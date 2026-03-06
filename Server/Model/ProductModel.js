@@ -107,6 +107,22 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    deliveryTo60Min: {
+        type: Boolean,
+        default: false
+    },
+    ActiveonDeliveryDate: {
+        type: Boolean,
+        default: false
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
 

@@ -80,8 +80,8 @@ const Footer = () => {
         <div className="row footer-top">
 
           {/* Policy Info */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
-            <h6 className="text-dark">Policy Info</h6>
+          <div className="col-lg-3 col-md-4 footer-column col-sm-6 col-6">
+            <h3 className="" style={{ color: 'white', fontWeight: 'bold' }}>Policy Info</h3>
             <ul className="text-light">
               <li className="text-light"><Link to="/terms-&-conditions">Terms & Conditions</Link></li>
               <li><Link to="/cancellation-refund-policy">Cancellation & Refund Policy</Link></li>
@@ -92,8 +92,8 @@ const Footer = () => {
           </div>
 
           {/* About Company */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
-            <h6 className="text-dark">About Company</h6>
+          <div className="col-lg-3 col-md-4 footer-column col-sm-6 col-6">
+            <h3 className="" style={{ color: 'white', fontWeight: 'bold' }}>About Company</h3>
             <ul>
               <li><Link to="/about-us">About Us</Link></li>
               <li><Link to="/contact-us">Contact Us</Link></li>
@@ -103,13 +103,13 @@ const Footer = () => {
           </div>
 
           {/* API CATEGORY SECTION */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
-            <h6 className="text-dark">Our Bakery</h6>
+          {/* <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
+            <h3 className="text-dark" style={{color:'white', fontWeight:'bold'}}>Our Bakery</h3>
             <ul className="footer-scroll">
               {categories.map((cat) =>
                 cat.subcategories.map((sub, index) => (
                   <li key={index}>
-                    {/* <Link to={`/product-related/${sub.subcategoryName}`}> */}
+                   
                     <div onClick={() => {
                       navigate(`/product-related/${sub.subcategoryName.replace(/\s+/g, "-")}`,
                         { state: { id: sub?._id, status: 'category' } });
@@ -119,16 +119,16 @@ const Footer = () => {
                       {sub?.subcategoryName?.charAt(0).toUpperCase() + sub?.subcategoryName?.slice(1)}
                     </div>
 
-                    {/* </Link> */}
+               
                   </li>
                 ))
               )}
             </ul>
-          </div>
+          </div> */}
 
           {/* Need Help */}
-          <div className="col-lg-2 col-md-4 footer-column col-sm-6 col-6">
-            <h6 className="text-dark">Need Help ?</h6>
+          <div className="col-lg-3 col-md-4 footer-column col-sm-6 col-6">
+            <h3 className="" style={{ color: 'white', fontWeight: 'bold' }}>Need Help ?</h3>
             <ul>
               <li><Link to="/contact-us">Contact Us</Link></li>
               <li><Link to="/wishlist">Whislist</Link></li>
@@ -148,7 +148,7 @@ const Footer = () => {
 
           {/* Subscribe */}
           <div className="col-lg-3 footer-column col-md-8 col-6">
-            <h6 className="text-dark">Subscribe Now</h6>
+            <h3 className="" style={{ color: 'white', fontWeight: 'bold' }}>Subscribe Now</h3>
             <p className="subscribe-text">
               Get updates on promotions and offers coupons.
             </p>
@@ -159,8 +159,14 @@ const Footer = () => {
                 <i className="bi bi-arrow-right"></i>
               </button>
             </div>
+            <div className="social-icons" style={{ marginTop: '20px' }} >
+            <a href="#"><img src={insta} /></a>
+            <a href="#"><img src={facebook} /></a>
+            <a href="#"><img src={linkedin} /></a>
+            <a href="#"><img src={xtwiter} /></a>
           </div>
-
+          </div>
+          
         </div>
       </div>
 
@@ -174,8 +180,13 @@ const Footer = () => {
           <p>
             Telephone No.: +91-9211929555 | Grievance Officer: Support Team
           </p>
-          <Link to="#" className="csr-link">
-            Corporate Social Responsibility (CSR) Policy
+          {/* <Link to="#" className="csr-link">
+           Corporate Social Responsibility (CSR) Policy
+            Designed By Kreative Captains Pvt.Ltd
+          </Link> */}
+          <Link to="https://kreativecaptains.com" className="csr-link" >
+            {/* Corporate Social Responsibility (CSR) Policy */}
+            Designed By Kreative Captains Pvt.Ltd
           </Link>
         </div>
       </div>
@@ -184,20 +195,16 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container d-flex justify-content-between align-items-center flex-wrap">
 
-          <div className="social-icons">
-            <a href="#"><img src={insta} /></a>
-            <a href="#"><img src={facebook} /></a>
-            <a href="#"><img src={linkedin} /></a>
-            <a href="#"><img src={xtwiter} /></a>
-          </div>
 
-          <p className="mb-0">
+
+          {/* <p className="mb-0">
             © 2024 Cake Bakery. All rights reserved.
-          </p>
+          </p> */}
+          
 
-          <div className="payment-icons">
+          {/* <div className="payment-icons">
             <FaCcAmazonPay className="fs-3 " />
-          </div>
+          </div> */}
 
         </div>
       </div>

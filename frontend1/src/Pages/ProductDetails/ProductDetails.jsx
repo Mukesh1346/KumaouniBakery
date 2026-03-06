@@ -697,7 +697,7 @@ const ProductDetails = () => {
                   </label>
                   <input
                     type="date"
-                    className="form-control  inputfield"
+                    className="form-control inputfield"
                     value={deliveryDate}
                     min={new Date().toISOString().split("T")[0]}
                     onChange={(e) => setDeliveryDate(e.target.value)}

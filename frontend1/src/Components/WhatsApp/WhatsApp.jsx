@@ -93,7 +93,7 @@ const WhatsAppChat = () => {
   const sendToWhatsApp = () => {
     if (!message.trim()) return;
 
-    const phoneNumber = "919953553051"; // 🔥 add country code (91 for India)
+    const phoneNumber = "919211929555"; // 🔥 add country code (91 for India)
     const encodedMessage = encodeURIComponent(message);   
 
     const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;

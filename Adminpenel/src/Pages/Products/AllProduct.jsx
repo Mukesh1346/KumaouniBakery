@@ -32,25 +32,26 @@ const AllProduct = () => {
     );
   };
 
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        "http://localhost:7000/api/all-product"
+      );
+      setIsLoading(false);
+      console.log("XXXXXXXXXXXXXXXX==>", response.data.data);
+      setProducts(response.data.data || []);
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error fetching products:", error);
+      toast.error("Failed to fetch products!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Fetch all products
   useEffect(() => {
-    const fetchProducts = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(
-          "https://api.cakenpetals.com/api/all-product"
-        );
-        setIsLoading(false);
-        console.log("XXXXXXXXXXXXXXXX==>",response.data.data);
-        setProducts(response.data.data || []);
-      } catch (error) {
-        setIsLoading(false);
-        console.error("Error fetching products:", error);
-        toast.error("Failed to fetch products!");
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
     fetchProducts();
   }, []);
@@ -69,7 +70,7 @@ const AllProduct = () => {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `https://api.cakenpetals.com/api/delete-product/${productId}`
+          `http://localhost:7000/api/delete-product/${productId}`
         );
         setProducts(products.filter((product) => product._id !== productId));
         toast.success("Product deleted successfully!");
@@ -80,6 +81,24 @@ const AllProduct = () => {
     }
   };
 
+
+  const handleCheckboxChange = async (type, e, productId) => {
+    try {
+      const response = await axios.post(`http://localhost:7000/api/change-status`, {
+        isActive: e,
+        type,
+        productId: productId
+      });
+
+      if (response.status === 200) {
+        fetchProducts();
+        toast.success('Product status updated successfully');
+      }
+    } catch (error) {
+      toast.error("Error updating product status");
+      console.error("Error updating product status:", error);
+    }
+  }
   // Filter products based on search
   const filteredProducts = products.filter((product) =>
     product.productName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -99,18 +118,18 @@ const AllProduct = () => {
         </div>}
       </div>
 
-      {/* <div className="filteration">
-                <div className="search">
-                    <label htmlFor="search">Search</label> &nbsp;
-                    <input
-                        type="text"
-                        name="search"
-                        id="search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                </div>
-            </div> */}
+      <div className="filteration">
+        <div className="search">
+          <label htmlFor="search">Search</label> &nbsp;
+          <input
+            type="text"
+            name="search"
+            id="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
 
       <section className="main-table">
         <table className="table table-bordered table-striped table-hover">
@@ -120,8 +139,12 @@ const AllProduct = () => {
               {/* <th>Main Category</th> */}
               {/* <th>Sub Category</th> */}
               {/* <th>Child Category</th> */}
-              <th>Product Name</th>
               <th>Images</th>
+              <th>Product Name</th>
+              <th>Active On Home</th>
+              <th>Best Selling Product</th>
+              <th>Featured Products</th>
+              <th>30 - 60 mins delivery</th>
               {(hasAccessDelete('products') || hasAccessEdit('products')) && <th>Actions</th>}
             </tr>
           </thead>
@@ -145,17 +168,25 @@ const AllProduct = () => {
                   {/* <td>{product.categoryName?.mainCategoryName || "N/A"}</td> */}
                   {/* <td>{product.subcategoryName?.subcategoryName || "N/A"}</td> */}
                   {/* <td>{product.secondsubcategoryName?.secondsubcategoryName || "N/A"}</td> */}
-                  <td>{product.productName}</td>
                   <td>
                     {product?.productImage?.map((image, imgIndex) => (
-                      <img
-                        key={imgIndex}
-                        src={`https://api.cakenpetals.com/${image}`}
-                        alt="Product"
-                        style={{ width: "50px", marginRight: "5px" }}
-                      />
+                      <img key={imgIndex} src={`http://localhost:7000/${image}`} alt="Product" style={{ width: "50px", marginRight: "5px" }} />
                     ))}
                   </td>
+                  <td>{product.productName}</td>
+                  <td>
+                    <input type="checkbox" name="ActiveonHome" className="form-check-input me-2" checked={product?.ActiveonHome} onChange={(e) => handleCheckboxChange('ActiveonHome', e.target.checked, product._id)} />
+                  </td>
+                  <td>
+                    <input type="checkbox" name="BestSellingProduct" className="form-check-input me-2" checked={product?.BestSellingProduct} onChange={(e) => handleCheckboxChange('BestSellingProduct', e.target.checked, product._id)} />
+                  </td>
+                  <td>
+                    <input type="checkbox" name="FeaturedProducts" className="form-check-input me-2" checked={product?.FeaturedProducts} onChange={(e) => handleCheckboxChange('FeaturedProducts', e.target.checked, product._id)} />
+                  </td>
+                  <td>
+                    <input type="checkbox" name="deliveryTo60Min" className="form-check-input me-2" checked={product?.deliveryTo60Min} onChange={(e) => handleCheckboxChange('deliveryTo60Min', e.target.checked, product._id)} />
+                  </td>
+
                   <td>
                     {hasAccessEdit('products') && <Link
                       to={`/edit-product/${product._id}`}

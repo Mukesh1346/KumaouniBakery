@@ -1,6 +1,6 @@
 const express = require('express');
 const { createProduct, getProducts, getProduct, updateProduct, deleteProduct,
-    getProductByname, getBestSellingProducts, getProductsBySubcategoryId,
+    getProductByname, getBestSellingProducts, getProductsBySubcategoryId,changeStatus,
     getProductsBySubcategory, getProductsActiveonHome, getFeaturedProducts } = require('../Controller/ProductController');
 const upload = require('../MiddleWare/Multer');
 const ProductRouter = express.Router();
@@ -16,5 +16,6 @@ ProductRouter.get('/get-product-by-subcatname/:subcategoryName', getProductsBySu
 ProductRouter.get('/get-product-by-subCategoryId/:id', getProductsBySubcategoryId);
 ProductRouter.put('/update-product/:id', upload.array("productImage", 5), updateProduct);
 ProductRouter.delete('/delete-product/:id', deleteProduct);
+ProductRouter.post('/change-status', changeStatus);
 
 module.exports = ProductRouter;
