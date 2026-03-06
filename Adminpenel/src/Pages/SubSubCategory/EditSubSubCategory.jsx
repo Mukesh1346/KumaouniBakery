@@ -281,7 +281,6 @@ const EditSubSubCategory = () => {
               isSearchable
               classNamePrefix="react-select"
             />
-
             <div className="mt-2 row g-2">
               {formData?.productId?.map((id) => {
                 const product = productList?.find(p => p?._id === id);
