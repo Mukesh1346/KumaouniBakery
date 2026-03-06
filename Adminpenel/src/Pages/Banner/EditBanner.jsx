@@ -407,6 +407,7 @@ const EditBanner = () => {
         setPageLoading(true);
         const { data } = await axios.get(`${BASE_URL}/api/get-single-banner/${id}`);
         const banner = data.data;
+        console.log("banner==>banner==>banner==>", banner);
         setFormData({
           bannerName: banner.bannerName || "",
           bannerImage: null,
