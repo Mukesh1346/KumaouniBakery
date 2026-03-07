@@ -4,9 +4,11 @@ import "./homebanner.css";
 import pic1 from "../../images/1583 by 426 banner/Banner1.jpg";
 import pic2 from "../../images/1583 by 426 banner/Banner2.jpg"; // optional
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomeBannerSlider = () => {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
   // ✅ API call
   const fetchBannerData = async () => {
     try {
@@ -39,13 +41,18 @@ const HomeBannerSlider = () => {
     arrows: false,
   };
 
-  // console.log("AAAAAAAAAAAAA===>", data)
+  console.log("AAAAAAAAAAAAA===>", data)
   return (
     <div className="container-fluid p-0">
       <div className="slider-container">
         <Slider {...settings}>
           {data.map((banner) => (
-            <div key={banner._id}>
+            <div key={banner._id}
+              onClick={() => {
+                navigate(`/${banner?.name.replace(/\s+/g, "-").toLowerCase()}`,
+                  { state: { id: banner?.id, status: 'subCategory' } });
+
+              }}>
               <img
                 className="banner-Image"
                 src={`https://api.cakenpetals.com/${banner?.bannerImage}`}

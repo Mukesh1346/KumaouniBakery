@@ -78,7 +78,7 @@ const Header = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          `https://http://localhost:7000i/get-category-with-subcategory`
+          `https://api.cakenpetals.com/api/get-category-with-subcategory`
         );
 
         console.log(res.data.data)
@@ -147,9 +147,9 @@ const Header = () => {
     const fetchAllProducts = async () => {
       try {
         const res = await axios.get(
-          "https://cakenpetals.com/api/all-product"
+          "https://api.cakenpetals.com/api/all-product"
         );
-        console.log("SSSSDD=>" ,res)
+        console.log("SSSSDD=>", res)
         setAllProducts(res.data?.data || []);
       } catch (err) {
         console.error("All products fetch error:", err);
