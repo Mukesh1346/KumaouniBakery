@@ -555,7 +555,7 @@ const Header = () => {
 
       {/* ================= DESKTOP MEGA NAV ================= */}
       <nav className="navbar navbar-expand-lg bottom-navbar d-none d-lg-block">
-        <div className="container navbarContainer">
+        <div className="container navbarContainer" style={{ background: 'white' }}>
           <ul className="navbar-nav mx-auto">
             {megaCategories.map((cat, index) => (
               <li
@@ -564,7 +564,7 @@ const Header = () => {
                 onMouseEnter={() => setDesktopMenuOpen(index)}
                 onMouseLeave={() => setDesktopMenuOpen(null)}
               >
-                <span className="nav-link mega-toggle">
+                <span className="nav-link mega-toggle" style={{fontSize:''}}>
                   {cat.name}
                 </span>
 

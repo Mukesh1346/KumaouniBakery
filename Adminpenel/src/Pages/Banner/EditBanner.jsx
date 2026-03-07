@@ -349,7 +349,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 
-// const BASE_URL = 'http://localhost:7000';
+// const BASE_URL = 'https://api.cakenpetals.com';
 const BASE_URL = "https://api.cakenpetals.com";
 
 const BANNER_TYPE_HINTS = {

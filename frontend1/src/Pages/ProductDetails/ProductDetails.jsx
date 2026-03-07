@@ -1003,7 +1003,7 @@ const ProductDetails = () => {
         <div className="container">
           <h2 className="mb-3 MainTitle" style={{ fontSize: "20px", fontWeight: "600", color: "#222" }}>Related Products</h2>
         </div>
-        <AllProducts />
+        <AllProducts relatedProducts={'relatedProducts'} />
       </section>
 
     </>
