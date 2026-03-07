@@ -136,9 +136,9 @@
   top: 100%; /* Sits below header */
   left: 50%;
   transform: translateX(-50%); /* Pulls back to true center */
-  width: 80vw; /* 60% of screen */
+  width: 90vw; /* 60% of screen */
   max-width: 900px;
-  margin-top: 15px; /* The premium gap */
+  margin-top: 0px; /* The premium gap */
   background: #fff;
   padding: 15px 0;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
