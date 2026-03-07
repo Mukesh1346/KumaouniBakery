@@ -230,6 +230,7 @@ import "./contactUs.css";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { IoLogoYoutube } from "react-icons/io";
 import { FaSquareXTwitter } from "react-icons/fa6";
+import { FaFacebook } from "react-icons/fa";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -306,11 +307,44 @@ const ContactUs = () => {
 
         <div className="info-card">
           <h5>Follow Us</h5>
-          <div className="social-icons">
-            <FaWhatsapp />
-            <IoLogoYoutube />
-            <FaSquareXTwitter />
-            <FaInstagram />
+            <div className="social-icons" style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+            
+            {/* WhatsApp Link */}
+            <a 
+              href="https://wa.me/919910198589" /* Replace with your actual WhatsApp number */
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: "#555", transition: "color 0.3s ease" }}
+              onMouseEnter={(e) => e.currentTarget.style.color = "#25D366"} /* WhatsApp Green */
+              onMouseLeave={(e) => e.currentTarget.style.color = "#555"}
+            >
+              <FaWhatsapp size={24} />
+            </a>
+
+            {/* Facebook Link */}
+            <a 
+              href="https://facebook.com/share/1BR7vSXvz1/" /* Replace with your actual Facebook link */
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: "#555", transition: "color 0.3s ease" }}
+              onMouseEnter={(e) => e.currentTarget.style.color = "#1877F2"} /* Facebook Blue */
+              onMouseLeave={(e) => e.currentTarget.style.color = "#555"}
+            >
+              <FaFacebook size={24} />
+            </a>
+
+            {/* Instagram Link */}
+            <a 
+              href="https://instagram.com/cakenpetalsofficial?igsh=NGE0M3Jya3U3eXRn&utm_source=qr" /* Replace with your actual Instagram link */
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: "#555", transition: "color 0.3s ease" }}
+              onMouseEnter={(e) => e.currentTarget.style.color = "#E1306C"} /* Insta Pink/Red */
+              onMouseLeave={(e) => e.currentTarget.style.color = "#555"}
+            >
+              <FaInstagram size={24} />
+            </a>
+            
           </div>
         </div>
       </div>

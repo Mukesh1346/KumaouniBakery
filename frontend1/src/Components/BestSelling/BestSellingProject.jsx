@@ -20,7 +20,6 @@ const BestSellingProduct = () => {
   const navigate = useNavigate();
   const [wishlist, setWishlist] = useState([]);
   const [products, setProducts] = useState([]);
-  const [loaded, setLoaded] = useState(false);
 
   const fetchBestSellingProducts = async () => {
     try {
@@ -123,7 +122,7 @@ const BestSellingProduct = () => {
 
       {/* Product Grid */}
       <div className="row g-4">
-        {products.map((item, index) => {
+        {products.map((item) => {
           const variant = item?.Variant?.[0] || {};
           const image = item?.productImage?.[0]?.replace(/\\/g, "/");
 
@@ -144,23 +143,13 @@ const BestSellingProduct = () => {
 
                 {/* Image */}
                 <div className="product-img">
-                  {/* <img
-                    src={`https://api.cakenpetals.com/${image}`}
-                    alt={item.productName}
-                  /> */}
                   <img
-                    className={`banner-Image ${loaded ? "banner-Image--visible" : ""}`}
                     src={`https://api.cakenpetals.com/${image}`}
                     alt={item.productName}
-                    loading={index === 0 ? "eager" : "lazy"}   // first slide loads eagerly
-                    decoding="async"
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    onLoad={() => setLoaded(true)}
-                    onError={() => setLoaded(true)}           // hide skeleton even on error
                   />
 
                   {variant?.discountPrice && (
-                    <span style={{ fontSize: "14px" }} className="badge bg-success position-absolute top-0 start-0 m-2">
+                    <span style={{fontSize:"14px"}} className="badge bg-success position-absolute top-0 start-0 m-2">
                       {variant?.discountPrice}% OFF
                     </span>
                   )}

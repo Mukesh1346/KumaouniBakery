@@ -2,6 +2,7 @@
 /* HEADER BASE */
 /* ============================= */
 .HeaderContainer {
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -119,41 +120,33 @@
 }
 
 /* ============================= */
-/* MEGA MENU (UPDATED DESKTOP UI)*/
+/* MEGA MENU */
 /* ============================= */
 
 .mega-dropdown {
-  position: static; /* Allows menu to center to screen */
+  position: static;
 }
 
 .mega-toggle {
   cursor: pointer;
 }
 
-/* Mega menu container (60% UI Fix) */
+/* Mega menu container */
 .mega-menu {
   position: absolute;
-  top: 100%; /* Sits below header */
-  left: 50%;
-  transform: translateX(-50%); /* Pulls back to true center */
-  width: 60vw; /* 60% of screen */
-  max-width: 900px;
-  margin-top: 15px; /* The premium gap */
+  left: 0;
+  top: 80%;
+  width: 100%;
   background: #fff;
   padding: 15px 0;
+  display: none;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  border-radius: 16px; /* Smooth rounded corners */
   z-index: 999;
 }
 
-/* Invisible bridge so mouse doesn't lose hover over the gap */
-.mega-menu::before {
-  content: "";
-  position: absolute;
-  top: -15px;
-  left: 0;
-  width: 100%;
-  height: 15px;
+/* Show on hover */
+.mega-dropdown:hover>.mega-menu {
+  display: block;
 }
 
 .header-topBanner {
@@ -163,17 +156,24 @@
 
 /* Grid layout */
 .mega-menu-inner {
-  width: 100%;
+  max-width: 1400px;
   margin: auto;
-  padding: 0 20px;
+  padding: 0 40px;
   gap: 24px 0px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Auto adapts to 60vw size */
+  grid-template-columns: repeat(6, 1fr);
   overflow: hidden;
 }
 
 /* Items */
 .mega-item {
+  /* font-size: 12px;
+  color: #333;
+  text-decoration: none;
+  padding: 8px 6px;
+  border-radius: 6px;
+  transition: all 0.25s ease;
+  display: block; */
   color: #1C2120;
   font-family: Poppins, sans-serif;
   font-size: 13px;
@@ -208,6 +208,11 @@
   transition: width 0.35s ease;
 
 }
+
+/* animate underline */
+/* .mega-child:hover::after {
+  width: 100%;
+} */
 
 /* keep your existing hover effects */
 .mega-child:hover {
@@ -515,9 +520,6 @@
     box-shadow: none;
     padding: 0;
     display: none;
-    margin-top: 0;
-    transform: none;
-    border-radius: 0;
   }
 
   .mega-menu.mobile-open {
@@ -546,9 +548,6 @@
     background: #fff;
     border-top: 1px solid #eee;
     padding: 10px 16px;
-    /* THE MOBILE SCROLL FIX: Caps height and enables independent scrolling */
-    max-height: calc(100vh - 120px); 
-    overflow-y: auto;
   }
 
   .mobile-cat {
@@ -564,56 +563,29 @@
     cursor: pointer;
   }
 
-  /* NEW MOBILE ACCORDION CSS */
-  .mobile-nested-accordion {
-    margin-bottom: 5px;
-    border-bottom: 1px solid #f9f9f9;
+  .mobile-subcats {
+    padding-bottom: 12px;
   }
 
-  .mobile-subcat-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    cursor: pointer;
-    list-style: none; /* Removes default triangle */
+  .mobile-subcat {
+    margin-bottom: 10px;
   }
 
-  .mobile-subcat-summary::-webkit-details-marker {
-    display: none; /* Removes Safari triangle */
-  }
-
-  .mobile-subcat-summary strong {
+  .mobile-subcat strong {
+    display: block;
     font-size: 14px;
-    color: #333;
+    margin-bottom: 6px;
   }
 
-  .plus-icon {
-    font-size: 18px;
-    color: #666;
-    transition: transform 0.3s ease;
-  }
-
-  .mobile-nested-accordion[open] .plus-icon {
-    transform: rotate(45deg); /* Turns + to x */
-  }
-
-  .mobile-children-links {
-    padding: 5px 0 15px 15px;
-    border-left: 2px solid #ffe6e6;
-    margin-left: 5px;
-  }
-
-  .mobile-children-links .mega-item {
-    padding: 6px 0;
+  .mobile-subcat a {
+    display: block;
     font-size: 13px;
     color: #555;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 4px 0;
+    text-decoration: none;
   }
 
-  .mobile-children-links .mega-item:hover {
+  .mobile-subcat a:hover {
     color: var(--color-pink);
   }
 
@@ -624,6 +596,8 @@
   .arrow.rotate {
     transform: rotate(180deg);
   }
+
+
 
   .mega-item {
     font-size: 14px;
@@ -697,6 +671,43 @@
     flex-wrap: wrap;
   }
 
+  /* Force delivery into next row */
+  /* .delivery-row {
+    flex-basis: 100%;
+    width: 100%;
+    order: 99; 
+  }
+
+ 
+  .delivery-row .delivery-box {
+    width: 100%;
+    border-radius: 0;
+    background: #eaf6ff;
+    padding: 10px 14px;
+    margin-top: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .DeliverSection {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .DeliverSection small {
+    font-size: 12px;
+    color: #333;
+  }
+
+  .delivery-country {
+    font-size: 13px;
+    font-weight: 600;
+    color: #000;
+  } */
+
+
   /* Make sure header can stack rows */
   .top-header-wrapper {
     flex-wrap: wrap;
@@ -740,15 +751,56 @@
   /* dropdown blocks */
 
   .mobile-subcats {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 12px 14px;
     margin-top: 10px;
   }
+
+  /* Individual subcategory card */
+  .mobile-subcat {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .mobile-subcat strong {
+    font-size: 13px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .mobile-subcat a {
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+
 }
 
 
 /* 🔥 cart badge */
 .cart-count-badge {
+  /* position: absolute;
+  top: -4px;
+  right: 2px;
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: #000000;
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.25s ease; */
   position: absolute;
     top: -4px;
     right: -3px;

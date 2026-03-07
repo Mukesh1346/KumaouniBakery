@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Swal from "sweetalert2";
 
+
 const AllProducts = ({ status = '' }) => {
   const navigate = useNavigate();
   const user = sessionStorage.getItem("userId");
@@ -148,70 +149,133 @@ const AllProducts = ({ status = '' }) => {
               className="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6"
             >
               <div
-                className="product-card"
+                className="product-card h-100 d-flex flex-column"
                 onClick={() => handleProductClick(product?.productName)}
-                style={{ cursor: "pointer" }}
+                style={{ 
+                  cursor: "pointer",
+                  borderRadius: "12px",
+                  border: "1px solid #eaeaea",
+                  overflow: "hidden",
+                  backgroundColor: "#fff",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)"}
+                onMouseLeave={(e) => e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.04)"}
               >
 
-                {/* IMAGE */}
-                <div className="product-img">
+                {/* IMAGE AREA */}
+                <div className="product-img position-relative" style={{ height: "200px", width: "100%", backgroundColor: "#f9f9f9" }}>
                   <img
                     src={`https://api.cakenpetals.com/${product.productImage[0]}`}
                     alt={product.productName}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
 
-                  {/* ❤️ Wishlist (with stopPropagation) */}
+                  {/* ❤️ Floating Circular Wishlist */}
                   <span
-                    className="wishlist"
+                    className="wishlist d-flex align-items-center justify-content-center"
                     onClick={(e) => handleWishlistClick(e, product?._id)}
+                    style={{
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px",
+                      width: "32px",
+                      height: "32px",
+                      backgroundColor: "#fff",
+                      borderRadius: "50%",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                      zIndex: 10
+                    }}
                   >
                     {wishlist?.includes(product?._id) ? (
-                      <FaHeart color="red" />
+                      <FaHeart color="#ff3b30" size={15} />
                     ) : (
-                      <FaRegHeart />
+                      <FaRegHeart color="#888" size={15} />
                     )}
                   </span>
+
+                  {/* Premium Discount Badge */}
                   {product?.Variant[0]?.discountPrice && (
-                    <span  style={{fontSize:"14px"}} className="badge bg-success position-absolute top-0 start-0 m-2">
+                    <span 
+                      style={{
+                        position: "absolute", 
+                        top: "10px", 
+                        left: "0",
+                        backgroundColor: "#388e3c", 
+                        color: "#fff", 
+                        fontSize: "11px", 
+                        fontWeight: "700",
+                        padding: "4px 8px", 
+                        borderTopRightRadius: "4px", 
+                        borderBottomRightRadius: "4px",
+                        letterSpacing: "0.5px",
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.2)"
+                      }}
+                    >
                       {product?.Variant[0]?.discountPrice}% OFF
                     </span>
                   )}
-                  {/* <span className="off-badge">{product?.Variant[0]?.discountPrice}% OFF</span> */}
                 </div>
 
-                {/* CONTENT */}
-                <div className="product-body">
-                  <p className="product-title">
+                {/* CONTENT AREA */}
+                <div className="product-body p-3 d-flex flex-column" style={{ flexGrow: 1 }}>
+                  
+                  {/* Micro-Badges */}
+                  <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                    <span style={{ fontSize: "10px", fontWeight: "700", color: "#388e3c", border: "1px solid #388e3c", padding: "2px 6px", borderRadius: "3px", letterSpacing: "0.3px" }}>
+                      ⊡ EGGLESS
+                    </span>
+                    <span style={{ fontSize: "10px", fontWeight: "600", backgroundColor: "#e0f2f1", color: "#00796b", padding: "3px 6px", borderRadius: "3px" }}>
+                      ⚡ 30 Min Delivery
+                    </span>
+                  </div>
+
+                  {/* Title (Clamped to 2 lines to keep grid neat) */}
+                  <p className="product-title mb-2" style={{ 
+                    fontSize: "14px", 
+                    fontWeight: "600", 
+                    color: "#222", 
+                    lineHeight: "1.4",
+                    display: "-webkit-box", 
+                    WebkitLineClamp: "2", 
+                    WebkitBoxOrient: "vertical", 
+                    overflow: "hidden" 
+                  }}>
                     {product?.productName?.charAt(0).toUpperCase() + product?.productName?.slice(1)}
                   </p>
 
-                  <div className="price-row">
-                    <span className="price">₹ {product?.Variant[0]?.finalPrice}</span>
-                    <span className="old-price">₹ {product?.Variant[0]?.price}</span>
-                    {/* <span className="off">{product?.Variant[0]?.discountPrice}% OFF</span> */}
+                  {/* Spacer to push pricing and rating to the bottom */}
+                  <div style={{ marginTop: "auto" }}>
+                    
+                    {/* Rating Box */}
+                    <div className="rating d-flex align-items-center gap-2 mb-2">
+                      <span style={{ backgroundColor: "#388e3c", color: "#fff", padding: "2px 5px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold", display: "flex", alignItems: "center", gap: "2px" }}>
+                        ★ 4.8
+                      </span>
+                      <span style={{ fontSize: "11px", color: "#007185", fontWeight: "500" }}>245 Reviews</span>
+                    </div>
+
+                    {/* Price Row */}
+                    <div className="price-row d-flex align-items-baseline gap-2">
+                      <span className="price" style={{ fontSize: "16px", fontWeight: "700", color: "#111" }}>
+                        ₹ {product?.Variant[0]?.finalPrice}
+                      </span>
+                      {product?.Variant[0]?.price && product?.Variant[0]?.price !== product?.Variant[0]?.finalPrice && (
+                        <span className="old-price" style={{ fontSize: "13px", color: "#999", textDecoration: "line-through", fontWeight: "500" }}>
+                          ₹ {product?.Variant[0]?.price}
+                        </span>
+                      )}
+                    </div>
+                    
                   </div>
 
-                  {/* <div className="rating">
-                        ⭐ 4.8 <span>(245 Reviews)</span>
-                      </div> */}
-
-                  <p className="delivery">
-                    Earliest Delivery : <span>In 3 hours</span>
-                  </p>
-
-                  {/* <button
-                        className="btn btn-dark w-100 mt-2"
-                        onClick={(e) => handleBuyNowClick(e, product?.productName)}
-                      >
-                        Buy Now
-                      </button> */}
                 </div>
 
               </div>
             </div>
           ))}
         </div>
-
       </div>
       {/* );
       })} */}

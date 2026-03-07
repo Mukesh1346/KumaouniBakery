@@ -500,38 +500,32 @@ const Header = () => {
                 >
                   {cat?.name}
                   <IoIosArrowDown
-                    className={`arrow ${mobileCategoryOpen === index ? "rotate" : ""}`}
+                    className={`arrow ${mobileCategoryOpen === index ? "rotate" : ""
+                      }`}
                   />
                 </div>
 
                 {mobileCategoryOpen === index && (
                   <div className="mobile-subcats">
                     {cat?.subcategories?.map((sub, i) => (
-                      
-                      <details key={sub?._id || i} className="mobile-nested-accordion">
-                        <summary className="mobile-subcat-summary">
-                          <strong>{sub?.name}</strong>
-                          <span className="plus-icon">+</span>
-                        </summary>
+                      <div key={sub?._id || i} className="mobile-subcat">
+                        <strong>{sub?.name}</strong>
+                        {sub?.children?.map((child, j) => (
+                          <div
+                            onClick={() => {
+                              // navigate(`/product-related/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
+                              navigate(`/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
+                                { state: { id: child?.id, status: 'subCategory' } });
+                              setMobileNavOpen((prev) => !prev);
+                              setMobileCategoryOpen(null);
 
-                        <div className="mobile-children-links">
-                          {sub?.children?.map((child, j) => (
-                            <div
-                              key={j}
-                              onClick={() => {
-                                navigate(`/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
-                                  { state: { id: child?.id, status: 'subCategory' } });
-                                setMobileNavOpen((prev) => !prev);
-                                setMobileCategoryOpen(null);
-                              }}
-                              className="mega-item mega-child"
-                            >
-                              {child?.name}
-                            </div>
-                          ))}
-                        </div>
-                      </details>
-
+                            }}
+                            className="mega-item mega-child"
+                          >
+                            {child?.name}
+                          </div>
+                        ))}
+                      </div>
                     ))}
                   </div>
                 )}
@@ -564,10 +558,10 @@ const Header = () => {
               >
                 <span className="nav-link mega-toggle">
                   {cat.name}
+                  {/* <IoIosArrowDown /> */}
                 </span>
 
-                {/* THE DESKTOP FIX: Added "&& cat?.subcategories?.length > 0" */}
-                {desktopMenuOpen === index && cat?.subcategories?.length > 0 && (
+                {desktopMenuOpen === index && (
                   <div className="mega-menu">
                     <div className="mega-menu-inner">
                       {cat.subcategories?.map((sub, i) => (
@@ -576,9 +570,16 @@ const Header = () => {
                             {sub.name}
                           </p>
                           {sub.children?.map((child, j) => (
+                            // <Link
+                            //   key={j}
+                            //   to={`/category/${child
+                            //     .replace(/\s+/g, "-")
+                            //     .toLowerCase()}`}
+                            //   className="mega-item mega-child"
+                            // >
                             <div
-                              key={j}
                               onClick={() => {
+                                // navigate(`/product-related/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
                                 navigate(`/${child?.name.replace(/\s+/g, "-").toLowerCase()}`,
                                   { state: { id: child?.id, status: 'subCategory' } });
                                 setDesktopMenuOpen(null);
@@ -587,6 +588,8 @@ const Header = () => {
                             >
                               {child?.name}
                             </div>
+
+                            // </Link>
                           ))}
                         </div>
                       ))}

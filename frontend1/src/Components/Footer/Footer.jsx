@@ -175,7 +175,7 @@ const Footer = () => {
         <div className="container text-center">
           <p>
             Company Name: CAKENPETALS | CIN: U52100HR2021PTC118882 |
-            Regd. Office: Gurugram, Haryana - 122003
+            Regd. Office: A 23 sanjay nagar ghaziabad - 201002
           </p>
           <p>
             Telephone No.: +91-9211929555 | Grievance Officer: Support Team
