@@ -36,6 +36,7 @@ import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import AllProductByChildCategory from "./Pages/AllProductByChildCategory/AllProductByChildCategory";
 import CancellationRefund from "./Pages/FooterPages/CancellationRefund";
 import EggLess from "./Components/EggLess/EggLess";
+import WhatsAppChat from "./Components/WhatsApp/WhatsApp";
 
 
 
@@ -49,6 +50,7 @@ const App = () => {
         <ScrollToTop />
         <Header />
         <EggLess />
+        <WhatsAppChat />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about-us" element={<AboutUs />} />

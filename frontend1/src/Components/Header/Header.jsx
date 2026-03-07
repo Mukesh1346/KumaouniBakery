@@ -78,7 +78,7 @@ const Header = () => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get(
-          `https://api.cakenpetals.com/api/get-category-with-subcategory`
+          `https://http://localhost:7000i/get-category-with-subcategory`
         );
 
         console.log(res.data.data)
@@ -125,8 +125,8 @@ const Header = () => {
   //       setLoadingSuggestions(true);
 
   //       const res = await axios.get(
-  //         // `https://api.cakenpetals.com/api/search-products?query=${searchQuery}`
-  //         ` https://api.cakenpetals.com/api/get-best-selling-products?query=${searchQuery}`
+  //         // `htthttp://localhost:7000om/api/search-products?query=${searchQuery}`
+  //         http://localhost:7000als.com/api/get-best-selling-products?query=${searchQuery}`
 
 
   //       );
@@ -147,8 +147,9 @@ const Header = () => {
     const fetchAllProducts = async () => {
       try {
         const res = await axios.get(
-          "https://api.cakenpetals.com/api/all-product"
+          "https://cakenpetals.com/api/all-product"
         );
+        console.log("SSSSDD=>" ,res)
         setAllProducts(res.data?.data || []);
       } catch (err) {
         console.error("All products fetch error:", err);
@@ -361,8 +362,9 @@ const Header = () => {
                           }}
                         >
                           <img
-                            src={`https://api.cakenpetals.com/${product.productImage?.[0]?.replace(/\\/g, "/")}`}
-                            alt={product.productName}
+                            // <http://localhost:7000       
+                            src={`https://api.cakenpetals.com/${product?.productImage?.[0]?.replace(/\\/g, "/")}`}
+                            alt={product?.productName}
                             className="suggestion-image"
                           />
 
@@ -507,7 +509,7 @@ const Header = () => {
                 {mobileCategoryOpen === index && (
                   <div className="mobile-subcats">
                     {cat?.subcategories?.map((sub, i) => (
-                      
+
                       <details key={sub?._id || i} className="mobile-nested-accordion">
                         <summary className="mobile-subcat-summary">
                           <strong>{sub?.name}</strong>

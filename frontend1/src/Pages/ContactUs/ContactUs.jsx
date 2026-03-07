@@ -292,12 +292,12 @@ const ContactUs = () => {
       <div className="contact-info container">
         <div className="info-card">
           <h5>Visit Us</h5>
-          <p>Gurugram, Haryana, India</p>
+          <p>A 23, sanjay nagar,  ghaziabad</p>
         </div>
 
         <div className="info-card">
           <h5>Call Us</h5>
-          <a href="tel:+9211929555">+91 9211929555</a>
+          <a href="tel:+919211929555">+91 9211929555</a>
         </div>
 
         <div className="info-card">
@@ -307,12 +307,12 @@ const ContactUs = () => {
 
         <div className="info-card">
           <h5>Follow Us</h5>
-            <div className="social-icons" style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-            
+          <div className="social-icons" style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+
             {/* WhatsApp Link */}
-            <a 
-              href="https://wa.me/919910198589" /* Replace with your actual WhatsApp number */
-              target="_blank" 
+            <a
+              href="https://wa.me/919211929555" /* Replace with your actual WhatsApp number */
+              target="_blank"
               rel="noopener noreferrer"
               style={{ color: "#555", transition: "color 0.3s ease" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "#25D366"} /* WhatsApp Green */
@@ -322,9 +322,9 @@ const ContactUs = () => {
             </a>
 
             {/* Facebook Link */}
-            <a 
+            <a
               href="https://facebook.com/share/1BR7vSXvz1/" /* Replace with your actual Facebook link */
-              target="_blank" 
+              target="_blank"
               rel="noopener noreferrer"
               style={{ color: "#555", transition: "color 0.3s ease" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "#1877F2"} /* Facebook Blue */
@@ -334,9 +334,9 @@ const ContactUs = () => {
             </a>
 
             {/* Instagram Link */}
-            <a 
+            <a
               href="https://instagram.com/cakenpetalsofficial?igsh=NGE0M3Jya3U3eXRn&utm_source=qr" /* Replace with your actual Instagram link */
-              target="_blank" 
+              target="_blank"
               rel="noopener noreferrer"
               style={{ color: "#555", transition: "color 0.3s ease" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "#E1306C"} /* Insta Pink/Red */
@@ -344,7 +344,7 @@ const ContactUs = () => {
             >
               <FaInstagram size={24} />
             </a>
-            
+
           </div>
         </div>
       </div>

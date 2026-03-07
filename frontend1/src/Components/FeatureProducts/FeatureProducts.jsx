@@ -306,7 +306,7 @@ const FeaturedProducts = () => {
 
   return (
     <div className="container my-5 featured-products">
-      
+
       {/* HEADER SECTION */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -334,10 +334,10 @@ const FeaturedProducts = () => {
               key={item._id}
             >
               {/* UI PATTERN: The Floating "Island" Card */}
-              <div 
+              <div
                 className="product-card h-100 d-flex flex-column"
                 onClick={() => handleProductClick(item.productName)}
-                style={{ 
+                style={{
                   cursor: "pointer",
                   borderRadius: "12px",
                   border: "1px solid #eaeaea",
@@ -357,7 +357,7 @@ const FeaturedProducts = () => {
                     alt={item.productName}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
-                  
+
                   {/* ❤️ Floating Circular Wishlist */}
                   <span
                     className="wishlist d-flex align-items-center justify-content-center"
@@ -386,17 +386,17 @@ const FeaturedProducts = () => {
 
                   {/* UI PATTERN: Premium Discount Ribbon */}
                   {discount && (
-                    <span 
+                    <span
                       style={{
-                        position: "absolute", 
-                        top: "10px", 
+                        position: "absolute",
+                        top: "10px",
                         left: "0",
-                        backgroundColor: "#388e3c", 
-                        color: "#fff", 
-                        fontSize: "11px", 
+                        backgroundColor: "#388e3c",
+                        color: "#fff",
+                        fontSize: "11px",
                         fontWeight: "700",
-                        padding: "4px 8px", 
-                        borderTopRightRadius: "4px", 
+                        padding: "4px 8px",
+                        borderTopRightRadius: "4px",
                         borderBottomRightRadius: "4px",
                         letterSpacing: "0.5px",
                         boxShadow: "0 2px 4px rgba(0,0,0,0.2)"
@@ -409,7 +409,7 @@ const FeaturedProducts = () => {
 
                 {/* CONTENT AREA */}
                 <div className="product-body p-3 d-flex flex-column" style={{ flexGrow: 1 }}>
-                  
+
                   {/* Micro-Badges */}
                   <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
                     {item.eggless && (
@@ -423,22 +423,22 @@ const FeaturedProducts = () => {
                   </div>
 
                   {/* Title (Clamped to 2 lines to keep grid perfectly neat) */}
-                  <p className="product-title mb-2" style={{ 
-                    fontSize: "14px", 
-                    fontWeight: "600", 
-                    color: "#222", 
+                  <p className="product-title mb-2" style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "#222",
                     lineHeight: "1.4",
-                    display: "-webkit-box", 
-                    WebkitLineClamp: "2", 
-                    WebkitBoxOrient: "vertical", 
-                    overflow: "hidden" 
+                    display: "-webkit-box",
+                    WebkitLineClamp: "2",
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden"
                   }}>
                     {item?.productName?.charAt(0).toUpperCase() + item?.productName?.slice(1)}
                   </p>
 
                   {/* Spacer to push pricing & subcategory to the very bottom */}
                   <div style={{ marginTop: "auto" }}>
-                    
+
                     {/* Subcategory Label */}
                     {item.subcategoryName?.subcategoryName && (
                       <p style={{ fontSize: "12px", color: "#777", marginBottom: "6px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -457,7 +457,9 @@ const FeaturedProducts = () => {
                         </span>
                       )}
                     </div>
-
+                    <p className="delivery">
+                      Earliest Delivery : <span>In 3 hours</span>
+                    </p>
                   </div>
 
                 </div>

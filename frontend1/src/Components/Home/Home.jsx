@@ -21,11 +21,10 @@ const Home = () => {
     <>
       <HomeBannerSlider />  {/* DONE */}
       <Category /> {/* DONE */}
-      <WhatsAppChat />
       <CakeBanners /> {/* DONE */}
       <ReelSection />  {/* DONE */}
       <BestSellingProduct />
-      <AllProducts status={'Home'} />  {/* DONE p*/}
+      {/* <AllProducts status={'Home'} />  DONE p */}
       <FeaturedProducts />  {/* DONE P*/}
       <Coustomize />  {/* DONE */}
       <Hero />  {/* DONE */}

@@ -791,8 +791,8 @@ const ProductDetails = () => {
                     )}
 
                     {data?.NameOnCake && (
-                      <div className="pdx-block mb-3">
-                        <label style={{ fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "#333", display: "flex", justifyContent: "space-between" }}>
+                      <div className="pdx-block mb-3" style={{ marginTop: "8%", }}>
+                        <label style={{ fontSize: "13px", marginTop: 10, fontWeight: "600", marginBottom: "6px", color: "#333", display: "flex", justifyContent: "space-between" }}>
                           Name on Cake <small style={{ color: "#888", fontWeight: "normal" }}>{massage?.length} / 25</small>
                         </label>
                         <input
