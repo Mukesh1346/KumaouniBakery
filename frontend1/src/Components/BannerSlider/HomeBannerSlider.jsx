@@ -49,8 +49,8 @@ const HomeBannerSlider = () => {
           {data.map((banner) => (
             <div key={banner._id}
               onClick={() => {
-                navigate(`/${banner?.name.replace(/\s+/g, "-").toLowerCase()}`,
-                  { state: { id: banner?.id, status: 'subCategory' } });
+                navigate(`/${banner?.bannerName?.replace(/\s+/g, "-").toLowerCase()}`,
+                  { state: { id: banner?.secondsubcategoryName, status: 'subCategory' } });
 
               }}>
               <img

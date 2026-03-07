@@ -72,11 +72,12 @@ const updateBanner = async (req, res) => {
         if (!banner) return res.status(404).json({ success: false, message: "Banner not found" });
 
         // Delete old image if a new one is uploaded
-        if (req.file && banner.bannerImage) {
-            deleteImageFile(banner.bannerImage);
+        if (req.file && banner?.bannerImage) {
+            deleteImageFile(banner?.bannerImage);
             banner.bannerImage = req.file.path;
         }
-
+        console.log("update-banner==>", req.body);
+        
         // Update banner details
         banner.bannerName = bannerName || banner.bannerName;
         banner.bannerType = bannerType || banner.bannerType;

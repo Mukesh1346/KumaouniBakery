@@ -102,7 +102,7 @@ const Header = () => {
           setMegaCategories(formattedData);
 
 
-          setMegaCategories(formattedData);
+          // setMegaCategories(formattedData);
         }
 
       } catch (error) {
